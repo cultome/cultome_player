@@ -62,47 +62,49 @@ describe CultomePlayer do
   end
 
   context '#search' do
-    it 'search' do
+    before { require 'load_fixtures' }
+    
+    it 'no_args()' do
       r = player.search([])
       r.should == []
     end
 
-    it 'search artista' do
+    it 'artista' do
       r = player.search([{:value=>"artista", :type=>:literal}])
       r.should == []
     end
 
-    it 'search a:artista' do
+    it 'a:artista' do
       r = player.search([{:criteria=>:a, :value=>"artista", :type=>:criteria}])
       r.should == []
     end
 
-    it 'search b:album' do
+    it 'b:album' do
       r = player.search([{:criteria=>:b, :value=>"album", :type=>:criteria}])
       r.should == []
     end
 
-    it 'search s:rola' do
+    it 's:rola' do
       r = player.search([{:criteria=>:s, :value=>"rola", :type=>:criteria}])
       r.should == []
     end
 
-    it 'search artista album rola' do
+    it 'artista album rola' do
       r = player.search([{:value=>"artista", :type=>:literal}, {:value=>"album", :type=>:literal}, {:value=>"rola", :type=>:literal}])
       r.should == []
     end
 
-    it 'search a:artista b:album s:rola' do
+    it 'a:artista b:album s:rola' do
       r = player.search([{:criteria=>:a, :value=>"artista", :type=>:criteria}, {:criteria=>:b, :value=>"album", :type=>:criteria}, {:criteria=>:s, :value=>"rola", :type=>:criteria}])
       r.should == []
     end
 
-    it 'search a:artista1 a:artista2 a:artista3' do
+    it 'a:artista1 a:artista2 a:artista3' do
       r = player.search([{:criteria=>:a, :value=>"artista1", :type=>:criteria}, {:criteria=>:a, :value=>"artista2", :type=>:criteria}, {:criteria=>:a, :value=>"artista3", :type=>:criteria}])
       r.should == []
     end
 
-    it 'search a:artista1 @playlist algo' do
+    it 'a:artista1 @playlist algo' do
       r = player.search([{:criteria=>:a, :value=>"artista1", :type=>:criteria}, {:value=>"playlist", :type=>:object}, {:value=>"algo", :type=>:literal}])
       r.should == []
     end
