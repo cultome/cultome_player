@@ -9,9 +9,26 @@ require 'persistence'
 class CultomePlayer
   include UserInput
 
+  attr_reader :playlist
+  attr_reader :search
+  attr_reader :queue
+
+  attr_reader :song
+  attr_reader :artist
+  attr_reader :album
+
   def initialize
     listener = PlayerListener.new(self)
     @player = Player.new(listener)
+    @search = []
+    @playlist = []
+    @history = []
+    @queue = []
+    @song = nil
+    @artist = nil
+    @album = nil
+    @play_index = 0
+    @max_play_index = 0
   end
 
   def start
@@ -21,10 +38,12 @@ class CultomePlayer
   def execute(user_input)
     cmds = parse(user_input)
     cmds.each do |cmd|
+# puts "\n#{cmd[:command]}: #{cmd[:params].inspect}\n"
       send(cmd[:command], cmd[:params])
     end
   end
 
+  # parameter types: literal, criteria
   def search(params)
     return [] if params.empty?
 
@@ -52,9 +71,65 @@ class CultomePlayer
     find_by_query(query)
   end
 
-  private 
+  # parameter types: literal, criteria::: object, number
+  def play(params)
+    if @playlist.empty?
+      set_playlist find_by_query # todas las canciones
+      @artist = @playlist[0].artist unless @playlist.empty?
+      @album = @playlist[0].album unless @playlist.empty?
+    end
 
-  def find_by_query(query)
+    search_criteria = []
+    new_playlist = params.empty? ? @playlist : []
+
+    params.each do |param|
+      case param[:type]
+        when /literal|criteria/
+          search_criteria << param
+        when :number
+          @queue.push @playlist[param[:value].to_i - 1]
+        when :object
+          case param[:value]
+            when :playlist then new_playlist = @playlist
+            when :search then new_playlist += @search
+            when :history then new_playlist += @history
+            when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
+            when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
+          end
+        when :unknown
+      end
+    end
+
+    new_playlist += search(search_criteria) unless search_criteria.empty?
+    set_playlist(new_playlist) unless new_playlist.empty?
+
+    do_play
+
+  end
+
+  def next(params={})
+    if @play_index + 1 <= @max_play_index
+      @play_index += 1
+      @history.push @song
+
+      do_play
+    end
+  end
+
+  private
+
+  def do_play
+    if @queue.empty?
+      @queue << @playlist[@play_index]
+    end
+    @song = @queue.shift
+    @album = @song.album
+    @artist = @song.artist
+puts ":::::::::::::: Playing #{@song}" # aqui hay que hacer un pop
+    @song
+  end
+
+  def find_by_query(query={or: [], and: []})
     # checamos que una condicion que hace que los and's se vuelvan or's
     #   =>  si una condicion del 2..4 se pone dos o mas veces, esa condicion se hace un or
     # TODO: ESTO QUEDO MUY FEO, CAMBIARLO
@@ -82,10 +157,24 @@ class CultomePlayer
 
 # puts "===========> WHERE: #{where_clause}\n===========> PARAMS: #{where_params}"
 
-    songs = Song.joins("left outer join artists on artists.id == songs.artist_id")
-            .joins("left outer join albums on albums.id == songs.album_id")
-            .where(where_clause, *where_params)
+    @search = if where_clause.empty?
+                Song.all
+              else
+                Song.joins("left outer join artists on artists.id == songs.artist_id")
+                .joins("left outer join albums on albums.id == songs.album_id")
+                .where(where_clause, *where_params)
+              end
 # puts "@@@@@@@@ songs.size: #{songs.size}"
 # songs.each{|s| puts " ---> name: #{s.name}"}
+  end
+
+  def set_playlist(songs)
+    @playlist = songs
+    @play_index = 0
+    @max_play_index = songs.size
+  end
+
+  def append_to_playlist(songs)
+    @playlist = @playlist + songs
   end
 end

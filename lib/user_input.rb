@@ -49,9 +49,9 @@ module UserInput
   def parse_params(params)
     params.collect{|param|
       case param
-        when /\A[\d]+\Z/ then {value: param, type: :number}
+        when /\A[0-9]+\Z/ then {value: param, type: param.to_i > 0 ? :number : :unknown}
         when /\A(#{VALID_CRITERIA_PREFIX}):([\w]+)\Z/ then {criteria: $1.to_sym, value: $2, type: :criteria}
-        when /\A@([\w]+)\Z/ then {value: $1, type: :object}
+        when /\A@([\w]+)\Z/ then {value: $1.to_sym, type: :object}
         when /\A[\w\d]+\Z/ then {value: param, type: :literal}
         else {value: param, type: :unknown}
       end

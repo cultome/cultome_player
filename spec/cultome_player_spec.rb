@@ -57,8 +57,78 @@ describe CultomePlayer do
     end
 
     it 'search a:artista1 @playlist algo' do
-      player.should_receive(:search).with([{:criteria=>:a, :value=>"artista1", :type=>:criteria}, {:value=>"playlist", :type=>:object}, {:value=>"algo", :type=>:literal}])
+      player.should_receive(:search).with([{:criteria=>:a, :value=>"artista1", :type=>:criteria}, {:value=>:playlist, :type=>:object}, {:value=>"algo", :type=>:literal}])
       player.execute('search a:artista1 @playlist algo')
+    end
+
+    it 'play' do
+      player.should_receive(:play).with([])
+      player.execute('play')
+    end
+
+    it 'play 1' do
+      player.should_receive(:play).with([{:value=>"1", :type=>:number}])
+      player.execute('play 1')
+    end
+
+    it 'play 1 2 3' do
+      player.should_receive(:play).with([{:value=>"1", :type=>:number}, {:value=>"2", :type=>:number}, {:value=>"3", :type=>:number}])
+      player.execute('play 1 2 3')
+    end
+
+    it 'play @playlist' do
+      player.should_receive(:play).with([{:value=>:playlist, :type=>:object}])
+      player.execute('play @playlist')
+    end
+
+    it 'play @search' do
+      player.should_receive(:play).with([{:value=>:search, :type=>:object}])
+      player.execute('play @search')
+    end
+
+    it 'play @history'  do
+      player.should_receive(:play).with([{:value=>:history, :type=>:object}])
+      player.execute('play @history')
+    end
+
+    it 'play @artist'  do
+      player.should_receive(:play).with([{:value=>:artist, :type=>:object}])
+      player.execute('play @artist')
+    end
+
+    it 'play @album'  do
+      player.should_receive(:play).with([{:value=>:album, :type=>:object}])
+      player.execute('play @album')
+    end
+
+    it 'play artista' do
+      player.should_receive(:play).with([{:value=>"artista", :type=>:literal}])
+      player.execute('play artista')
+    end
+
+    it 'play a:artista' do
+      player.should_receive(:play).with([{:criteria=>:a, :value=>"artista", :type=>:criteria}])
+      player.execute('play a:artista')
+    end
+
+    it 'play b:album' do
+      player.should_receive(:play).with([{:criteria=>:b, :value=>"album", :type=>:criteria}])
+      player.execute('play b:album')
+    end
+
+    it 'play s:rola' do
+      player.should_receive(:play).with([{:criteria=>:s, :value=>"rola", :type=>:criteria}])
+      player.execute('play s:rola')
+    end
+
+    it 'play artista album rola'  do
+      player.should_receive(:play).with([{:value=>"artista", :type=>:literal}, {:value=>"album", :type=>:literal}, {:value=>"rola", :type=>:literal}])
+      player.execute('play artista album rola')
+    end
+
+    it 'play a:artista b:album s:rola'  do
+      player.should_receive(:play).with([{:criteria=>:a, :value=>"artista", :type=>:criteria}, {:criteria=>:b, :value=>"album", :type=>:criteria}, {:criteria=>:s, :value=>"rola", :type=>:criteria}])
+      player.execute('play a:artista b:album s:rola')
     end
   end
 
@@ -111,30 +181,108 @@ describe CultomePlayer do
       r = player.search([{:criteria=>:a, :value=>"Noel", :type=>:criteria}, {:criteria=>:a, :value=>"Black", :type=>:criteria}, {:criteria=>:a, :value=>"oasis", :type=>:criteria}])
       r.should == [@s1, @s2, @s3, @s4]
     end
+  end
 
-    xit 'a:artista1 @playlist algo' do
-      r = player.search([{:criteria=>:a, :value=>"artista1", :type=>:criteria}, {:value=>"playlist", :type=>:object}, {:value=>"algo", :type=>:literal}])
-      r.should == []
+  context "#play" do
+    before{
+      @s1 = Song.find(1) # name: "If a Had A Gun", artist_id: 1, album_id: 1
+      @s2 = Song.find(2) # name: "The Death of You And Me", artist_id: 1, album_id: 1
+      @s3 = Song.find(3) # name: "Paranoid", artist_id: 2, album_id: 2
+      @s4 = Song.find(4) # name: "Stand By Me", artist_id: 3, album_id: 3
+      @s5 = Song.find(5) # name: "Destination Calabria", artist_id: 0, album_id: 0
+    }
+
+    context "sin playlist seleccionada" do
+      before { player.playlist.should == []}
+      after { player.playlist.should == [@s1, @s2, @s3, @s4, @s5] }
+
+      it 'no args()' do
+        player.play([])
+        player.song.should == @s1
+      end
+
+      it '2' do
+        player.play([{:value=>"2", :type=>:number}])
+        player.song.should == @s2
+      end
+
+      it '3 4 5' do
+        player.play([{:value=>"3", :type=>:number}, {:value=>"4", :type=>:number}, {:value=>"5", :type=>:number}])
+        player.song.should == @s3
+        player.queue.should == [@s4, @s5]
+      end
+    end
+
+    context "usando objetos" do
+      before { player.playlist.should == []}
+
+      it '@playlist' do
+        player.play([{:value=>:playlist, :type=>:object}])
+        player.playlist.should == [@s1, @s2, @s3, @s4, @s5]
+      end
+
+      it '@search' do
+        player.play([])
+        player.search([{:value=>"Noel", :type=>:literal}])
+        player.play([{:value=>:search, :type=>:object}])
+        player.playlist.should == [@s1, @s2]
+      end
+
+      it '@history' do
+        player.play([{:value=>"3", :type=>:number}, {:value=>"4", :type=>:number}, {:value=>"5", :type=>:number}])
+        player.next
+        player.next
+        player.song.should == @s5
+        player.play([{:value=>:history, :type=>:object}])
+        player.playlist.should == [@s3, @s4]
+      end
+
+      it '@artist' do
+        player.play([{:value=>:artist, :type=>:object}])
+        player.playlist.should == [@s1, @s2]
+      end
+
+      it '@album' do
+        player.play([{:value=>:album, :type=>:object}])
+        player.playlist.should == [@s1, @s2]
+      end
+    end
+
+    context "el resultado de una busqueda" do
+      it 'artista' do
+        player.play([{:value=>"Black", :type=>:literal}])
+        player.playlist.should == [@s3]
+      end
+
+      it 'a:artista' do
+        player.play([{:criteria=>:a, :value=>"Oasis", :type=>:criteria}])
+        player.playlist.should == [@s4]
+      end
+
+      it 'b:album' do
+        player.play([{:criteria=>:b, :value=>"Paranoid", :type=>:criteria}])
+        player.playlist.should == [@s3]
+      end
+
+      it 's:rola' do
+        player.play([{:criteria=>:s, :value=>"Calabria", :type=>:criteria}])
+        player.playlist.should == [@s5]
+      end
+
+      it 'artista album rola'  do
+        player.play([{:value=>"Noel", :type=>:literal}, {:value=>"high", :type=>:literal}, {:value=>"death", :type=>:literal}])
+        player.playlist.should == [@s1, @s2]
+      end
+
+      it 'a:artista b:album s:rola'  do
+        player.play([{:criteria=>:a, :value=>"Noel", :type=>:criteria}, {:criteria=>:b, :value=>"high", :type=>:criteria}, {:criteria=>:s, :value=>"death", :type=>:criteria}])
+        player.playlist.should == [@s2]
+      end
     end
   end
 
-
 end
 
-# 'play'
-# 'play 1'
-# 'play 1 2 3'
-# 'play @playlist'
-# 'play @search'
-# 'play @history' 
-# 'play @artist' 
-# 'play @album' 
-# 'play artista'
-# 'play a:artista'
-# 'play b:album'
-# 'play s:rola'
-# 'play artista album rola' 
-# 'play a:artista b:album s:rola' 
 # 'show'
 # 'show @song'
 # 'show @playlist'
@@ -148,9 +296,3 @@ end
 # 'prev'
 # 'search algo | play'
 # 'search algo | play | show @artist'
-
-# s5=Song.create(name: "Destination Calabria", artist_id: 0, album_id: 0, year: 0, track: 0, duration: 145
-
-# where = "(artists.name like ? or albums.name like ? or songs.name like ?) or (artists.name like ? or albums.name like ? or songs.name like ?) or (artists.name like ? or albums.name like ? or songs.name like ?)"
-# params = ["%Noel%", "%Noel%", "%Noel%", "%paranoid%", "%paranoid%", "%paranoid%", "%Calabria%", "%Calabria%", "%Calabria%"]
-# songs = Song.joins("left outer join artists on artists.id == songs.artist_id").joins("left outer join albums on albums.id == songs.album_id").where(where, *params)

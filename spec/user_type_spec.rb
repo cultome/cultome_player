@@ -52,11 +52,16 @@ describe TestUserInput do
 
       it "buscando en artistas las palabras 'artista', 'artista2', 'artista3'" do
         cmd = parser.parse 'search a:artista1 @playlist algo'
-        cmd.should == [{:command=>"search", :params=>[{:criteria=>:a, :value=>"artista1", :type=>:criteria}, {:value=>"playlist", :type=>:object}, {:value=>"algo", :type=>:literal}]}]
+        cmd.should == [{:command=>"search", :params=>[{:criteria=>:a, :value=>"artista1", :type=>:criteria}, {:value=>:playlist, :type=>:object}, {:value=>"algo", :type=>:literal}]}]
       end
     end
 
     context 'play' do
+      it "buscando con parametros incorrectos" do
+         cmd = parser.parse 'play -1 2.3 0'
+         cmd.should == [{:command=>"play", :params=>[{:value=>"-1", :type=>:unknown}, {:value=>"2.3", :type=>:unknown}, {:value=>"0", :type=>:unknown}]}]
+      end
+
       it "toca la siguiente rola en la playlist actual" do
          cmd = parser.parse 'play'
          cmd.should == [{:command=>"play", :params=>[]}]
@@ -74,27 +79,27 @@ describe TestUserInput do
 
       it "toca la primer rola de la playlist llamada 'playlist'" do
          cmd = parser.parse 'play @playlist'
-         cmd.should == [{:command=>"play", :params=>[{:value=>"playlist", :type=>:object}]}]
+         cmd.should == [{:command=>"play", :params=>[{:value=>:playlist, :type=>:object}]}]
       end
 
       it "convierte los resultado de la busqueda en la playlista actual" do
          cmd = parser.parse 'play @search'
-         cmd.should == [{:command=>"play", :params=>[{:value=>"search", :type=>:object}]}]
+         cmd.should == [{:command=>"play", :params=>[{:value=>:search, :type=>:object}]}]
       end
 
       it "convierte el historico en la playlista actual" do
          cmd = parser.parse 'play @history' 
-         cmd.should == [{:command=>"play", :params=>[{:value=>"history", :type=>:object}]}]
+         cmd.should == [{:command=>"play", :params=>[{:value=>:history, :type=>:object}]}]
       end
 
       it "busca las rolas del artista actual y hace una playlist" do
          cmd = parser.parse 'play @artist' 
-         cmd.should == [{:command=>"play", :params=>[{:value=>"artist", :type=>:object}]}]
+         cmd.should == [{:command=>"play", :params=>[{:value=>:artist, :type=>:object}]}]
       end
 
       it "busca las rolas del album actual y hace una playlist" do
          cmd = parser.parse 'play @album' 
-         cmd.should == [{:command=>"play", :params=>[{:value=>"album", :type=>:object}]}]
+         cmd.should == [{:command=>"play", :params=>[{:value=>:album, :type=>:object}]}]
       end
 
       it "buscando en artista, album o rola" do
@@ -138,32 +143,32 @@ describe TestUserInput do
 
     it "muestra informacion del album actual" do
        cmd = parser.parse 'show @song'
-       cmd.should == [{:command=>"show", :params=>[{:value=>"song", :type=>:object}]}]
+       cmd.should == [{:command=>"show", :params=>[{:value=>:song, :type=>:object}]}]
     end
 
     it "muestra" do
        cmd = parser.parse 'show @playlist'
-       cmd.should == [{:command=>"show", :params=>[{:value=>"playlist", :type=>:object}]}]
+       cmd.should == [{:command=>"show", :params=>[{:value=>:playlist, :type=>:object}]}]
     end
 
     it "muestra el playlist de rolas que ya se tocaron" do
        cmd = parser.parse 'show @history'
-       cmd.should == [{:command=>"show", :params=>[{:value=>"history", :type=>:object}]}]
+       cmd.should == [{:command=>"show", :params=>[{:value=>:history, :type=>:object}]}]
     end
 
     it "muestra los resultado de la busqueda" do
        cmd = parser.parse 'show @search'
-       cmd.should == [{:command=>"show", :params=>[{:value=>"search", :type=>:object}]}]
+       cmd.should == [{:command=>"show", :params=>[{:value=>:search, :type=>:object}]}]
     end
 
     it "muestra informacion del album actual" do
        cmd = parser.parse 'show @album'
-       cmd.should == [{:command=>"show", :params=>[{:value=>"album", :type=>:object}]}]
+       cmd.should == [{:command=>"show", :params=>[{:value=>:album, :type=>:object}]}]
     end
 
     it "muestra informacion del artistaactual" do
        cmd = parser.parse 'show @artist'
-       cmd.should == [{:command=>"show", :params=>[{:value=>"artist", :type=>:object}]}]
+       cmd.should == [{:command=>"show", :params=>[{:value=>:artist, :type=>:object}]}]
     end
 
     it "Pausar la reproduccion" do
@@ -194,7 +199,7 @@ describe TestUserInput do
 
       it "debe ejecutar tres comandos" do # pipe
         cmd = parser.parse 'search algo | play | show @artist'
-        cmd.should == [{:command=>"show", :params=>[{:value=>"artist", :type=>:object}, {:type=>:command, :value=>{:command=>"play", :params=>[{:type=>:command, :value=>{:command=>"search", :params=>[{:value=>"algo", :type=>:literal}], :piped=>true}}], :piped=>true}}]}]
+        cmd.should == [{:command=>"show", :params=>[{:value=>:artist, :type=>:object}, {:type=>:command, :value=>{:command=>"play", :params=>[{:type=>:command, :value=>{:command=>"search", :params=>[{:value=>"algo", :type=>:literal}], :piped=>true}}], :piped=>true}}]}]
       end
     end
 

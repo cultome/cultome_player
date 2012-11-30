@@ -16,6 +16,10 @@ class Song < ActiveRecord::Base
   belongs_to :artist
   belongs_to :album
   has_and_belongs_to_many :genres
+
+  def to_s
+    ":::: Title: #{self.name} \\ Artist: #{self.artist.name} ::::"
+  end
 end
 
 class Album < ActiveRecord::Base
