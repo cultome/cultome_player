@@ -11,6 +11,7 @@ class CultomePlayer
 
   attr_reader :playlist
   attr_reader :search
+  attr_reader :history
   attr_reader :queue
 
   attr_reader :song
@@ -44,7 +45,7 @@ class CultomePlayer
   end
 
   # parameter types: literal, criteria
-  def search(params)
+  def search(params=[])
     return [] if params.empty?
 
     query = {
@@ -62,17 +63,14 @@ class CultomePlayer
           if param[:criteria] == :a then query[:and] << {id: 2, condition: 'artists.name like ?', value: param_value}
           elsif param[:criteria] == :b then query[:and] << {id: 3, condition: 'albums.name like ?', value: param_value}
           elsif param[:criteria] == :s then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
-        when :number
-        when :object
-        when :unknown
       end
     end
 
-    find_by_query(query)
+    @search = find_by_query(query).to_a
   end
 
   # parameter types: literal, criteria::: object, number
-  def play(params)
+  def play(params=[])
     if @playlist.empty?
       set_playlist find_by_query # todas las canciones
       @artist = @playlist[0].artist unless @playlist.empty?
@@ -96,10 +94,8 @@ class CultomePlayer
             when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
             when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
           end
-        when :unknown
       end
     end
-
     new_playlist += search(search_criteria) unless search_criteria.empty?
     set_playlist(new_playlist) unless new_playlist.empty?
 
@@ -107,13 +103,31 @@ class CultomePlayer
 
   end
 
-  def next(params={})
+  def next(params=[])
     if @play_index + 1 <= @max_play_index
       @play_index += 1
       @history.push @song
 
       do_play
+
     end
+  end
+
+  def show(params=[])
+    obj = ""
+
+    if params.empty?
+      puts "#{obj = @song.to_s}"
+    elsif
+      params.each do |param|
+        case param[:type]
+          when :object 
+            puts "#{obj = instance_variable_get("@#{param[:value]}").to_s}"
+        end
+      end
+    end
+
+    obj
   end
 
   private
@@ -125,7 +139,6 @@ class CultomePlayer
     @song = @queue.shift
     @album = @song.album
     @artist = @song.artist
-puts ":::::::::::::: Playing #{@song}" # aqui hay que hacer un pop
     @song
   end
 
@@ -155,17 +168,13 @@ puts ":::::::::::::: Playing #{@song}" # aqui hay que hacer un pop
     # preparamos los parametros
     where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.empty? }.compact.flatten
 
-# puts "===========> WHERE: #{where_clause}\n===========> PARAMS: #{where_params}"
-
-    @search = if where_clause.empty?
-                Song.all
-              else
-                Song.joins("left outer join artists on artists.id == songs.artist_id")
-                .joins("left outer join albums on albums.id == songs.album_id")
-                .where(where_clause, *where_params)
-              end
-# puts "@@@@@@@@ songs.size: #{songs.size}"
-# songs.each{|s| puts " ---> name: #{s.name}"}
+    if where_clause.empty?
+      Song.all
+    else
+      Song.joins("left outer join artists on artists.id == songs.artist_id")
+      .joins("left outer join albums on albums.id == songs.album_id")
+      .where(where_clause, *where_params)
+    end
   end
 
   def set_playlist(songs)
@@ -176,5 +185,12 @@ puts ":::::::::::::: Playing #{@song}" # aqui hay que hacer un pop
 
   def append_to_playlist(songs)
     @playlist = @playlist + songs
+  end
+end
+
+class Array
+  def to_s
+    idx = 0
+    self.collect{|e| "#{idx += 1} #{e}" }.join("\n")
   end
 end

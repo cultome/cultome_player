@@ -17,7 +17,7 @@ describe CultomePlayer do
 
   context '#execute' do
     it 'search' do
-      player.should_receive(:search).with([])
+      player.should_receive(:search)
       player.execute('search')
     end
 
@@ -62,7 +62,7 @@ describe CultomePlayer do
     end
 
     it 'play' do
-      player.should_receive(:play).with([])
+      player.should_receive(:play)
       player.execute('play')
     end
 
@@ -130,6 +130,42 @@ describe CultomePlayer do
       player.should_receive(:play).with([{:criteria=>:a, :value=>"artista", :type=>:criteria}, {:criteria=>:b, :value=>"album", :type=>:criteria}, {:criteria=>:s, :value=>"rola", :type=>:criteria}])
       player.execute('play a:artista b:album s:rola')
     end
+
+    it 'show' do
+      player.should_receive(:show)
+      player.execute('show')
+    end
+
+    it 'show @song' do
+      player.should_receive(:show).with([{:value=>:song, :type=>:object}])
+      player.execute('show @song')
+    end
+
+    it 'show @playlist' do
+      player.should_receive(:show).with([{:value=>:playlist, :type=>:object}])
+      player.execute('show @playlist')
+    end
+
+    it 'show @history' do
+      player.should_receive(:show).with([{:value=>:history, :type=>:object}])
+      player.execute('show @history')
+    end
+
+    it 'show @search' do
+      player.should_receive(:show).with([{:value=>:search, :type=>:object}])
+      player.execute('show @search')
+    end
+
+    it 'show @album' do
+      player.should_receive(:show).with([{:value=>:album, :type=>:object}])
+      player.execute('show @album')
+    end
+
+    it 'show @artist' do
+      player.should_receive(:show).with([{:value=>:artist, :type=>:object}])
+      player.execute('show @artist')
+    end
+
   end
 
   context '#search' do
@@ -143,7 +179,7 @@ describe CultomePlayer do
     }
     
     it 'no_args()' do
-      r = player.search([])
+      r = player.search
       r.should == []
     end
 
@@ -197,7 +233,7 @@ describe CultomePlayer do
       after { player.playlist.should == [@s1, @s2, @s3, @s4, @s5] }
 
       it 'no args()' do
-        player.play([])
+        player.play
         player.song.should == @s1
       end
 
@@ -222,7 +258,7 @@ describe CultomePlayer do
       end
 
       it '@search' do
-        player.play([])
+        player.play
         player.search([{:value=>"Noel", :type=>:literal}])
         player.play([{:value=>:search, :type=>:object}])
         player.playlist.should == [@s1, @s2]
@@ -281,15 +317,50 @@ describe CultomePlayer do
     end
   end
 
+  context "#show" do
+    before { player.play }
+
+    it 'no_args()' do
+      r = player.show
+      r.should ==  ":::: Song: If a Had A Gun \\ Artist: Noel Gallagher ::::"
+    end
+
+    it '@song' do
+      r = player.show([{:value=>:song, :type=>:object}])
+      r.should == ":::: Song: If a Had A Gun \\ Artist: Noel Gallagher ::::"
+    end
+
+    it '@playlist' do
+      r = player.show([{:value=>:playlist, :type=>:object}])
+      r.should == "1 :::: Song: If a Had A Gun \\ Artist: Noel Gallagher ::::\n2 :::: Song: The Death of You And Me \\ Artist: Noel Gallagher ::::\n3 :::: Song: Paranoid \\ Artist: Black Sabbath ::::\n4 :::: Song: Stand By Me \\ Artist: Oasis ::::\n5 :::: Song: Destination Calabria \\ Artist: unknown ::::"
+    end
+
+    it '@history' do
+      player.play([{:value=>"3", :type=>:number}, {:value=>"4", :type=>:number}, {:value=>"5", :type=>:number}])
+      player.next
+      player.next
+      r = player.show([{:value=>:history, :type=>:object}])
+      r.should == "1 :::: Song: Paranoid \\ Artist: Black Sabbath ::::\n2 :::: Song: Stand By Me \\ Artist: Oasis ::::"
+    end
+
+    it '@search' do
+      player.play([{:criteria=>:b, :value=>"Paranoid", :type=>:criteria}])
+      r = player.show([{:value=>:search, :type=>:object}])
+      r.should == "1 :::: Song: Paranoid \\ Artist: Black Sabbath ::::"
+    end
+
+    it '@album' do
+      r = player.show([{:value=>:album, :type=>:object}])
+      r.should ==  ":::: Album: High Flying Birds \\ Artist: Noel Gallagher ::::"
+    end
+
+    it '@artist' do
+      r = player.show([{:value=>:artist, :type=>:object}])
+      r.should == ":::: Artist: Noel Gallagher ::::"
+    end
+  end
 end
 
-# 'show'
-# 'show @song'
-# 'show @playlist'
-# 'show @history'
-# 'show @search'
-# 'show @album'
-# 'show @artist'
 # 'pause'
 # 'stop'
 # 'next'

@@ -18,7 +18,7 @@ class Song < ActiveRecord::Base
   has_and_belongs_to_many :genres
 
   def to_s
-    ":::: Title: #{self.name} \\ Artist: #{self.artist.name} ::::"
+    ":::: Song: #{self.name} \\ Artist: #{self.artist.name} ::::"
   end
 end
 
@@ -26,7 +26,11 @@ class Album < ActiveRecord::Base
   attr_accessible :name, :id
 
   has_many :songs
-  has_one :artist, through: :songs
+  has_many :artists, through: :songs
+
+  def to_s
+    ":::: Album: #{self.name} \\ Artist: #{self.artists.uniq.collect{|a| a.name}.join(', ')} ::::"
+  end
 end
 
 class Artist < ActiveRecord::Base
@@ -34,6 +38,11 @@ class Artist < ActiveRecord::Base
 
   has_many :songs
   has_many :albums, through: :songs
+
+
+  def to_s
+    ":::: Artist: #{self.name} ::::"
+  end
 end
 
 class Genre < ActiveRecord::Base
