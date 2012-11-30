@@ -166,6 +166,15 @@ describe CultomePlayer do
       player.execute('show @artist')
     end
 
+    it 'next' do
+      player.should_receive(:next)
+      player.execute('next')
+    end
+
+    it 'prev' do
+      player.should_receive(:prev)
+      player.execute('prev')
+    end
   end
 
   context '#search' do
@@ -359,11 +368,46 @@ describe CultomePlayer do
       r.should == ":::: Artist: Noel Gallagher ::::"
     end
   end
+
+  context "movimientos de la playlist" do
+    before{
+      @s1 = Song.find(1) # name: "If a Had A Gun", artist_id: 1, album_id: 1
+      @s2 = Song.find(2) # name: "The Death of You And Me", artist_id: 1, album_id: 1
+      @s3 = Song.find(3) # name: "Paranoid", artist_id: 2, album_id: 2
+      @s4 = Song.find(4) # name: "Stand By Me", artist_id: 3, album_id: 3
+      @s5 = Song.find(5) # name: "Destination Calabria", artist_id: 0, album_id: 0
+    }
+    
+    context "#next" do
+      before {
+        player.play
+        player.song.should == @s1
+      }
+
+      it 'next' do
+        r = player.next
+        r.should == @s2
+      end
+    end
+
+    context "#prev" do
+      before {
+        player.play
+        player.song.should == @s1
+        player.next
+        player.song.should == @s2
+      }
+
+      it 'prev' do
+        r = player.prev
+        r.should == @s1
+      end
+    end
+  end
+
 end
 
 # 'pause'
 # 'stop'
-# 'next'
-# 'prev'
 # 'search algo | play'
 # 'search algo | play | show @artist'

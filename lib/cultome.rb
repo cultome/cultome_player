@@ -109,7 +109,14 @@ class CultomePlayer
       @history.push @song
 
       do_play
+    end
+  end
 
+  def prev(params=[])
+    unless @history.empty?
+      @queue.unshift @history.pop
+
+      do_play
     end
   end
 
