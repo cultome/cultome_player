@@ -19,14 +19,14 @@ class Song < ActiveRecord::Base
 end
 
 class Album < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :id
 
   has_many :songs
   has_one :artist, through: :songs
 end
 
 class Artist < ActiveRecord::Base
-  attr_accessible :name
+  attr_accessible :name, :id
 
   has_many :songs
   has_many :albums, through: :songs
