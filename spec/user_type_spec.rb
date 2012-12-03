@@ -134,41 +134,41 @@ describe TestUserInput do
     end
 
     context "show" do
-    end
-    
-    it "muestra rola actual, tiempo" do
-       cmd = parser.parse 'show'
-       cmd.should == [{:command=>"show", :params=>[]}]
-    end
+      
+      it "muestra rola actual, tiempo" do
+         cmd = parser.parse 'show'
+         cmd.should == [{:command=>"show", :params=>[]}]
+      end
 
-    it "muestra informacion del album actual" do
-       cmd = parser.parse 'show @song'
-       cmd.should == [{:command=>"show", :params=>[{:value=>:song, :type=>:object}]}]
-    end
+      it "muestra informacion del album actual" do
+         cmd = parser.parse 'show @song'
+         cmd.should == [{:command=>"show", :params=>[{:value=>:song, :type=>:object}]}]
+      end
 
-    it "muestra" do
-       cmd = parser.parse 'show @playlist'
-       cmd.should == [{:command=>"show", :params=>[{:value=>:playlist, :type=>:object}]}]
-    end
+      it "muestra" do
+         cmd = parser.parse 'show @playlist'
+         cmd.should == [{:command=>"show", :params=>[{:value=>:playlist, :type=>:object}]}]
+      end
 
-    it "muestra el playlist de rolas que ya se tocaron" do
-       cmd = parser.parse 'show @history'
-       cmd.should == [{:command=>"show", :params=>[{:value=>:history, :type=>:object}]}]
-    end
+      it "muestra el playlist de rolas que ya se tocaron" do
+         cmd = parser.parse 'show @history'
+         cmd.should == [{:command=>"show", :params=>[{:value=>:history, :type=>:object}]}]
+      end
 
-    it "muestra los resultado de la busqueda" do
-       cmd = parser.parse 'show @search'
-       cmd.should == [{:command=>"show", :params=>[{:value=>:search, :type=>:object}]}]
-    end
+      it "muestra los resultado de la busqueda" do
+         cmd = parser.parse 'show @search'
+         cmd.should == [{:command=>"show", :params=>[{:value=>:search, :type=>:object}]}]
+      end
 
-    it "muestra informacion del album actual" do
-       cmd = parser.parse 'show @album'
-       cmd.should == [{:command=>"show", :params=>[{:value=>:album, :type=>:object}]}]
-    end
+      it "muestra informacion del album actual" do
+         cmd = parser.parse 'show @album'
+         cmd.should == [{:command=>"show", :params=>[{:value=>:album, :type=>:object}]}]
+      end
 
-    it "muestra informacion del artistaactual" do
-       cmd = parser.parse 'show @artist'
-       cmd.should == [{:command=>"show", :params=>[{:value=>:artist, :type=>:object}]}]
+      it "muestra informacion del artistaactual" do
+         cmd = parser.parse 'show @artist'
+         cmd.should == [{:command=>"show", :params=>[{:value=>:artist, :type=>:object}]}]
+      end
     end
 
     it "Pausar la reproduccion" do
@@ -189,6 +189,16 @@ describe TestUserInput do
     it "Cambia a la anterior rola" do
       cmd = parser.parse 'prev'
       cmd.should == [{:command=>"prev", :params=>[]}]
+    end
+
+    it 'debe conectar el folder al reproductor' do
+      cmd = parser.parse 'connect c:/musica/artista/ => rolateca'
+      cmd.should == [{:command=>"connect", :params=>[ {value: 'c:/musica/artista', type: :path}, {value: 'rolateca', type: :literal} ]}]
+    end
+
+    it 'debe conectar el folder al reproductor' do
+      cmd = parser.parse 'connect /musica/artista/ => rolateca'
+      cmd.should == [{:command=>"connect", :params=>[ {value: '/musica/artista', type: :path}, {value: 'rolateca', type: :literal} ]}]
     end
 
     context "pipe" do

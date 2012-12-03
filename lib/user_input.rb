@@ -7,12 +7,13 @@ end
 
 module UserInput
 
-  COMMANDS = %w{play search show pause stop next prev}
+  COMMANDS = %w{play search show pause stop next prev connect}
   ALIAS = %w{p s n}
 
   VALID_IN_CMD = COMMANDS.join('|') + '|' + ALIAS.join('|')
 
   VALID_CRITERIA_PREFIX = "[abs]"
+  BUBBLE_WORD = %w{=>}
 
   def parse(input)
     prev_cmd = nil
@@ -50,11 +51,13 @@ module UserInput
     params.collect{|param|
       case param
         when /\A[0-9]+\Z/ then {value: param, type: param.to_i > 0 ? :number : :unknown}
+        when /\A([a-zA-Z]:[\/\\]|\/)([\w\/\\]+)+\Z/ then {value: param.gsub(/(\/|\\)\Z/, ''), type: :path}
         when /\A(#{VALID_CRITERIA_PREFIX}):([\w]+)\Z/ then {criteria: $1.to_sym, value: $2, type: :criteria}
         when /\A@([\w]+)\Z/ then {value: $1.to_sym, type: :object}
         when /\A[\w\d]+\Z/ then {value: param, type: :literal}
+        when /\A#{BUBBLE_WORD.join('|')}\Z/ then nil
         else {value: param, type: :unknown}
       end
-    }
+    }.compact
   end
 end

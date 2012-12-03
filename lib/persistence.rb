@@ -11,14 +11,15 @@ ActiveRecord::Base.establish_connection(
 )
 
 class Song < ActiveRecord::Base
-  attr_accessible :name, :artist_id, :album_id, :year, :track, :duration
+  attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id
 
   belongs_to :artist
   belongs_to :album
   has_and_belongs_to_many :genres
+  belongs_to :drive
 
   def path
-    "C:/ws/cultome_player/01.mp3"
+    "#{self.drive.path}/#{self.relative_path}"
   end
 
   def to_s
@@ -53,4 +54,10 @@ class Genre < ActiveRecord::Base
   attr_accessible :name
 
   has_and_belongs_to_many :songs
+end
+
+class Drive < ActiveRecord::Base
+  attr_accessible :name, :path
+
+  has_many :songs
 end

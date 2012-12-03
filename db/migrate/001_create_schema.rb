@@ -8,6 +8,8 @@ class CreateSchema < ActiveRecord::Migration
       t.integer :year # 2011
       t.integer :track # 3
       t.integer :duration # 50070000
+      t.integer :drive_id
+      t.string :relative_path
       t.timestamps
     end
 
@@ -29,6 +31,12 @@ class CreateSchema < ActiveRecord::Migration
       t.integer :song_id
       t.integer :genre_id
     end
+
+    create_table :drives do |t|
+      t.string :name
+      t.string :path
+      t.timestamps
+    end
   end
 
   def self.down
@@ -37,6 +45,7 @@ class CreateSchema < ActiveRecord::Migration
     drop_table :artists
     drop_table :genres
     drop_table :genres_songs
+    drop_table :drives
   end
 end
 

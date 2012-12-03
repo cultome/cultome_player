@@ -202,6 +202,16 @@ describe CultomePlayer do
       player.execute('stop')
     end
 
+    it 'connect' do
+      player.should_receive(:connect)
+      player.execute('connect')
+    end
+
+    it 'connect c:/musica => rolateca' do
+      player.should_receive(:connect)
+      player.execute('connect')
+    end
+
     # it 'search algo | play' do
     #   player.should_receive(:search)
     #   player.should_receive(:play)
@@ -279,7 +289,7 @@ describe CultomePlayer do
 
     context "sin playlist seleccionada" do
       before { player.playlist.should == []}
-      after { player.playlist.should == [@s1, @s2, @s3, @s4, @s5] }
+      after { player.playlist.should include(@s1, @s2, @s3, @s4, @s5) }
 
       it 'no args()' do
         player.play
@@ -303,7 +313,7 @@ describe CultomePlayer do
 
       it '@playlist' do
         player.play([{:value=>:playlist, :type=>:object}])
-        player.playlist.should == [@s1, @s2, @s3, @s4, @s5]
+        player.playlist.should include(@s1, @s2, @s3, @s4, @s5)
       end
 
       it '@search' do
@@ -381,7 +391,7 @@ describe CultomePlayer do
 
     it '@playlist' do
       r = player.show([{:value=>:playlist, :type=>:object}])
-      r.should == "1 :::: Song: If a Had A Gun \\ Artist: Noel Gallagher ::::\n2 :::: Song: The Death of You And Me \\ Artist: Noel Gallagher ::::\n3 :::: Song: Paranoid \\ Artist: Black Sabbath ::::\n4 :::: Song: Stand By Me \\ Artist: Oasis ::::\n5 :::: Song: Destination Calabria \\ Artist: unknown ::::"
+      r.should match /\A1 :::: Song: If a Had A Gun \\ Artist: Noel Gallagher ::::\n2 :::: Song: The Death of You And Me \\ Artist: Noel Gallagher ::::\n3 :::: Song: Paranoid \\ Artist: Black Sabbath ::::\n4 :::: Song: Stand By Me \\ Artist: Oasis ::::\n5 :::: Song: Destination Calabria \\ Artist: unknown ::::/
     end
 
     it '@history' do
@@ -475,7 +485,13 @@ describe CultomePlayer do
         player.should be_stopped
       end
     end
+  end
 
+  context "#connect" do
+    it 'folder' do
+      r = player.connect([{value: 'C:/ws/cultome_player/test_music_1', type: :path}, {value: 'rolateca', type: :literal}])
+      r.should == 4
+    end
   end
 
   context "piped commands" do

@@ -1,15 +1,18 @@
 require 'user_input'
 require 'persistence'
 require 'player_listener'
+require 'helper'
 
 # TODO
 #  - agregar el genero a los objetos del reproductor
 #  - sacar los objetosa un lugar visible
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
+#  - validar el parametro de connect
 
 class CultomePlayer
   include UserInput
   include PlayerListener
+  include Helper
 
   attr_reader :playlist
   attr_reader :search
@@ -144,6 +147,23 @@ class CultomePlayer
     @status == :PLAYING ? @player.pause : @player.resume
   end
 
+  def connect(params=[])
+    path_param = params.find{|p| p[:type] == :path}
+    path_return nil unless Dir.exist?(path_param[:value])
+
+    name_param = params.find{|p| p[:type] == :literal}
+# puts "@@@@@@@@@@@@ name: #{name_param[:value]}, path: #{path_param[:value]}"
+    new_drive = Drive.create(name: name_param[:value], path: path_param[:value])
+# puts ">>>>>>>>>>>>>> #{new_drive.inspect}"
+
+    music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
+    music_files.each do |file_path|
+      create_song_from_file(file_path, new_drive)
+    end
+
+    return music_files.size
+  end
+
   private
 
   def do_play
@@ -221,6 +241,28 @@ class CultomePlayer
       # mandamos al player todo lo que no conozcamos
       @player.send(method_name, *args)
     end
+  end
+
+  def create_song_from_file(file_path, drive)
+    info = extract_mp3_information(file_path)
+
+    unless info[:artist].empty?
+      info[:artist_id] = Artist.find_or_create_by_name(name: info[:artist]).id
+    end
+
+    unless info[:album].empty?
+      info[:album_id] = Album.find_or_create_by_name(name: info[:album]).id
+    end
+
+    info[:drive_id] = drive.id
+    puts "drive.path: #{drive.path}"
+    info[:relative_path] = file_path.gsub("#{drive.path}/", '')
+
+    puts info.inspect
+    song = Song.create(info)
+    puts song.inspect
+
+    return song
   end
 end
 
