@@ -1,19 +1,35 @@
 require 'spec_helper'
 require 'cultome'
 
-class PlayerListener
+class Event
+  attr_reader :description
+  def initialize(desc)
+    @description = desc
+  end
 end
 
 class Player
+  def initialize(listener)
+    @listener = listener
+  end
+
+  def play(song_path)
+    @listener.stateUpdated(Event.new(:PLAYING))
+  end
+  def pause
+    @listener.stateUpdated(Event.new(:PAUSED))
+  end
+  def resume
+    @listener.stateUpdated(Event.new(:PLAYING))
+  end
+  def stop
+    @listener.stateUpdated(Event.new(:STOPPED))
+  end
 end
 
 describe CultomePlayer do
 
   let(:player) { CultomePlayer.new }
-  before {
-    Player.stub(:new)
-    PlayerListener.stub(:new)
-  }
 
   context '#execute' do
     it 'search' do
@@ -175,6 +191,30 @@ describe CultomePlayer do
       player.should_receive(:prev)
       player.execute('prev')
     end
+
+    it 'pause' do
+      player.should_receive(:pause)
+      player.execute('pause')
+    end
+
+    it 'stop' do
+      player.should_receive(:stop)
+      player.execute('stop')
+    end
+
+    # it 'search algo | play' do
+    #   player.should_receive(:search)
+    #   player.should_receive(:play)
+    #   player.execute('search algo | play')
+    # end
+
+    # it 'search algo | play | show @artist' do
+    #   player.should_receive(:search)
+    #   player.should_receive(:play)
+    #   player.should_receive(:show)
+    #   player.execute('search algo | play | show @artist')
+    # end
+
   end
 
   context '#search' do
@@ -377,14 +417,14 @@ describe CultomePlayer do
       @s4 = Song.find(4) # name: "Stand By Me", artist_id: 3, album_id: 3
       @s5 = Song.find(5) # name: "Destination Calabria", artist_id: 0, album_id: 0
     }
-    
+
     context "#next" do
       before {
         player.play
         player.song.should == @s1
       }
 
-      it 'next' do
+      it 'no_args()' do
         r = player.next
         r.should == @s2
       end
@@ -398,16 +438,59 @@ describe CultomePlayer do
         player.song.should == @s2
       }
 
-      it 'prev' do
+      it 'no_args()' do
         r = player.prev
         r.should == @s1
       end
     end
+
+    context "pause" do
+      before {
+        player.play
+        player.should be_playing
+      }
+
+      it 'no_args()' do
+        player.pause
+        player.should be_paused
+      end
+
+      it 'should toggle' do
+        player.pause
+        player.should be_paused
+        player.pause
+        player.should be_playing
+      end
+    end
+
+    context "stop" do
+
+      before {
+        player.play
+        player.should be_playing
+      }
+
+      it 'no_args()' do
+        player.stop
+        player.should be_stopped
+      end
+    end
+
+  end
+
+  context "piped commands" do
+    # it 'search algo | play' do
+    #   player.should_receive(:search)
+    #   player.should_receive(:play)
+    #   player.execute('search algo | play')
+    # end
+
+    # it 'search algo | play | show @artist' do
+    #   player.should_receive(:search)
+    #   player.should_receive(:play)
+    #   player.should_receive(:show)
+    #   player.execute('search algo | play | show @artist')
+    # end
   end
 
 end
-
-# 'pause'
-# 'stop'
-# 'search algo | play'
-# 'search algo | play | show @artist'

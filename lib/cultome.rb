@@ -141,7 +141,7 @@ class CultomePlayer
   end
 
   def pause
-    @status == :PLAYING ? do_pause : do_resume
+    @status == :PLAYING ? @player.pause : @player.resume
   end
 
   private
@@ -159,14 +159,6 @@ class CultomePlayer
     @player.play(@song.path)
 
     @song
-  end
-
-  def do_pause
-    @player.pause
-  end
-
-  def do_resume
-    @player.resume
   end
 
   def find_by_query(query={or: [], and: []})
@@ -225,6 +217,9 @@ class CultomePlayer
       end
 
       send(method_name, *args)
+    else
+      # mandamos al player todo lo que no conozcamos
+      @player.send(method_name, *args)
     end
   end
 end

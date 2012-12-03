@@ -34,10 +34,11 @@ module PlayerListener
   end
 
   def stateUpdated(event)
-    puts ":::::::::::::::: stateUpdated: event => #{event}"
-    @status = event.description.to_sym
+    # puts ":::::::::::::::: stateUpdated: event => #{event}"
     # OPENED:35850
     # PLAYING:35850
+    @status = event.description.to_sym
+    puts ":::::::::::::::: stateUpdated: event => #{event} New status => #{@status}"
   end
 
   def setController(controller)
