@@ -11,10 +11,10 @@ Dir.entries(jars_path).each{|jar|
 }
 
 import 'Player'
-import 'javazoom.jlgui.basicplayer.BasicPlayerListener'
 
-require 'player_listener'
 require 'cultome'
 
 # iniciamos el reproductor
-CultomePlayer.new.start
+# player=CultomePlayer.new
+# player.start
+# player.play

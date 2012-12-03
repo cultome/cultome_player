@@ -1,5 +1,6 @@
 require 'user_input'
 require 'persistence'
+require 'player_listener'
 
 # TODO
 #  - agregar el genero a los objetos del reproductor
@@ -8,6 +9,7 @@ require 'persistence'
 
 class CultomePlayer
   include UserInput
+  include PlayerListener
 
   attr_reader :playlist
   attr_reader :search
@@ -19,8 +21,7 @@ class CultomePlayer
   attr_reader :album
 
   def initialize
-    listener = PlayerListener.new(self)
-    @player = Player.new(listener)
+    @player = Player.new(self)
     @search = []
     @playlist = []
     @history = []
@@ -30,10 +31,12 @@ class CultomePlayer
     @album = nil
     @play_index = 0
     @max_play_index = 0
+    @status = :STOPPED
   end
 
   def start
     puts "Iniciando!" # aqui poner una frase humorisitca aleatoria
+    self
   end
 
   def execute(user_input)
@@ -137,16 +140,33 @@ class CultomePlayer
     obj
   end
 
+  def pause
+    @status == :PLAYING ? do_pause : do_resume
+  end
+
   private
 
   def do_play
     if @queue.empty?
       @queue << @playlist[@play_index]
     end
+
     @song = @queue.shift
     @album = @song.album
     @artist = @song.artist
+
+    # @status = :PLAYING
+    @player.play(@song.path)
+
     @song
+  end
+
+  def do_pause
+    @player.pause
+  end
+
+  def do_resume
+    @player.resume
   end
 
   def find_by_query(query={or: [], and: []})
@@ -192,6 +212,20 @@ class CultomePlayer
 
   def append_to_playlist(songs)
     @playlist = @playlist + songs
+  end
+
+  def method_missing(method_name, *args)
+    # interrogando sobre el estatus del reproductor
+    if method_name =~ /\A(.*?)\?\Z/
+      self.class.class_eval do 
+        define_method method_name do
+# puts "@@@@@@@@@@@@ method_name: #{method_name}: ====> #{@status.downcase} == #{$1.to_sym} ?? #{@status.downcase == $1.to_sym}"
+          @status.downcase == $1.to_sym
+        end
+      end
+
+      send(method_name, *args)
+    end
   end
 end
 

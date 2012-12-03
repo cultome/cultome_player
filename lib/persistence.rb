@@ -17,6 +17,10 @@ class Song < ActiveRecord::Base
   belongs_to :album
   has_and_belongs_to_many :genres
 
+  def path
+    "C:/ws/cultome_player/01.mp3"
+  end
+
   def to_s
     ":::: Song: #{self.name} \\ Artist: #{self.artist.name} ::::"
   end

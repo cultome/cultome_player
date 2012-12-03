@@ -1,6 +1,5 @@
 
-class PlayerListener
-  include BasicPlayerListener
+module PlayerListener
 
   def initialize(cultome_player)
     @player = cultome_player
@@ -36,6 +35,7 @@ class PlayerListener
 
   def stateUpdated(event)
     puts ":::::::::::::::: stateUpdated: event => #{event}"
+    @status = event.description.to_sym
     # OPENED:35850
     # PLAYING:35850
   end
