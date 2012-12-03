@@ -2,9 +2,9 @@ require 'spec_helper'
 require 'cultome'
 
 class Event
-  attr_reader :description
-  def initialize(desc)
-    @description = desc
+  attr_reader :code
+  def initialize(code)
+    @code = code
   end
 end
 
@@ -14,16 +14,16 @@ class Player
   end
 
   def play(song_path)
-    @listener.stateUpdated(Event.new(:PLAYING))
+    @listener.stateUpdated(Event.new(2))
   end
   def pause
-    @listener.stateUpdated(Event.new(:PAUSED))
+    @listener.stateUpdated(Event.new(4))
   end
   def resume
-    @listener.stateUpdated(Event.new(:PLAYING))
+    @listener.stateUpdated(Event.new(2))
   end
   def stop
-    @listener.stateUpdated(Event.new(:STOPPED))
+    @listener.stateUpdated(Event.new(3))
   end
 end
 

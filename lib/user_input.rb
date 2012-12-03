@@ -1,4 +1,5 @@
-
+# TODO
+#  - Implementar pruebas para ff y fb
 class String
   def blank?
     self.nil? || self.empty?
@@ -7,7 +8,7 @@ end
 
 module UserInput
 
-  COMMANDS = %w{play search show pause stop next prev connect}
+  COMMANDS = %w{play search show pause stop next prev connect quit ff fb}
   ALIAS = %w{p s n}
 
   VALID_IN_CMD = COMMANDS.join('|') + '|' + ALIAS.join('|')

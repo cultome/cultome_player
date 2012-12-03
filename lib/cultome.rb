@@ -2,17 +2,30 @@ require 'user_input'
 require 'persistence'
 require 'player_listener'
 require 'helper'
+require 'active_support'
 
 # TODO
 #  - agregar el genero a los objetos del reproductor
-#  - sacar los objetosa un lugar visible
+#  - sacar los objetos a un lugar visible
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
-#  - validar el parametro de connect
+#  - Checar como meter automaticamente la insercion de registros unknown
+#  - Manejar las canciones que no se pueden tocar 
+#  - Agregar en show el progeso de la cancion
+#  - Implementar control de volumen
+#  - Amarrar las teclas de flechas a acciones
+#  - Agregar los alias a TODO
+#
+# ERRORS
+#  - tirar la salida del reproductor a un log
+#  - el next se desborda despues de la ultima rola
+#
 
 class CultomePlayer
   include UserInput
   include PlayerListener
   include Helper
+
+  FAST_FORWARD_STEP = 250
 
   attr_reader :playlist
   attr_reader :search
@@ -33,26 +46,44 @@ class CultomePlayer
     @artist = nil
     @album = nil
     @play_index = 0
-    @max_play_index = 0
+    @prompt = 'cultome> '
     @status = :STOPPED
+    @progress = {}
   end
 
   def start
     puts "Iniciando!" # aqui poner una frase humorisitca aleatoria
-    self
+    @running = true
+
+    while(@running) do
+      print @prompt
+      execute gets.chomp
+    end
   end
 
   def execute(user_input)
-    cmds = parse(user_input)
-    cmds.each do |cmd|
-# puts "\n#{cmd[:command]}: #{cmd[:params].inspect}\n"
-      send(cmd[:command], cmd[:params])
+    begin
+      cmds = parse(user_input)
+      cmds.each do |cmd|
+  # puts "\n#{cmd[:command]}: #{cmd[:params].inspect}\n"
+        send(cmd[:command], cmd[:params])
+      end
+    rescue Exception => e
+      puts e.message
+      # podriamos indicar que la cancion no toca simplemente y sacarla
+      send(:next)
     end
+  end
+
+  def quit(params=[])
+    @running = false
+    @player.stop
+    puts "Bye!" # aqui poner una frase humorisitca aleatoria
   end
 
   # parameter types: literal, criteria
   def search(params=[])
-    return [] if params.empty?
+    return [] if params.blank?
 
     query = {
       or: [],
@@ -77,14 +108,21 @@ class CultomePlayer
 
   # parameter types: literal, criteria::: object, number
   def play(params=[])
-    if @playlist.empty?
-      set_playlist find_by_query # todas las canciones
-      @artist = @playlist[0].artist unless @playlist.empty?
-      @album = @playlist[0].album unless @playlist.empty?
+    if @playlist.blank?
+      results = find_by_query
+      if results.blank?
+        puts "No music connected yet. Try 'connect C:/my_music => music_library' first!"
+        return nil
+      end
+
+      set_playlist results # todas las canciones
+      @artist = @playlist[0].artist unless @playlist.blank?
+      @album = @playlist[0].album unless @playlist.blank?
     end
 
     search_criteria = []
-    new_playlist = params.empty? ? @playlist : []
+    # new_playlist = params.blank? ? @playlist : []
+    new_playlist = []
 
     params.each do |param|
       case param[:type]
@@ -102,15 +140,18 @@ class CultomePlayer
           end
       end
     end
-    new_playlist += search(search_criteria) unless search_criteria.empty?
-    set_playlist(new_playlist) unless new_playlist.empty?
+
+    new_playlist += search(search_criteria) unless search_criteria.blank?
+
+    set_playlist(new_playlist) unless new_playlist.blank?
 
     do_play
 
   end
 
   def next(params=[])
-    if @play_index + 1 <= @max_play_index
+    puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NEXT"
+    if @play_index + 1 <= @playlist.size
       @play_index += 1
       @history.push @song
 
@@ -119,8 +160,9 @@ class CultomePlayer
   end
 
   def prev(params=[])
-    unless @history.empty?
+    unless @history.blank?
       @queue.unshift @history.pop
+      @play_index -= 1 if @play_index > 0
 
       do_play
     end
@@ -128,13 +170,12 @@ class CultomePlayer
 
   def show(params=[])
     obj = ""
-
-    if params.empty?
+    if params.blank?
       puts "#{obj = @song.to_s}"
-    elsif
+    else
       params.each do |param|
         case param[:type]
-          when :object 
+          when :object
             puts "#{obj = instance_variable_get("@#{param[:value]}").to_s}"
         end
       end
@@ -143,7 +184,7 @@ class CultomePlayer
     obj
   end
 
-  def pause
+  def pause(params=[])
     @status == :PLAYING ? @player.pause : @player.resume
   end
 
@@ -152,9 +193,7 @@ class CultomePlayer
     path_return nil unless Dir.exist?(path_param[:value])
 
     name_param = params.find{|p| p[:type] == :literal}
-# puts "@@@@@@@@@@@@ name: #{name_param[:value]}, path: #{path_param[:value]}"
     new_drive = Drive.create(name: name_param[:value], path: path_param[:value])
-# puts ">>>>>>>>>>>>>> #{new_drive.inspect}"
 
     music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
     music_files.each do |file_path|
@@ -164,10 +203,20 @@ class CultomePlayer
     return music_files.size
   end
 
+  def ff(params=[])
+    next_pos = @progress["mp3.position.byte"] + (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+    @player.seek(next_pos)
+  end
+
+  def fb(params=[])
+    next_pos = @progress["mp3.position.byte"] - (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+    @player.seek(next_pos)
+  end
+
   private
 
   def do_play
-    if @queue.empty?
+    if @queue.blank?
       @queue << @playlist[@play_index]
     end
 
@@ -198,16 +247,16 @@ class CultomePlayer
 
     # armamos la condicion where
     where_clause = or_condition
-    if where_clause.empty?
+    if where_clause.blank?
       where_clause = and_condition
-    elsif !and_condition.empty?
+    elsif !and_condition.blank?
       where_clause += " and #{and_condition}"
     end
 
     # preparamos los parametros
-    where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.empty? }.compact.flatten
+    where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.blank? }.compact.flatten
 
-    if where_clause.empty?
+    if where_clause.blank?
       Song.all
     else
       Song.joins("left outer join artists on artists.id == songs.artist_id")
@@ -219,7 +268,6 @@ class CultomePlayer
   def set_playlist(songs)
     @playlist = songs
     @play_index = 0
-    @max_play_index = songs.size
   end
 
   def append_to_playlist(songs)
@@ -231,7 +279,6 @@ class CultomePlayer
     if method_name =~ /\A(.*?)\?\Z/
       self.class.class_eval do 
         define_method method_name do
-# puts "@@@@@@@@@@@@ method_name: #{method_name}: ====> #{@status.downcase} == #{$1.to_sym} ?? #{@status.downcase == $1.to_sym}"
           @status.downcase == $1.to_sym
         end
       end
@@ -239,18 +286,18 @@ class CultomePlayer
       send(method_name, *args)
     else
       # mandamos al player todo lo que no conozcamos
-      @player.send(method_name, *args)
+      @player.send(method_name)
     end
   end
 
   def create_song_from_file(file_path, drive)
     info = extract_mp3_information(file_path)
 
-    unless info[:artist].empty?
+    unless info[:artist].blank?
       info[:artist_id] = Artist.find_or_create_by_name(name: info[:artist]).id
     end
 
-    unless info[:album].empty?
+    unless info[:album].blank?
       info[:album_id] = Album.find_or_create_by_name(name: info[:album]).id
     end
 
