@@ -1,4 +1,3 @@
-
 module PlayerListener
   STATES = {
     -1 =>:UNKNOWN, 
@@ -16,11 +15,10 @@ module PlayerListener
   }
 
   def initialize
-    # @player = cultome_player
   end
 
   def opened(stream, properties)
-    puts ":::::::::::::::: opended: stream => #{stream}, properties: => #{properties}"
+    # puts ":::::::::::::::: opended: stream => #{stream}, properties: => #{properties}"
     # "mp3.id3tag.track"=>"3",
     # "mp3.crc"=>false, "mp3.id3tag.orchestra"=>"Noel Gallagher",
     # "mp3.copyright"=>false, "album"=>"High Flying Birds  ",
@@ -66,8 +64,7 @@ module PlayerListener
     end
 
     @status = STATES[event.code]
-    puts ":::::::::::::::: New status 
-    => #{@status}"
+    # puts ":::::::::::::::: New status => #{@status}"
   end
 
   def setController(controller)

@@ -23,7 +23,7 @@ class Song < ActiveRecord::Base
   end
 
   def to_s
-    ":::: Song: #{self.name} \\ Artist: #{self.artist.name} ::::"
+    ":::: Song: #{self.name} \\ Artist: #{self.artist.name unless self.artist.nil?} ::::"
   end
 end
 
@@ -60,4 +60,8 @@ class Drive < ActiveRecord::Base
   attr_accessible :name, :path
 
   has_many :songs
+
+  def to_s
+    ":::: Drive: #{self.name} => #{self.songs.size} songs => #{self.path} ::::"
+  end
 end

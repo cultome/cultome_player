@@ -9,15 +9,22 @@ require 'active_support'
 #  - sacar los objetos a un lugar visible
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
 #  - Checar como meter automaticamente la insercion de registros unknown
-#  - Manejar las canciones que no se pueden tocar 
-#  - Agregar en show el progeso de la cancion
 #  - Implementar control de volumen
 #  - Amarrar las teclas de flechas a acciones
 #  - Agregar los alias a TODO
+#  * Shuffle and replay mode
+#  - Mostrar progreso de importacion de canciones al conectar un drive
+#  - Importar en segundo plano
+#  - Meter visualizaciones ASCII
+#  - Contar las reproducciones de cada cada
+#  - Mostrar TODAS las rolas de la bibliotecas conectadas
+#  - Manejar los paths con espacios y caracteres especiales  durante la importacion
+# 
 #
 # ERRORS
-#  - tirar la salida del reproductor a un log
-#  - el next se desborda despues de la ultima rola
+#  - Manejar la situacion de que la rola no cargue correctamente
+#  - Ver porque no importa todas las rolas (folder con espacios? muy anidados?)
+#  - Como primera accion, el 'play absolution' toca otra cancion
 #
 
 class CultomePlayer
@@ -45,16 +52,19 @@ class CultomePlayer
     @song = nil
     @artist = nil
     @album = nil
-    @play_index = 0
+    @play_index = -1
     @prompt = 'cultome> '
     @status = :STOPPED
     @progress = {}
+    @focus = nil
+    @drives = Drive.all.to_a
   end
 
   def start
     puts "Iniciando!" # aqui poner una frase humorisitca aleatoria
     @running = true
 
+    gets # el doble prompt
     while(@running) do
       print @prompt
       execute gets.chomp
@@ -103,33 +113,34 @@ class CultomePlayer
       end
     end
 
-    @search = find_by_query(query).to_a
+    display(@search = @focus = find_by_query(query).to_a)
+
+    @search
   end
 
   # parameter types: literal, criteria::: object, number
   def play(params=[])
+    search_criteria = []
+    new_playlist = []
+
     if @playlist.blank?
-      results = find_by_query
-      if results.blank?
+      new_playlist = find_by_query
+      if new_playlist.blank?
         puts "No music connected yet. Try 'connect C:/my_music => music_library' first!"
         return nil
       end
 
-      set_playlist results # todas las canciones
-      @artist = @playlist[0].artist unless @playlist.blank?
-      @album = @playlist[0].album unless @playlist.blank?
+      # set_playlist results # todas las canciones
+      @artist = new_playlist[0].artist unless new_playlist[0].blank?
+      @album = new_playlist[0].album unless new_playlist[0].blank?
     end
-
-    search_criteria = []
-    # new_playlist = params.blank? ? @playlist : []
-    new_playlist = []
 
     params.each do |param|
       case param[:type]
         when /literal|criteria/
           search_criteria << param
         when :number
-          @queue.push @playlist[param[:value].to_i - 1]
+          @queue.push @focus[param[:value].to_i - 1]
         when :object
           case param[:value]
             when :playlist then new_playlist = @playlist
@@ -143,45 +154,32 @@ class CultomePlayer
 
     new_playlist += search(search_criteria) unless search_criteria.blank?
 
-    set_playlist(new_playlist) unless new_playlist.blank?
-
-    do_play
-
-  end
-
-  def next(params=[])
-    puts "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< NEXT"
-    if @play_index + 1 <= @playlist.size
-      @play_index += 1
-      @history.push @song
-
-      do_play
-    end
-  end
-
-  def prev(params=[])
-    unless @history.blank?
-      @queue.unshift @history.pop
-      @play_index -= 1 if @play_index > 0
-
+    if new_playlist.blank?
+      self.next
+    else
+      set_playlist(new_playlist)
       do_play
     end
   end
 
   def show(params=[])
-    obj = ""
     if params.blank?
-      puts "#{obj = @song.to_s}"
+      display @song
+      show_progress @song 
     else
       params.each do |param|
         case param[:type]
           when :object
-            puts "#{obj = instance_variable_get("@#{param[:value]}").to_s}"
+            display (@focus = instance_variable_get("@#{param[:value]}"))
         end
       end
     end
+  end
 
-    obj
+  def show_progress(song)
+    actual = @progress["mp3.position.microseconds"] / 1000000
+    percentage = ((actual * 100) / song.duration) / 10
+    display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(song.duration)}"
   end
 
   def pause(params=[])
@@ -193,7 +191,7 @@ class CultomePlayer
     path_return nil unless Dir.exist?(path_param[:value])
 
     name_param = params.find{|p| p[:type] == :literal}
-    new_drive = Drive.create(name: name_param[:value], path: path_param[:value])
+    @drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
 
     music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
     music_files.each do |file_path|
@@ -213,19 +211,43 @@ class CultomePlayer
     @player.seek(next_pos)
   end
 
+  def next(params=[])
+    if @play_index + 1 < @playlist.size
+      @play_index += 1
+
+      @history.push @song unless @song.nil?
+
+      @queue.push @playlist[@play_index]
+
+      do_play
+    else
+      display "No more songs in playlist!"
+    end
+  end
+
+  def prev(params=[])
+    unless @history.blank?
+      @queue.unshift @history.pop
+      @play_index -= 1 if @play_index > 0
+
+      do_play
+    end
+  end
+
   private
 
   def do_play
     if @queue.blank?
-      @queue << @playlist[@play_index]
+      return self.next
     end
 
     @song = @queue.shift
     @album = @song.album
     @artist = @song.artist
 
-    # @status = :PLAYING
     @player.play(@song.path)
+
+    display @song
 
     @song
   end
@@ -266,8 +288,8 @@ class CultomePlayer
   end
 
   def set_playlist(songs)
-    @playlist = songs
-    @play_index = 0
+    @playlist = @focus = songs
+    @play_index = -1
   end
 
   def append_to_playlist(songs)
@@ -302,15 +324,22 @@ class CultomePlayer
     end
 
     info[:drive_id] = drive.id
-    puts "drive.path: #{drive.path}"
+    # puts "drive.path: #{drive.path}"
     info[:relative_path] = file_path.gsub("#{drive.path}/", '')
 
-    puts info.inspect
+    # puts info.inspect
     song = Song.create(info)
-    puts song.inspect
+    # puts song.inspect
 
     return song
   end
+
+  def display(object)
+    text = object.to_s
+    puts text
+    text
+  end
+
 end
 
 class Array

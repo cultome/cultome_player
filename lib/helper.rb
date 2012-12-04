@@ -31,4 +31,7 @@ module Helper
     info
   end
 
+  def to_time(seconds)
+    "#{(seconds/60).to_s.rjust(2, '0')}:#{(seconds%60).to_s.rjust(2, '0')}"
+  end
 end
