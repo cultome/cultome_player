@@ -13,5 +13,9 @@ Dir.entries(jars_path).each{|jar|
 import 'Player'
 require 'cultome'
 
+# checamos si estan los registros default
+Album.find_or_create_by_id(id: 0, name: "unknown")
+Artist.find_or_create_by_id(id: 0, name: "unknown")
+
 # iniciamos el reproductor
 CultomePlayer.new.start

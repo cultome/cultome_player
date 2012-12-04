@@ -5,22 +5,27 @@ module Helper
 
   def extract_mp3_information(file_path)
     info = nil
-    Mp3Info.open(file_path) do |mp3|
-      info = {
-        name: mp3.tag.title,
-        artist: mp3.tag.artist,
-        album: mp3.tag.album,
-        track: mp3.tag.tracknum,
-        duration: mp3.length,
-        year: mp3.tag1["year"]
-      }
-    end
+    begin
+      Mp3Info.open(file_path) do |mp3|
+        info = {
+          name: mp3.tag.title,
+          artist: mp3.tag.artist,
+          album: mp3.tag.album,
+          track: mp3.tag.tracknum,
+          duration: mp3.length,
+          year: mp3.tag1["year"]
+        }
+      end
 
-    if info[:name].nil?
-      info[:name] = file_path.split('/').last
-    end
+      if info[:name].nil?
+        info[:name] = file_path.split('/').last
+      end
 
-    return polish(info)
+      return polish(info)
+    rescue
+      puts "The file '#{file_path}' could not be added"
+      return nil
+    end
   end
 
   def polish(info)

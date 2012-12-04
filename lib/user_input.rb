@@ -1,5 +1,6 @@
 # TODO
 #  - Implementar pruebas para ff y fb
+#  - Implementar prurbas para los nuevos caracteres del path
 class String
   def blank?
     self.nil? || self.empty?
@@ -38,8 +39,32 @@ module UserInput
     return nil if input !~ /\A(#{VALID_IN_CMD})[\s]*(.*)?\Z/
 
     cmd = $1
-    params = $2.split(' ').collect{|s| if s.blank? then nil else s end }
-    pretty_params = parse_params(params)
+    # params = $2.split(' ').collect{|s| if s.blank? then nil else s end }
+
+    m = nil
+    params = $2.split(' ').collect do |t|
+      if t.blank?
+        nil
+      elsif m.nil?
+        if t.index('"')
+          m = t.gsub('"', '')
+          nil
+        else 
+          t 
+        end
+      else
+        m = m + ' ' + t.gsub('"', '')
+        if t.index('"')
+          temp = m
+          m = nil
+          temp
+        else
+          nil
+        end
+      end
+    end
+
+    pretty_params = parse_params(params.compact)
 
     # puts "CMD: #{cmd}\tPARAMS: #{pretty_params.inspect}"
 
@@ -52,10 +77,10 @@ module UserInput
     params.collect{|param|
       case param
         when /\A[0-9]+\Z/ then {value: param, type: param.to_i > 0 ? :number : :unknown}
-        when /\A([a-zA-Z]:[\/\\]|\/)([\w\/\\]+)+\Z/ then {value: param.gsub(/(\/|\\)\Z/, ''), type: :path}
-        when /\A(#{VALID_CRITERIA_PREFIX}):([\w]+)\Z/ then {criteria: $1.to_sym, value: $2, type: :criteria}
+        when /\A([a-zA-Z]:[\/\\]|\/)(.+?)+\Z/ then {value: param.gsub(/(\/|\\)\Z/, ''), type: :path}
+        when /\A(#{VALID_CRITERIA_PREFIX}):([\w ]+)\Z/ then {criteria: $1.to_sym, value: $2, type: :criteria}
         when /\A@([\w]+)\Z/ then {value: $1.to_sym, type: :object}
-        when /\A[\w\d]+\Z/ then {value: param, type: :literal}
+        when /\A[\w\d ]+\Z/ then {value: param, type: :literal}
         when /\A#{BUBBLE_WORD.join('|')}\Z/ then nil
         else {value: param, type: :unknown}
       end

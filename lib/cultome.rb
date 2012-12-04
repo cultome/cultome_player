@@ -8,22 +8,18 @@ require 'active_support'
 #  - agregar el genero a los objetos del reproductor
 #  - sacar los objetos a un lugar visible
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
-#  - Checar como meter automaticamente la insercion de registros unknown
 #  - Implementar control de volumen
 #  - Amarrar las teclas de flechas a acciones
 #  - Agregar los alias a TODO
-#  * Shuffle and replay mode
-#  - Mostrar progreso de importacion de canciones al conectar un drive
+#  - Shuffle and replay mode
 #  - Importar en segundo plano
 #  - Meter visualizaciones ASCII
 #  - Contar las reproducciones de cada cada
 #  - Mostrar TODAS las rolas de la bibliotecas conectadas
-#  - Manejar los paths con espacios y caracteres especiales  durante la importacion
 # 
 #
 # ERRORS
 #  - Manejar la situacion de que la rola no cargue correctamente
-#  - Ver porque no importa todas las rolas (folder con espacios? muy anidados?)
 #  - Como primera accion, el 'play absolution' toca otra cancion
 #
 
@@ -194,8 +190,13 @@ class CultomePlayer
     @drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
 
     music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
+    imported = 0
+    to_be_imported = music_files.size
+
     music_files.each do |file_path|
       create_song_from_file(file_path, new_drive)
+      imported += 1
+      display "Importing #{imported}/#{to_be_imported}..."
     end
 
     return music_files.size
@@ -314,6 +315,8 @@ class CultomePlayer
 
   def create_song_from_file(file_path, drive)
     info = extract_mp3_information(file_path)
+
+    return nil if info.nil?
 
     unless info[:artist].blank?
       info[:artist_id] = Artist.find_or_create_by_name(name: info[:artist]).id

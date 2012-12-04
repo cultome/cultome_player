@@ -1,7 +1,7 @@
 require 'persistence'
 
-Album.create(id: 0, name: "unknown")
-Artist.create(id: 0, name: "unknown")
+# Album.create(id: 0, name: "unknown")
+# Artist.create(id: 0, name: "unknown")
 Drive.create(name: "rolateca", path: "C:\\ws\\cultome_player")
 
 s=Song.create(name: "If a Had A Gun", artist_id: 1, album_id: 1, year: 2011, track: 1, duration: 123, drive_id: 1, relative_path: "01.mp3")

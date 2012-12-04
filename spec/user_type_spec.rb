@@ -15,6 +15,11 @@ describe TestUserInput do
         cmd.should == [{:command=>"search", :params=>[]}]
       end
 
+      it "buscando con criterio multi palabra" do
+        cmd = parser.parse 'search "mi artista"'
+        cmd.should == [{:command=>"search", :params=>[{:value=>"mi artista", :type=>:literal}]}]
+      end
+
       it "buscando en artista, album o rola" do
         cmd = parser.parse 'search artista'
         cmd.should == [{:command=>"search", :params=>[{:value=>"artista", :type=>:literal}]}]
@@ -194,6 +199,11 @@ describe TestUserInput do
     it 'debe conectar el folder al reproductor' do
       cmd = parser.parse 'connect c:/musica/artista/ => rolateca'
       cmd.should == [{:command=>"connect", :params=>[ {value: 'c:/musica/artista', type: :path}, {value: 'rolateca', type: :literal} ]}]
+    end
+
+    it 'debe conectar el folder al reproductor' do
+      cmd = parser.parse 'connect "I:\Musica\Belanova - Fantasia Pop (2007) - Electronic" => rolateca'
+      cmd.should == [{:command=>"connect", :params=>[ {value: 'I:\Musica\Belanova - Fantasia Pop (2007) - Electronic', type: :path}, {value: 'rolateca', type: :literal} ]}]
     end
 
     it 'debe conectar el folder al reproductor' do
