@@ -16,11 +16,18 @@ require 'active_support'
 #  - Meter visualizaciones ASCII
 #  - Contar las reproducciones de cada cada
 #  - Mostrar TODAS las rolas de la bibliotecas conectadas
+#  - Conectar y deconectar unidades
+#  - Play @all
+#  - Con enter sin nada mas en el promt se repita el ultimo comando
+#  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
 # 
 #
 # ERRORS
 #  - Manejar la situacion de que la rola no cargue correctamente
 #  - Como primera accion, el 'play absolution' toca otra cancion
+#  - A veces se atora cuando termina una cancion y no toca la siguiente
+#  - Clear objetos como queue y playlist
+#  - Comporatmiento erratico con la queue
 #
 
 class CultomePlayer
