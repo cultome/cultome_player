@@ -1,24 +1,20 @@
 require 'user_input'
+require 'readline'
 require 'persistence'
 require 'player_listener'
 require 'helper'
 require 'active_support'
 
 # TODO
+#  - Importar canciones en segundo plano
+#  - Agregar ayuda!!!! y mensajes descritivos para los comandos
 #  - agregar el genero a los objetos del reproductor
-#  - sacar los objetos a un lugar visible
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
 #  - Implementar control de volumen
-#  - Amarrar las teclas de flechas a acciones
-#  - Agregar los alias a TODO
-#  - Shuffle and replay mode
 #  - Importar en segundo plano
 #  - Meter visualizaciones ASCII
 #  - Contar las reproducciones de cada cada
-#  - Mostrar TODAS las rolas de la bibliotecas conectadas
 #  - Conectar y deconectar unidades
-#  - Play @all
-#  - Con enter sin nada mas en el promt se repita el ultimo comando
 #  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
 # 
 #
@@ -31,330 +27,412 @@ require 'active_support'
 #
 
 class CultomePlayer
-  include UserInput
-  include PlayerListener
-  include Helper
+	include UserInput
+	include PlayerListener
+	include Helper
 
-  FAST_FORWARD_STEP = 250
+	FAST_FORWARD_STEP = 250
 
-  attr_reader :playlist
-  attr_reader :search
-  attr_reader :history
-  attr_reader :queue
+	attr_reader :playlist
+	attr_reader :search
+	attr_reader :history
+	attr_reader :queue
 
-  attr_reader :song
-  attr_reader :artist
-  attr_reader :album
+	attr_reader :song
+	attr_reader :artist
+	attr_reader :album
 
-  def initialize
-    @player = Player.new(self)
-    @search = []
-    @playlist = []
-    @history = []
-    @queue = []
-    @song = nil
-    @artist = nil
-    @album = nil
-    @play_index = -1
-    @prompt = 'cultome> '
-    @status = :STOPPED
-    @progress = {}
-    @focus = nil
-    @drives = Drive.all.to_a
-  end
+	def initialize
+		@player = Player.new(self)
+		@search = []
+		@playlist = []
+		@history = []
+		@queue = []
+		@song = nil
+		@artist = nil
+		@album = nil
+		@play_index = -1
+		@prompt = 'cultome> '
+		@status = :STOPPED
+		@progress = {}
+		@focus = nil
+		@drives = Drive.all.to_a
+		@last_cmds = []
+		@is_shuffling = true
+	end
 
-  def start
-    puts "Iniciando!" # aqui poner una frase humorisitca aleatoria
-    @running = true
+	def start
+		display "Iniciando!" # aqui poner una frase humorisitca aleatoria
+		@running = true
 
-    gets # el doble prompt
-    while(@running) do
-      print @prompt
-      execute gets.chomp
-    end
-  end
+		while(@running) do
+			execute Readline::readline(@prompt, true)
+		end
+	end
 
-  def execute(user_input)
-    begin
-      cmds = parse(user_input)
-      cmds.each do |cmd|
-  # puts "\n#{cmd[:command]}: #{cmd[:params].inspect}\n"
-        send(cmd[:command], cmd[:params])
-      end
-    rescue Exception => e
-      puts e.message
-      # podriamos indicar que la cancion no toca simplemente y sacarla
-      send(:next)
-    end
-  end
+	def execute(user_input)
+		begin
+			cmds = parse(user_input)
+			if cmds.empty?
+				cmds = @last_cmds
+			else
+				@last_cmds = cmds
+			end
 
-  def quit(params=[])
-    @running = false
-    @player.stop
-    puts "Bye!" # aqui poner una frase humorisitca aleatoria
-  end
+			cmds.each do |cmd|
+				if respond_to? cmd[:command]
+					return send(cmd[:command], cmd[:params])
+				end
+			end
+		rescue Exception => e
+			display e.message
+			# podriamos indicar que la cancion no toca simplemente y sacarla
+			send(:next) unless e.message =~ /Invalid command/
+		end
+	end
 
-  # parameter types: literal, criteria
-  def search(params=[])
-    return [] if params.blank?
+	def help(params=[])
+		if params.empty?
+			display("The following commands are valids:")
+			COMMANDS.each{|key, map| display("  #{key.ljust(15)} #{map[:help]}")}
+			display("\nView more details for a command typing 'help <command>'\n")
+		else
+			cmd = params[0][:value]
+			map = COMMANDS[cmd]
+			display("Usage: #{cmd} #{ map[:params_format] }")
+		end
 
-    query = {
-      or: [],
-      and: []
-    }
+		display("\nThe following are the parameters types:")
+		display("  #{"number".ljust(15)}A integer value. Normally limited by the focused object.")
+		display("  #{"literal".ljust(15)}Any string of characters. If spaces are required, wrap the string with \" or '")
+		display("  #{"object".ljust(15)}One of the playes's objects. The following are available:")
+		display("#{"".ljust(20)}@playlist: The current playlist.")
+		display("#{"".ljust(20)}@song: The current song playing.")
+		display("#{"".ljust(20)}@artist: The artist from the current song playing.")
+		display("#{"".ljust(20)}@album: The album from the current song playing.")
+		display("#{"".ljust(20)}@history: The history playlist.")
+		display("#{"".ljust(20)}@search: the playlist with the results of the lastest search.")
+		display("#{"".ljust(20)}@library: The playlist of the complete library..")
+		display("  #{"criteria".ljust(15)}A key-value pair in the format <key>:<literal>. Valid keys are:")
+		display("#{"".ljust(20)}a: stand for Artist.")
+		display("#{"".ljust(20)}b: stand for Album.")
+		display("#{"".ljust(20)}t: stand for Title.")
+		display("  #{"path".ljust(15)}A valid path inside local filesystem.")
+	end
 
-    params.each do |param|
-      param_value = "%#{param[:value]}%"
+	def quit(params=[])
+		@running = false
+		@player.stop
+		display "Bye!" # aqui poner una frase humorisitca aleatoria
+	end
 
-      case param[:type]
-        when :literal
-          query[:or] << {id: 1, condition: '(artists.name like ? or albums.name like ? or songs.name like ?)', value: [param_value] * 3}
-        when :criteria
-          if param[:criteria] == :a then query[:and] << {id: 2, condition: 'artists.name like ?', value: param_value}
-          elsif param[:criteria] == :b then query[:and] << {id: 3, condition: 'albums.name like ?', value: param_value}
-          elsif param[:criteria] == :s then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
-      end
-    end
+	# parameter types: literal, criteria
+	def search(params=[])
+		return [] if params.blank?
 
-    display(@search = @focus = find_by_query(query).to_a)
+		query = {
+			or: [],
+			and: []
+		}
 
-    @search
-  end
+		params.each do |param|
+			param_value = "%#{param[:value]}%"
 
-  # parameter types: literal, criteria::: object, number
-  def play(params=[])
-    search_criteria = []
-    new_playlist = []
+			case param[:type]
+			when :literal
+				query[:or] << {id: 1, condition: '(artists.name like ? or albums.name like ? or songs.name like ?)', value: [param_value] * 3}
+			when :criteria
+				if param[:criteria] == :a then query[:and] << {id: 2, condition: 'artists.name like ?', value: param_value}
+				elsif param[:criteria] == :b then query[:and] << {id: 3, condition: 'albums.name like ?', value: param_value}
+				elsif param[:criteria] == :s then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
+			end
+		end
 
-    if @playlist.blank?
-      new_playlist = find_by_query
-      if new_playlist.blank?
-        puts "No music connected yet. Try 'connect C:/my_music => music_library' first!"
-        return nil
-      end
+		display(@search = @focus = find_by_query(query).to_a)
 
-      # set_playlist results # todas las canciones
-      @artist = new_playlist[0].artist unless new_playlist[0].blank?
-      @album = new_playlist[0].album unless new_playlist[0].blank?
-    end
+		@search
+	end
 
-    params.each do |param|
-      case param[:type]
-        when /literal|criteria/
-          search_criteria << param
-        when :number
-          @queue.push @focus[param[:value].to_i - 1]
-        when :object
-          case param[:value]
-            when :playlist then new_playlist = @playlist
-            when :search then new_playlist += @search
-            when :history then new_playlist += @history
-            when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
-            when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
-          end
-      end
-    end
+	# parameter types: literal, criteria::: object, number
+	def play(params=[])
+		search_criteria = []
+		new_playlist = []
 
-    new_playlist += search(search_criteria) unless search_criteria.blank?
+		if params.empty? && @playlist.blank?
+			new_playlist = find_by_query
+			if new_playlist.blank?
+				display "No music connected yet. Try 'connect /home/csoria/music => music_library' first!"
+				return nil
+			end
 
-    if new_playlist.blank?
-      self.next
-    else
-      set_playlist(new_playlist)
-      do_play
-    end
-  end
+			# set_playlist results # todas las canciones
+			@artist = new_playlist[0].artist unless new_playlist[0].blank?
+			@album = new_playlist[0].album unless new_playlist[0].blank?
+		end
 
-  def show(params=[])
-    if params.blank?
-      display @song
-      show_progress @song 
-    else
-      params.each do |param|
-        case param[:type]
-          when :object
-            display (@focus = instance_variable_get("@#{param[:value]}"))
-        end
-      end
-    end
-  end
+		params.each do |param|
+			case param[:type]
+			when /literal|criteria/
+				search_criteria << param
+			when :number
+				if @focus[param[:value].to_i - 1].nil?
+					@queue.push @playlist[param[:value].to_i - 1]
+				else
+					@queue.push @focus[param[:value].to_i - 1]
+				end
+			when :object
+				case param[:value]
+					when :library then new_playlist = find_by_query
+					when :playlist then new_playlist = @playlist
+					when :search then new_playlist += @search
+					when :history then new_playlist += @history
+					when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
+					when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
+				end
+			end
+		end
 
-  def show_progress(song)
-    actual = @progress["mp3.position.microseconds"] / 1000000
-    percentage = ((actual * 100) / song.duration) / 10
-    display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(song.duration)}"
-  end
+		new_playlist += search(search_criteria) unless search_criteria.blank?
 
-  def pause(params=[])
-    @status == :PLAYING ? @player.pause : @player.resume
-  end
+		unless new_playlist.blank?
+			set_playlist(new_playlist)
+		end
 
-  def connect(params=[])
-    path_param = params.find{|p| p[:type] == :path}
-    path_return nil unless Dir.exist?(path_param[:value])
+		@history.push @song unless @song.nil?
+		do_play
+	end
 
-    name_param = params.find{|p| p[:type] == :literal}
-    @drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
+	def shuffle(params=[])
+		unless params.empty?
+			params.each do |param|
+				@is_shuffling = param[:value] =~ /on|true|1|si|ok/
+			end
+		end
+		display(@is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
 
-    music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
-    imported = 0
-    to_be_imported = music_files.size
+	end
 
-    music_files.each do |file_path|
-      create_song_from_file(file_path, new_drive)
-      imported += 1
-      display "Importing #{imported}/#{to_be_imported}..."
-    end
+	def next(params=[])
+		if @play_index + 1 < @playlist.size
+			@history.push @song unless @song.nil?
 
-    return music_files.size
-  end
+			if @is_shuffling
+				@queue.push @playlist[rand(@playlist.size - 1)]
+			else
+				@play_index += 1
+				@queue.push @playlist[@play_index]
+			end
 
-  def ff(params=[])
-    next_pos = @progress["mp3.position.byte"] + (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
-    @player.seek(next_pos)
-  end
+			do_play
+		else
+			display "No more songs in playlist!"
+		end
+	end
 
-  def fb(params=[])
-    next_pos = @progress["mp3.position.byte"] - (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
-    @player.seek(next_pos)
-  end
+	def prev(params=[])
+		if @history.blank?
+			display "Thre is no files in history"
+		else
+			@queue.unshift @history.pop
+			@play_index -= 1 if @play_index > 0
 
-  def next(params=[])
-    if @play_index + 1 < @playlist.size
-      @play_index += 1
+			do_play
+		end
+	end
 
-      @history.push @song unless @song.nil?
+	def do_play
+		if @queue.blank?
+			return self.next
+		end
 
-      @queue.push @playlist[@play_index]
+		@song = @queue.shift
 
-      do_play
-    else
-      display "No more songs in playlist!"
-    end
-  end
+		if @song.nil?
+			display 'There is no song to play' 
+			return nil
+		end
 
-  def prev(params=[])
-    unless @history.blank?
-      @queue.unshift @history.pop
-      @play_index -= 1 if @play_index > 0
+		if @song.class == Artist
+			@artist = @song
+			return play([{type: :object, value: :artist}])
+		elsif @song.class == Album
+			@album = @song
+			return play([{type: :object, value: :album}])
+		end
 
-      do_play
-    end
-  end
+		@album = @song.album 
+		@artist = @song.artist
 
-  private
+		@player.play(@song.path)
 
-  def do_play
-    if @queue.blank?
-      return self.next
-    end
+		display @song
 
-    @song = @queue.shift
-    @album = @song.album
-    @artist = @song.artist
+		@song
+	end
 
-    @player.play(@song.path)
 
-    display @song
+	def show(params=[])
+		if params.blank?
+			display @song
+			show_progress @song 
+		else
+			params.each do |param|
+				case param[:type]
+				when :object
+					obj = instance_variable_get("@#{param[:value]}")
 
-    @song
-  end
+					if param[:value] =~ /playlist|search|history/ 
+						@focus = obj
+					elsif param[:value] =~ /artists|albums/
+						if param[:value] =~ /artists/
+							obj = Artist.all
+						elsif param[:value] =~ /albums/
+							obj = Album.all
+						end
+						@focus = obj
+					end
 
-  def find_by_query(query={or: [], and: []})
-    # checamos que una condicion que hace que los and's se vuelvan or's
-    #   =>  si una condicion del 2..4 se pone dos o mas veces, esa condicion se hace un or
-    # TODO: ESTO QUEDO MUY FEO, CAMBIARLO
-    (2..4).each do |id_cond|
-      if query[:and].count{|cond| cond[:id] == id_cond} > 1
-        # sacamos todas las condiciones de este tipo y las metemos como or's
-        query[:or] = query[:or] + query[:and].select{|cond| cond[:id] == id_cond}
-        query[:and] = query[:and].delete_if{|cond| cond[:id] == id_cond}
-      end
-    end
+					display(obj)
+				end # case
+			end # do
+		end # if
+	end
 
-    or_condition = query[:or].collect{|c| c[:condition] }.join(' or ')
-    and_condition = query[:and].collect{|c| c[:condition] }.join(' and ')
+	def show_progress(song)
+		actual = @progress["mp3.position.microseconds"] / 1000000
+		percentage = ((actual * 100) / song.duration) / 10
+		display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(song.duration)}"
+	end
 
-    # armamos la condicion where
-    where_clause = or_condition
-    if where_clause.blank?
-      where_clause = and_condition
-    elsif !and_condition.blank?
-      where_clause += " and #{and_condition}"
-    end
+	def pause(params=[])
+		@status == :PLAYING ? @player.pause : @player.resume
+	end
 
-    # preparamos los parametros
-    where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.blank? }.compact.flatten
+	def connect(params=[])
+		path_param = params.find{|p| p[:type] == :path}
+		path_return nil unless Dir.exist?(path_param[:value])
 
-    if where_clause.blank?
-      Song.all
-    else
-      Song.joins("left outer join artists on artists.id == songs.artist_id")
-      .joins("left outer join albums on albums.id == songs.album_id")
-      .where(where_clause, *where_params)
-    end
-  end
+		name_param = params.find{|p| p[:type] == :literal}
+		@drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
 
-  def set_playlist(songs)
-    @playlist = @focus = songs
-    @play_index = -1
-  end
+		music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
+		imported = 0
+		to_be_imported = music_files.size
 
-  def append_to_playlist(songs)
-    @playlist = @playlist + songs
-  end
+		music_files.each do |file_path|
+			create_song_from_file(file_path, new_drive)
+			imported += 1
+			display "Importing #{imported}/#{to_be_imported}..."
+		end
 
-  def method_missing(method_name, *args)
-    # interrogando sobre el estatus del reproductor
-    if method_name =~ /\A(.*?)\?\Z/
-      self.class.class_eval do 
-        define_method method_name do
-          @status.downcase == $1.to_sym
-        end
-      end
+		return music_files.size
+	end
 
-      send(method_name, *args)
-    else
-      # mandamos al player todo lo que no conozcamos
-      @player.send(method_name)
-    end
-  end
+	def ff(params=[])
+		next_pos = @progress["mp3.position.byte"] + (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+		@player.seek(next_pos)
+	end
 
-  def create_song_from_file(file_path, drive)
-    info = extract_mp3_information(file_path)
+	def fb(params=[])
+		next_pos = @progress["mp3.position.byte"] - (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+		@player.seek(next_pos)
+	end
 
-    return nil if info.nil?
+	private
 
-    unless info[:artist].blank?
-      info[:artist_id] = Artist.find_or_create_by_name(name: info[:artist]).id
-    end
+	def find_by_query(query={or: [], and: []})
+		# checamos que una condicion que hace que los and's se vuelvan or's
+		#   =>  si una condicion del 2..4 se pone dos o mas veces, esa condicion se hace un or
+		# TODO: ESTO QUEDO MUY FEO, CAMBIARLO
+		(2..4).each do |id_cond|
+			if query[:and].count{|cond| cond[:id] == id_cond} > 1
+				# sacamos todas las condiciones de este tipo y las metemos como or's
+				query[:or] = query[:or] + query[:and].select{|cond| cond[:id] == id_cond}
+				query[:and] = query[:and].delete_if{|cond| cond[:id] == id_cond}
+			end
+		end
 
-    unless info[:album].blank?
-      info[:album_id] = Album.find_or_create_by_name(name: info[:album]).id
-    end
+		or_condition = query[:or].collect{|c| c[:condition] }.join(' or ')
+		and_condition = query[:and].collect{|c| c[:condition] }.join(' and ')
 
-    info[:drive_id] = drive.id
-    # puts "drive.path: #{drive.path}"
-    info[:relative_path] = file_path.gsub("#{drive.path}/", '')
+		# armamos la condicion where
+		where_clause = or_condition
+		if where_clause.blank?
+			where_clause = and_condition
+		elsif !and_condition.blank?
+			where_clause += " and #{and_condition}"
+		end
 
-    # puts info.inspect
-    song = Song.create(info)
-    # puts song.inspect
+		# preparamos los parametros
+		where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.blank? }.compact.flatten
 
-    return song
-  end
+		if where_clause.blank?
+			Song.all
+		else
+			Song.joins("left outer join artists on artists.id == songs.artist_id")
+			.joins("left outer join albums on albums.id == songs.album_id")
+			.where(where_clause, *where_params)
+		end
+	end
 
-  def display(object)
-    text = object.to_s
-    puts text
-    text
-  end
+	def set_playlist(songs)
+		@playlist = @focus = songs
+		@play_index = -1
+		@queue = []
+	end
+
+	def append_to_playlist(songs)
+		@playlist = @playlist + songs
+	end
+
+	def method_missing(method_name, *args)
+		# interrogando sobre el estatus del reproductor
+		if method_name =~ /\A(.*?)\?\Z/
+			self.class.class_eval do 
+			define_method method_name do
+				@status.downcase == $1.to_sym
+			end
+			end
+
+		send(method_name, *args)
+		else
+			# mandamos al player todo lo que no conozcamos
+			@player.send(method_name)
+		end
+	end
+
+	def create_song_from_file(file_path, drive)
+		info = extract_mp3_information(file_path)
+
+		return nil if info.nil?
+
+		unless info[:artist].blank?
+			info[:artist_id] = Artist.find_or_create_by_name(name: info[:artist]).id
+		end
+
+		unless info[:album].blank?
+			info[:album_id] = Album.find_or_create_by_name(name: info[:album]).id
+		end
+
+		info[:drive_id] = drive.id
+		info[:relative_path] = file_path.gsub("#{drive.path}/", '')
+
+		song = Song.create(info)
+
+		return song
+	end
+
+	def display(object)
+		text = object.to_s
+		puts text
+		text
+	end
 
 end
 
 class Array
-  def to_s
-    idx = 0
-    self.collect{|e| "#{idx += 1} #{e}" }.join("\n")
-  end
+	def to_s
+		idx = 0
+		self.collect{|e| "#{idx += 1} #{e}" }.join("\n")
+	end
 end
