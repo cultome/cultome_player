@@ -285,6 +285,9 @@ class CultomePlayer
 
 		@player.play(@song.path)
 
+		# agregamos al contador de reproducciones
+		Song.increment_counter :plays, @song.id
+
 		display @song
 
 		@song

@@ -11,6 +11,7 @@ class CreateSchema < ActiveRecord::Migration
       t.integer :drive_id
       t.string :relative_path
       t.integer :points, default: 0
+      t.integer :plays, default: 0
       t.timestamps
     end
 
