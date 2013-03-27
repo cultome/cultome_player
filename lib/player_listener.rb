@@ -39,7 +39,7 @@ module PlayerListener
 
   def progress(bytesread, microseconds, pcmdata, properties)
     # puts ":::::::::::::::: progress: bytesread => #{bytesread}, microseconds => #{microseconds},  pcmdata => #{pcmdata}, properties => #{properties}"
-    @progress = properties
+    @song_status = properties
     # puts "------ #{@progress["mp3.frame"]} ::: #{@progress["mp3.position.byte"]}"
     # bytesread => 35850
     # microseconds: 0
@@ -59,7 +59,8 @@ module PlayerListener
       # y llega un status de STOPPED y position -1
       # la rola se acabo y pasamos a la siguiente
       if STATES[event.code] == :STOPPED
-        self.next()
+        #self.next()
+		self.execute('next')
       end
     end
 

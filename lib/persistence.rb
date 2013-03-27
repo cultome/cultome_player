@@ -11,7 +11,7 @@ ActiveRecord::Base.establish_connection(
 )
 
 class Song < ActiveRecord::Base
-	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id
+	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points
 
 	belongs_to :artist
 	belongs_to :album
@@ -31,7 +31,7 @@ class Song < ActiveRecord::Base
 end
 
 class Album < ActiveRecord::Base
-	attr_accessible :name, :id
+	attr_accessible :name, :id, :points
 
 	has_many :songs
 	has_many :artists, through: :songs
@@ -44,7 +44,7 @@ class Album < ActiveRecord::Base
 end
 
 class Artist < ActiveRecord::Base
-	attr_accessible :name, :id
+	attr_accessible :name, :id, :points
 
 	has_many :songs
 	has_many :albums, through: :songs
@@ -56,7 +56,7 @@ class Artist < ActiveRecord::Base
 end
 
 class Genre < ActiveRecord::Base
-	attr_accessible :name
+	attr_accessible :name, :points
 
 	has_and_belongs_to_many :songs
 end

@@ -1,3 +1,4 @@
+require 'taste_analizer'
 require 'user_input'
 require 'readline'
 require 'persistence'
@@ -6,6 +7,8 @@ require 'helper'
 require 'active_support'
 
 # TODO
+#  - Revisar las conexiones la BD, se estan quedado colgadas
+#  - agregar calificacion por tiempo de reproduccion con y reproducciones
 #  - agregar el genero a los objetos del reproductor
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
 #  - Implementar control de volumen
@@ -38,6 +41,11 @@ class CultomePlayer
 	attr_reader :song
 	attr_reader :artist
 	attr_reader :album
+	# para el taster
+	attr_reader :song_status
+	attr_reader :current_command
+	attr_reader :is_playing_library
+	attr_reader :is_shuffling
 
 	def initialize
 		@player = Player.new(self)
@@ -51,11 +59,13 @@ class CultomePlayer
 		@play_index = -1
 		@prompt = 'cultome> '
 		@status = :STOPPED
-		@progress = {}
+		@song_status = {}
 		@focus = nil
 		@drives = Drive.all.to_a
 		@last_cmds = []
 		@is_shuffling = true
+		@taste = TasteAnalizer.new(self)
+		@current_command = nil
 	end
 
 	def start
@@ -65,6 +75,7 @@ class CultomePlayer
 		while(@running) do
 			execute Readline::readline(@prompt, true)
 		end
+		display "Bye!" # aqui poner una frase humorisitca aleatoria
 	end
 
 	def execute(user_input)
@@ -78,6 +89,7 @@ class CultomePlayer
 
 			cmds.each do |cmd|
 				if respond_to? cmd[:command]
+					@current_command = cmd
 					return send(cmd[:command], cmd[:params])
 				end
 			end
@@ -120,7 +132,6 @@ class CultomePlayer
 	def quit(params=[])
 		@running = false
 		@player.stop
-		display "Bye!" # aqui poner una frase humorisitca aleatoria
 	end
 
 	# parameter types: literal, criteria
@@ -154,9 +165,12 @@ class CultomePlayer
 	def play(params=[])
 		search_criteria = []
 		new_playlist = []
+		@is_playing_library = false
 
 		if params.empty? && @playlist.blank?
 			new_playlist = find_by_query
+			@is_playing_library = true
+
 			if new_playlist.blank?
 				display "No music connected yet. Try 'connect /home/csoria/music => music_library' first!"
 				return nil
@@ -165,29 +179,30 @@ class CultomePlayer
 			# set_playlist results # todas las canciones
 			@artist = new_playlist[0].artist unless new_playlist[0].blank?
 			@album = new_playlist[0].album unless new_playlist[0].blank?
-		end
-
-		params.each do |param|
-			case param[:type]
-			when /literal|criteria/
-				search_criteria << param
-			when :number
-				if @focus[param[:value].to_i - 1].nil?
-					@queue.push @playlist[param[:value].to_i - 1]
-				else
-					@queue.push @focus[param[:value].to_i - 1]
-				end
-			when :object
-				case param[:value]
-					when :library then new_playlist = find_by_query
-					when :playlist then new_playlist = @playlist
-					when :search then new_playlist += @search
-					when :history then new_playlist += @history
-					when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
-					when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
-				end
-			end
-		end
+		else
+			params.each do |param|
+				case param[:type]
+					when /literal|criteria/ then search_criteria << param
+					when :number
+						if @focus[param[:value].to_i - 1].nil?
+							@queue.push @playlist[param[:value].to_i - 1]
+						else
+							@queue.push @focus[param[:value].to_i - 1]
+						end
+					when :object
+						case param[:value]
+							when :library 
+								new_playlist = find_by_query
+								@is_playing_library = true
+							when :playlist then new_playlist = @playlist
+							when :search then new_playlist += @search
+							when :history then new_playlist += @history
+							when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
+							when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
+						end
+				end # case
+			end # do
+		end # if
 
 		new_playlist += search(search_criteria) unless search_criteria.blank?
 
@@ -242,7 +257,15 @@ class CultomePlayer
 			return self.next
 		end
 
+		old_song = @song
 		@song = @queue.shift
+
+		# antes de cambiar de cancion calificamos la actual rola
+		@taste.calculate_weight(
+			old_song,
+			@song
+		) unless old_song.nil?
+
 
 		if @song.nil?
 			display 'There is no song to play' 
@@ -292,7 +315,7 @@ class CultomePlayer
 	end
 
 	def show_progress(song)
-		actual = @progress["mp3.position.microseconds"] / 1000000
+		actual = @song_status["mp3.position.microseconds"] / 1000000
 		percentage = ((actual * 100) / song.duration) / 10
 		display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(song.duration)}"
 	end
@@ -322,12 +345,12 @@ class CultomePlayer
 	end
 
 	def ff(params=[])
-		next_pos = @progress["mp3.position.byte"] + (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+		next_pos = @song_status["mp3.position.byte"] + (@song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
 		@player.seek(next_pos)
 	end
 
 	def fb(params=[])
-		next_pos = @progress["mp3.position.byte"] - (@progress["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+		next_pos = @song_status["mp3.position.byte"] - (@song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
 		@player.seek(next_pos)
 	end
 

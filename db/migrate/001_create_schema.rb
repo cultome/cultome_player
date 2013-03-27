@@ -10,20 +10,24 @@ class CreateSchema < ActiveRecord::Migration
       t.integer :duration # 50070000
       t.integer :drive_id
       t.string :relative_path
+      t.integer :points
       t.timestamps
     end
 
     create_table :albums do |t|
       t.string :name
+      t.integer :points
       t.timestamps
     end
 
     create_table :artists do |t|
       t.string :name
+      t.integer :points
       t.timestamps
     end
 
     create_table :genres do |t|
+      t.integer :points
       t.string :name
     end
 
