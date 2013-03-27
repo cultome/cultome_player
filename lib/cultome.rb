@@ -6,12 +6,9 @@ require 'helper'
 require 'active_support'
 
 # TODO
-#  - Importar canciones en segundo plano
-#  - Agregar ayuda!!!! y mensajes descritivos para los comandos
 #  - agregar el genero a los objetos del reproductor
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
 #  - Implementar control de volumen
-#  - Importar en segundo plano
 #  - Meter visualizaciones ASCII
 #  - Contar las reproducciones de cada cada
 #  - Conectar y deconectar unidades
@@ -278,22 +275,18 @@ class CultomePlayer
 		else
 			params.each do |param|
 				case param[:type]
-				when :object
-					obj = instance_variable_get("@#{param[:value]}")
-
-					if param[:value] =~ /playlist|search|history/ 
-						@focus = obj
-					elsif param[:value] =~ /artists|albums/
-						if param[:value] =~ /artists/
-							obj = Artist.all
-						elsif param[:value] =~ /albums/
-							obj = Album.all
+					when :object
+						case param[:value]
+							when :library then @focus = obj = find_by_query
+							when :artists then @focus = obj = Artist.all
+							when :albums then @focus = obj = Album.all
+							when /playlist|search|history/ then @focus = obj = instance_variable_get("@#{param[:value]}")
+							when /artist|album/ then obj = instance_variable_get("@#{param[:value]}")
 						end
-						@focus = obj
-					end
-
-					display(obj)
+					else
+						obj = @song
 				end # case
+				display(obj)
 			end # do
 		end # if
 	end

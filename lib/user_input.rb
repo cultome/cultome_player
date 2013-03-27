@@ -25,8 +25,6 @@ module UserInput
 	}
 
 	ALIAS = {
-		"s" => "search",
-		"p" => "play",
 		"exit" => "quit",
 	}
 
