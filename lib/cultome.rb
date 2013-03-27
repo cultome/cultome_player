@@ -435,6 +435,10 @@ class CultomePlayer
 
 		song = Song.create(info)
 
+		unless info[:genre].blank?
+			song.genres << Genre.find_or_create_by_name(name: info[:genre])
+		end
+
 		return song
 	end
 

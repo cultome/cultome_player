@@ -15,35 +15,42 @@ class TasteAnalizer
 	end
 
 	def calculate_songs_weight(song, next_song)
-		puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.current_command }..."
+		return if @p.song_status.empty?
+
+puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.current_command }..."
 
 		progress_in_sec = @p.song_status["mp3.position.microseconds"] / 1000000
 		percentage = (progress_in_sec * 100) / song.duration
 		
 		if @p.current_command[:command] =~ /next/
-			if percentage < 10
+			if song == next_song
+				Song.increment_counter :points, song.id
+			end
+
+			if percentage < 20
 				# restamos puntos a la rola actual
-puts "-1 a #{song}"
 				Song.decrement_counter :points, song.id
+				Album.decrement_counter :points, song.album.id unless song.album.nil?
+				if song.artist != next_song.artist
+					Artist.decrement_counter :points, song.artist.id unless song.artist.id
+				end
 			elsif percentage > 60 && percentage < 90
 				# damos un punto a la rola actual
-puts "1 a #{song}"
 				Song.increment_counter :points, song.id
+				Album.increment_counter :points, song.album.id unless song.album.nil?
+				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 			elsif percentage >= 90
 			# damos 2 puntos a la rola actual
-puts "2 a #{song}"
 				Song.update_counters song.id, points: 2
+				Album.increment_counter :points, song.album.id unless song.album.nil?
+				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 			end
 		elsif @p.current_command[:command] =~ /prev/
 			# le damos puntos a la proxima rola 
 			# porque la queremos volver a escuchar
-puts "1 a #{next_song}"
-			Song.update_counters next_song.id, points: 1
-		#elsif @p.current_command[:command] =~ /play/ 
-			# a todas las rolas pasadas por numero
-			# se les dan puntos por ser seleccionadas a mano
-			#if @p.current_command[:params].all?{|p| p[:type] == :number }
-			#end
+			Song.increment_counter :points, song.id
+			Album.increment_counter :points, song.album.id unless song.album.nil?
+			Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 		end
 
 		# checamos si cambio el genero de la musica
@@ -55,19 +62,63 @@ puts "1 a #{next_song}"
 		return 0 if current_genres.nil? || current_genres.empty?
 		return 0 if next_genres.nil? || next_genres.empty?
 
-		weight = current_genres.product(next_genres).inject(0){|sum, c,n| sum += compare_genres(c,n)}
-
-		return weight / (current_genres.size + next_genres)
+		product = current_genres.product(next_genres)
+		weight = product.inject(0){|sum, comb| sum += compare_genres(*comb)}
+		return weight / product.size
 	end
 
 	def compare_genres(g1, g2)
-		return 1 if g1 == g2
-		case g1
+puts "Comparando generos: #{g1.name} == #{g2.name}"
+		return 1.0 if g1.name == g2.name
+
+		case g1.name
 			when 'Rock'
-				case g2
+				case g2.name
+					when 'Progressive Rock' then return 0.9
+					when 'Hard Rock' then return 0.9
+					when 'AlternRock' then return 0.9
 					when 'Metal' then return 0.7
+					when 'Heavy Metal' then return 0.6
 					when 'Pop' then return 0.3
+					when 'Hip-Hop' then return 0.3
+					when 'Alternative' then return 0.2
 				end
+			when /Pop|BritPop/
+				case g2.name
+					when 'BritPop' then return 0.8
+					when 'Pop' then return 0.8
+					when 'Dance' then return 0.5
+					when 'Club' then return 0.5
+					when 'Disco' then return 0.4
+					when 'Funck' then return 0.2
+				end
+			else return 0.0
 		end
 	end
+	#Rock
+	#Pop
+	#BritPop
+	#Blues
+	#Alternative
+	#Soundtrack
+	#Comedy
+	#Hip-Hop
+	#Progressive Rock
+	#Heavy Metal
+	#Tribal
+	#AlternRock
+	#Rap
+	#Disco
+	#Metal
+	#Dance
+	#Hard Rock
+	#Ethnic
+	#Euro-House
+	#Other
+	#Industrial
+	#Electronic
+	#Club
+	#Indie
+	#Funk
+	#Acid Jazz
 end

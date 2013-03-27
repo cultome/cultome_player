@@ -10,7 +10,7 @@ class CreateSchema < ActiveRecord::Migration
       t.integer :duration # 50070000
       t.integer :drive_id
       t.string :relative_path
-      t.integer :points
+      t.integer :points, default: 0
       t.timestamps
     end
 
