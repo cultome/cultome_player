@@ -7,13 +7,11 @@ require 'helper'
 require 'active_support'
 
 # TODO
+#  - Probar que pasa cuando la cancion no tiene informacion del album o artista
+#  - Agregar el genero a los objetos del reproductor
 #  - Revisar las conexiones la BD, se estan quedado colgadas
-#  - agregar calificacion por tiempo de reproduccion con y reproducciones
-#  - agregar el genero a los objetos del reproductor
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
-#  - Implementar control de volumen
 #  - Meter visualizaciones ASCII
-#  - Contar las reproducciones de cada cada
 #  - Conectar y deconectar unidades
 #  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
 # 
@@ -388,8 +386,9 @@ class CultomePlayer
 		if where_clause.blank?
 			Song.all
 		else
-			Song.joins("left outer join artists on artists.id == songs.artist_id")
-			.joins("left outer join albums on albums.id == songs.album_id")
+			#Song.joins("left outer join artists on artists.id == songs.artist_id")
+			#.joins("left outer join albums on albums.id == songs.album_id")
+			Song.joins(:artist, :album)
 			.where(where_clause, *where_params)
 		end
 	end

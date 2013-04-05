@@ -55,7 +55,7 @@ puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.
 
 		# checamos si cambio el genero de la musica
 		genres_weight = calculate_genre_compatibility(song.genres, next_song.genres)
-		puts "Genre weight: #{genres_weight}"
+puts "Genre weight: #{genres_weight}"
 	end
 
 	def calculate_genre_compatibility(current_genres, next_genres)
@@ -92,8 +92,9 @@ puts "Comparando generos: #{g1.name} == #{g2.name}"
 					when 'Disco' then return 0.4
 					when 'Funck' then return 0.2
 				end
-			else return 0.0
 		end
+
+		return 0.0
 	end
 	#Rock
 	#Pop
