@@ -31,7 +31,7 @@ class CultomePlayer
 	include PlayerListener
 	include Helper
 
-	FAST_FORWARD_STEP = 250
+	FAST_FORWARD_STEP = 500
 
 	attr_reader :playlist
 	attr_reader :search
@@ -385,6 +385,10 @@ class CultomePlayer
 			# reanudamos la reproduccion
 			self.next
 		end
+	end
+
+	def repeat(params=[])
+		@player.seek(0)
 	end
 
 	private

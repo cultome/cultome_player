@@ -21,6 +21,7 @@ module UserInput
 		"ff" => {help: "Fast forward 5 sec.", params_format: ""},
 		"fb" => {help: "Fast backward 5 sec.", params_format: ""},
 		"shuffle" => {help: "Check and change the status of shuffle.", params_format: "<number>|<literal>"},
+		"repeat" => {help: "Repeat the current song", params_format: ""},
 		"kill" => {help: "Delete from disk the current song", params_format: ""},
 		"help" => {help: "This help.", params_format: "<literal>"},
 	}
