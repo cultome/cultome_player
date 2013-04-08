@@ -1,3 +1,5 @@
+require 'readline'
+
 # TODO
 #  - Implementar pruebas para ff y fb
 #  - Implementar prurbas para los nuevos caracteres del path
@@ -17,7 +19,8 @@ module UserInput
 		"stop" => {help: "Stops playback.", params_format: ""},
 		"next" => {help: "Play the next song in the queue.", params_format: "<number>"},
 		"prev" => {help: "Play the previous song from the history.", params_format: ""},
-		"connect" => {help: "Add file to the library.", params_format: "<path> => <literal>"},
+		"connect" => {help: "Add files to the library.", params_format: "<path> => <literal>"},
+		"disconnect" => {help: "Remove filesfrom the library.", params_format: "<literal>"},
 		"quit" => {help: "Exit the player.", params_format: ""},
 		"ff" => {help: "Fast forward 5 sec.", params_format: ""},
 		"fb" => {help: "Fast backward 5 sec.", params_format: ""},
@@ -95,8 +98,15 @@ module UserInput
 	def get_confirmation(msg)
 		display(msg)
 		display("y/N: ", true)
-		resp = gets.chomp
-		return resp =~ /Y|y|yes|si|s|ok/
+		is_true_value gets.chomp
+	end
+
+	def is_true_value(value)
+		value =~ /Y|y|yes|1|si|s|ok/
+	end
+
+	def get_command
+		Readline::readline(@prompt, true)
 	end
 
 	private

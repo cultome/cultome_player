@@ -2,7 +2,6 @@ require 'shellwords'
 require 'taste_analizer'
 require 'gesture_analizer'
 require 'user_input'
-require 'readline'
 require 'persistence'
 require 'player_listener'
 require 'helper'
@@ -16,6 +15,7 @@ require 'active_support'
 #  - Meter visualizaciones ASCII
 #  - Conectar y deconectar unidades
 #  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
+#  - Cargar los plugins por separado
 # 
 #
 # ERRORS
@@ -31,7 +31,7 @@ class CultomePlayer
 	include PlayerListener
 	include Helper
 
-	FAST_FORWARD_STEP = 250
+	FAST_FORWARD_STEP = 500
 
 	attr_reader :playlist
 	attr_reader :search
@@ -74,7 +74,7 @@ class CultomePlayer
 		@running = true
 
 		while(@running) do
-			execute Readline::readline(@prompt, true)
+			execute get_command
 		end
 		display "Bye!" # aqui poner una frase humorisitca aleatoria
 	end
@@ -205,10 +205,10 @@ class CultomePlayer
 							when :history then new_playlist += @history
 							when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
 							when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
-							when :recent_added then new_playlist += Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
+							when :recent_added then new_playlist += find_by_query({or: [{id: 6, condition: 'created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
 							else
 								drive = @drives.find{|d| d.name.to_sym == param[:value]}
-								new_playlist += Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
+								new_playlist += find_by_query({or: [{id: 7, condition: 'drive_id = ?', value: drive.id}], and: []}) unless drive.nil?
 						end
 				end # case
 			end # do
@@ -229,7 +229,7 @@ class CultomePlayer
 	def shuffle(params=[])
 		unless params.empty?
 			params.each do |param|
-				@is_shuffling = param[:value] =~ /on|true|1|si|ok/
+				@is_shuffling = is_true_value param[:value]
 			end
 		end
 		display(@is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
@@ -263,8 +263,6 @@ class CultomePlayer
 			do_play
 		end
 	end
-
-	private
 
 	def do_play
 		if @queue.blank?
@@ -347,22 +345,50 @@ class CultomePlayer
 
 	def connect(params=[])
 		path_param = params.find{|p| p[:type] == :path}
-		path_return nil unless Dir.exist?(path_param[:value])
 
-		name_param = params.find{|p| p[:type] == :literal}
-		@drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
+		if path_param.nil?
+			drive_name = params.find{|p| p[:type] == :literal}
+			drive = Drive.find_by_name(drive_name[:value])
+			if drive.nil?
+				display("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
+			else
+				drive.update_attributes(connected: true)
+				@drives << drive
+			end
 
-		music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
-		imported = 0
-		to_be_imported = music_files.size
+			return Song.where(drive_id: drive.id).count()
+		else
+			# conectamos una unidad nueva
+			return nil unless Dir.exist?(path_param[:value])
 
-		music_files.each do |file_path|
-			create_song_from_file(file_path, new_drive)
-			imported += 1
-			display "Importing #{imported}/#{to_be_imported}..."
+			name_param = params.find{|p| p[:type] == :literal}
+			@drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
+
+			music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
+			imported = 0
+			to_be_imported = music_files.size
+
+			music_files.each do |file_path|
+				create_song_from_file(file_path, new_drive)
+				imported += 1
+				display "Importing #{imported}/#{to_be_imported}..."
+			end
+
+			return music_files.size
+		end
+	end
+
+	def disconnect(params=[])
+		drive_name = params.find{|p| p[:type] == :literal}
+		drive = Drive.find_by_name(drive_name[:value])
+		if drive.nil?
+			display("An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?")
+		else
+			drive.update_attributes(connected: false)
+			@drives.delete(drive)
 		end
 
-		return music_files.size
+		return Song.where(drive_id: drive.id).count()
 	end
 
 	def ff(params=[])
@@ -400,8 +426,6 @@ class CultomePlayer
 		@player.seek(next_pos)
 	end
 
-	private
-
 	def find_by_query(query={or: [], and: []})
 		# checamos que una condicion que hace que los and's se vuelvan or's
 		#   =>  si una condicion del 2..4 se pone dos o mas veces, esa condicion se hace un or
@@ -429,11 +453,11 @@ class CultomePlayer
 		where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.blank? }.compact.flatten
 
 		if where_clause.blank?
-			Song.all
+			Song.connected.all
 		else
 			#Song.joins("left outer join artists on artists.id == songs.artist_id")
 			#.joins("left outer join albums on albums.id == songs.album_id")
-			Song.joins(:artist, :album)
+			Song.connected.joins(:artist, :album)
 			.where(where_clause, *where_params)
 		end
 	end

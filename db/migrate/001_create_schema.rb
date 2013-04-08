@@ -40,6 +40,7 @@ class CreateSchema < ActiveRecord::Migration
     create_table :drives do |t|
       t.string :name
       t.string :path
+	  t.boolean :connected, default: true
       t.timestamps
     end
   end

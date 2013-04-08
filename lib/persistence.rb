@@ -18,6 +18,8 @@ class Song < ActiveRecord::Base
 	has_and_belongs_to_many :genres
 	belongs_to :drive
 
+	scope :connected, joins(:drive).where('drives.connected' => true)
+
 	def path
 		"#{self.drive.path}/#{self.relative_path}"
 	end
@@ -62,11 +64,11 @@ class Genre < ActiveRecord::Base
 end
 
 class Drive < ActiveRecord::Base
-	attr_accessible :name, :path
+	attr_accessible :name, :path, :connected
 
 	has_many :songs
 
 	def to_s
-		":::: Drive: #{self.name} => #{self.songs.size} songs => #{self.path} ::::"
+		":::: Drive: #{self.name} => #{self.songs.size} songs => #{self.path} => #{connected ? "Online" : "Offline"}::::"
 	end
 end
