@@ -21,6 +21,7 @@ module UserInput
 		"ff" => {help: "Fast forward 5 sec.", params_format: ""},
 		"fb" => {help: "Fast backward 5 sec.", params_format: ""},
 		"shuffle" => {help: "Check and change the status of shuffle.", params_format: "<number>|<literal>"},
+		"kill" => {help: "Delete from disk the current song", params_format: ""},
 		"help" => {help: "This help.", params_format: "<literal>"},
 	}
 
@@ -87,6 +88,13 @@ module UserInput
 		end
 
 		{command: cmd, params: pretty_params}
+	end
+
+	def get_confirmation(msg)
+		display(msg)
+		display("y/N: ", true)
+		resp = gets.chomp
+		return resp =~ /Y|y|yes|si|s|ok/
 	end
 
 	private

@@ -17,7 +17,7 @@ class TasteAnalizer
 	def calculate_songs_weight(song, next_song)
 		return if @p.song_status.empty?
 
-puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.current_command }..."
+		#puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.current_command }..."
 
 		progress_in_sec = @p.song_status["mp3.position.microseconds"] / 1000000
 		percentage = (progress_in_sec * 100) / song.duration
@@ -55,7 +55,7 @@ puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.
 
 		# checamos si cambio el genero de la musica
 		genres_weight = calculate_genre_compatibility(song.genres, next_song.genres)
-puts "Genre weight: #{genres_weight}"
+		#puts "Genre weight: #{genres_weight}"
 	end
 
 	def calculate_genre_compatibility(current_genres, next_genres)
@@ -68,7 +68,7 @@ puts "Genre weight: #{genres_weight}"
 	end
 
 	def compare_genres(g1, g2)
-puts "Comparando generos: #{g1.name} == #{g2.name}"
+		#puts "Comparando generos: #{g1.name} == #{g2.name}"
 		return 1.0 if g1.name == g2.name
 
 		case g1.name

@@ -1,3 +1,4 @@
+require 'shellwords'
 require 'taste_analizer'
 require 'gesture_analizer'
 require 'user_input'
@@ -366,6 +367,26 @@ class CultomePlayer
 		@player.seek(next_pos)
 	end
 
+	def kill(params=[])
+		if get_confirmation("Are you sure you want to delete #{@song} ???")
+			# detenemos la reproduccion
+			self.stop
+
+			path = Shellwords.escape("#{@song.drive.path}/#{@song.relative_path}")
+			system("mv #{path} ~/tmp/#{rand()}.mp3")
+
+			if $?.exitstatus == 0
+				@song.delete
+				display("Song deleted!")
+			else
+				display("An error occurred when deleting the song #{@song}")
+			end
+			
+			# reanudamos la reproduccion
+			self.next
+		end
+	end
+
 	private
 
 	def find_by_query(query={or: [], and: []})
@@ -455,9 +476,13 @@ class CultomePlayer
 		return song
 	end
 
-	def display(object)
+	def display(object, continuos=false)
 		text = object.to_s
-		puts text
+		if continuos
+			print text
+		else
+			puts text
+		end
 		text
 	end
 
