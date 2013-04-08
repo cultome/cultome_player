@@ -13,17 +13,12 @@ require 'active_support'
 #  - Revisar las conexiones la BD, se estan quedado colgadas
 #  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
 #  - Meter visualizaciones ASCII
-#  - Conectar y deconectar unidades
 #  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
 #  - Cargar los plugins por separado
 # 
 #
 # ERRORS
-#  - Manejar la situacion de que la rola no cargue correctamente
-#  - Como primera accion, el 'play absolution' toca otra cancion
-#  - A veces se atora cuando termina una cancion y no toca la siguiente
-#  - Clear objetos como queue y playlist
-#  - Comporatmiento erratico con la queue
+#  - La pausa se traba cuando la cancion hace un next solita???
 #
 
 class CultomePlayer
@@ -164,11 +159,20 @@ class CultomePlayer
 	end
 
 	def enqueue(params=[])
-		play(params, true)
+		pl = generate_playlist(params)
+		@playlist = @focus = @playlist + pl 
 	end
 
 	# parameter types: literal, criteria::: object, number
-	def play(params=[], enqueue=false)
+	def play(params=[])
+		pl = generate_playlist(params)
+		# si se encolan
+		set_playlist(pl) unless pl.blank?
+		@history.push @song unless @song.nil?
+		do_play
+	end
+
+	def generate_playlist(params)
 		search_criteria = []
 		new_playlist = []
 		@is_playing_library = false
@@ -216,14 +220,7 @@ class CultomePlayer
 
 		new_playlist += search(search_criteria) unless search_criteria.blank?
 
-		# si se encolan
-		if enqueue
-			@playlist = @focus = @playlist + new_playlist 
-		else
-			set_playlist(new_playlist) unless new_playlist.blank?
-			@history.push @song unless @song.nil?
-			do_play
-		end
+		return new_playlist
 	end
 
 	def shuffle(params=[])
