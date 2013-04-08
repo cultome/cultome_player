@@ -31,7 +31,7 @@ class CultomePlayer
 	include PlayerListener
 	include Helper
 
-	FAST_FORWARD_STEP = 500
+	FAST_FORWARD_STEP = 250
 
 	attr_reader :playlist
 	attr_reader :search
@@ -163,8 +163,12 @@ class CultomePlayer
 		@search
 	end
 
+	def enqueue(params=[])
+		play(params, true)
+	end
+
 	# parameter types: literal, criteria::: object, number
-	def play(params=[])
+	def play(params=[], enqueue=false)
 		search_criteria = []
 		new_playlist = []
 		@is_playing_library = false
@@ -212,12 +216,14 @@ class CultomePlayer
 
 		new_playlist += search(search_criteria) unless search_criteria.blank?
 
-		unless new_playlist.blank?
-			set_playlist(new_playlist)
+		# si se encolan
+		if enqueue
+			@playlist = @focus = @playlist + new_playlist 
+		else
+			set_playlist(new_playlist) unless new_playlist.blank?
+			@history.push @song unless @song.nil?
+			do_play
 		end
-
-		@history.push @song unless @song.nil?
-		do_play
 	end
 
 	def shuffle(params=[])
@@ -235,7 +241,7 @@ class CultomePlayer
 			@history.push @song unless @song.nil?
 
 			if @is_shuffling
-				@queue.push @playlist[rand(@playlist.size - 1)]
+				@queue.push @playlist[rand(@playlist.size)]
 			else
 				@play_index += 1
 				@queue.push @playlist[@play_index]
@@ -257,6 +263,8 @@ class CultomePlayer
 			do_play
 		end
 	end
+
+	private
 
 	def do_play
 		if @queue.blank?
@@ -388,7 +396,8 @@ class CultomePlayer
 	end
 
 	def repeat(params=[])
-		@player.seek(0)
+		next_pos = @song_status["mp3.position.byte"] + (@song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+		@player.seek(next_pos)
 	end
 
 	private

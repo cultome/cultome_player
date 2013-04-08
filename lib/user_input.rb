@@ -10,6 +10,7 @@ end
 module UserInput
 	COMMANDS = {
 		"play" => {help: "Create and inmediatly plays playlists", params_format: "(<number>|<criteria>|<object>|<literal>)*"},
+		"enqueue" => {help: "Append the created playlist to the current playlist", params_format: "(<number>|<criteria>|<object>|<literal>)*"},
 		"search" => {help: "Find inside library for song with the given criteria.", params_format: "(<criteria>|<object>|<literal>)*"},
 		"show" => {help: "Display information about status, objects and library.", params_format: "<object>"},
 		"pause" => {help: "Pause playback.", params_format: ""},
