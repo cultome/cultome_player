@@ -1,4 +1,5 @@
 require 'taste_analizer'
+require 'gesture_analizer'
 require 'user_input'
 require 'readline'
 require 'persistence'
@@ -64,6 +65,7 @@ class CultomePlayer
 		@is_shuffling = true
 		@taste = TasteAnalizer.new(self)
 		@current_command = nil
+		@gestures = GestureAnalizer.new
 	end
 
 	def start
@@ -88,6 +90,7 @@ class CultomePlayer
 			cmds.each do |cmd|
 				if respond_to? cmd[:command]
 					@current_command = cmd
+					@gestures.add_command(cmd)
 					return send(cmd[:command], cmd[:params])
 				end
 			end
@@ -197,6 +200,10 @@ class CultomePlayer
 							when :history then new_playlist += @history
 							when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
 							when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
+							when :recent_added then new_playlist += Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
+							else
+								drive = @drives.find{|d| d.name.to_sym == param[:value]}
+								new_playlist += Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
 						end
 				end # case
 			end # do
@@ -306,6 +313,10 @@ class CultomePlayer
 							when :albums then @focus = obj = Album.all
 							when /playlist|search|history/ then @focus = obj = instance_variable_get("@#{param[:value]}")
 							when /artist|album/ then obj = instance_variable_get("@#{param[:value]}")
+							when :recent_added then @focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
+							else
+								drive = @drives.find{|d| d.name.to_sym == param[:value]}
+								@focus = obj = Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
 						end
 					else
 						obj = @song
