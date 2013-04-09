@@ -97,7 +97,7 @@ module UserInput
 
 	def get_confirmation(msg)
 		display(msg)
-		display("y/N: ", true)
+		display("  [y/N]: ", true)
 		is_true_value gets.chomp
 	end
 

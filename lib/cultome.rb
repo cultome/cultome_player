@@ -18,7 +18,6 @@ require 'active_support'
 # 
 #
 # ERRORS
-#  - La pausa se traba cuando la cancion hace un next solita???
 #
 
 class CultomePlayer
@@ -167,7 +166,12 @@ class CultomePlayer
 	def play(params=[])
 		pl = generate_playlist(params)
 		# si se encolan
-		set_playlist(pl) unless pl.blank?
+		unless pl.blank?
+			@playlist = @focus = pl
+			@play_index = -1
+			@queue = []
+		end
+
 		@history.push @song unless @song.nil?
 		do_play
 	end
@@ -186,7 +190,6 @@ class CultomePlayer
 				return nil
 			end
 
-			# set_playlist results # todas las canciones
 			@artist = new_playlist[0].artist unless new_playlist[0].blank?
 			@album = new_playlist[0].album unless new_playlist[0].blank?
 		else
@@ -316,7 +319,7 @@ class CultomePlayer
 							when :artists then @focus = obj = Artist.all
 							when :albums then @focus = obj = Album.all
 							when /playlist|search|history/ then @focus = obj = instance_variable_get("@#{param[:value]}")
-							when /artist|album/ then obj = instance_variable_get("@#{param[:value]}")
+							when /artist|album|drives/ then obj = instance_variable_get("@#{param[:value]}")
 							when :recent_added then @focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
 							else
 								drive = @drives.find{|d| d.name.to_sym == param[:value]}
@@ -337,7 +340,7 @@ class CultomePlayer
 	end
 
 	def pause(params=[])
-		@status == :PLAYING ? @player.pause : @player.resume
+		@status =~ /PLAYING|RESUMED/ ? @player.pause : @player.resume
 	end
 
 	def connect(params=[])
@@ -457,16 +460,6 @@ class CultomePlayer
 			Song.connected.joins(:artist, :album)
 			.where(where_clause, *where_params)
 		end
-	end
-
-	def set_playlist(songs)
-		@playlist = @focus = songs
-		@play_index = -1
-		@queue = []
-	end
-
-	def append_to_playlist(songs)
-		@playlist = @playlist + songs
 	end
 
 	def method_missing(method_name, *args)
