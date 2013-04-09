@@ -10,13 +10,13 @@ require 'active_support'
 # TODO
 #  - Probar que pasa cuando la cancion no tiene informacion del album o artista
 #  - Agregar el genero a los objetos del reproductor
-#  - Revisar las conexiones la BD, se estan quedado colgadas
 #  - Meter visualizaciones ASCII
 #  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
 #  - Cargar los plugins por separado
 # 
 #
 # ERRORS
+#  - Revisar las conexiones la BD, se estan quedado colgadas
 #
 
 class CultomePlayer
@@ -427,8 +427,7 @@ class CultomePlayer
 	end
 
 	def repeat(params=[])
-		next_pos = @song_status["mp3.position.byte"] + (@song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
-		@player.seek(next_pos)
+		@player.seek(0)
 	end
 
 	def find_by_query(query={or: [], and: []})
