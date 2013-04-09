@@ -9,9 +9,7 @@ require 'active_support'
 
 # TODO
 #  - Probar que pasa cuando la cancion no tiene informacion del album o artista
-#  - Agregar el genero a los objetos del reproductor
 #  - Meter visualizaciones ASCII
-#  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
 #  - Cargar los plugins por separado
 # 
 #
@@ -211,6 +209,7 @@ class CultomePlayer
 							when :history then new_playlist += @history
 							when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
 							when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
+
 							# criterios de busqueda avanzados
 							when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
 							when :recently_played then new_playlist += find_by_query({or: [{id: 7, condition: 'last_played_at > ?', value: Song.maximum('last_played_at') - (60*60*24)}], and: []})
@@ -218,8 +217,14 @@ class CultomePlayer
 							when :less_played then new_playlist += find_by_query({or: [{id: 9, condition: 'plays < ?', value: Song.average('plays')}], and: []})
 							when :populars then new_playlist += find_by_query({or: [{id: 10, condition: 'songs.points > ?', value: Song.average('points').ceil.to_i}], and: []})
 							else
+								# intentamos matchear las unidades primero
 								drive = @drives.find{|d| d.name.to_sym == param[:value]}
-								new_playlist += find_by_query({or: [{id: 11, condition: 'drive_id = ?', value: drive.id}], and: []}) unless drive.nil?
+								if drive.nil?
+									# intetamos matchear por genero
+									new_playlist += Song.connected.joins(:genres).where('genres.name like ?', "%#{param[:value].to_s.gsub('_', ' ')}%" )
+								else
+									new_playlist += find_by_query({or: [{id: 11, condition: 'drive_id = ?', value: drive.id}], and: []})
+								end
 						end
 				end # case
 			end # do
@@ -294,6 +299,8 @@ class CultomePlayer
 		elsif @song.class == Album
 			@album = @song
 			return play([{type: :object, value: :album}])
+		elsif @song.class == Genre
+			return play([{type: :object, value: @song.name.gsub(' ', '_').to_sym}])
 		end
 
 		@album = @song.album 
@@ -323,6 +330,7 @@ class CultomePlayer
 							when :library then @focus = obj = find_by_query
 							when :artists then @focus = obj = Artist.all
 							when :albums then @focus = obj = Album.all
+							when :genres then @focus = obj = Genre.all
 							when /playlist|search|history/ then @focus = obj = instance_variable_get("@#{param[:value]}")
 							when /artist|album|drives/ then obj = instance_variable_get("@#{param[:value]}")
 							when :recent_added then @focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )

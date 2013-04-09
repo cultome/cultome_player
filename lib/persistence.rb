@@ -61,6 +61,10 @@ class Genre < ActiveRecord::Base
 	attr_accessible :name, :points
 
 	has_and_belongs_to_many :songs
+
+	def to_s
+		":::: Genre: #{self.name} ::::"
+	end
 end
 
 class Drive < ActiveRecord::Base
@@ -69,6 +73,6 @@ class Drive < ActiveRecord::Base
 	has_many :songs
 
 	def to_s
-		":::: Drive: #{self.name} => #{self.songs.size} songs => #{self.path} => #{connected ? "Online" : "Offline"}::::"
+		":::: Drive: #{self.name} => #{self.songs.size} songs => #{self.path} => #{connected ? "Online" : "Offline"} ::::"
 	end
 end
