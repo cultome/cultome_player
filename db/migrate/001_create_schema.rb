@@ -12,6 +12,7 @@ class CreateSchema < ActiveRecord::Migration
       t.string :relative_path
       t.integer :points, default: 0
       t.integer :plays, default: 0
+	  t.datetime :last_played_at
       t.timestamps
     end
 

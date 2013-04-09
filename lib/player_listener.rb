@@ -60,12 +60,13 @@ module PlayerListener
       # la rola se acabo y pasamos a la siguiente
       if STATES[event.code] == :STOPPED
         #self.next()
+		puts ":::::::::::::: Invoking Next! #{event.code}"
 		return self.execute('next')
       end
     end
 
     @status = STATES[event.code]
-    #puts ":::::::::::::::: New status => #{@status}"
+    puts ":::::::::::::::: New status => #{@status}"
   end
 
   def setController(controller)

@@ -11,7 +11,7 @@ ActiveRecord::Base.establish_connection(
 )
 
 class Song < ActiveRecord::Base
-	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points
+	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points, :last_played_at
 
 	belongs_to :artist
 	belongs_to :album

@@ -11,7 +11,6 @@ require 'active_support'
 #  - Probar que pasa cuando la cancion no tiene informacion del album o artista
 #  - Agregar el genero a los objetos del reproductor
 #  - Revisar las conexiones la BD, se estan quedado colgadas
-#  - meter scopes para busquedas "rapidas" (ultimos reproducidos, mas tocados, meos tocados)
 #  - Meter visualizaciones ASCII
 #  - Elimnar palabras cortitas de las busquedas como AND, THE, etc
 #  - Cargar los plugins por separado
@@ -212,10 +211,15 @@ class CultomePlayer
 							when :history then new_playlist += @history
 							when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @artist.name }%"}], and: []})
 							when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
-							when :recent_added then new_playlist += find_by_query({or: [{id: 6, condition: 'created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
+							# criterios de busqueda avanzados
+							when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
+							when :recently_played then new_playlist += find_by_query({or: [{id: 7, condition: 'last_played_at > ?', value: Song.maximum('last_played_at') - (60*60*24)}], and: []})
+							when :more_played then new_playlist += find_by_query({or: [{id: 8, condition: 'plays > ?', value: Song.maximum('plays') - Song.average('plays')}], and: []})
+							when :less_played then new_playlist += find_by_query({or: [{id: 9, condition: 'plays < ?', value: Song.average('plays')}], and: []})
+							when :populars then new_playlist += find_by_query({or: [{id: 10, condition: 'songs.points > ?', value: Song.average('points').ceil.to_i}], and: []})
 							else
 								drive = @drives.find{|d| d.name.to_sym == param[:value]}
-								new_playlist += find_by_query({or: [{id: 7, condition: 'drive_id = ?', value: drive.id}], and: []}) unless drive.nil?
+								new_playlist += find_by_query({or: [{id: 11, condition: 'drive_id = ?', value: drive.id}], and: []}) unless drive.nil?
 						end
 				end # case
 			end # do
@@ -299,6 +303,7 @@ class CultomePlayer
 
 		# agregamos al contador de reproducciones
 		Song.increment_counter :plays, @song.id
+		Song.update(@song.id, last_played_at: Time.now)
 
 		display @song
 
