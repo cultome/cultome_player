@@ -55,19 +55,23 @@ module PlayerListener
 
 	def stateUpdated(event)
 		# si esta reproduciendo..
-		if @status == :EOM
+		#if @status == :EOM
 			# y llega un status de STOPPED y position -1
 			# la rola se acabo y pasamos a la siguiente
-			puts ":::::::::::::::: Estando en OEM => #{STATES[event.code]}"
-			if STATES[event.code] == :STOPPED
+			#puts ":::::::::::::::: Estando en OEM => #{STATES[event.code]}"
+			#if STATES[event.code] == :STOPPED
 				#self.next()
-				puts ":::::::::::::: Invoking Next! #{event.code}"
-				return self.execute('next')
-			end
+				#puts ":::::::::::::: Invoking Next! #{event.code}"
+				#return self.execute('next')
+			#end
+		#end
+
+		if STATES[event.code] == :EOM
+			return self.execute('next')
 		end
 
 		@status = STATES[event.code]
-		puts ":::::::::::::::: New status => #{@status}"
+		#puts ":::::::::::::::: New status => #{@status}"
 	end
 
 	def setController(controller)
