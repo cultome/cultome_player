@@ -11,10 +11,14 @@ require 'active_support'
 #  - Probar que pasa cuando la cancion no tiene informacion del album o artista
 #  - Meter visualizaciones ASCII
 #  - Cargar los plugins por separado
+#  - Agregar 'show @genre'
+#  - Agregar 'show 178' cuando haya artistas, albumnes o rolas en foco
 # 
 #
 # ERRORS
-#  - Revisar las conexiones la BD, se estan quedado colgadas
+#  - Revisar las conexiones la BD, se estan quedado colgadas. Abrirlas al hacer las consultas y cerrarlas despues.
+#  - El listado de artistas debe ser de la musica conectada
+#  - Cuando reconectas una unidad aparece dos veces en el listado
 #
 
 class CultomePlayer
@@ -211,7 +215,7 @@ class CultomePlayer
 							when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @album.name }%"}], and: []})
 
 							# criterios de busqueda avanzados
-							when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
+							when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'songs.created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
 							when :recently_played then new_playlist += find_by_query({or: [{id: 7, condition: 'last_played_at > ?', value: Song.maximum('last_played_at') - (60*60*24)}], and: []})
 							when :more_played then new_playlist += find_by_query({or: [{id: 8, condition: 'plays > ?', value: Song.maximum('plays') - Song.average('plays')}], and: []})
 							when :less_played then new_playlist += find_by_query({or: [{id: 9, condition: 'plays < ?', value: Song.average('plays')}], and: []})
@@ -333,7 +337,7 @@ class CultomePlayer
 							when :genres then @focus = obj = Genre.all
 							when /playlist|search|history/ then @focus = obj = instance_variable_get("@#{param[:value]}")
 							when /artist|album|drives/ then obj = instance_variable_get("@#{param[:value]}")
-							when :recent_added then @focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
+							when :recently_added then @focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
 							else
 								drive = @drives.find{|d| d.name.to_sym == param[:value]}
 								@focus = obj = Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
@@ -524,7 +528,6 @@ class CultomePlayer
 		end
 		text
 	end
-
 end
 
 class Array
