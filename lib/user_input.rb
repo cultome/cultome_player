@@ -1,43 +1,21 @@
 require 'readline'
 
-# TODO
-#  - Implementar pruebas para ff y fb
-#  - Implementar prurbas para los nuevos caracteres del path
-class String
-	def blank?
-		self.nil? || self.empty?
-	end
-end
-
 module UserInput
-	COMMANDS = {
-		"play" => {help: "Create and inmediatly plays playlists", params_format: "(<number>|<criteria>|<object>|<literal>)*"},
-		"enqueue" => {help: "Append the created playlist to the current playlist", params_format: "(<number>|<criteria>|<object>|<literal>)*"},
-		"search" => {help: "Find inside library for song with the given criteria.", params_format: "(<criteria>|<object>|<literal>)*"},
-		"show" => {help: "Display information about status, objects and library.", params_format: "<object>"},
-		"pause" => {help: "Pause playback.", params_format: ""},
-		"stop" => {help: "Stops playback.", params_format: ""},
-		"next" => {help: "Play the next song in the queue.", params_format: "<number>"},
-		"prev" => {help: "Play the previous song from the history.", params_format: ""},
-		"connect" => {help: "Add files to the library.", params_format: "<path> => <literal>"},
-		"disconnect" => {help: "Remove filesfrom the library.", params_format: "<literal>"},
-		"quit" => {help: "Exit the player.", params_format: ""},
-		"ff" => {help: "Fast forward 5 sec.", params_format: ""},
-		"fb" => {help: "Fast backward 5 sec.", params_format: ""},
-		"shuffle" => {help: "Check and change the status of shuffle.", params_format: "<number>|<literal>"},
-		"repeat" => {help: "Repeat the current song", params_format: ""},
-		"kill" => {help: "Delete from disk the current song", params_format: ""},
-		"help" => {help: "This help.", params_format: "<literal>"},
-	}
 
 	ALIAS = {
-		"exit" => "quit",
+		exit: :quit,
 	}
-
-	VALID_IN_CMD = COMMANDS.keys.join('|') + '|' + ALIAS.keys.join('|')
 
 	VALID_CRITERIA_PREFIX = "[abs]"
 	BUBBLE_WORD = %w{=>}
+
+	def valid_command
+		if @valid_commands.nil?
+			@valid_comands = @command_registry.keys.join('|') + '|' + ALIAS.keys.join('|')
+		end
+
+		@valid_comands
+	end
 
 	def parse(input)
 		prev_cmd = nil
@@ -58,9 +36,9 @@ module UserInput
 	end
 
 	def parse_command(input)
-		raise "Invalid command. Try typing 'help' for information" if input !~ /\A(#{VALID_IN_CMD})[\s]*(.*)?\Z/
+		raise "Invalid command. Try typing 'help' for information" if input !~ /\A(#{valid_command})[\s]*(.*)?\Z/
 
-			cmd = $1
+		cmd = $1.to_sym
 		# params = $2.split(' ').collect{|s| if s.blank? then nil else s end }
 
 		m = nil

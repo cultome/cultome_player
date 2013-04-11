@@ -40,4 +40,9 @@ module Helper
 	def to_time(seconds)
 		"#{(seconds/60).to_s.rjust(2, '0')}:#{(seconds%60).to_s.rjust(2, '0')}"
 	end
+
+	def get_project_path
+		absolute_path = File.absolute_path(__FILE__)
+		absolute_path.slice(0, absolute_path.rindex('/lib'))
+	end
 end
