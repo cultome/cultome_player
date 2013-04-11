@@ -1,5 +1,3 @@
-#require 'taste_analizer'
-#require 'gesture_analizer'
 require 'user_input'
 require 'player_listener'
 require 'helper'
@@ -66,9 +64,7 @@ class CultomePlayer
 		@last_cmds = []
 		@is_shuffling = true
 		@is_playing_library = false
-		#@taste = TasteAnalizer.new(self)
 		@current_command = nil
-		#@gestures = GestureAnalizer.new
 		@command_registry = Hash.new{|h,k| h[k] = []}
 		@listener_registry = Hash.new{|h,k| h[k] = []}
 	end

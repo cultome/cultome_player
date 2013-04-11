@@ -1,7 +1,23 @@
+require 'persistence'
 require 'active_support/inflector'
 require 'mp3info'
 
 module Helper
+	def require_jars
+		jars_path = "#{get_project_path}/jars"
+		Dir.entries(jars_path).each{|jar| 
+		  if jar =~ /.jar\Z/
+			# puts "#{jars_path}/#{jar}"
+			require "#{jars_path}/#{jar}"
+		  end
+		}
+	end
+
+	def init_album_and_artist
+		# checamos si estan los registros default
+		Album.find_or_create_by_id(id: 0, name: "unknown")
+		Artist.find_or_create_by_id(id: 0, name: "unknown")
+	end
 
 	def extract_mp3_information(file_path)
 		info = nil
@@ -44,5 +60,19 @@ module Helper
 	def get_project_path
 		absolute_path = File.absolute_path(__FILE__)
 		absolute_path.slice(0, absolute_path.rindex('/lib'))
+	end
+end
+
+# abrimos algunas clases con propositos utilitarios
+class Array
+	def to_s
+		idx = 0
+		self.collect{|e| "#{idx += 1} #{e}" }.join("\n")
+	end
+end
+
+class String
+	def blank?
+		self.nil? || self.empty?
 	end
 end
