@@ -6,12 +6,20 @@ module UserInput
 		exit: :quit,
 	}
 
-	VALID_CRITERIA_PREFIX = "[abs]"
+	VALID_CRITERIA_PREFIX = "[abt]"
 	BUBBLE_WORD = %w{=>}
+
+	def valid_alias
+		if @valid_aliases.nil?
+			@valid_aliases = ALIAS.keys.join('|')
+		end
+
+		@valid_aliases
+	end
 
 	def valid_command
 		if @valid_commands.nil?
-			@valid_comands = @command_registry.keys.join('|') + '|' + ALIAS.keys.join('|')
+			@valid_comands = @command_registry.keys.join('|')
 		end
 
 		@valid_comands
@@ -36,7 +44,7 @@ module UserInput
 	end
 
 	def parse_command(input)
-		raise "Invalid command. Try typing 'help' for information" if input !~ /\A(#{valid_command})[\s]*(.*)?\Z/
+		raise "Invalid command. Try typing 'help' for information" if input !~ /\A(#{valid_command}|#{valid_alias})[\s]*(.*)?\Z/
 
 		cmd = $1.to_sym
 		# params = $2.split(' ').collect{|s| if s.blank? then nil else s end }

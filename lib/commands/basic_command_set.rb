@@ -57,7 +57,7 @@ class BasicCommandSet
 			when :criteria
 				if param[:criteria] == :a then query[:and] << {id: 2, condition: 'artists.name like ?', value: param_value}
 				elsif param[:criteria] == :b then query[:and] << {id: 3, condition: 'albums.name like ?', value: param_value}
-				elsif param[:criteria] == :s then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
+				elsif param[:criteria] == :t then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
 			end
 		end
 
