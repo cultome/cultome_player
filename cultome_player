@@ -1,0 +1,7 @@
+#!/usr/bin/env jruby
+
+system("clear")
+
+$LOAD_PATH << './lib'
+
+require 'player'
