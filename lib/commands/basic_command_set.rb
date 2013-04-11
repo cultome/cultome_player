@@ -9,7 +9,7 @@ class BasicCommandSet
 		@p = player
 	end
 
-	def get_registry
+	def get_command_registry
 		{
 		play: {help: "Create and inmediatly plays playlists", params_format: "(<number>|<criteria>|<object>|<literal>)*"},
 		enqueue: {help: "Append the created playlist to the current playlist", params_format: "(<number>|<criteria>|<object>|<literal>)*"},
@@ -176,7 +176,7 @@ class BasicCommandSet
 
 	def prev(params=[])
 		if @p.history.blank?
-			@p.display "Thre is no files in history"
+			@p.display "There is no files in history"
 		else
 			@p.queue.unshift @p.history.pop
 			@p.play_index -= 1 if @p.play_index > 0
@@ -190,14 +190,8 @@ class BasicCommandSet
 			return self.next
 		end
 
-		old_song = @p.song
+		@p.prev_song = @p.song
 		@p.song = @p.queue.shift
-
-		# antes de cambiar de cancion calificamos la actual rola
-		#@taste.calculate_weight(
-			#old_song,
-			#@song
-		#) unless old_song.nil?
 
 		if @p.song.nil?
 			@p.display 'There is no song to play' 

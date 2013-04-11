@@ -1,7 +1,16 @@
 
 class GestureAnalizer
-	def initialize
+	def initialize(player)
+		@p = player
 		@queue = EventQueue.new
+	end
+
+	def get_listener_registry
+		[:__ALL__]
+	end
+
+	def method_missing(method_name, *args)
+		add_command({command: method_name, params: args})
 	end
 
 	def add_command(cmd)
@@ -11,7 +20,7 @@ class GestureAnalizer
 
 	def analize_queue
 		# checamos el patron y vemos si matchea
-		if @queue.has(5, 'next', 20)
+		if @queue.has(5, :next, 20)
 			puts "#### Notifying: Looking for something"
 		end
 	end

@@ -4,8 +4,16 @@
 #  - Agregar algun mecanismo para que me avise cuando un genero no este dado de alta
 class TasteAnalizer
 
-	def initialize(cultome_player)
-		@p = cultome_player
+	def initialize(player)
+		@p = player
+	end
+
+	def get_listener_registry
+		[:next, :prev]
+	end
+
+	def method_missing(method_name, *args)
+		calculate_weight(@p.prev_song, @p.song) unless @p.prev_song.nil?
 	end
 
 	def calculate_weight(obj1, obj2)

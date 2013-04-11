@@ -34,6 +34,7 @@ class CultomePlayer
 	attr_accessor :drives
 
 	attr_accessor :song
+	attr_accessor :prev_song
 	attr_accessor :artist
 	attr_accessor :album
 	attr_accessor :running
@@ -53,6 +54,7 @@ class CultomePlayer
 		@history = []
 		@queue = []
 		@song = nil
+		@prev_song = nil
 		@artist = nil
 		@album = nil
 		@play_index = -1
@@ -68,6 +70,7 @@ class CultomePlayer
 		@current_command = nil
 		#@gestures = GestureAnalizer.new
 		@command_registry = Hash.new{|h,k| h[k] = []}
+		@listener_registry = Hash.new{|h,k| h[k] = []}
 	end
 
 	def load_commands
@@ -78,13 +81,18 @@ class CultomePlayer
 				require "#{commands_path}/#{file}"
 				
 				command = file.gsub('.rb', '').classify.constantize.new(self)
-				registry = command.get_registry
 
-				registry.each{|k,v|
+				cmd_regs = command.get_command_registry if command.respond_to?(:get_command_registry)
+				cmd_regs.each{|k,v|
 					@command_registry[k] << command
 					v[:command] = k
 					command_help << v
-				}
+				} unless cmd_regs.nil?
+
+				listener_regs = command.get_listener_registry if command.respond_to?(:get_listener_registry)
+				listener_regs.each{|k,v|
+					@listener_registry[k] << command
+				} unless listener_regs.nil?
 			end
 		}
 		# luego cargamos los comandos que provee esta clase
@@ -124,7 +132,7 @@ class CultomePlayer
 	end
 
 	def send_to_listeners(cmd)
-		listeners = @command_registry[cmd[:command]]
+		listeners = @command_registry[cmd[:command]] + @listener_registry[cmd[:command]] + @listener_registry[:__ALL__]
 		unless listeners.nil?
 			@current_command = cmd
 
@@ -146,8 +154,10 @@ class CultomePlayer
 		@help_msg = "The following commands are loaded:\n"
 
 		command_help.each{|map| 
-			msg = "#{map[:command]} #{map[:params_format]}"
-			@help_msg += "  #{msg.ljust(offset)} #{map[:help]}\n"
+			if map[:command] != :__ALL__
+				msg = "#{map[:command]} #{map[:params_format]}"
+				@help_msg += "  #{msg.ljust(offset)} #{map[:help]}\n"
+			end
 		}
 
 		@help_msg += "\nThe following are the parameters types:\n"
