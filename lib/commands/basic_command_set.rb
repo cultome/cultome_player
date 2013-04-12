@@ -7,6 +7,9 @@ class BasicCommandSet
 
 	def initialize(player)
 		@p = player
+		# checamos si estan los registros default
+		Album.find_or_create_by_id(id: 0, name: "unknown")
+		Artist.find_or_create_by_id(id: 0, name: "unknown")
 	end
 
 	def get_command_registry

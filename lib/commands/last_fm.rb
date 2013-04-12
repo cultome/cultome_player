@@ -21,6 +21,9 @@ class LastFm
 		artist = @p.artist.name
 
 		json = get_similars(params, song, artist)
+
+		display("Similars found!") unless json.nil?
+
 		if !json['similarartists'].nil?
 			artists = extract_artists(json['similarartists']['artist'])
 			artists_in_library = find_artists_in_library(artists)
@@ -39,6 +42,7 @@ class LastFm
 	def get_query_string(params, song, artist)
 		if params.empty?
 			# por default se buscan rolas similares
+			display("Looking for tracks similar to #{song} / #{artist}...")
 			query = {
 				method: 'track.getSimilar',
 				artist: artist,
@@ -50,12 +54,14 @@ class LastFm
 				when :object
 					case param[:value]
 					when :artist
+						display("Looking for artists similar to #{artist}...")
 						query = {
 							method: 'artist.getSimilar',
 							artist: artist,
 						}
 
 					when :song
+						display("Looking for tracks similar to #{song} / #{artist}...")
 						query = {
 							method: 'track.getSimilar',
 							artist: artist,
@@ -105,9 +111,15 @@ class LastFm
 
 	def find_artists_in_library(artists)
 		in_library = []
+
+		display('Fetching similar artist from library', true)
+
 		artists.keep_if do |a|
+
+			display('.', true)
+
 			artist = Artist.find_by_name(a[:name])
-			if artist.nil?
+			if artist.empty?
 				true
 			else
 				in_library << artist
@@ -120,21 +132,25 @@ class LastFm
 
 	def find_tracks_in_library(tracks)
 		in_library = []
+
+		display('Fetching similar tracks from library', true)
+
 		tracks.keep_if do |t|
-			song = Song.joins(:artists).where('songs.name = ? and artists.name = ?', t[:name], t[:artist])
-			if song.nil?
+			display('.', true)
+			song = Song.joins(:artist).where('songs.name = ? and artists.name = ?', t[:name], t[:artist]).to_a
+			if song.empty?
 				true
 			else
-				in_library << artist
+				in_library << song
 				false
 			end
 		end
 
-		return in_library
+		return in_library.flatten
 	end
 
-	def display(msg)
-		@p.display(msg)
+	def display(msg, continuos=false)
+		@p.display(msg, continuos)
 	end
 
 	def show_tracks(song, tracks, tracks_in_library)
@@ -142,7 +158,7 @@ class LastFm
 		tracks.each{|a| display("  #{a[:name]} / #{a[:artist]}") } unless tracks.empty?
 
 		display("Similar tracks to #{song} in library") unless tracks_in_library.empty?
-		tracks_in_library.each{|a| display("  #{a[:name]} / #{a[:artist]}") } unless tracks_in_library.empty?
+		tracks_in_library.each{|a| display("  #{a.name} / #{a.artist.name}") } unless tracks_in_library.empty?
 
 		display("No similarities found for #{song}") if tracks.empty? && tracks_in_library.empty?
 	end
@@ -152,7 +168,7 @@ class LastFm
 		artists.each{|a| display("  #{a[:name]}") } unless artists.empty?
 
 		display("Similar artists to #{artist} in library") unless artists_in_library.empty?
-		artists_in_library.each{|a| display("  #{a[:name]}") } unless artists_in_library.empty?
+		artists_in_library.each{|a| display("  #{a.name}") } unless artists_in_library.empty?
 
 		display("No similarities found for #{artist}") if artists.empty? && artists_in_library.empty?
 	end

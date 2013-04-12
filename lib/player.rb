@@ -10,8 +10,6 @@ require_jars
 
 import 'Player'
 
-init_album_and_artist
-
 # iniciamos el reproductor
 CultomePlayer.new.start
 

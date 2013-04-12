@@ -13,12 +13,6 @@ module Helper
 		}
 	end
 
-	def init_album_and_artist
-		# checamos si estan los registros default
-		Album.find_or_create_by_id(id: 0, name: "unknown")
-		Artist.find_or_create_by_id(id: 0, name: "unknown")
-	end
-
 	def extract_mp3_information(file_path)
 		info = nil
 		begin
