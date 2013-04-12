@@ -221,7 +221,7 @@ play
 Sorry for this, I will make it more distributable-friendly very soon.
 
 ## TODO
-* Organize better the code so plugins can be easyly connected.
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Leave JRuby and convert to pure Ruby
 * Make it distributable-friendly 
+* Change the underlying in.memory database for a real one, thinking on mongo
