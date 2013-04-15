@@ -3,11 +3,12 @@ require 'active_support/inflector'
 require 'mp3info'
 
 module Helper
+
 	def require_jars
 		jars_path = "#{get_project_path}/jars"
 		Dir.entries(jars_path).each{|jar| 
 		  if jar =~ /.jar\Z/
-			# puts "#{jars_path}/#{jar}"
+			#puts "#{jars_path}/#{jar}"
 			require "#{jars_path}/#{jar}"
 		  end
 		}

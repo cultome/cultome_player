@@ -4,21 +4,22 @@ require 'yaml'
 
 task :default => :migrate
 
-desc "Migrate the database through scripts in db/migrate. Target specific version with VERSION=x"
-task :migrate => :environment do
-  ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : 1 )
+desc "Migrate the database through scripts in db/migrate."
+
+task :up => :establish_connection do
+	ActiveRecord::Migrator.migrate('./db/migrate')
 end
 
-task :rollback => :environment do
-  ActiveRecord::Migrator.rollback('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : 1 )
+task :down => :establish_connection do
+	ActiveRecord::Migrator.rollback('db/migrate')
 end
 
-task :reset => :environment do
-  ActiveRecord::Migrator.rollback('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : 1 )
-  ActiveRecord::Migrator.migrate('db/migrate', ENV["VERSION"] ? ENV["VERSION"].to_i : 1 )
+task :reset => :establish_connection do
+	ActiveRecord::Migrator.rollback('db/migrate')
+	ActiveRecord::Migrator.migrate('db/migrate')
 end
 
-task :environment do
-  ActiveRecord::Base.establish_connection(YAML::load(File.open('database.yml')))
-  ActiveRecord::Base.logger = Logger.new(File.open('logs/db.log', 'a'))
+task :establish_connection do
+	ActiveRecord::Base.establish_connection(YAML::load(File.open('database.yml')))
+	ActiveRecord::Base.logger = Logger.new(File.open('logs/db.log', 'a'))
 end
