@@ -209,16 +209,16 @@ git clone https://github.com/csoriav/cultome_player.git
 
 cd cultome_player
 
-jrake reset
+chmod +x cultome
 
-jruby -Ilib lib/player.rb
+./cultome
 
 connect /home/user/music => main
 
 play
 ```
 
-Sorry for this, I will make it more distributable-friendly very soon.
+I will make it more distributable-friendly very soon.
 
 ## TODO
 * Refine the taste analizer, which is the component that give preference points to songs.
