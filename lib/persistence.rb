@@ -17,6 +17,7 @@ class Song < ActiveRecord::Base
 	belongs_to :album
 	has_and_belongs_to_many :genres
 	belongs_to :drive
+	has_many :similars, as: :similar
 
 	scope :connected, joins(:drive).where('drives.connected' => true)
 
@@ -32,6 +33,30 @@ class Song < ActiveRecord::Base
 	end
 end
 
+class Artist < ActiveRecord::Base
+	attr_accessible :name, :id, :points
+
+	has_many :songs
+	has_many :albums, through: :songs
+	has_many :similars, as: :similar
+
+	def to_s
+		":::: Artist: #{self.name} ::::"
+	end
+end
+
+class Similar < ActiveRecord::Base
+	attr_accessible :track, :artist, :artist_url, :track_url, :type
+
+	belongs_to :similar, polymorphic: true
+
+	def to_s
+		str = ":::: "
+		str += "Song: #{self.track} \\ " if self.type == 'track'
+		str += "Artist: #{self.artist} ::::"
+	end
+end
+
 class Album < ActiveRecord::Base
 	attr_accessible :name, :id, :points
 
@@ -42,18 +67,6 @@ class Album < ActiveRecord::Base
 		str = ":::: Album: #{self.name}" 
 		str += " \\ Artist: #{self.artists.uniq.collect{|a| a.name}.join(', ')}" unless self.artists.nil? || self.artists.empty?
 		str += " ::::"
-	end
-end
-
-class Artist < ActiveRecord::Base
-	attr_accessible :name, :id, :points
-
-	has_many :songs
-	has_many :albums, through: :songs
-
-
-	def to_s
-		":::: Artist: #{self.name} ::::"
 	end
 end
 

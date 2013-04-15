@@ -44,6 +44,16 @@ class CreateSchema < ActiveRecord::Migration
 	  t.boolean :connected, default: true
       t.timestamps
     end
+
+    create_table :similars do |t|
+      t.string :track 
+      t.string :artist
+      t.string :artist_url
+      t.string :track_url
+      t.string :similar_to
+	  t.references :similar, polymorphic: true
+      t.timestamps
+    end
   end
 
   def self.down
@@ -53,6 +63,7 @@ class CreateSchema < ActiveRecord::Migration
     drop_table :genres
     drop_table :genres_songs
     drop_table :drives
+    drop_table :similars
   end
 end
 
