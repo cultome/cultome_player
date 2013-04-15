@@ -246,7 +246,7 @@ class BasicCommandSet
 							when :albums then @p.focus = obj = Album.all
 							when :genres then @p.focus = obj = Genre.all
 							when /playlist|search|history/ then @p.focus = obj = @p.instance_variable_get("@#{param[:value]}")
-							when /artist|album|drives|queue/ then obj = @p.instance_variable_get("@#{param[:value]}")
+							when /artist|album|drives|queue|focus/ then obj = @p.instance_variable_get("@#{param[:value]}")
 							when :recently_added then @p.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
 							else
 								drive = @p.drives.find{|d| d.name.to_sym == param[:value]}

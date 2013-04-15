@@ -207,9 +207,14 @@ class LastFm
 		tracks.each{|a| display("  #{a[:track]} / #{a[:artist]}") } unless tracks.empty?
 
 		display("Similar tracks to #{song} in library") unless tracks_in_library.empty?
-		tracks_in_library.each{|a| display("  #{a.name} / #{a.artist.name}") } unless tracks_in_library.empty?
+		display(tracks_in_library) unless tracks_in_library.empty?
+		#tracks_in_library.each{|a| display("  #{a.name} / #{a.artist.name}") } unless tracks_in_library.empty?
 
-		display("No similarities found for #{song}") if tracks.empty? && tracks_in_library.empty?
+		if tracks.empty? && tracks_in_library.empty?
+			display("No similarities found for #{song}") 
+		else
+			@p.focus = tracks_in_library
+		end
 	end
 
 	def show_artist(artist, artists, artists_in_library)
