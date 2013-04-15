@@ -17,6 +17,7 @@ require 'active_support/inflector'
 #  - Revisar las conexiones la BD, se estan quedado colgadas. Abrirlas al hacer las consultas y cerrarlas despues.
 #  - El listado de artistas debe ser de la musica conectada
 #  - Cuando reconectas una unidad aparece dos veces en el listado
+#  - Mensajes de error cuando no se pueda hacer un 'play xxx'
 #
 
 class CultomePlayer

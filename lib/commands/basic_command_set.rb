@@ -1,7 +1,9 @@
 require 'persistence'
+require 'user_input'
 require 'shellwords'
 
 class BasicCommandSet
+	include UserInput
 
 	FAST_FORWARD_STEP = 500
 
@@ -31,6 +33,10 @@ class BasicCommandSet
 		repeat: {help: "Repeat the current song", params_format: ""},
 		kill: {help: "Delete from disk the current song", params_format: ""},
 		}
+	end
+
+	def display(msg, continuos=false)
+		@p.display(msg, continuos)
 	end
 
 	def quit(params=[])
@@ -64,7 +70,7 @@ class BasicCommandSet
 			end
 		end
 
-		@p.display(@p.search = @p.focus = find_by_query(query).to_a)
+		display(@p.search = @p.focus = find_by_query(query).to_a)
 
 		@p.search
 	end
@@ -98,7 +104,7 @@ class BasicCommandSet
 			@p.is_playing_library = true
 
 			if new_playlist.blank?
-				@p.display "No music connected yet. Try 'connect /home/csoria/music => music_library' first!"
+				display "No music connected yet. Try 'connect /home/csoria/music => music_library' first!"
 				return nil
 			end
 
@@ -156,7 +162,7 @@ class BasicCommandSet
 				@p.is_shuffling = is_true_value param[:value]
 			end
 		end
-		@p.display(@p.is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
+		display(@p.is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
 
 	end
 
@@ -173,13 +179,13 @@ class BasicCommandSet
 
 			do_play
 		else
-			@p.display "No more songs in playlist!"
+			display "No more songs in playlist!"
 		end
 	end
 
 	def prev(params=[])
 		if @p.history.blank?
-			@p.display "There is no files in history"
+			display "There is no files in history"
 		else
 			@p.queue.unshift @p.history.pop
 			@p.play_index -= 1 if @p.play_index > 0
@@ -197,7 +203,7 @@ class BasicCommandSet
 		@p.song = @p.queue.shift
 
 		if @p.song.nil?
-			@p.display 'There is no song to play' 
+			display 'There is no song to play' 
 			return nil
 		end
 
@@ -220,7 +226,7 @@ class BasicCommandSet
 		Song.increment_counter :plays, @p.song.id
 		Song.update(@p.song.id, last_played_at: Time.now)
 
-		@p.display @p.song
+		display @p.song
 
 		@p.song
 	end
@@ -228,7 +234,7 @@ class BasicCommandSet
 
 	def show(params=[])
 		if params.blank?
-			@p.display @p.song
+			display @p.song
 			show_progress @p.song 
 		else
 			params.each do |param|
@@ -240,7 +246,7 @@ class BasicCommandSet
 							when :albums then @p.focus = obj = Album.all
 							when :genres then @p.focus = obj = Genre.all
 							when /playlist|search|history/ then @p.focus = obj = @p.instance_variable_get("@#{param[:value]}")
-							when /artist|album|drives/ then obj = @p.instance_variable_get("@#{param[:value]}")
+							when /artist|album|drives|queue/ then obj = @p.instance_variable_get("@#{param[:value]}")
 							when :recently_added then @p.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
 							else
 								drive = @p.drives.find{|d| d.name.to_sym == param[:value]}
@@ -249,7 +255,7 @@ class BasicCommandSet
 					else
 						obj = @p.song
 				end # case
-				@p.display(obj)
+				display(obj)
 			end # do
 		end # if
 	end
@@ -257,7 +263,7 @@ class BasicCommandSet
 	def show_progress(song)
 		actual = @p.song_status["mp3.position.microseconds"] / 1000000
 		percentage = ((actual * 100) / song.duration) / 10
-		@p.display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(song.duration)}"
+		display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(song.duration)}"
 	end
 
 	def pause(params=[])
@@ -271,7 +277,7 @@ class BasicCommandSet
 			drive_name = params.find{|p| p[:type] == :literal}
 			drive = Drive.find_by_name(drive_name[:value])
 			if drive.nil?
-				@p.display("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
+				display("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
 			else
 				drive.update_attributes(connected: true)
 				@p.drives << drive
@@ -283,7 +289,12 @@ class BasicCommandSet
 			return nil unless Dir.exist?(path_param[:value])
 
 			name_param = params.find{|p| p[:type] == :literal}
-			@p.drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
+			new_drive = Drive.find_by_path(path_param[:value])
+			if new_drive.nil?
+				@p.drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
+			else
+				display("The drive '#{new_drive.name}' is refering the same path. Update of '#{new_drive.name}' is in progress.")
+			end
 
 			music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
 			imported = 0
@@ -292,7 +303,7 @@ class BasicCommandSet
 			music_files.each do |file_path|
 				create_song_from_file(file_path, new_drive)
 				imported += 1
-				@p.display "Importing #{imported}/#{to_be_imported}..."
+				display "Importing #{imported}/#{to_be_imported}..."
 			end
 
 			return music_files.size
@@ -303,7 +314,7 @@ class BasicCommandSet
 		drive_name = params.find{|p| p[:type] == :literal}
 		drive = Drive.find_by_name(drive_name[:value])
 		if drive.nil?
-			@p.display("An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?")
+			display("An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?")
 		else
 			drive.update_attributes(connected: false)
 			@p.drives.delete(drive)
@@ -332,9 +343,9 @@ class BasicCommandSet
 
 			if $?.exitstatus == 0
 				@p.song.delete
-				@p.display("Song deleted!")
+				display("Song deleted!")
 			else
-				@p.display("An error occurred when deleting the song #{@p.song}")
+				display("An error occurred when deleting the song #{@p.song}")
 			end
 			
 			# reanudamos la reproduccion
@@ -398,7 +409,8 @@ class BasicCommandSet
 		info[:drive_id] = drive.id
 		info[:relative_path] = file_path.gsub("#{drive.path}/", '')
 
-		song = Song.create(info)
+		# buscamos la rola antes de insertarla para evitar duplicados
+		song = Song.where('drive_id = ? and relative_path = ?', info[:drive_id], info[:relative_path]).first_or_create(info)
 
 		unless info[:genre].blank?
 			song.genres << Genre.find_or_create_by_name(name: info[:genre])
