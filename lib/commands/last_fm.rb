@@ -1,18 +1,16 @@
+require 'base_command'
 require 'open-uri'
 require 'json'
 require 'persistence'
 require 'cgi'
 
-class LastFm
+class LastFm < BaseCommand
+
 	LAST_FM_WS_ENDPOINT = 'http://ws.audioscrobbler.com/2.0/'
 	LAST_FM_API_KEY = 'bfc44b35e39dc6e8df68594a55a442c5'
 	SIMILARS_LIMIT = 10
 	GET_SIMILAR_TRACKS_METHOD = 'track.getSimilar'
 	GET_SIMILAR_ARTISTS_METHOD = 'artist.getSimilar'
-
-	def initialize(player)
-		@p = player
-	end
 
 	def get_command_registry
 		{similar: {help: "Look in last.fm for similar artists or songs", params_format: "<object>"}}
@@ -196,10 +194,6 @@ class LastFm
 		display("")
 
 		return in_library.flatten
-	end
-
-	def display(msg, continuos=false)
-		@p.display(msg, continuos)
 	end
 
 	def show_tracks(song, tracks, tracks_in_library)

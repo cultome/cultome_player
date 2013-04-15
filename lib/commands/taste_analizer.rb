@@ -1,12 +1,9 @@
+require 'base_command'
 
 # TODO
 #  - Agregar las similitudes de generos
 #  - Agregar algun mecanismo para que me avise cuando un genero no este dado de alta
-class TasteAnalizer
-
-	def initialize(player)
-		@p = player
-	end
+class TasteAnalizer < BaseCommand
 
 	def get_listener_registry
 		[:next, :prev]

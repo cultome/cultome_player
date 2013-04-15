@@ -1,8 +1,10 @@
+require 'base_command'
 
-class GestureAnalizer
+class GestureAnalizer < BaseCommand
+
 	def initialize(player)
-		@p = player
 		@queue = EventQueue.new
+		super(player)
 	end
 
 	def get_listener_registry

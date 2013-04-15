@@ -1,16 +1,10 @@
+require 'base_command'
 require 'open-uri'
 require 'json'
 require 'cgi'
 require 'htmlentities'
 
-class LyricFinder
-	def initialize(player)
-		@p = player
-	end
-
-	def display(msg)
-		@p.display(msg)
-	end
+class LyricFinder < BaseCommand
 
 	def get_command_registry
 		{lyric: {help: "Find the lyric of the current song", params_format: ""}}

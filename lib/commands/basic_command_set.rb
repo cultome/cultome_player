@@ -1,14 +1,15 @@
+require 'base_command'
 require 'persistence'
 require 'user_input'
 require 'shellwords'
 
-class BasicCommandSet
+class BasicCommandSet < BaseCommand
 	include UserInput
 
 	FAST_FORWARD_STEP = 500
 
 	def initialize(player)
-		@p = player
+		super(player)
 		# checamos si estan los registros default
 		Album.find_or_create_by_id(id: 0, name: "unknown")
 		Artist.find_or_create_by_id(id: 0, name: "unknown")
@@ -33,10 +34,6 @@ class BasicCommandSet
 		repeat: {help: "Repeat the current song", params_format: ""},
 		kill: {help: "Delete from disk the current song", params_format: ""},
 		}
-	end
-
-	def display(msg, continuos=false)
-		@p.display(msg, continuos)
 	end
 
 	def quit(params=[])
