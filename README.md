@@ -9,12 +9,12 @@ The player is designed around this concept, so it has commands to help you find 
 
 Lets see a couple examples and translate it to what to expect
 
-```console
+```ruby
 play a:weird
 ```
 Generate a playlist with songs whose artist contains the string 'weird' in their name.
 
-```console
+```ruby
 play @history
 ```
 Generate a playlist with all the songs you have heard in this session.
