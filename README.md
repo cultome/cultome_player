@@ -19,32 +19,32 @@ play @history
 ```
 Generate a playlist with all the songs you have heard in this session.
 
-```console
+```ruby
 play a:gorillaz b:demon
 ```
 Generate a playlist with songs whose from albums that contains the string 'demon' in their name and their artist's name contains the string 'gorillaz'
 
-```console
+```ruby
 search rose
 ```
 Finds all the songs whose title, artist'name or album's name has the string 'rose' in them.
 
-```console
+```ruby
 play 12
 ```
 From the *focused list*, play the 12th item but dont modify the *current playlist*. If the *focused list* is a list of songs, then play a song, but if the *focused list* is of artists o albums, the play all the song from that artist o album.
 
-```console
+```ruby
 play @album
 ```
 Generate a playlist with the songs from the *current song*'s album
 
-```console
+```ruby
 play @search
 ```
 Generate a playlist with the results of the latest *search*.
 
-```console
+```ruby
 play @tribal
 ```
 Generates a playlist with song whose genres includes 'tribal'
@@ -60,13 +60,13 @@ A criterio is a key:value pair. In this moment only three keys are valid:
 
 Examples of criterio are:
 
-```console
+```ruby
 a:duffy
 ```
-```console
+```ruby
 b:"this is"
 ```
-```console
+```ruby
 t:Jugulator
 ```
 
@@ -75,11 +75,11 @@ A chain of non-space characters. If you require spaces you can wrap the text in 
 
 Examples of literals are:
 
-```console
+```ruby
 tunnels
 ```
 
-```console
+```ruby
 "The miss and the pit"
 ```
 
@@ -114,7 +114,7 @@ The numbers refers to elements in a displayed list. When a list is displayed, th
 
 Lets say we have the following *focused list*:
 
-```console
+```ruby
 35 :::: Song: Suburban War \ Artist: Arcade Fire \ Album: The Suburbs ::::
 36 :::: Song: Butcher Blues \ Artist: Kasabian \ Album: Kasabian ::::
 37 :::: Song: Master Of Puppets \ Artist: Metallica \ Album: 40 Greatest Metal Songs (Vh1) ::::
@@ -128,12 +128,12 @@ Lets say we have the following *focused list*:
 
 Because is a songs list, if we do
 
-```console
+```ruby
 play 39
 ```
 We're saying that we want to play the song 'La Primavera'. But if we have the following *focused list*:
 
-```console
+```ruby
 149 :::: Artist: Paloma Faith ::::
 150 :::: Artist: Duffy ::::
 151 :::: Artist: Ke$Ha ::::
@@ -145,7 +145,7 @@ We're saying that we want to play the song 'La Primavera'. But if we have the fo
 
 And the we do
 
-```console
+```ruby
 play 151
 ```
 
@@ -154,14 +154,14 @@ We get a playlist with all the songs of 'Ke$ha'. Similar behavior if we have had
 ### Path
 A special parameter type which is used basicly by the 'connect' command. Is an absolute path inside the filesystem. As with literals if the path has any spaces in it, is required to be wrapped inside " or '. In this moment there is no route expansion, so path like ~/music are not valids.
 
-```console
+```ruby
 /home/usuario/music
 ```
 
 ## Commands
 The commands are very rustic. Basicly consist in a command name and a list of parameters.
 
-```console
+```ruby
 <command> [<param>...]
 ```
 
@@ -189,13 +189,13 @@ Parameters passed to commands that dont require any are simply ignored.
 
 Normally and where makes sense, multiple parameters can mix types. For example, in the 'play' the following is valid and means 'Create a playlist with the results from last search, the artist 'Loly' and any song, artist or album whose name contains 'little'.
 
-```console
+```ruby
 play @search a:Loly little
 ```
 
 The following search songs of artist named 'Poor' or 'Rich'
 
-```console
+```ruby
 search a:Poor a:Rich
 ```
 
@@ -204,7 +204,7 @@ First of all you need JRuby installed in your system. There are many tutorial in
 
 To distinguish from pure ruby, I'm gonna assume that all the JRuby executable are prepended with a j.
 
-```console
+```ruby
 git clone https://github.com/csoriav/cultome_player.git
 
 cd cultome_player
