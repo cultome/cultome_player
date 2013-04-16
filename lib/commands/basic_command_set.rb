@@ -217,7 +217,12 @@ class BasicCommandSet < BaseCommand
 		@p.album = @p.song.album 
 		@p.artist = @p.song.artist
 
-		@p.player.play(@p.song.path)
+		begin
+			@p.player.play(@p.song.path)
+		rescue Exception => e
+			display("Error: #{e.message}")
+			return @p.execute('next')
+		end
 
 		# agregamos al contador de reproducciones
 		Song.increment_counter :plays, @p.song.id
