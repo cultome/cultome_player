@@ -1,3 +1,11 @@
 #!/usr/bin/env jruby
 
-puts "CulToMe Player"
+system("clear")
+
+puts "Iniciando!" # aqui poner una frase humorisitca aleatoria
+
+require 'cultome'
+# iniciamos el reproductor
+CultomePlayer.new.start
+
+puts "Bye!" # aqui poner una frase humorisitca aleatoria

@@ -2,7 +2,7 @@ require 'persistence'
 require 'active_support/inflector'
 require 'mp3info'
 
-module Helper
+module Cultome::Helper
 
 	def require_jars
 		jars_path = "#{get_project_path}/jars"

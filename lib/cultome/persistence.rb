@@ -10,7 +10,7 @@ ActiveRecord::Base.establish_connection(
 	database: "dev.sql"
 )
 
-class Song < ActiveRecord::Base
+class Cultome::Song < ActiveRecord::Base
 	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points, :last_played_at
 
 	belongs_to :artist
@@ -33,7 +33,7 @@ class Song < ActiveRecord::Base
 	end
 end
 
-class Artist < ActiveRecord::Base
+class Cultome::Artist < ActiveRecord::Base
 	attr_accessible :name, :id, :points
 
 	has_many :songs
@@ -45,7 +45,7 @@ class Artist < ActiveRecord::Base
 	end
 end
 
-class Similar < ActiveRecord::Base
+class Cultome::Similar < ActiveRecord::Base
 	attr_accessible :track, :artist, :artist_url, :track_url, :type
 
 	belongs_to :similar, polymorphic: true
@@ -57,7 +57,7 @@ class Similar < ActiveRecord::Base
 	end
 end
 
-class Album < ActiveRecord::Base
+class Cultome::Album < ActiveRecord::Base
 	attr_accessible :name, :id, :points
 
 	has_many :songs
@@ -70,7 +70,7 @@ class Album < ActiveRecord::Base
 	end
 end
 
-class Genre < ActiveRecord::Base
+class Cultome::Genre < ActiveRecord::Base
 	attr_accessible :name, :points
 
 	has_and_belongs_to_many :songs
@@ -80,7 +80,7 @@ class Genre < ActiveRecord::Base
 	end
 end
 
-class Drive < ActiveRecord::Base
+class Cultome::Drive < ActiveRecord::Base
 	attr_accessible :name, :path, :connected
 
 	has_many :songs
