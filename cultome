@@ -22,6 +22,8 @@ rescue Exception => e
 		$stdout = oldstd
 	end
 
+	system("mkdir logs")
+
 	Rake.application.init
 	Rake.application.load_rakefile
 	capture_stdout{Rake.application[:up].invoke}
