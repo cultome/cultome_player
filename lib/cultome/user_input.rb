@@ -1,6 +1,6 @@
 require 'readline'
 
-module Cultome::UserInput
+module UserInput
 
 	ALIAS = {
 		exit: :quit,

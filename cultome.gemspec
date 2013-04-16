@@ -6,10 +6,10 @@ Gem::Specification.new do |s|
 	s.description = "A ruby console-based music library explorer and player"
 	s.authors     = ["Carlos Soria"]
 	s.email       = "zooria@gmail.com"
-	s.files       = ["lib/cultome.rb"]
+	s.files       = Dir['lib/**/*.rb'] + Dir['lib/**/*.rake'] + Dir['bin/*'] + Dir['jars/*.jar'] + Dir['db/**/*'] + Dir['database.yml']
 	s.homepage    = "https://github.com/csoriav/cultome_player"
 	s.add_runtime_dependency "activerecord", [">= 3.2.13"]
-	s.add_runtime_dependency "active_support", [">= 3.2.13"]
+	s.add_runtime_dependency "activesupport", [">= 3.2.13"]
 	s.add_runtime_dependency "mp3info", [">= 0.6.18"]
 	s.add_runtime_dependency "activerecord-jdbcsqlite3-adapter", [">= 1.2.9"]
 	s.add_runtime_dependency "rb-readline", [">= 0.4.2"]

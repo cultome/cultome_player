@@ -1,4 +1,4 @@
-module Cultome::PlayerListener
+module PlayerListener
 	STATES = {
 		-1 =>:UNKNOWN, 
 		0 => :OPENING, 

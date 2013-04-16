@@ -1,6 +1,6 @@
-require 'base_command'
-require 'persistence'
-require 'user_input'
+require 'cultome/commands/base_command'
+require 'cultome/persistence'
+require 'cultome/user_input'
 require 'shellwords'
 
 class BasicCommandSet < BaseCommand

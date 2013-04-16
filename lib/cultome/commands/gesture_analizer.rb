@@ -1,4 +1,4 @@
-require 'base_command'
+require 'cultome/commands/base_command'
 
 class GestureAnalizer < BaseCommand
 

@@ -3,14 +3,15 @@
 require 'active_record'
 require 'logger'
 
-ActiveRecord::Base.logger = Logger.new('logs/db.log')
+base_path = File.expand_path(File.dirname(__FILE__) + "/../..")
+ActiveRecord::Base.logger = Logger.new("#{base_path}/logs/db.log")
 
 ActiveRecord::Base.establish_connection(
 	adapter: "jdbcsqlite3",
 	database: "dev.sql"
 )
 
-class Cultome::Song < ActiveRecord::Base
+class Song < ActiveRecord::Base
 	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points, :last_played_at
 
 	belongs_to :artist
@@ -33,7 +34,7 @@ class Cultome::Song < ActiveRecord::Base
 	end
 end
 
-class Cultome::Artist < ActiveRecord::Base
+class Artist < ActiveRecord::Base
 	attr_accessible :name, :id, :points
 
 	has_many :songs
@@ -45,7 +46,7 @@ class Cultome::Artist < ActiveRecord::Base
 	end
 end
 
-class Cultome::Similar < ActiveRecord::Base
+class Similar < ActiveRecord::Base
 	attr_accessible :track, :artist, :artist_url, :track_url, :type
 
 	belongs_to :similar, polymorphic: true
@@ -57,7 +58,7 @@ class Cultome::Similar < ActiveRecord::Base
 	end
 end
 
-class Cultome::Album < ActiveRecord::Base
+class Album < ActiveRecord::Base
 	attr_accessible :name, :id, :points
 
 	has_many :songs
@@ -70,7 +71,7 @@ class Cultome::Album < ActiveRecord::Base
 	end
 end
 
-class Cultome::Genre < ActiveRecord::Base
+class Genre < ActiveRecord::Base
 	attr_accessible :name, :points
 
 	has_and_belongs_to_many :songs
@@ -80,7 +81,7 @@ class Cultome::Genre < ActiveRecord::Base
 	end
 end
 
-class Cultome::Drive < ActiveRecord::Base
+class Drive < ActiveRecord::Base
 	attr_accessible :name, :path, :connected
 
 	has_many :songs

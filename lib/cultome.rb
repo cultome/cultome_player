@@ -1,10 +1,9 @@
-
 # inicializamos la gem
-begin
-	require 'persistence'
-	Song.first
-rescue Exception => e
-	print "Running for the first time. Preparing environment..."
+
+base_path = File.expand_path(File.dirname(__FILE__) + "/..")
+
+unless Dir.exist?("#{ base_path }/logs")
+	puts "Running for the first time. Preparing environment..."
 
 	require 'rake'
 
@@ -18,15 +17,14 @@ rescue Exception => e
 		$stdout = oldstd
 	end
 
-	system("mkdir logs")
+	system("mkdir #{base_path}/logs")
 
-	Rake.application.init
-	Rake.application.load_rakefile
+	Rake.application.rake_require("tasks/db_admin")
 	capture_stdout{Rake.application[:up].invoke}
 	#capture_stdout{Rake.application[:down].invoke}
 end
 
-require 'helper'
+require 'cultome/helper'
 require 'java'
 
 include Helper

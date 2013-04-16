@@ -5,6 +5,7 @@ system("clear")
 puts "Iniciando!" # aqui poner una frase humorisitca aleatoria
 
 require 'cultome'
+require 'cultome/core'
 # iniciamos el reproductor
 CultomePlayer.new.start
 

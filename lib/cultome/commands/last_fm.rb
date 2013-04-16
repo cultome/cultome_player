@@ -1,7 +1,7 @@
-require 'base_command'
+require 'cultome/commands/base_command'
+require 'cultome/persistence'
 require 'open-uri'
 require 'json'
-require 'persistence'
 require 'cgi'
 
 class LastFm < BaseCommand

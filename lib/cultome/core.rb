@@ -1,6 +1,6 @@
-require 'user_input'
-require 'player_listener'
-require 'helper'
+require 'cultome/user_input'
+require 'cultome/player_listener'
+require 'cultome/helper'
 require 'active_support'
 require 'active_support/inflector'
 
