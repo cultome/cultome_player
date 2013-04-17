@@ -8,7 +8,7 @@ ActiveRecord::Base.logger = Logger.new("#{base_path}/logs/db.log")
 
 ActiveRecord::Base.establish_connection(
 	adapter: "jdbcsqlite3",
-	database: "dev.sql"
+	database: "#{base_path}/dev.sql"
 )
 
 class Song < ActiveRecord::Base

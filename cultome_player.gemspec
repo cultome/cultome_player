@@ -18,5 +18,5 @@ Gem::Specification.new do |s|
 
 	#s.add_development_dependency "bourne", [">== 0"]
 	
-	s.executables << 'cultome'
+	s.executables << 'cultome_player'
 end
