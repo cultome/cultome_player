@@ -1,25 +1,29 @@
 require 'cultome/commands/base_command'
 
-# TODO
-#  - Agregar las similitudes de generos
-#  - Agregar algun mecanismo para que me avise cuando un genero no este dado de alta
+# Plugin that tries to detect musical user preferences analizing the music he listen and the habits he has.
 class TasteAnalizer < BaseCommand
 
+	# Register this listener for the events: next and prev
+	# @note Required method for register listeners
+	#
+	# @return [List<Symbol>] The name of the events to listen.
 	def get_listener_registry
 		[:next, :prev]
 	end
 
+	# When a callback is invoked in this listener, we give point to the last listened song.
 	def method_missing(method_name, *args)
-		calculate_weight(@p.prev_song, @p.song) unless @p.prev_song.nil?
+		calculate_songs_weight(@p.prev_song, @p.song) unless @p.prev_song.nil?
 	end
 
-	def calculate_weight(obj1, obj2)
-		if obj1.class == Song && obj2.class == Song
-			calculate_songs_weight(obj1, obj2)
-		end
-	end
+	private
 
+	# Give point to a song, artist and album depending on various factors like how much the song played? is the same genre? same artist?
+	#
+	# @param song [Song] The current song
+	# @param next_song [Song] The next song to be played
 	def calculate_songs_weight(song, next_song)
+		return unless song.class == Song && next_song.class == Song
 		return if @p.song_status.empty?
 
 		#puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.current_command }..."
@@ -63,6 +67,11 @@ class TasteAnalizer < BaseCommand
 		#puts "Genre weight: #{genres_weight}"
 	end
 
+	# Calculate how much song genres is similar to other.
+	#
+	# @param current_genres [List<Genre>] One list of genres
+	# @param next_genres [List<Genre>] The other list of genres to compare with.
+	# @return [Float] A number between 0 and 1. Denotes the similitud between song genres.
 	def calculate_genre_compatibility(current_genres, next_genres)
 		return 0 if current_genres.nil? || current_genres.empty?
 		return 0 if next_genres.nil? || next_genres.empty?
@@ -72,6 +81,11 @@ class TasteAnalizer < BaseCommand
 		return weight / product.size
 	end
 
+	# Calculate how much a genre is similar to other genre.
+	#
+	# @param g1 [Genre] A genre
+	# @param g2 [Genre] Another genre to compre with.
+	# @return [Float] A number between 0 and 1. Denotes the similitud between genres.
 	def compare_genres(g1, g2)
 		#puts "Comparando generos: #{g1.name} == #{g2.name}"
 		return 1.0 if g1.name == g2.name

@@ -5,22 +5,11 @@ require 'cultome/persistence'
 require 'active_support'
 require 'active_support/inflector'
 
-
-# TODO
-#  - Probar que pasa cuando la cancion no tiene informacion del album o artista
-#  - Meter visualizaciones ASCII
-#  - Cargar los plugins por separado
-#  - Agregar 'show @genre'
-#  - Agregar 'show 178' cuando haya artistas, albumnes o rolas en foco
-# 
-#
-# ERRORS
-#  - Revisar las conexiones la BD, se estan quedado colgadas. Abrirlas al hacer las consultas y cerrarlas despues.
-#  - El listado de artistas debe ser de la musica conectada
-#  - Cuando reconectas una unidad aparece dos veces en el listado
-#  - Mensajes de error cuando no se pueda hacer un 'play xxx'
-#
-
+# This class represents and holds the music player's state in one moment.
+# This means that plugins can ask about, for example, current song, focused list or connected
+# drives to make its work.
+# Its work basicly is to load and call plugins (a.k.a registered commands), receive and parse user input 
+# and call listeners/commands registered.
 class CultomePlayer
 	include UserInput
 	include PlayerListener
@@ -71,6 +60,11 @@ class CultomePlayer
 		@listener_registry = Hash.new{|h,k| h[k] = []}
 	end
 
+	# Load and registers commands and listeners presents in folder lib/cultome/commands.
+	# With the commands create the in-app help.
+	# When the app dont use start method, this mehod must be called manually.
+	#
+	# @return [Hash<Symbol, Class<? extends BaseCommand>>] The command registry after the load
 	def load_commands
 		command_help = []
 		commands_path = "#{project_path}/lib/cultome/commands"
@@ -97,8 +91,13 @@ class CultomePlayer
 		@command_registry[:help] << self
 
 		generate_help(command_help)
+
+		return @command_registry
 	end
 
+	# Utility method for running a standalone player. Initialize the commands
+	# and loop to get user input until @running flag is set to false.
+	# When a error is detected, a call to #execute with 'next' input is invoked.
 	def start
 		# cargamos los plugins
 		load_commands
@@ -106,40 +105,51 @@ class CultomePlayer
 		@running = true
 
 		while(@running) do
-			execute get_command
+			begin
+				execute get_command
+			rescue Exception => e
+				display e.message
+				# podriamos indicar que la cancion no toca simplemente y sacarla
+				execute('next') unless e.message =~ /Invalid command/
+			end
 		end
 	end
 
+	# Parse a user input into a command and dispatch it to the registered plugins.
+	#
+	# @param user_input [String] The user input
+	# @return (see #send_to_listeners)
 	def execute(user_input)
-		begin
-			cmds = parse(user_input)
-			if cmds.empty?
-				cmds = @last_cmds
-			else
-				@last_cmds = cmds
-			end
+		cmds = parse(user_input)
+		if cmds.empty?
+			cmds = @last_cmds
+		else
+			@last_cmds = cmds
+		end
 
-			cmds.each do |cmd|
-				send_to_listeners(cmd)
-			end
-		rescue Exception => e
-			display e.message
-			# podriamos indicar que la cancion no toca simplemente y sacarla
-			execute('next') unless e.message =~ /Invalid command/
+		cmds.each do |cmd|
+			send_to_listeners(cmd)
 		end
 	end
 
+	# Send the command parameters to appropiated registered listeners/commands.
+	#
+	# @param cmd [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
+	# @return What the plugin's appropiated command/listeners returns
 	def send_to_listeners(cmd)
 		listeners = @command_registry[cmd[:command]] + @listener_registry[cmd[:command]] + @listener_registry[:__ALL__]
 		unless listeners.nil?
 			@current_command = cmd
-
 			listeners.each{|listener|
 				listener.send(cmd[:command], cmd[:params])
 			}
 		end
 	end
-	
+
+	# Generates the in-app help from a list of command's help.
+	#
+	# @param command_help [List<Hash>] The hashes contains the keys :help, :params_format. The former is the command's help line and the latter its accepted parameters.
+	# @return [String] The help message generated.
 	def generate_help(command_help)
 		bigest_cmd = command_help.max{|a,b|
 			"#{a[:command]} #{a[:params_format]}".length \
@@ -174,12 +184,20 @@ class CultomePlayer
 		@help_msg += "#{"".ljust(bigger_offset)}b: stand for Album.\n"
 		@help_msg += "#{"".ljust(bigger_offset)}t: stand for Title.\n"
 		@help_msg += "  #{"path".ljust(offset)}A valid path inside local filesystem.\n"
+
+		@help_msg
 	end
 
+	# Shows the generated in-app help message.
 	def help(params=[])
 		display(@help_msg)
 	end
 
+	# Print a message in the screen.
+	#
+	# @param object [Object] Any object that responds to #to_s.
+	# @param continuos [Boolean] If false a new line character is appended at the end of message.
+	# @return [String] The message printed.
 	def display(object, continuos=false)
 		text = object.to_s
 		if continuos
@@ -190,6 +208,8 @@ class CultomePlayer
 		text
 	end
 
+	# When no command is found for a user input,
+	# this method send the command to the underlying music player.
 	def method_missing(method_name, *args)
 		# interrogando sobre el estatus del reproductor
 		if method_name =~ /\A(.*?)\?\Z/

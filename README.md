@@ -1,11 +1,11 @@
 # CulToMe Player
 A handy music library explorer. Is designed to facilitate you to play the music you like in the moment you want.
 
-### I want to play exactly this music
+**"I want to play exactly this music""**
 
 The player is designed around this concept, so it has commands to help you find music in your library and play it.
 
-## Usage examples
+### Usage examples
 
 Lets see a couple examples and translate it to what to expect
 
@@ -49,10 +49,10 @@ play @tribal
 ```
 Generates a playlist with song whose genres includes 'tribal'
 
-## Player's command interface
+### Player's command interface
 To understand the command interface, you need to understand its parameters types and formats.
 
-### Criterio
+#### Criterio
 A criterio is a key:value pair. In this moment only three keys are valid:
 * a    Stand for Artist
 * b    Stand for Album
@@ -70,7 +70,7 @@ b:"this is"
 t:Jugulator
 ```
 
-### Literal
+#### Literal
 A chain of non-space characters. If you require spaces you can wrap the text in " or ' so this can be considered only one parameter.
 
 Examples of literals are:
@@ -83,7 +83,7 @@ tunnels
 "The miss and the pit"
 ```
 
-### Object
+#### Object
 The objects are words with special meaning to the player prefixed with an @. In this moment the fully recognized objects are:
 * @library         Refers to the complete list of songs in you *connected* collection.
 * @search          Refers to the list of songs returned in your last search.
@@ -109,7 +109,7 @@ And anything else is interpreted as follow:
 1. If there is a @drive with the same name, the @drive is used. The spaces in the @drive name are replaced with _. So, @my_drive search a drive with name 'my drive', no matter the case.
 2. Try to match a genre, with same name tranformation as above. So, @rock refers to the genre named 'rock', no matter the case.
 
-### Number
+#### Number
 The numbers refers to elements in a displayed list. When a list is displayed, that lists becomes the *focused list* and any given numerical parameter refers to the elements in this list. Depending on the list type, that will be the type of parameter used.A *focused list* is usually the latest list displayed by the player.
 
 Lets say we have the following *focused list*:
@@ -151,14 +151,14 @@ play 151
 
 We get a playlist with all the songs of 'Ke$ha'. Similar behavior if we have had a albums list.
 
-### Path
+#### Path
 A special parameter type which is used basicly by the 'connect' command. Is an absolute path inside the filesystem. As with literals if the path has any spaces in it, is required to be wrapped inside " or '. In this moment there is no route expansion, so path like ~/music are not valids.
 
 ```ruby
 /home/usuario/music
 ```
 
-## Commands
+### Commands
 The commands are very rustic. Basicly consist in a command name and a list of parameters.
 
 ```ruby
@@ -199,7 +199,7 @@ The following search songs of artist named 'Poor' or 'Rich'
 search a:Poor a:Rich
 ```
 
-## Installation
+### Installation
 First of all you need JRuby installed in your system. There are many tutorial in internet to do this.
 
 To distinguish from pure ruby, I'm gonna assume that all the JRuby executable are prepended with a j.
@@ -214,7 +214,7 @@ connect /home/user/music => main
 play
 ```
 
-## TODO
+### TODO
 * Add test and update specs
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Leave JRuby and convert to pure Ruby

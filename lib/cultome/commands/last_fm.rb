@@ -4,6 +4,7 @@ require 'open-uri'
 require 'json'
 require 'cgi'
 
+# Plugin to use information from the Last.fm webservices.
 class LastFm < BaseCommand
 
 	LAST_FM_WS_ENDPOINT = 'http://ws.audioscrobbler.com/2.0/'
@@ -12,10 +13,18 @@ class LastFm < BaseCommand
 	GET_SIMILAR_TRACKS_METHOD = 'track.getSimilar'
 	GET_SIMILAR_ARTISTS_METHOD = 'artist.getSimilar'
 
+
+	# Register the command: similar
+	# @note Required method for register commands
+	#
+	# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
 	def get_command_registry
 		{similar: {help: "Look in last.fm for similar artists or songs", params_format: "<object>"}}
 	end
 
+	# Display a list with similar artist or album of the give song or artist and shows a list with them, separing the one within our library.
+	#
+	# @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
 	def similar(params=[])
 		song = @p.song.name
 		artist = @p.artist.name
@@ -30,13 +39,35 @@ class LastFm < BaseCommand
 			json = get_similars(search_info)
 
 			if !json['similarartists'].nil?
-				artists = extract_artists(json['similarartists']['artist'])
-				save_similar_artists(artist_id, artists)
+				# get the information form the reponse
+				artists = json['similarartists']['artist'].collect do |a|
+					{
+						artist: a['name'],
+						artist_url: a['url'],
+						similar_to: 'artist'
+					}
+				end
+				# salvamos los similares
+				artists.each do |a|
+					Artist.find(artist_id).similars.create(a)
+				end
 				artists_in_library = find_artists_in_library(artists)
 				show_artist(artist, artists, artists_in_library)
 			elsif !json['similartracks'].nil?
-				tracks = extract_tracks(json['similartracks']['track'])
-				save_similar_tracks(song_id, tracks)
+				# convierte los datos del request en un hash mas manejable
+				tracks = json['similartracks']['track'].collect do |t|
+					{
+						track: t['name'],
+						artist: t['artist']['name'],
+						track_url: t['url'],
+						artist_url: t['artist']['url'],
+						similar_to: 'track'
+					}
+				end
+				# salvamos los similares
+				tracks.each do |t|
+					Song.find(song_id).similars.create(t)
+				end
 				tracks_in_library = find_tracks_in_library(tracks)
 				show_tracks(song, tracks, tracks_in_library)
 			else
@@ -55,18 +86,12 @@ class LastFm < BaseCommand
 		end
 	end
 
-	def save_similar_artists(original_artist_id, artists)
-		artists.each do |a|
-			Artist.find(original_artist_id).similars.create(a)
-		end
-	end
+	private
 
-	def save_similar_tracks(original_track_id, tracks)
-		tracks.each do |t|
-			Song.find(original_track_id).similars.create(t)
-		end
-	end
-
+	# Check if previously the similars has been inserted.
+	#
+	# @param (see #define_search)
+	# @return [List<Similar>] A list with the result of the search for similars for this criterio.
 	def check_in_db(search_info)
 		if search_info[:method] == GET_SIMILAR_ARTISTS_METHOD
 			artist = Artist.includes(:similars).find_by_name(search_info[:artist])
@@ -77,6 +102,12 @@ class LastFm < BaseCommand
 		end
 	end
 
+	# Given the command information, creates a search criteria.
+	#
+	# @param params [List<Hash>] Command's params information.
+	# @param song [Song] The song to find similars, depending on the params.
+	# @param artist [Artist] The artist to find similars, depending on the params.
+	# @return [Hash] With keys :method, :artist and :track, depending on the parameters.
 	def define_search(params, song, artist)
 		if params.empty?
 			# por default se buscan rolas similares
@@ -117,10 +148,18 @@ class LastFm < BaseCommand
 		return query
 	end
 
+	# Create a safe query string to use with the request to the webservice.
+	#
+	# @param (see #define_search)
+	# @result [String] A safe query string.
 	def get_query_string(search_info)
 		return search_info.inject(""){|sum,map| sum += "#{map[0]}=#{CGI::escape(map[1])}&" }
 	end
 
+	# Make a request to the last.fm webservice, and parse the response with JSON.
+	#
+	# @param (see #define_search)
+	# @return [Hash] Filled with the webservice response information.
 	def get_similars(search_info)
 		query_string = search_info.inject(""){|sum,map| sum += "#{map[0]}=#{CGI::escape(map[1])}&" }
 
@@ -131,28 +170,11 @@ class LastFm < BaseCommand
 		return JSON.parse(json_string)
 	end
 
-	def extract_artists(artists)
-		artists.collect do |a|
-			{
-				artist: a['name'],
-				artist_url: a['url'],
-				similar_to: 'artist'
-			}
-		end
-	end
-
-	def extract_tracks(tracks)
-		tracks.collect do |t|
-			{
-				track: t['name'],
-				artist: t['artist']['name'],
-				track_url: t['url'],
-				artist_url: t['artist']['url'],
-				similar_to: 'track'
-			}
-		end
-	end
-
+	# For the given artist list, find in the library if that artist exists, if exist, remove it from the parameter list.
+	# @note This method change the artist parameter.
+	#
+	# @param artists [List<Hash>] Contains the transformed artist information.
+	# @return [List<Artist>] The artist found in library.
 	def find_artists_in_library(artists)
 		in_library = []
 
@@ -175,6 +197,11 @@ class LastFm < BaseCommand
 		return in_library
 	end
 
+	# For the given tracks list, find in the library if that track exists, if exist, remove it from the parameter list.
+	# @note This method change the tracks parameter.
+	#
+	# @param tracks [List<Hash>] Contains the transformed track information.
+	# @return [List<Song>] The songs found in library.
 	def find_tracks_in_library(tracks)
 		in_library = []
 
@@ -196,6 +223,11 @@ class LastFm < BaseCommand
 		return in_library.flatten
 	end
 
+	# Display a list with similar tracks found and not found in library.
+	#
+	# @param song [Song] The song compared.
+	# @param tracks [List<Hash>] The song transformed information.
+	# @param tracks_in_library [List<Song>] The similari songs found in library.
 	def show_tracks(song, tracks, tracks_in_library)
 		display("Similar tracks to #{song}") unless tracks.empty?
 		tracks.each{|a| display("  #{a[:track]} / #{a[:artist]}") } unless tracks.empty?
@@ -211,6 +243,11 @@ class LastFm < BaseCommand
 		end
 	end
 
+	# Display a list with similar artist found and not found in library.
+	#
+	# @param artist [Artist] The artist compared.
+	# @param artists [List<Hash>] The artist transformed information.
+	# @param artists_in_library [List<Artist>] The similari artist found in library.
 	def show_artist(artist, artists, artists_in_library)
 		display("Similar artists to #{artist}") unless artists.empty?
 		artists.each{|a| display("  #{a[:artist]}") } unless artists.empty?

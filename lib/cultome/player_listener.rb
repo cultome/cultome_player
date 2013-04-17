@@ -1,4 +1,8 @@
+
+# Listener to the underlying java music player events.
 module PlayerListener
+
+	# The known states of the underlying music player.
 	STATES = {
 		-1 =>:UNKNOWN, 
 		0 => :OPENING, 
@@ -17,6 +21,7 @@ module PlayerListener
 	def initialize
 	end
 
+	# Callback for opened event.
 	def opened(stream, properties)
 		# puts ":::::::::::::::: opended: stream => #{stream}, properties: => #{properties}"
 		# "mp3.id3tag.track"=>"3",
@@ -37,6 +42,7 @@ module PlayerListener
 		# "duration"=>250070000, "mp3.frequency.hz"=>44100, "mp3.header.pos"=>27658, "basicplayer.sourcedataline"=>#<#<Class:0x3a3c7b60>:0x3a83b5aa>, "bitrate"=>320000, "mp3.mode"=>0, "comment"=>"",
 	end
 
+	# Callback for progress event.
 	def progress(bytesread, microseconds, pcmdata, properties)
 		# puts ":::::::::::::::: progress: bytesread => #{bytesread}, microseconds => #{microseconds},  pcmdata => #{pcmdata}, properties => #{properties}"
 		@song_status = properties
@@ -53,6 +59,7 @@ module PlayerListener
 		# }
 	end
 
+	# Callback for stateUpdated event.
 	def stateUpdated(event)
 		# si esta reproduciendo..
 		#if @status == :EOM
@@ -74,6 +81,7 @@ module PlayerListener
 		#puts ":::::::::::::::: New status => #{@status}"
 	end
 
+	# Callback for setController event.
 	def setController(controller)
 		# puts ":::::::::::::::: setController: controller => #{controller}"
 	end

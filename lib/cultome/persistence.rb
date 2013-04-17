@@ -10,6 +10,7 @@ ActiveRecord::Base.establish_connection(
 )
 ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
 
+# The ActiveRecord model for Song objects.
 class Song < ActiveRecord::Base
 	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points, :last_played_at
 
@@ -21,6 +22,9 @@ class Song < ActiveRecord::Base
 
 	scope :connected, joins(:drive).where('drives.connected' => true)
 
+	# Get the full path to the song file.
+	#
+	# @return [String] The full path to the song file.
 	def path
 		"#{self.drive.path}/#{self.relative_path}"
 	end
@@ -33,6 +37,7 @@ class Song < ActiveRecord::Base
 	end
 end
 
+# The ActiveRecord model for Artist objects.
 class Artist < ActiveRecord::Base
 	attr_accessible :name, :id, :points
 
@@ -45,6 +50,7 @@ class Artist < ActiveRecord::Base
 	end
 end
 
+# The ActiveRecord model for Similar objects.
 class Similar < ActiveRecord::Base
 	attr_accessible :track, :artist, :artist_url, :track_url, :type
 
@@ -57,6 +63,7 @@ class Similar < ActiveRecord::Base
 	end
 end
 
+# The ActiveRecord model for Album objects.
 class Album < ActiveRecord::Base
 	attr_accessible :name, :id, :points
 
@@ -70,6 +77,7 @@ class Album < ActiveRecord::Base
 	end
 end
 
+# The ActiveRecord model for Genre objects.
 class Genre < ActiveRecord::Base
 	attr_accessible :name, :points
 
@@ -80,6 +88,7 @@ class Genre < ActiveRecord::Base
 	end
 end
 
+# The ActiveRecord model for Drive objects.
 class Drive < ActiveRecord::Base
 	attr_accessible :name, :path, :connected
 
