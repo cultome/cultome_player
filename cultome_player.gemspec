@@ -1,12 +1,12 @@
 Gem::Specification.new do |s|
 	s.name = "cultome_player"
-	s.version = "1.0.0.pre"
-	s.date        = '2013-04-15'
+	s.version = "0.1.0"
+	s.date        = '2013-04-17'
 	s.summary     = "CulToMe Player"
-	s.description = "A ruby console-based music library explorer and player"
+	s.description = "A console music library explorer and player"
 	s.authors     = ["Carlos Soria"]
 	s.email       = "zooria@gmail.com"
-	s.files       = Dir['lib/**/*.rb'] + Dir['lib/**/*.rake'] + Dir['bin/*'] + Dir['jars/*.jar'] + Dir['db/**/*'] + Dir['database.yml']
+	s.files       = Dir['lib/**/*.rb'] + Dir['lib/**/*.rake'] + Dir['bin/*'] + Dir['jars/*.jar'] + Dir['db/**/*']
 	s.homepage    = "https://github.com/csoriav/cultome_player"
 	s.add_runtime_dependency "activerecord", [">= 3.2.13"]
 	s.add_runtime_dependency "activesupport", [">= 3.2.13"]
@@ -16,7 +16,5 @@ Gem::Specification.new do |s|
 	s.add_runtime_dependency "htmlentities", [">= 4.3.1"]
 	s.add_runtime_dependency "json", [">= 1.7.7"]
 
-	#s.add_development_dependency "bourne", [">== 0"]
-	
 	s.executables << 'cultome_player'
 end
