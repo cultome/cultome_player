@@ -1,6 +1,7 @@
 require 'cultome/user_input'
 require 'cultome/player_listener'
 require 'cultome/helper'
+require 'cultome/persistence'
 require 'active_support'
 require 'active_support/inflector'
 
@@ -72,7 +73,7 @@ class CultomePlayer
 
 	def load_commands
 		command_help = []
-		commands_path = "#{get_project_path}/lib/cultome/commands"
+		commands_path = "#{project_path}/lib/cultome/commands"
 		Dir.entries(commands_path).each{|file|
 			if file =~ /.rb\Z/
 				require "#{commands_path}/#{file}"

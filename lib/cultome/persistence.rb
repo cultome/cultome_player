@@ -1,15 +1,14 @@
 # encoding: UTF-8
 
+require 'cultome/helper'
 require 'active_record'
 require 'logger'
 
-base_path = File.expand_path(File.dirname(__FILE__) + "/../..")
-ActiveRecord::Base.logger = Logger.new("#{base_path}/logs/db.log")
-
 ActiveRecord::Base.establish_connection(
-	adapter: "jdbcsqlite3",
-	database: "#{base_path}/dev.sql"
+	adapter: db_adapter,
+	database: db_file
 )
+ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
 
 class Song < ActiveRecord::Base
 	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points, :last_played_at
@@ -90,3 +89,4 @@ class Drive < ActiveRecord::Base
 		":::: Drive: #{self.name} => #{self.songs.size} songs => #{self.path} => #{connected ? "Online" : "Offline"} ::::"
 	end
 end
+

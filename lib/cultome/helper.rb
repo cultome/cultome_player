@@ -1,11 +1,10 @@
-require 'cultome/persistence'
 require 'active_support/inflector'
 require 'mp3info'
 
 module Helper
 
 	def require_jars
-		jars_path = "#{get_project_path}/jars"
+		jars_path = "#{project_path}/jars"
 		Dir.entries(jars_path).each{|jar| 
 		  if jar =~ /.jar\Z/
 			#puts "#{jars_path}/#{jar}"
@@ -52,9 +51,28 @@ module Helper
 		"#{(seconds/60).to_s.rjust(2, '0')}:#{(seconds%60).to_s.rjust(2, '0')}"
 	end
 
-	def get_project_path
-		absolute_path = File.absolute_path(__FILE__)
-		absolute_path.slice(0, absolute_path.rindex('/lib'))
+	def project_path
+		@_project_path || @_project_path = File.expand_path(File.dirname(__FILE__) + "/../..")
+	end
+
+	def migrations_path
+		"#{ project_path }/db/migrate"
+	end
+
+	def db_logs_folder_path
+		"#{ project_path }/logs"
+	end
+
+	def db_log_path
+		"#{db_logs_folder_path}/db.log"
+	end
+
+	def db_adapter
+		'jdbcsqlite3'
+	end
+
+	def db_file
+		"#{project_path}/db_cultome.dat"
 	end
 end
 
