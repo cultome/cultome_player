@@ -205,23 +205,17 @@ First of all you need JRuby installed in your system. There are many tutorial in
 To distinguish from pure ruby, I'm gonna assume that all the JRuby executable are prepended with a j.
 
 ```ruby
-git clone https://github.com/csoriav/cultome_player.git
+jgem install cultome_player
 
-cd cultome_player
-
-chmod +x cultome
-
-./cultome
+cultome_player
 
 connect /home/user/music => main
 
 play
 ```
 
-I will make it more distributable-friendly very soon.
-
 ## TODO
+* Add test and update specs
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Leave JRuby and convert to pure Ruby
-* Make it distributable-friendly 
 * Change the underlying in.memory database for a real one, thinking on mongo
