@@ -72,7 +72,7 @@ class CultomePlayer
 				file_name = file.gsub('.rb', '')
 				require "plugins/#{file_name}"
 				
-				command = file_name.classify.constantize.new(self)
+				command = "Plugin::#{file_name.classify}".constantize.new(self)
 
 				cmd_regs = command.get_command_registry if command.respond_to?(:get_command_registry)
 				cmd_regs.each{|k,v|
