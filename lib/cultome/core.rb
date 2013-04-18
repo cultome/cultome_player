@@ -66,12 +66,13 @@ class CultomePlayer
 	# @return [Hash<Symbol, Class<? extends BaseCommand>>] The command registry after the load
 	def load_commands
 		command_help = []
-		commands_path = "#{project_path}/lib/cultome/commands"
+		commands_path = "#{project_path}/lib/plugins"
 		Dir.entries(commands_path).each{|file|
 			if file =~ /.rb\Z/
-				require "#{commands_path}/#{file}"
+				file_name = file.gsub('.rb', '')
+				require "plugins/#{file_name}"
 				
-				command = file.gsub('.rb', '').classify.constantize.new(self)
+				command = file_name.classify.constantize.new(self)
 
 				cmd_regs = command.get_command_registry if command.respond_to?(:get_command_registry)
 				cmd_regs.each{|k,v|
