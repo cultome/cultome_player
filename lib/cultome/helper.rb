@@ -56,7 +56,7 @@ module Helper
 	#
 	# @return [String] The path to the base of the instalation.
 	def project_path
-		@_project_path || @_project_path = File.expand_path(File.dirname(__FILE__) + "/../..")
+		@_project_path ||= File.expand_path(File.dirname(__FILE__) + "/../..")
 	end
 
 	# Return the path to the migrations folder.
@@ -100,7 +100,7 @@ module Helper
 	# @param info [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre.
 	# @return [Hash] The same hash but with polished values.
 	def polish(info)
-		[:name, :artist, :album].each{|k| info[k] = info[k].strip.titleize unless info[k].nil? }
+		[:name, :artist, :album].each{|k| info[k] = info[k].downcase.strip.titleize unless info[k].nil? }
 		[:track, :year].each{|k| info[k] = info[k].to_i if info[k] =~ /\A[\d]+\Z/ }
 		info[:duration] = info[:duration].to_i
 

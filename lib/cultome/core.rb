@@ -1,7 +1,6 @@
 require 'cultome/user_input'
 require 'cultome/player_listener'
 require 'cultome/helper'
-require 'cultome/persistence'
 require 'active_support'
 require 'active_support/inflector'
 
@@ -51,7 +50,7 @@ class CultomePlayer
 		@status = :STOPPED
 		@song_status = {}
 		@focus = nil
-		@drives = Drive.all.to_a
+		@drives = nil
 		@last_cmds = []
 		@is_shuffling = true
 		@is_playing_library = false
@@ -91,7 +90,7 @@ class CultomePlayer
 		@command_registry[:help] << self
 
 		generate_help(command_help)
-
+ 
 		return @command_registry
 	end
 
@@ -131,6 +130,28 @@ class CultomePlayer
 			send_to_listeners(cmd)
 		end
 	end
+
+	# Shows the generated in-app help message.
+	def help(params=[])
+		display(@help_msg)
+	end
+
+	# Print a message in the screen.
+	#
+	# @param object [Object] Any object that responds to #to_s.
+	# @param continuos [Boolean] If false a new line character is appended at the end of message.
+	# @return [String] The message printed.
+	def display(object, continuos=false)
+		text = object.to_s
+		if continuos
+			print text
+		else
+			puts text
+		end
+		text
+	end
+
+	private
 
 	# Send the command parameters to appropiated registered listeners/commands.
 	#
@@ -186,26 +207,6 @@ class CultomePlayer
 		@help_msg += "  #{"path".ljust(offset)}A valid path inside local filesystem.\n"
 
 		@help_msg
-	end
-
-	# Shows the generated in-app help message.
-	def help(params=[])
-		display(@help_msg)
-	end
-
-	# Print a message in the screen.
-	#
-	# @param object [Object] Any object that responds to #to_s.
-	# @param continuos [Boolean] If false a new line character is appended at the end of message.
-	# @return [String] The message printed.
-	def display(object, continuos=false)
-		text = object.to_s
-		if continuos
-			print text
-		else
-			puts text
-		end
-		text
 	end
 
 	# When no command is found for a user input,

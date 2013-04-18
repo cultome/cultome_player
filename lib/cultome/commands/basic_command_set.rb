@@ -122,7 +122,7 @@ class BasicCommandSet < BaseCommand
 							when /artist|album|drives|queue|focus/ then obj = @p.instance_variable_get("@#{param[:value]}")
 							when :recently_added then @p.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
 							else
-								drive = @p.drives.find{|d| d.name.to_sym == param[:value]}
+								drive = drives.find{|d| d.name.to_sym == param[:value]}
 								@p.focus = obj = Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
 						end
 					else
@@ -192,7 +192,7 @@ class BasicCommandSet < BaseCommand
 				display("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
 			else
 				drive.update_attributes(connected: true)
-				@p.drives << drive
+				drives << drive
 			end
 
 			return Song.where(drive_id: drive.id).count()
@@ -203,7 +203,7 @@ class BasicCommandSet < BaseCommand
 			name_param = params.find{|p| p[:type] == :literal}
 			new_drive = Drive.find_by_path(path_param[:value])
 			if new_drive.nil?
-				@p.drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
+				drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
 			else
 				display("The drive '#{new_drive.name}' is refering the same path. Update of '#{new_drive.name}' is in progress.")
 			end
@@ -233,7 +233,7 @@ class BasicCommandSet < BaseCommand
 			display("An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?")
 		else
 			drive.update_attributes(connected: false)
-			@p.drives.delete(drive)
+			drives.delete(drive)
 		end
 
 		return Song.where(drive_id: drive.id).count()
@@ -351,7 +351,7 @@ class BasicCommandSet < BaseCommand
 							when :populars then new_playlist += find_by_query({or: [{id: 10, condition: 'songs.points > ?', value: Song.average('points').ceil.to_i}], and: []})
 							else
 								# intentamos matchear las unidades primero
-								drive = @p.drives.find{|d| d.name.to_sym == param[:value]}
+								drive = drives.find{|d| d.name.to_sym == param[:value]}
 								if drive.nil?
 									# intetamos matchear por genero
 									new_playlist += Song.connected.joins(:genres).where('genres.name like ?', "%#{param[:value].to_s.gsub('_', ' ')}%" )
@@ -492,6 +492,10 @@ class BasicCommandSet < BaseCommand
 		end
 
 		return song
+	end
+
+	def drives
+		@p.drives ||= Drive.all.to_a
 	end
 end
 

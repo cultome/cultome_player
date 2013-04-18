@@ -45,7 +45,7 @@ module UserInput
 		}.compact
 
 		cmds.delete_if{|c| c[:piped] }
-		# puts cmds.inspect
+
 		cmds # ver que hacer si hay nils
 	end
 
@@ -56,8 +56,7 @@ module UserInput
 	# @return (see #is_true_value)
 	def get_confirmation(msg)
 		display(msg)
-		display("  [y/N]: ", true)
-		is_true_value gets.chomp
+		is_true_value get_command("  [y/N]: ", false)
 	end
 
 	# Return true if value matches /Y|y|yes|1|si|s|ok/

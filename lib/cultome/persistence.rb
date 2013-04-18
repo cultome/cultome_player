@@ -4,6 +4,8 @@ require 'cultome/helper'
 require 'active_record'
 require 'logger'
 
+include Helper
+
 ActiveRecord::Base.establish_connection(
 	adapter: db_adapter,
 	database: db_file
