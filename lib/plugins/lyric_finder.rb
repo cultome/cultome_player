@@ -1,5 +1,5 @@
 require 'cultome/plugin'
-require 'open-uri'
+require 'net/http'
 require 'json'
 require 'cgi'
 require 'htmlentities'
@@ -19,16 +19,21 @@ module Plugin
 
 		# Search and display the lyrics for the current song
 		def lyric(params=[])
-			display("Finding lyric for #{@p.song.name}...")
-			response = open("http://lyrics.wikia.com/api.php?artist=#{CGI::escape(@p.artist.name)}&song=#{CGI::escape(@p.song.name)}&fmt=json").string
-			json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
+			song = @p.song.name
+			artist = @p.artist.name
 
-			open(json['url']).readlines.each do |line|
+			display("Finding lyric for #{song}...")
+
+			url = "http://lyrics.wikia.com/api.php?artist=#{CGI::escape(artist)}&song=#{CGI::escape(song)}&fmt=json"
+
+			response = Net::HTTP.get_response(URI(url)).body
+			json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
+			Net::HTTP.get_response(URI(json['url'])).body.lines.each do |line|
 				if line =~ /<div class='lyricbox'>/
 					lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
-					display(":::: Lyric for #{@p.song.name} ::::")
+					display(":::: Lyric for #{song} ::::")
 					display(lyric)
-					return 
+					return lyric
 				end
 			end
 		end

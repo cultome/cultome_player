@@ -8,7 +8,6 @@ class CultomePlayer
 	end
 end
 
-
 describe CultomePlayer do
 
 	let(:p){ CultomePlayer.new }

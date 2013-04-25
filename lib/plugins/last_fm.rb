@@ -1,6 +1,6 @@
 require 'cultome/plugin'
 require 'cultome/persistence'
-require 'open-uri'
+require 'net/http'
 require 'json'
 require 'cgi'
 
@@ -48,12 +48,16 @@ module Plugin
 							similar_to: 'artist'
 						}
 					end
+
 					# salvamos los similares
 					artists.each do |a|
 						Artist.find(artist_id).similars.create(a)
 					end
+
 					artists_in_library = find_artists_in_library(artists)
 					show_artist(artist, artists, artists_in_library)
+
+					return artists, artists_in_library
 				elsif !json['similartracks'].nil?
 					# convierte los datos del request en un hash mas manejable
 					tracks = json['similartracks']['track'].collect do |t|
@@ -71,6 +75,8 @@ module Plugin
 					end
 					tracks_in_library = find_tracks_in_library(tracks)
 					show_tracks(song, tracks, tracks_in_library)
+
+					return tracks, tracks_in_library
 				else
 					# seguramente un error
 					display("Problem! #{json['error']}: #{json['message']}")
@@ -80,9 +86,13 @@ module Plugin
 				if search_info[:method] == GET_SIMILAR_ARTISTS_METHOD
 					artists_in_library = find_artists_in_library(in_db)
 					show_artist(artist, in_db, artists_in_library)
+
+					return in_db, artists_in_library
 				elsif search_info[:method] == GET_SIMILAR_TRACKS_METHOD
 					tracks_in_library = find_tracks_in_library(in_db)
 					show_tracks(song, in_db, tracks_in_library)
+
+					return in_db, tracks_in_library
 				end
 			end
 		end
@@ -166,7 +176,7 @@ module Plugin
 
 			url = "#{LAST_FM_WS_ENDPOINT}?api_key=#{LAST_FM_API_KEY}&limit=#{SIMILARS_LIMIT}&format=json&#{query_string}"
 
-			json_string = open(url).readlines.join
+			json_string = Net::HTTP::get_response(URI(url)).body
 
 			return JSON.parse(json_string)
 		end
@@ -185,7 +195,7 @@ module Plugin
 				display('.', true)
 
 				artist = Artist.find_by_name(a[:artist])
-				if artist.empty?
+				if artist.nil? 
 					# aqui meter a similars
 					true
 				else

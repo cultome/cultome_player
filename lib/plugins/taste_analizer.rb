@@ -24,48 +24,57 @@ module Plugin
 		# @param song [Song] The current song
 		# @param next_song [Song] The next song to be played
 		def calculate_songs_weight(song, next_song)
-			return unless song.class == Song && next_song.class == Song
-			return if @p.song_status.empty?
+			return -1 unless song.class == Song && next_song.class == Song
+			return 0 if @p.song_status.empty?
 
 			#puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.current_command }..."
 
 			progress_in_sec = @p.song_status["mp3.position.microseconds"] / 1000000
 			percentage = (progress_in_sec * 100) / song.duration
 
+			points = 0
+
 			if @p.current_command[:command] =~ /next/
-				if song == next_song
-					Song.increment_counter :points, song.id
-				end
+				Song.increment_counter(:points, song.id) if song == next_song
+				points += 1
+			end
 
 			if percentage < 20
 				# restamos puntos a la rola actual
 				Song.decrement_counter :points, song.id
 				Album.decrement_counter :points, song.album.id unless song.album.nil?
-				if song.artist != next_song.artist
-					Artist.decrement_counter :points, song.artist.id unless song.artist.id
-				end
+				Artist.decrement_counter :points, song.artist.id unless song.artist.id if song.artist != next_song.artist
+
+				points -= 1
 			elsif percentage > 60 && percentage < 90
 				# damos un punto a la rola actual
 				Song.increment_counter :points, song.id
 				Album.increment_counter :points, song.album.id unless song.album.nil?
 				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
+
+				points += 1
 			elsif percentage >= 90
 				# damos 2 puntos a la rola actual
 				Song.update_counters song.id, points: 2
 				Album.increment_counter :points, song.album.id unless song.album.nil?
 				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
-			end
+
+				points += 1
 			elsif @p.current_command[:command] =~ /prev/
 				# le damos puntos a la proxima rola 
 				# porque la queremos volver a escuchar
 				Song.increment_counter :points, song.id
 				Album.increment_counter :points, song.album.id unless song.album.nil?
 				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
+
+				points += 1
 			end
 
 			# checamos si cambio el genero de la musica
 			genres_weight = calculate_genre_compatibility(song.genres, next_song.genres)
 			#puts "Genre weight: #{genres_weight}"
+
+			return points + genres_weight
 		end
 
 		# Calculate how much song genres is similar to other.

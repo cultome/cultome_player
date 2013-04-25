@@ -20,6 +20,8 @@ module Plugin
 			[:__ALL__]
 		end
 
+		private
+
 		# When a callback is invoked in this listener, all we do is add that command into the queue.
 		def method_missing(method_name, *args)
 			add_command({command: method_name, params: args})
@@ -33,14 +35,14 @@ module Plugin
 			analize_queue
 		end
 
-		private
-
 		# Look for known patterns and interpret them.
 		def analize_queue
 			# checamos el patron y vemos si matchea
 			if @queue.has(5, :next, 20)
-				puts "#### Notifying: Looking for something"
+				display "#### Notifying: Looking for something"
 			end
+
+			@queue
 		end
 	end
 

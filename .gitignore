@@ -8,3 +8,4 @@ test_music_2
 *.swp
 *.gem
 .yardoc
+*.dat

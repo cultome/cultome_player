@@ -70,8 +70,8 @@ module UserInput
 	# Read the user input. Provide funcitonality like history and limited autocomplete.
 	#
 	# @return [String] The user input.
-	def get_command
-		Readline::readline(@prompt, true)
+	def get_command(msg=@prompt, history=true)
+		Readline::readline(msg, history)
 	end
 
 	private

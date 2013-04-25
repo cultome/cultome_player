@@ -84,7 +84,7 @@ module Helper
 	#
 	# @return [String] The db adapter name.
 	def db_adapter
-		'jdbcsqlite3'
+		ENV['db_adapter'] || 'jdbcsqlite3'
 	end
 
 	# Return the path to the db data file.

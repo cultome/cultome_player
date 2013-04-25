@@ -26,7 +26,11 @@ describe Helper do
 	end
 
 	it 'Should return the db adapter name' do
-		h.db_adapter.should eq('jdbcsqlite3')
+		if ENV['db_adapter']
+			h.db_adapter.should_not be_nil
+		else
+			h.db_adapter.should eq('jdbcsqlite3')
+		end
 	end
 
 	it 'Should return the db data file' do

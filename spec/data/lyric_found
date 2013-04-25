@@ -1,0 +1,1271 @@
+HTTP/1.1 200 OK
+Server: Apache
+X-Content-Type-Options: nosniff
+Content-language: en
+Last-Modified: Sun, 03 Mar 2013 23:02:33 GMT
+Content-Type: text/html; charset=utf-8
+X-Cacheable: YES
+Content-Length: 96468
+Accept-Ranges: bytes
+Date: Fri, 19 Apr 2013 21:50:05 GMT
+Connection: keep-alive
+X-Served-By: varnish-s1-SJC, cache-d45-DAL
+X-Cache: HIT, HIT
+X-Cache-Hits: 1, 1
+X-Timer: S1366359367.370710373,VS0,VS78,VE85,VE48837797
+Vary: Accept-Encoding,Cookie
+Set-Cookie: wikia_beacon_id=e-LySmavLj; domain=.wikia.com; path=/; expires=Wed, 16 Oct 2013 21:50:05 GMT;
+Set-Cookie: Geo={%22city%22:%22FIXME%22%2C%22country%22:%22MX%22%2C%22continent%22:%22NA%22}; path=/
+X-Age: 48838
+Set-Cookie: varnish-stat=/server/DAL/cache-d45-DAL/(null)/; path=/
+Set-Cookie: loadtime=S1366359367.370710373,VS0,VS78,VE85,VE48837797; path=/
+Cache-Control: private, s-maxage=0, max-age=0, must-revalidate
+
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=1200">
+<meta name="generator" content="MediaWiki 1.19.5" />
+<meta name="keywords" content="Great DJ lyrics,The Ting Tings Great DJ lyrics,Great DJ by The Ting Tings lyrics,lyrics,LyricWiki,LyricWiki,lyricwiki,The Ting Tings:Great DJ,The Ting Tings,The Ting Tings:We Started Nothing (2008),The Ting Tings:Great DJ,The Ting Tings:Great DJ" />
+<meta name="description" content="Fed up with your indigestion Swallow words one by one Folks got high at a quarter to five Don't..." />
+<meta name="google-site-verification" content="skOGWQqvmKauTQiH20BO4fMuRhiincIUYw-LssOeP4k" />
+<link rel="canonical" href="http://lyrics.wikia.com/The_Ting_Tings:Great_DJ" />
+<link rel="alternate" type="application/x-wiki" title="Edit" href="/The_Ting_Tings:Great_DJ?action=edit" />
+<link rel="edit" title="Edit" href="/The_Ting_Tings:Great_DJ?action=edit" />
+<link rel="apple-touch-icon" href="http://images.wikia.com/lyricwiki/images/b/bc/Wiki.png" />
+<link rel="shortcut icon" href="http://images3.wikia.nocookie.net/__cb62134/lyricwiki/images/6/64/Favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="/opensearch_desc.php" title="LyricWiki (en)" />
+<link rel="EditURI" type="application/rsd+xml" href="http://lyrics.wikia.com/api.php?action=rsd" />
+<link rel="copyright" href="/LyricWiki:Copyrights" />
+<link rel="alternate" type="application/atom+xml" title="LyricWiki Atom feed" href="/Special:RecentChanges?feed=atom" />
+<title>The Ting Tings:Great DJ Lyrics - Lyric Wiki - song lyrics, music lyrics</title>
+
+<!-- SASS-generated CSS file -->
+<link rel="stylesheet" href="http://slot1.images3.wikia.nocookie.net/__am/62132/sass/background-align%3Dcenter%26background-fixed%3Dfalse%26background-image%3Dhttp%253A%252F%252Fimages3.wikia.nocookie.net%252F__cb7%252Flyricwiki%252Fimages%252F5%252F50%252FWiki-background%26background-tiled%3Dtrue%26color-body%3D%2523fff%26color-buttons%3D%2523006cb0%26color-header%3D%25233a5766%26color-links%3D%2523006cb0%26color-page%3D%2523ffffff%26page-opacity%3D100%26widthType%3D3%26wordmark-font%3D/skins/oasis/css/oasis.scss">
+
+<!-- CSS injected by extensions -->
+<link rel="stylesheet" href="http://lyrics.wikia.com/__load/-/cb%3D62132%26debug%3Dfalse%26lang%3Den%26only%3Dstyles%26skin%3Doasis/ext.wikihiero" /><link rel="stylesheet" href="http://lyrics.wikia.com/__load/-/cb%3D62132%26debug%3Dfalse%26lang%3Den%26only%3Dstyles%26skin%3Doasis/site" /><style>			/* Add a pretty logo to Facebook links */
+			.mw-fblink {
+				background: url(http://static.ak.fbcdn.net/images/icons/favicon.gif) top left no-repeat !important;
+				padding-left: 17px !important;
+			}</style><style>a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}a.new,#quickbar a.new{color:#ba0000}
+
+/* cache key: lyricwiki:resourceloader:filter:minify-css:7:c88e2bcd56513749bec09a7e29cb3ffa */</style><style type='text/css'>/*<![CDATA[*/
+.lyricbox
+{
+	padding: 1em;
+	border: 1px solid silver;
+	color: black;
+	background-color: #ffffcc;
+}
+/*]]>*/</style><style type='text/css'>/*<![CDATA[*/
+.lyricbox
+{
+	padding: 1em 1em 0;
+	border: 1px solid silver;
+	color: black;
+	background-color: #ffffcc;
+}
+.lyricsbreak{
+	clear:both;
+}
+/*]]>*/</style>
+
+
+
+<script>
+var Wikia={},
+wgJqueryUrl=["http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"],
+wgMessages={"categoryselect-button-save":"Save","categoryselect-category-add":"Add category...","categoryselect-category-edit":"Edit category","categoryselect-category-remove":"Remove category","categoryselect-error-category-name-length":"The maximum length for a category name has been reached.","categoryselect-error-duplicate-category-name":"Category \"$1\" already exists.","categoryselect-error-empty-category-name":"Please provide a category name.","categoryselect-modal-category-name":"Provide the name of the category:","categoryselect-modal-category-sortkey":"Optionally, you may alphabetize this page on the \"$1\" category page under the name:","categoryselect-tooltip-add":"Press the Enter or Return key when done."},
+wgJSMessagesCB="62132.12224367.60796",
+JSSnippetsStack=[],
+adslots2=[],
+wgLoadAdsInHead=false,
+wgAdsInHeadGroup=0,
+wgAdsShowableOnPage=true,
+wgShowAds=true,
+wgAdDriverUseGpt=false,
+wgAdDriverStartLiftiumOnLoad=false,
+adDriverLastDARTCallNoAds=[],
+wgDartCustomKeyValues="age=13-17;age=18-34;eth=hisp;hhi=0-30",
+cityShort="music",
+wikiaPageType="article",
+wikiaPageIsHub=false,
+cscoreCat="Entertainment",
+wgEnableKruxTargeting=true,
+wgKruxCategoryId="HixxfWsd",
+wgAfterContentAndJS=[],
+wgWikiFactoryTagIds=[29,100024,100052,100065,100066,100068,100084,100449],
+wgWikiFactoryTagNames=["music","test","adss","tandem","tandem_2","hadonedotenabled","adss_medium","sensitive"],
+wgCdnRootUrl="http://slot1.images.wikia.nocookie.net",
+wgDBname="lyricwiki",
+wgCityId="43339",
+wgMedusaSlot="slot1",
+wgContentLanguage="en",
+wgUserName=null,
+wgArticleId=789958,
+wgCategories=["Song","Silver Songs","YouTube/Song","Wikipedia articles/Song","Songs G","Language/English","ITunes/Song","Amazon/Song","Allmusic/Song","MusicBrainz/Song"],
+wgPageName="The_Ting_Tings:Great_DJ",
+skin="oasis",
+_gaq=[],
+wgIsGASpecialWiki=true,
+wgStyleVersion="62132";
+</script><script>window.mw||(mw={fk:1,loader:{state:function(s){preMwLdrStA=window.preMwLdrStA||[];preMwLdrStA.push(s)}}});</script>
+<script>var wgNow = new Date();</script>
+<!-- Wikia Beacon Tracking -->
+<noscript><img src="http://a.wikia-beacon.com/__track/view?c=43339&amp;lc=en&amp;lid=75&amp;x=lyricwiki&amp;y=c1&amp;u=0&amp;ip=213.30.207.55&amp;a=789958&amp;s=oasis&amp;n=0&amp;nojs=1" width="1" height="1" border="0" alt="" /></noscript>
+<script>
+(function() {
+	var result = RegExp("wikia_beacon_id=([A-Za-z0-9_-]{10})").exec(document.cookie);
+	if(result) {
+		window.beacon_id = result[1];
+	} else {
+		// something went terribly wrong
+	}
+
+	var utma = RegExp("__utma=([0-9\.]+)").exec(document.cookie);
+	var utmb = RegExp("__utmb=([0-9\.]+)").exec(document.cookie);
+
+	var trackUrl = "http://a.wikia-beacon.com/__track/view?c=43339&amp;lc=en&amp;lid=75&amp;x=lyricwiki&amp;y=c1&amp;u=0&amp;ip=213.30.207.55&amp;a=789958&amp;s=oasis&amp;n=0" + ((typeof document.referrer != "undefined") ? "&amp;r=" + escape(document.referrer) : "") + "&amp;cb=" + (new Date).valueOf() + (window.beacon_id ? "&amp;beacon=" + window.beacon_id : "") + (utma && utma[1] ? "&amp;utma=" + utma[1] : "") + (utmb && utmb[1] ? "&amp;utmb=" + utmb[1] : "");
+	document.write('<'+'script type="text/javascript" src="' + trackUrl + '"><'+'/script>');
+})();
+</script><script src="http://lyrics.wikia.com/__load/-/cb%3D62132%26debug%3Dfalse%26lang%3Den%26only%3Dscripts%26skin%3Doasis/wikia.ext.abtesting"></script>
+<script src="http://slot1.images2.wikia.nocookie.net/__load/-/cb%3D62132%26debug%3Dfalse%26lang%3Den%26only%3Dscripts%26skin%3Doasis/amd|wikia.tracker.stub|wikia.cookies,geo,window"></script>
+<script>/*<![CDATA[*/window.mw.fk&&delete mw;/*]]>*/</script>
+<script type="text/javascript" src="http://slot1.images.wikia.nocookie.net/__am/62132/groups/-/abtesting,oasis_blocking,analytics_gas_js"></script>
+<!-- Make IE recognize HTML5 tags. -->
+<!--[if IE]>
+	<script>/*@cc_on'abbr article aside audio canvas details figcaption figure footer header hgroup mark menu meter nav output progress section summary time video'.replace(/\w+/g,function(n){document.createElement(n)})@*/</script>
+<![endif]-->
+
+
+
+	<meta property="fb:app_id" content="112328095453510" prefix="fb: http://www.facebook.com/2008/fbml" />
+	<meta property="og:type" content="article" />
+	<meta property="og:site_name" content="LyricWiki" />
+	<meta property="og:title" content="The Ting Tings:Great DJ" />
+	<meta property="og:image" content="http://images4.wikia.nocookie.net/__cb20130201195955/lyricwiki/images/3/32/Ting-tings.jpg" />
+	<meta property="og:description" content="Fed up with your indigestion Swallow words one by one Folks got high at a quarter to five Don't..." />
+	<meta property="og:url" content="http://lyrics.wikia.com/The_Ting_Tings:Great_DJ" />
+
+</head>
+<body class="mediawiki ltr ns-0 ns-subject page-The_Ting_Tings_Great_DJ  TOC_hide wikia-grid wikinav2 skin-oasis oasis-oasis oasis-split-skin">
+
+
+<!-- Begin comScore Tag -->
+<script type="text/javascript">
+var _comscore = _comscore || [];
+_comscore.push({ c1: "2", c2: "6177433",
+	options: {
+		url_append: "comscorekw=wikiacsid_entertainment"
+	}
+});
+
+(function() {
+	var s = document.createElement("script"), el = document.getElementsByTagName("script")[0]; s.async = true;
+	s.src = (document.location.protocol == "https:" ? "https://sb" : "http://b") + ".scorecardresearch.com/beacon.js";
+	el.parentNode.insertBefore(s, el);
+})();
+</script>
+<noscript>
+<img src="http://b.scorecardresearch.com/p?c1=2&amp;c2=6177433&amp;c3=&amp;c4=&amp;c5=&amp;c6=&amp;c7=http%3A%2F%2Flyrics.wikia.com%2FThe_Ting_Tings%3AGreat_DJ%3Fcomscorekw%3Dwikiacsid_entertainment&amp;c15=&amp;cv=2.0&amp;cj=1" />
+</noscript>
+<!-- End comScore Tag -->
+<!-- Start for QuantServe, page_view -->
+<script type="text/javascript">
+  var _qevents = _qevents || [];
+
+  (function() {
+   var elem = document.createElement('script');
+
+   elem.src = (document.location.protocol == "https:" ? "https://secure" : "http://edge") + ".quantserve.com/quant.js";
+   elem.async = true;
+   elem.type = "text/javascript";
+   var scpt = document.getElementsByTagName('script')[0];
+   scpt.parentNode.insertBefore(elem, scpt);  
+  })();
+</script>
+<script type="text/javascript">
+var quantcastLabels = "";
+if (window.cityShort) {
+	quantcastLabels += cityShort;
+	if (window.wgDartCustomKeyValues) {
+		var keyValues = wgDartCustomKeyValues.split(';');
+		for (var i=0; i<keyValues.length; i++) {
+			var keyValue = keyValues[i].split('=');
+			if (keyValue.length >= 2) {
+				quantcastLabels += ',' + cityShort + '.' + keyValue[1];
+			}
+		}
+	}
+}
+_qevents.push( { qacct:"p-8bG6eLqkH6Avk", labels:quantcastLabels } );
+</script>
+<noscript>
+<div style="display: none;"><img src="//pixel.quantserve.com/pixel/p-8bG6eLqkH6Avk.gif" height="1" width="1" alt="Quantcast"/></div>
+</noscript>
+<!-- Unsupported language for AnalyticsProviderIVW -->
+<!-- Start for AmazonDirectTargetedBuy, page_view -->
+		<script>
+			require(['wikia.geo'], function (geo) {
+				if (geo.getCountryCode() === 'US') {
+					var aax_src='3006';
+					var aax_url = encodeURIComponent(document.location);
+					try { aax_url = encodeURIComponent("" + window.top.location); } catch(e) {}
+					var s = document.createElement('script');
+					s.type = 'text/javascript';
+					s.async = true;
+					s.src = '//aax-us-east.amazon-adsystem.com/e/dtb/bid?src=' + aax_src + '&u=' + aax_url + "&cb=" + Math.round(Math.random()*10000000);
+					var insertLoc = document.getElementsByTagName('script')[0];
+					insertLoc.parentNode.insertBefore(s, insertLoc);
+				}
+			});
+		</script><h1>Wikia</h1>
+<div class="skiplinkcontainer">
+<a class="skiplink" rel="nofollow" href="#WikiaArticle">Skip to Content</a>
+<a class="skiplink wikinav" rel="nofollow" href="#WikiHeader">Skip to Wiki Navigation</a>
+<a class="skiplink sitenav" rel="nofollow" href="#GlobalNavigation">Skip to Site Navigation</a>
+</div>
+
+<div id="ad-skin" class="wikia-ad noprint"></div>
+<header id="WikiaHeader" class="WikiaHeader">
+	<div class="wikia-header-mask">
+		<div class="page-width-container">
+						<nav>
+								<h1>Wikia Navigation</h1>
+								<ul>
+					<li class="WikiaLogo">
+						<a href="http://www.wikia.com/Wikia" rel="nofollow"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite logo" height="23" width="91" alt="Wikia"></a>
+					</li>
+					<li class="start-a-wiki">
+						<a href="http://www.wikia.com/Special:CreateNewWiki" class="wikia-button">Start a wiki</a>
+					</li>
+					<li>
+						<ul id="GlobalNavigation" class="GlobalNavigation" data-hash="eb5d1a2fa10cb6ce0c37c703e5851a34">
+																																			<li class="topNav Video_Games video-games-vertical-color" data-index="1">
+											<a href="http://www.wikia.com/Video_Games">Video Games<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron" height="0" width="0"></a>
+											<ul class="subnav"></ul>
+										</li>
+																												<li class="topNav Entertainment entertainment-vertical-color" data-index="26">
+											<a href="http://www.wikia.com/Entertainment">Entertainment<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron" height="0" width="0"></a>
+											<ul class="subnav"></ul>
+										</li>
+																												<li class="topNav Lifestyle lifestyle-vertical-color" data-index="51">
+											<a href="http://www.wikia.com/Lifestyle">Lifestyle<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron" height="0" width="0"></a>
+											<ul class="subnav"></ul>
+										</li>
+																					</ul>
+					</li>
+									</ul>
+			</nav>
+			<ul id="AccountNavigation" class="AccountNavigation">
+
+	
+	
+	<li>
+		<a data-id="login" href="/Special:UserLogin?returnto=The_Ting_Tings:Great_DJ&amp;type=login" rel="nofollow" class="ajaxLogin" accesskey="o">Log in<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron" width="0" height="0" /></a>		<div id="UserLoginDropdown" class="UserLoginDropdown subnav">
+
+<form action="/Special:UserLogin" method="post" class="WikiaForm">
+	<fieldset>
+		
+					<div class="input-group error general-errors">
+				<div class="error-msg"></div>
+			</div>
+		
+		
+									
+									<input type="hidden" name="loginToken" value="">
+											
+									<input type="hidden" name="returnto" value="">
+											
+									<input type="hidden" name="returntoquery" value="">
+											
+															<div class="input-group required">
+					
+													<label>Username</label>
+						
+						
+																					<input type="text" name="username" tabindex="1">
+							
+						
+						
+											</div>
+					
+											
+															<div class="input-group password-input required">
+					
+													<label>Password</label>
+						
+						
+														<input type="password" class="password-input" name="password" tabindex="2">
+							
+						
+						
+											</div>
+					
+											
+															<div class="input-group">
+					
+						
+						
+														<a href="#" class="forgot-password" tabindex="0">Forgot your password?</a>							
+						
+						
+											</div>
+					
+											
+															<div class="input-group keep-logged-in">
+					
+						
+													<label>
+						
+														<input type="checkbox" class="keep-logged-in" name="keeploggedin" value="1" tabindex="3">
+								
+						
+													Stay logged in</label>
+						
+											</div>
+					
+											
+															<div class="input-group login-button">
+					
+						
+						
+														<input type="submit" class="login-button" value="Log in" tabindex="4">
+							
+						
+						
+											</div>
+					
+										</fieldset>
+
+	</form>
+	<div class="sso-login">
+		<div class="sso-login-divider">
+			<span>Or</span>
+		</div>
+
+					<a href="#" class="wikia-button wikia-button-facebook sso-login-facebook"  data-id="facebook" rel="tooltip" title="Click the button to log in with Facebook" tabindex="5" ><img alt="" class="sprite facebook" height="14" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="15" /> Connect</a>
+	</div></div>
+	</li>
+	<li>
+		<a data-id="register" href="/Special:UserLogin?returnto=The_Ting_Tings:Great_DJ&amp;type=signup" rel="nofollow" class="ajaxRegister">Sign up</a>	</li>
+
+	
+</ul>
+						<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="banner-corner-left" width="0" height="0">
+			<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="banner-corner-right" width="0" height="0">
+		</div>
+	</div>
+</header>
+
+
+<div class="WikiaTopAds" id="WikiaTopAds">
+<div class="WikiaTopAdsInner">
+
+
+<!-- BEGIN SLOTNAME: TOP_LEADERBOARD -->
+<div id="TOP_LEADERBOARD" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["TOP_LEADERBOARD",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: TOP_LEADERBOARD -->
+
+
+<!-- BEGIN SLOTNAME: TOP_BUTTON_WIDE -->
+<div id="TOP_BUTTON_WIDE" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["TOP_BUTTON_WIDE",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: TOP_BUTTON_WIDE -->
+
+
+</div>
+
+
+<!-- BEGIN SLOTNAME: INVISIBLE_SKIN -->
+<div id="INVISIBLE_SKIN" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["INVISIBLE_SKIN",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: INVISIBLE_SKIN -->
+
+
+</div>
+
+
+<section id="WikiaPage" class="WikiaPage V2 WikiaGrid">
+	<div id="WikiaPageBackground" class="WikiaPageBackground"></div>
+	<div class="WikiaPageContentWrapper">
+		
+		
+		<header id="WikiHeader" class="WikiHeader">
+	<h1 class="wordmark medium graphic ">
+	<a accesskey="z" href="/Lyrics_Wiki">
+					<img src="http://images2.wikia.nocookie.net/__cb7/lyricwiki/images/8/89/Wiki-wordmark.png" alt="LyricWiki"  width="250" height="65" >
+			</a>
+</h1>
+    <nav class="WikiNav">
+    	        <h1>LyricWiki Navigation</h1>
+        		<ul class="nav">
+																				<li class="nav-item marked">
+						<a href="#">On the Wiki</a>
+
+													<ul class="subnav-2 accent firstChild">
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:WikiActivity" data-canonical="wikiactivity">Wiki Activity</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:Random" data-canonical="random">Random page</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:Videos" data-canonical="videos">Videos</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:NewFiles" data-canonical="newfiles">Photos</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:Chat" data-canonical="chat">Chat</a>
+
+																			</li>
+																							</ul>
+											</li>
+																												<li class="nav-item">
+						<a href="/Help:Contents">Help Out</a>
+
+													<ul class="subnav-2 accent">
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Help:FAQ">LyricWiki FAQ</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Help:Contents">Help Index</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Help:Contents/Editing">Help with Editing Pages<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Help:Contents/Editing">General Help</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:Help_Desk">Ask on Help Desk</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:Job_Exchange">File an Edit Request</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:Page_Names">Our Page Naming Policy</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/LyricWiki:Community_Portal">The Community<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:Administrators">Find Admins</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki_talk:Community_Portal">Post Feedback</a>
+													</li>
+																							</ul>
+																			</li>
+																							</ul>
+											</li>
+																				<li class="nav-item">
+						<a href="/Special:Random">Stroll Around</a>
+
+													<ul class="subnav-2 accent">
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:Top/most_visited">Popular Pages</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:Random">Randomize<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:RandomInCategory/Artist">Random Artist</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:RandomInCategory/Album">Random Album</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:RandomInCategory/Song">Random Song</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:RandomInCategory/Translation">Random Translation</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/LyricWiki:Song_of_the_Day">LyricWiki Awards<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:Song_of_the_Day">Song of the Day</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:Album_of_the_Week">Album of the Week</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/LyricWiki:Top_100">Top 100 iTunes Songs</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Category:Lists">Other Lists</a>
+
+																			</li>
+																							</ul>
+											</li>
+																				<li class="nav-item">
+						<a href="/Special:Search">Search Lyrics</a>
+
+													<ul class="subnav-2 accent">
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Category:Artists">Artists<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Hometown">Artists by Hometown</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre">Artists by Genre</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Label">Artists by Label</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Category:Albums">Albums<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre">Albums by Genre</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Compilation_Series">Compilation Series</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Category:Songs">Songs<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Language">Songs by Language</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Song_Translations">Translations</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Instrumental">Instrumentals</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Category:Genre">Genres<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre/Pop">Pop</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre/Rock">Rock</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre/Electronic">Electronic</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre/Hip_Hop">Hip Hop</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre/Metal">Metal</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre/Country">Country</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre/Folk">Folk</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Genre">Other...</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Category:Label">Labels</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:Search">Search Contents<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:All_categories">Browse Categories</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:CategoryIntersection">Category Intersection Search</a>
+													</li>
+																							</ul>
+																			</li>
+																							</ul>
+											</li>
+																				<li class="nav-item">
+						<a href="/Special:SpecialPages">Advanced</a>
+
+													<ul class="subnav-2 accent">
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Lyrics_Wiki">About LyricWiki<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:Statistics">Statistics</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:Affiliates">Our Affiliates</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Category:Requests_For_Edits">Requests for Edits<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Requests_For_Edits/Artists">Artists</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Requests_For_Edits/Albums">Albums</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Category:Requests_For_Edits/Songs">Songs</a>
+													</li>
+																							</ul>
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:Upload">Upload Art</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="http://community.wikia.com/wiki/c:api:LyricWiki_lyrics">LyricWiki Mobile App</a>
+
+																			</li>
+																										<li class="subnav-2-item">
+										<a class="subnav-2a" href="/Special:SpecialPages">Special Pages<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron"></a>
+
+																					<ul class="subnav-3 subnav">
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:DoubleRedirects">Double Redirects</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:UncategorizedFiles">Uncategorized Photos</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:API">LyricWiki API</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/LyricWiki:SOAP">SOAP</a>
+													</li>
+																																						<li class="subnav-3-item">
+														<a class="subnav-3a" href="/Special:Wikify">Wikify Tracklists</a>
+													</li>
+																							</ul>
+																			</li>
+																							</ul>
+											</li>
+										</ul>
+
+<div class="navbackground">
+	<div></div>
+	<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron">
+</div>    </nav>
+    <div class="buttons">
+		<nav class="wikia-menu-button contribute secondary combined" >
+	<img alt="" class="sprite contribute" height="16" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="22" /> Contribute
+	<span class="drop">
+		<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron">
+	</span>
+	<ul class="WikiaMenuElement">
+		<li>
+			<a href="/The_Ting_Tings:Great_DJ?action=edit"  data-id="edit"  >Edit this Page</a>
+		</li>
+		<li>
+			<a href="/Special:WikiaVideoAdd"  data-id="wikiavideoadd"  >Add a Video</a>
+		</li>
+		<li>
+			<a href="/Special:Upload"  data-id="upload"  >Add a Photo</a>
+		</li>
+		<li>
+			<a href="/Special:CreatePage"  data-id="createpage"   class="createpage" class="createpage">Add a Page</a>
+		</li>
+		<li>
+			<a href="/Special:WikiActivity"  accesskey="g" data-id="wikiactivity"  >Wiki Activity</a>
+		</li>
+	</ul>
+</nav>
+					<a href="#" class="wikia-button share-button secondary"  data-id="shareButton"> Share<span class="share-dot"></span><span class="share-pixel"></span></a>
+    </div>
+
+    <div class="hiddenLinks">
+		<a href="/Special:Watchlist" title="Special:Watchlist" accesskey="l">Watchlist</a>		<a href="/Special:Random" title="Special:Random" accesskey="x">Random page</a>		<a href="/Special:RecentChanges" title="Special:RecentChanges" accesskey="r">Recent changes</a>    </div>
+</header>
+
+
+		
+		
+		
+		
+		<article id="WikiaMainContent" class="WikiaMainContent grid-4">
+			<header id="WikiaPageHeader" class="WikiaPageHeader">
+    <h1>The Ting Tings:Great DJ</h1>
+
+	<nav class="wikia-menu-button" >
+	<a accesskey="e"  href="/The_Ting_Tings:Great_DJ?action=edit" data-id="edit" id="ca-edit">
+		<img alt="" class="sprite edit-pencil" height="16" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="22" /> Edit	</a>
+
+	<span class="drop">
+		<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="chevron">
+	</span>
+	<ul class="WikiaMenuElement">
+		<li>
+			<a href="/The_Ting_Tings:Great_DJ?action=history"  accesskey="h" data-id="history"   id="ca-history">History</a>
+		</li>
+	</ul>
+</nav>
+			<a accesskey="t" href="/Talk:The_Ting_Tings:Great_DJ" class="wikia-button comments secondary talk" rel="nofollow" data-id="comment"> Talk<span class="commentsbubble">4</span></a>
+        <div class="tally">
+			<em>1,815,681</em><span>pages on<br /> this wiki</span>        </div>
+		</header>
+
+
+			
+			<div id="WikiaArticle" class="WikiaArticle">
+								
+				<div class="home-top-right-ads">
+								</div>
+
+				
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><span style="display:none"><a href="/The_Ting_Tings" title="The Ting Tings">The Ting Tings</a></span><div id="ranking-star-icon" style="float:right; margin-left:2em; margin-bottom:0.5em"><a href="/Talk:The_Ting_Tings:Great_DJ" title="Silver"><img alt="StarIconSilver" src="http://images2.wikia.nocookie.net/__cb20081201112629/lyricwiki/images/thumb/1/12/StarIconSilver.png/15px-StarIconSilver.png" width="15" height="14" /></a></div>
+This song is performed by <b><a href="/The_Ting_Tings" title="The Ting Tings">The Ting Tings</a></b>&#32;and appears on the album <i><a href="/The_Ting_Tings:We_Started_Nothing_(2008)" title="The Ting Tings:We Started Nothing (2008)">We Started Nothing (2008)</a></i>.<br />View the Gracenote version of these lyrics <a href="/Gracenote:The_Ting_Tings:Great_DJ" title="Gracenote:The Ting Tings:Great DJ">here</a>.<span id="gracenoteid" style="display:none"><p>Extension:DynamicPageList (DPL), version 1.9.0&#160;: Warning: No results.</p></span><div style="clear: both"></div>
+<div class="noprint" style="clear:both; float:right;margin:0 0 2px 0.5em; line-height: 0;"><object type="application/x-shockwave-flash" data="http://www.youtube.com/v/FH6wpO66J4k&amp;enablejsapi=1&amp;version=2&amp;playerapiid=FH6wpO66J4k" width="252" height="209" id="YT_FH6wpO66J4k"><param name="movie" value="http://www.youtube.com/v/FH6wpO66J4k&amp;enablejsapi=1&amp;version=2&amp;playerapiid=FH6wpO66J4k"/><param name="wmode" value="transparent"/><param name="allowScriptAccess" value="always"/></object></div>
+<div class="noprint" style="clear:both; border:solid #BBA34A 1px; margin:0 0 2px 0.5em; padding:2px; font-size:90%; background:#EBDAAC; width:246px; text-align:center; float:right"><div style="float:left; padding:2px"><img alt="Wikipedia sphere" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="35" height="32" data-src="http://images1.wikia.nocookie.net/__cb20101130031544/lyricwiki/images/thumb/5/54/Wikipedia_sphere.png/35px-Wikipedia_sphere.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Wikipedia sphere" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="35" height="32" data-src="http://images1.wikia.nocookie.net/__cb20101130031544/lyricwiki/images/thumb/5/54/Wikipedia_sphere.png/35px-Wikipedia_sphere.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Wikipedia sphere" src="http://images1.wikia.nocookie.net/__cb20101130031544/lyricwiki/images/thumb/5/54/Wikipedia_sphere.png/35px-Wikipedia_sphere.png" width="35" height="32" /></noscript></noscript></div><div>Wikipedia has an article on<div><i><b><a href="http://en.wikipedia.org/wiki/Great_DJ" class="extiw" title="wikipedia:Great DJ">Great DJ</a></b></i></div></div></div>
+<noscript><div class='gracenote-header'>You must enable javascript to view this page.  This is a requirement of our licensing agreement with music Gracenote.</div><style type='text/css'>.lyricbox{display:none !important;}</style></noscript>
+<div class='lyricbox'><div class='rtMatcher'><a href='http://www.ringtonematcher.com/co/ringtonematcher/02/noc.asp?sid=WILWros&amp;artist=The%2BTing%2BTings&amp;song=Great%2BDJ' rel='nofollow' target='_blank'><img src='http://slot1.images.wikia.nocookie.net/__cb62117/common/extensions/3rdparty/LyricWiki/phone_left.gif' alt='phone' width='16' height='17'/> Send "Great DJ" Ringtone to your Cell <img src='http://slot1.images.wikia.nocookie.net/__cb62117/common/extensions/3rdparty/LyricWiki/phone_right.gif' alt='phone' width='16' height='17'/></a></div>&#70;&#101;&#100;&#32;&#117;&#112;&#32;&#119;&#105;&#116;&#104;&#32;&#121;&#111;&#117;&#114;&#32;&#105;&#110;&#100;&#105;&#103;&#101;&#115;&#116;&#105;&#111;&#110;<br />&#83;&#119;&#97;&#108;&#108;&#111;&#119;&#32;&#119;&#111;&#114;&#100;&#115;&#32;&#111;&#110;&#101;&#32;&#98;&#121;&#32;&#111;&#110;&#101;<br />&#70;&#111;&#108;&#107;&#115;&#32;&#103;&#111;&#116;&#32;&#104;&#105;&#103;&#104;&#32;&#97;&#116;&#32;&#97;&#32;&#113;&#117;&#97;&#114;&#116;&#101;&#114;&#32;&#116;&#111;&#32;&#102;&#105;&#118;&#101;<br />&#68;&#111;&#110;&#39;&#116;&#32;&#121;&#111;&#117;&#32;&#102;&#101;&#101;&#108;&#32;&#121;&#111;&#117;&#39;&#114;&#101;&#32;&#103;&#114;&#111;&#119;&#105;&#110;&#103;&#32;&#117;&#112;&#32;&#117;&#110;&#100;&#111;&#110;&#101;<br /><br />&#78;&#111;&#116;&#104;&#105;&#110;&#103;&#32;&#98;&#117;&#116;&#32;&#116;&#104;&#101;&#32;&#108;&#111;&#99;&#97;&#108;&#32;&#68;&#74;<br />&#72;&#101;&#32;&#115;&#97;&#105;&#100;&#32;&#104;&#101;&#32;&#104;&#97;&#100;&#32;&#115;&#111;&#109;&#101;&#32;&#115;&#111;&#110;&#103;&#115;&#32;&#116;&#111;&#32;&#112;&#108;&#97;&#121;<br />&#87;&#104;&#97;&#116;&#32;&#119;&#101;&#110;&#116;&#32;&#100;&#111;&#119;&#110;&#32;&#102;&#114;&#111;&#109;&#32;&#116;&#104;&#105;&#115;&#32;&#102;&#111;&#111;&#108;&#105;&#110;&#103;&#32;&#97;&#114;&#111;&#117;&#110;&#100;<br />&#71;&#97;&#118;&#101;&#32;&#104;&#111;&#112;&#101;&#32;&#97;&#110;&#100;&#32;&#97;&#32;&#98;&#114;&#97;&#110;&#100;&#32;&#110;&#101;&#119;&#32;&#100;&#97;&#121;<br /><br />&#73;&#109;&#97;&#103;&#105;&#110;&#101;&#32;&#97;&#108;&#108;&#32;&#116;&#104;&#101;&#32;&#103;&#105;&#114;&#108;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#98;&#111;&#121;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#115;&#116;&#114;&#105;&#110;&#103;&#115;<br />&#69;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#32;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#79;&#104;<br /><br />&#78;&#111;&#116;&#104;&#105;&#110;&#103;&#32;&#119;&#97;&#115;&#32;&#116;&#104;&#101;&#32;&#115;&#97;&#109;&#101;&#32;&#97;&#103;&#97;&#105;&#110;<br />&#65;&#108;&#108;&#32;&#97;&#98;&#111;&#117;&#116;&#32;&#119;&#104;&#101;&#114;&#101;&#32;&#97;&#110;&#100;&#32;&#119;&#104;&#101;&#110;<br />&#66;&#108;&#111;&#119;&#105;&#110;&#103;&#32;&#111;&#117;&#114;&#32;&#109;&#105;&#110;&#100;&#115;&#32;&#105;&#110;&#32;&#97;&#32;&#108;&#105;&#102;&#101;&#32;&#117;&#110;&#107;&#105;&#110;&#100;<br />&#89;&#111;&#117;&#32;&#103;&#111;&#116;&#116;&#97;&#32;&#108;&#111;&#118;&#101;&#32;&#116;&#104;&#101;&#32;&#66;&#80;&#77;<br /><br />&#87;&#104;&#101;&#110;&#32;&#104;&#105;&#115;&#32;&#119;&#111;&#114;&#107;&#32;&#119;&#97;&#115;&#32;&#97;&#108;&#108;&#32;&#98;&#117;&#116;&#32;&#100;&#111;&#110;&#101;<br />&#82;&#101;&#109;&#101;&#109;&#98;&#101;&#114;&#105;&#110;&#103;&#32;&#104;&#111;&#119;&#32;&#116;&#104;&#105;&#115;&#32;&#98;&#101;&#103;&#117;&#110;<br />&#87;&#101;&#32;&#119;&#111;&#114;&#101;&#32;&#104;&#105;&#115;&#32;&#108;&#111;&#118;&#101;&#32;&#108;&#105;&#107;&#101;&#32;&#97;&#32;&#104;&#97;&#110;&#100;&#32;&#105;&#110;&#32;&#97;&#32;&#103;&#108;&#111;&#118;&#101;<br />&#84;&#104;&#105;&#115;&#32;&#112;&#114;&#101;&#97;&#99;&#104;&#101;&#114;&#32;&#112;&#108;&#97;&#121;&#115;&#32;&#105;&#116;&#32;&#97;&#108;&#108;&#32;&#110;&#105;&#103;&#104;&#116;&#32;&#108;&#111;&#110;&#103;<br /><br />&#65;&#110;&#100;&#32;&#110;&#111;&#116;&#104;&#105;&#110;&#103;&#32;&#98;&#117;&#116;&#32;&#116;&#104;&#101;&#32;&#103;&#105;&#114;&#108;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#98;&#111;&#121;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#115;&#116;&#114;&#105;&#110;&#103;&#115;<br />&#69;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#84;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br /><br />&#73;&#109;&#97;&#103;&#105;&#110;&#101;&#32;&#97;&#108;&#108;&#32;&#116;&#104;&#101;&#32;&#103;&#105;&#114;&#108;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#98;&#111;&#121;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#115;&#116;&#114;&#105;&#110;&#103;&#115;<br />&#69;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#111;&#104;<br /><br />&#65;&#108;&#108;&#32;&#116;&#104;&#101;&#32;&#103;&#105;&#114;&#108;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#98;&#111;&#121;&#115;<br />&#65;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;&#44;&#32;&#97;&#104;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#115;&#116;&#114;&#105;&#110;&#103;&#115;<br />&#69;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;&#44;&#32;&#101;&#101;&#101;<br />&#65;&#110;&#100;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#44;&#32;&#116;&#104;&#101;&#32;&#100;&#114;&#117;&#109;&#115;&#10;<!-- 
+<p>NewPP limit report
+Preprocessor node count: 279/1000000
+Post-expand include size: 2972/2097152 bytes
+Template argument size: 347/2097152 bytes
+Expensive parser function count: 3/100
+ExtLoops count: 3/100
+</p>
+-->&#10;<div class='rtMatcher'><a href='http://www.ringtonematcher.com/co/ringtonematcher/02/noc.asp?sid=WILWros&amp;artist=The%2BTing%2BTings&amp;song=Great%2BDJ' rel='nofollow' target='_blank'><img src='http://slot1.images.wikia.nocookie.net/__cb62117/common/extensions/3rdparty/LyricWiki/phone_left.gif' alt='phone' width='16' height='17'/> Send "Great DJ" Ringtone to your Cell <img src='http://slot1.images.wikia.nocookie.net/__cb62117/common/extensions/3rdparty/LyricWiki/phone_right.gif' alt='phone' width='16' height='17'/></a></div><div class='lyricsbreak'></div>
+</div>
+<h2><span class="mw-headline" id="Credits">Credits</span><span class="editsection"><a href="/The_Ting_Tings:Great_DJ?action=edit&amp;section=1" title="Edit Credits section"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite edit-pencil" />Edit</a></span></h2>
+<ul><li> Written by: <img alt="Wikipedia16" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" style="vertical-align: text-bottom" data-src="http://images4.wikia.nocookie.net/__cb20090130171617/lyricwiki/images/d/da/Wikipedia16.gif" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Wikipedia16" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" style="vertical-align: text-bottom" data-src="http://images4.wikia.nocookie.net/__cb20090130171617/lyricwiki/images/d/da/Wikipedia16.gif" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Wikipedia16" src="http://images4.wikia.nocookie.net/__cb20090130171617/lyricwiki/images/d/da/Wikipedia16.gif" width="16" height="16" style="vertical-align: text-bottom" /></noscript></noscript> <a href="http://en.wikipedia.org/wiki/Jules_De_Martino" class="extiw" title="wikipedia:Jules De Martino">Jules De Martino</a> / <img alt="Wikipedia16" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" style="vertical-align: text-bottom" data-src="http://images4.wikia.nocookie.net/__cb20090130171617/lyricwiki/images/d/da/Wikipedia16.gif" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Wikipedia16" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" style="vertical-align: text-bottom" data-src="http://images4.wikia.nocookie.net/__cb20090130171617/lyricwiki/images/d/da/Wikipedia16.gif" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Wikipedia16" src="http://images4.wikia.nocookie.net/__cb20090130171617/lyricwiki/images/d/da/Wikipedia16.gif" width="16" height="16" style="vertical-align: text-bottom" /></noscript></noscript> <a href="http://en.wikipedia.org/wiki/Katie_White" class="extiw" title="wikipedia:Katie White">Katie White</a>
+</li></ul>
+<div class="songfooter-fake-h2">External links<span class="plainlinks" style="float:right; font-size: 9pt; position: relative; top: 4px"><a class="external text" href="http://lyrics.wikia.com/Special:SOTD?artist=The+Ting+Tings&amp;song=Great+DJ&amp;vlink=FH6wpO66J4k&amp;alink=">Nominate as Song of the Day</a></span></div><div class="plainlinks"><img alt="ITunes icon" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images2.wikia.nocookie.net/__cb20130311215220/lyricwiki/images/0/06/ITunes_icon.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="ITunes icon" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images2.wikia.nocookie.net/__cb20130311215220/lyricwiki/images/0/06/ITunes_icon.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="ITunes icon" src="http://images2.wikia.nocookie.net/__cb20130311215220/lyricwiki/images/0/06/ITunes_icon.png" width="16" height="16" /></noscript></noscript> iTunes: buy <a class="external text" href="http://click.linksynergy.com/fs-bin/stat?id=gRMzf83mih4&amp;offerid=78941&amp;type=3&amp;subid=0&amp;tmpid=1826&amp;RD_PARM1=http%253A%252F%252Fitunes.apple.com%252Fus%252Falbum%252Fid280390218%253Fi%253D280390219%2526partnerId%253D30"><b>Great DJ</b></a></div>
+<div class="plainlinks"><img alt="Kingnee - Amazon" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images3.wikia.nocookie.net/__cb20080702082140/lyricwiki/images/a/a1/Kingnee_-_Amazon.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Amazon" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images3.wikia.nocookie.net/__cb20080702082140/lyricwiki/images/a/a1/Kingnee_-_Amazon.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Amazon" src="http://images3.wikia.nocookie.net/__cb20080702082140/lyricwiki/images/a/a1/Kingnee_-_Amazon.png" width="16" height="16" /></noscript></noscript> Amazon: search for… <a class="external text" href="http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;tag=wikia-20&amp;camp=1789&amp;creative=9325&amp;path=external-search%3Fsearch-type=ss%26index=music%26keyword=The+Ting+Tings">The Ting Tings</a>&#32;• <a class="external text" href="http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;tag=wikia-20&amp;camp=1789&amp;creative=9325&amp;path=external-search%3Fsearch-type=ss%26index=music%26keyword=The+Ting+Tings+We+Started+Nothing">We Started Nothing</a> •&#32;buy <b><a class="external text" href="http://www.amazon.com/exec/obidos/redirect?link_code=ur2&amp;tag=wikia-20&amp;camp=1789&amp;creative=9325&amp;path=http%3A%2F%2Fwww.amazon.com%2Fgp%2Fproduct%2FB001EWR5LK%2Fsr%3D8-1%2Fqid%3D1147400297%2Fref%3Dpd_bbs_1%3F%255Fencoding%3DUTF8">Great DJ</a></b></div>
+<div class="plainlinks"><img alt="Kingnee - Hype Machine" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images2.wikia.nocookie.net/__cb20080702230050/lyricwiki/images/6/63/Kingnee_-_Hype_Machine.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Hype Machine" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images2.wikia.nocookie.net/__cb20080702230050/lyricwiki/images/6/63/Kingnee_-_Hype_Machine.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Hype Machine" src="http://images2.wikia.nocookie.net/__cb20080702230050/lyricwiki/images/6/63/Kingnee_-_Hype_Machine.png" width="16" height="16" /></noscript></noscript> Hype Machine: search for… <a class="external text" href="http://hypem.com/search/The+Ting+Tings">The Ting Tings</a> • <a class="external text" href="http://hypem.com/search/The+Ting+Tings+Great+DJ">Great DJ</a></div>
+<div class="plainlinks"><img alt="Last.fm icon" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images1.wikia.nocookie.net/__cb20100519162232/lyricwiki/images/1/1a/Last.fm_icon.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Last.fm icon" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images1.wikia.nocookie.net/__cb20100519162232/lyricwiki/images/1/1a/Last.fm_icon.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Last.fm icon" src="http://images1.wikia.nocookie.net/__cb20100519162232/lyricwiki/images/1/1a/Last.fm_icon.png" width="16" height="16" /></noscript></noscript> Last.fm: search for… <a class="external text" href="http://www.last.fm/music/The+Ting+Tings">The Ting Tings</a> • <a class="external text" href="http://www.last.fm/music/The+Ting+Tings/We+Started+Nothing">We Started Nothing</a> • <a class="external text" href="http://www.last.fm/music/The+Ting+Tings/_/Great+DJ">Great DJ</a></div>
+<div class="plainlinks"><img alt="Kingnee - Pandora" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images2.wikia.nocookie.net/__cb20081007034928/lyricwiki/images/9/94/Kingnee_-_Pandora.PNG" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Pandora" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images2.wikia.nocookie.net/__cb20081007034928/lyricwiki/images/9/94/Kingnee_-_Pandora.PNG" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Pandora" src="http://images2.wikia.nocookie.net/__cb20081007034928/lyricwiki/images/9/94/Kingnee_-_Pandora.PNG" width="16" height="16" /></noscript></noscript> Pandora: search for… <a class="external text" href="http://www.pandora.com/backstage?type=artist&amp;q=The+Ting+Tings">The Ting Tings</a> • <a class="external text" href="http://www.pandora.com/backstage?type=song&amp;q=Great+DJ">Great DJ</a></div><div class="plainlinks"><img alt="Kingnee - Youtube" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images1.wikia.nocookie.net/__cb20080704171930/lyricwiki/images/a/a4/Kingnee_-_Youtube.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Youtube" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images1.wikia.nocookie.net/__cb20080704171930/lyricwiki/images/a/a4/Kingnee_-_Youtube.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Youtube" src="http://images1.wikia.nocookie.net/__cb20080704171930/lyricwiki/images/a/a4/Kingnee_-_Youtube.png" width="16" height="16" /></noscript></noscript> YouTube: <a class="external text" href="http://youtube.com/watch?v=FH6wpO66J4k"><b>Great DJ</b></a></div><div class="plainlinks"><img alt="AllMusic i" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images4.wikia.nocookie.net/__cb20080704091708/lyricwiki/images/c/cb/AllMusic_i.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="AllMusic i" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images4.wikia.nocookie.net/__cb20080704091708/lyricwiki/images/c/cb/AllMusic_i.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="AllMusic i" src="http://images4.wikia.nocookie.net/__cb20080704091708/lyricwiki/images/c/cb/AllMusic_i.png" width="16" height="16" /></noscript></noscript> allmusic: <a class="external text" href="http://www.allmusic.com/song/mt0018223706"><b>Great DJ</b></a></div><div class="plainlinks"><img alt="Kingnee - Musicbrainz" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images1.wikia.nocookie.net/__cb20080702081328/lyricwiki/images/9/91/Kingnee_-_Musicbrainz.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Musicbrainz" src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" width="16" height="16" data-src="http://images1.wikia.nocookie.net/__cb20080702081328/lyricwiki/images/9/91/Kingnee_-_Musicbrainz.png" class="lzy lzyPlcHld" onload="if(typeof ImgLzy==&quot;object&quot;){ImgLzy.load(this)}" /><noscript><img alt="Kingnee - Musicbrainz" src="http://images1.wikia.nocookie.net/__cb20080702081328/lyricwiki/images/9/91/Kingnee_-_Musicbrainz.png" width="16" height="16" /></noscript></noscript> MusicBrainz: <a class="external text" href="http://musicbrainz.org/recording/3d5d6266-f9f3-4bff-8a3e-51ca005d900f.html"><b>Great DJ</b></a></div>
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 701/1000000
+Post-expand include size: 10917/2097152 bytes
+Template argument size: 1592/2097152 bytes
+Expensive parser function count: 3/100
+ExtLoops count: 3/100
+-->
+
+<!-- Saved in parser cache with key lyricwiki:pcache:idhash:789958-0!*!0!*!*!2!* and timestamp 20130415052718 -->
+<noscript><link rel="stylesheet" href="http://slot1.images.wikia.nocookie.net/__cb62132/common/extensions/wikia/ImageLazyLoad/css/ImageLazyLoadNoScript.css" /></noscript><noscript><link rel="stylesheet" href="http://slot1.images.wikia.nocookie.net/__cb62132/common/extensions/wikia/TOCimprovements/TOCNoScript.css" /></noscript></div><div class="printfooter">
+Retrieved from "<a href="http://lyrics.wikia.com/The_Ting_Tings:Great_DJ?oldid=10808718">http://lyrics.wikia.com/The_Ting_Tings:Great_DJ?oldid=10808718</a>"</div>
+
+			</div>
+
+												<nav class="WikiaArticleCategories CategorySelect articlePage userCanEdit" id="WikiaArticleCategories">
+	<div class="container">
+		<div class="special-categories"><a href="/Special:Categories" title="Special:Categories" class="categoriesLink" rel="nofollow">Categories</a>:</div>
+		<ul class="categories">
+				<li class="category hidden" data-name="Song" data-namespace="" data-outertag="" data-sortkey="" data-type="hidden">
+	<span class="name"><a href="/Category:Song" title="Category:Song">Song</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category normal" data-name="Silver Songs" data-namespace="" data-outertag="" data-sortkey="" data-type="normal">
+	<span class="name"><a href="/Category:Silver_Songs" title="Category:Silver Songs">Silver Songs</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category hidden" data-name="YouTube/Song" data-namespace="" data-outertag="" data-sortkey="" data-type="hidden">
+	<span class="name"><a href="/Category:YouTube/Song" title="Category:YouTube/Song">YouTube/Song</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category hidden" data-name="Wikipedia articles/Song" data-namespace="" data-outertag="" data-sortkey="" data-type="hidden">
+	<span class="name"><a href="/Category:Wikipedia_articles/Song" title="Category:Wikipedia articles/Song">Wikipedia articles/Song</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category normal" data-name="Songs G" data-namespace="" data-outertag="" data-sortkey="" data-type="normal">
+	<span class="name"><a href="/Category:Songs_G" title="Category:Songs G">Songs G</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category normal" data-name="Language/English" data-namespace="" data-outertag="" data-sortkey="" data-type="normal">
+	<span class="name"><a href="/Category:Language/English" title="Category:Language/English">Language/English</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category hidden" data-name="ITunes/Song" data-namespace="" data-outertag="" data-sortkey="" data-type="hidden">
+	<span class="name"><a href="/Category:ITunes/Song" title="Category:ITunes/Song">ITunes/Song</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category hidden" data-name="Amazon/Song" data-namespace="" data-outertag="" data-sortkey="" data-type="hidden">
+	<span class="name"><a href="/Category:Amazon/Song" title="Category:Amazon/Song">Amazon/Song</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category hidden" data-name="Allmusic/Song" data-namespace="" data-outertag="" data-sortkey="" data-type="hidden">
+	<span class="name"><a href="/Category:Allmusic/Song" title="Category:Allmusic/Song">Allmusic/Song</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>	<li class="category hidden" data-name="MusicBrainz/Song" data-namespace="" data-outertag="" data-sortkey="" data-type="hidden">
+	<span class="name"><a href="/Category:MusicBrainz/Song" title="Category:MusicBrainz/Song">MusicBrainz/Song</a></span>
+	<ul class="toolbar">
+		<li class="tool editCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small edit" title=""></li>
+		<li class="tool removeCategory"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite-small delete" title=""></li>
+	</ul>
+</li>							<li class="last">
+					<button class="wikia-button secondary add" id="CategorySelectAdd" type="button">Add category</button>
+					<input autocomplete="off" class="input" id="CategorySelectInput" name="CategorySelectInput" placeholder="Add category..." type="text">				</li>
+					</ul>
+	</div>
+			<div class="toolbar">
+			<button class="wikia-button secondary cancel" id="CategorySelectCancel" type="button">Cancel</button>
+			<button class="wikia-button save" id="CategorySelectSave" type="button" disabled="disabled">Save</button>
+		</div>
+	</nav>							
+			
+			
+			<div id="WikiaArticleBottomAd" class="noprint">
+				
+<!-- BEGIN SLOTNAME: PREFOOTER_LEFT_BOXAD -->
+<div id="PREFOOTER_LEFT_BOXAD" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["PREFOOTER_LEFT_BOXAD",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: PREFOOTER_LEFT_BOXAD -->
+
+				
+<!-- BEGIN SLOTNAME: PREFOOTER_RIGHT_BOXAD -->
+<div id="PREFOOTER_RIGHT_BOXAD" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["PREFOOTER_RIGHT_BOXAD",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: PREFOOTER_RIGHT_BOXAD -->
+
+			</div>
+
+		</article><!-- WikiaMainContent -->
+
+					<div id="WikiaRail" class="WikiaRail grid-2">
+
+	
+<form id="WikiaSearch" class="WikiaSearch" action="index.php?title=Special:Search" method="get">
+	<input type="text" name="search" placeholder="Search this wiki" autocomplete="off" accesskey="f" value="">
+	<input type="hidden" name="fulltext" value="Search">
+	<input type="submit">
+	<button class="wikia-button"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite search" height="17" width="21"></button>
+</form>
+
+<!-- BEGIN SLOTNAME: TOP_RIGHT_BOXAD -->
+<div id="TOP_RIGHT_BOXAD" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["TOP_RIGHT_BOXAD",null,"AdEngine2"]);
+	</script>
+</div>
+	<div class="SelfServeUrl">Advertisement | <a href="http://mediakit.wikia.com/wiki/Media_Kit_Wiki">Your ad here</a></div>
+<!-- END SLOTNAME: TOP_RIGHT_BOXAD -->
+
+<section class="LatestPhotosModule module" id="LatestPhotosModule">
+	<h1 class="tight">Photos</h1>
+	<a href="/Special:Upload" title="Add a photo to this wiki" class="wikia-button upphotos" rel="tooltip"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" height="0" width="0" class="sprite photo" /> Add a Photo</a>	<div class="tally counter">
+		<em>106,833</em><span class="">photos on this wiki</span>	</div>
+
+			<a href="#" class="previous"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="latest-images-left" height="0" width="0"></a>
+		<a href="#" class="next"><img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="latest-images-right" height="0" width="0"></a>
+	<div class="carousel-container">
+		<div>
+			<ul class="carousel">
+	
+		<li class="thumbs"><a class="image" href="/File:Echt_-_Recorder.jpg">
+						<img class="thumbimage" data-image-name="Echt+-+Recorder.jpg" data-image-key="Echt_-_Recorder.jpg" height="82" width="82" src="http://images2.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/0/02/Echt_-_Recorder.jpg/100px-0%2C501%2C0%2C500-Echt_-_Recorder.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Fassbrause" title="User:Fassbrause">Fassbrause</a><br/>
+			<time class="timeago" datetime="2013-04-18T18:02:48Z">2013-04-18T18:02:48Z</time><br/>
+
+						Posted in			<a href="/Echt" title="Echt" class="wikia-gallery-item-posted">Echt</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Echt_-_Freischwimmer.jpg">
+						<img class="thumbimage" data-image-name="Echt+-+Freischwimmer.jpg" data-image-key="Echt_-_Freischwimmer.jpg" height="82" width="82" src="http://images2.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/c/cb/Echt_-_Freischwimmer.jpg/82px-0%2C501%2C0%2C500-Echt_-_Freischwimmer.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Fassbrause" title="User:Fassbrause">Fassbrause</a><br/>
+			<time class="timeago" datetime="2013-04-18T17:57:17Z">2013-04-18T17:57:17Z</time><br/>
+
+						Posted in			<a href="/Echt" title="Echt" class="wikia-gallery-item-posted">Echt</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Echt_-_Echt.jpg">
+						<img class="thumbimage" data-image-name="Echt+-+Echt.jpg" data-image-key="Echt_-_Echt.jpg" height="82" width="82" src="http://images1.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/8/8b/Echt_-_Echt.jpg/82px-2%2C502%2C0%2C499-Echt_-_Echt.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Fassbrause" title="User:Fassbrause">Fassbrause</a><br/>
+			<time class="timeago" datetime="2013-04-18T17:50:50Z">2013-04-18T17:50:50Z</time><br/>
+
+						Posted in			<a href="/Echt" title="Echt" class="wikia-gallery-item-posted">Echt</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Avicii_-_Levels.jpg">
+						<img class="thumbimage" data-image-name="Avicii+-+Levels.jpg" data-image-key="Avicii_-_Levels.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images2.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/0/0d/Avicii_-_Levels.jpg/82px-0%2C501%2C0%2C500-Avicii_-_Levels.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Fassbrause" title="User:Fassbrause">Fassbrause</a><br/>
+			<time class="timeago" datetime="2013-04-18T17:39:07Z">2013-04-18T17:39:07Z</time><br/>
+
+						Posted in			<a href="/Avicii" title="Avicii" class="wikia-gallery-item-posted">Avicii</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:%D0%9C%D0%B0%D0%BA%D1%83%D0%BB%D0%B0%D1%82%D1%83%D1%80%D0%B0_(Makulatura)_-_%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D1%81%D0%B8%D1%85%D0%B8%D0%B0%D1%82%D1%80.jpg">
+						<img class="thumbimage" data-image-name="%D0%9C%D0%B0%D0%BA%D1%83%D0%BB%D0%B0%D1%82%D1%83%D1%80%D0%B0+%28Makulatura%29+-+%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9+%D0%BF%D1%81%D0%B8%D1%85%D0%B8%D0%B0%D1%82%D1%80.jpg" data-image-key="%D0%9C%D0%B0%D0%BA%D1%83%D0%BB%D0%B0%D1%82%D1%83%D1%80%D0%B0_%28Makulatura%29_-_%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D1%81%D0%B8%D1%85%D0%B8%D0%B0%D1%82%D1%80.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images2.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/5/56/%D0%9C%D0%B0%D0%BA%D1%83%D0%BB%D0%B0%D1%82%D1%83%D1%80%D0%B0_%28Makulatura%29_-_%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D1%81%D0%B8%D1%85%D0%B8%D0%B0%D1%82%D1%80.jpg/82px-0%2C401%2C0%2C400-%D0%9C%D0%B0%D0%BA%D1%83%D0%BB%D0%B0%D1%82%D1%83%D1%80%D0%B0_%28Makulatura%29_-_%D0%B4%D0%B5%D1%82%D1%81%D0%BA%D0%B8%D0%B9_%D0%BF%D1%81%D0%B8%D1%85%D0%B8%D0%B0%D1%82%D1%80.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:MorganVolter" title="User:MorganVolter">MorganVolter</a><br/>
+			<time class="timeago" datetime="2013-04-18T15:38:11Z">2013-04-18T15:38:11Z</time><br/>
+
+						Posted in			<a href="/%D0%9C%D0%B0%D0%BA%D1%83%D0%BB%D0%B0%D1%82%D1%83%D1%80%D0%B0_(Makulatura)" title="Макулатура (Makulatura)" class="wikia-gallery-item-posted">Макулатура (Makulatura)</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Arrested_Development_-_Unplugged.jpg">
+						<img class="thumbimage" data-image-name="Arrested+Development+-+Unplugged.jpg" data-image-key="Arrested_Development_-_Unplugged.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images2.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/c/c0/Arrested_Development_-_Unplugged.jpg/82px-0%2C601%2C0%2C600-Arrested_Development_-_Unplugged.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Photocopy" title="User:Photocopy">Photocopy</a><br/>
+			<time class="timeago" datetime="2013-04-18T14:27:40Z">2013-04-18T14:27:40Z</time><br/>
+
+						Posted in			<a href="/Arrested_Development" title="Arrested Development" class="wikia-gallery-item-posted">Arrested Development</a>,&nbsp;<a href="/File:Arrested_Development_-_Unplugged.jpg#filelinks" class="wikia-gallery-item-more">more...</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Tyga_-_Hotel_California_(iTunes_Deluxe_Version).jpg">
+						<img class="thumbimage" data-image-name="Tyga+-+Hotel+California+%28iTunes+Deluxe+Version%29.jpg" data-image-key="Tyga_-_Hotel_California_%28iTunes_Deluxe_Version%29.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images4.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/d/d4/Tyga_-_Hotel_California_%28iTunes_Deluxe_Version%29.jpg/82px-0%2C501%2C0%2C500-Tyga_-_Hotel_California_%28iTunes_Deluxe_Version%29.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Lwt" title="User:Lwt">Lwt</a><br/>
+			<time class="timeago" datetime="2013-04-18T05:34:02Z">2013-04-18T05:34:02Z</time><br/>
+
+						Posted in			<a href="/Tyga:Hotel_California_(2013)" title="Tyga:Hotel California (2013)" class="wikia-gallery-item-posted">Tyga:Hotel California (2013)</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Tyga_-_Hotel_California.jpg">
+						<img class="thumbimage" data-image-name="Tyga+-+Hotel+California.jpg" data-image-key="Tyga_-_Hotel_California.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images3.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/6/69/Tyga_-_Hotel_California.jpg/82px-0%2C501%2C0%2C500-Tyga_-_Hotel_California.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Lwt" title="User:Lwt">Lwt</a><br/>
+			<time class="timeago" datetime="2013-04-18T05:27:54Z">2013-04-18T05:27:54Z</time><br/>
+
+						Posted in			<a href="/Tyga" title="Tyga" class="wikia-gallery-item-posted">Tyga</a>,&nbsp;<a href="/File:Tyga_-_Hotel_California.jpg#filelinks" class="wikia-gallery-item-more">more...</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Daft_Punk_-_Random_Access_Memories.jpg">
+						<img class="thumbimage" data-image-name="Daft+Punk+-+Random+Access+Memories.jpg" data-image-key="Daft_Punk_-_Random_Access_Memories.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images2.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/7/74/Daft_Punk_-_Random_Access_Memories.jpg/82px-0%2C330%2C0%2C329-Daft_Punk_-_Random_Access_Memories.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Hard4me" title="User:Hard4me">Hard4me</a><br/>
+			<time class="timeago" datetime="2013-04-18T03:52:28Z">2013-04-18T03:52:28Z</time><br/>
+
+						Posted in			<a href="/Daft_Punk" title="Daft Punk" class="wikia-gallery-item-posted">Daft Punk</a>,&nbsp;<a href="/File:Daft_Punk_-_Random_Access_Memories.jpg#filelinks" class="wikia-gallery-item-more">more...</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Dogs_With_Jobs_-_Payday.jpg">
+						<img class="thumbimage" data-image-name="Dogs+With+Jobs+-+Payday.jpg" data-image-key="Dogs_With_Jobs_-_Payday.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images3.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/8/81/Dogs_With_Jobs_-_Payday.jpg/82px-0%2C499%2C0%2C499-Dogs_With_Jobs_-_Payday.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:EchoSierra" title="User:EchoSierra">EchoSierra</a><br/>
+			<time class="timeago" datetime="2013-04-18T02:07:06Z">2013-04-18T02:07:06Z</time><br/>
+
+						Posted in			<a href="/Dogs_With_Jobs" title="Dogs With Jobs" class="wikia-gallery-item-posted">Dogs With Jobs</a>,&nbsp;<a href="/File:Dogs_With_Jobs_-_Payday.jpg#filelinks" class="wikia-gallery-item-more">more...</a>				</span>
+		</li>
+	
+		<li class="thumbs"><a class="image" href="/File:Jorge_Ben_Jor_-_%C3%81frica_Brasil.jpg">
+						<img class="thumbimage" data-image-name="Jorge+Ben+Jor+-+%C3%81frica+Brasil.jpg" data-image-key="Jorge_Ben_Jor_-_%C3%81frica_Brasil.jpg" height="82" width="82" src='data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D' data-src="http://images2.wikia.nocookie.net/__cb62134/lyricwiki/images/thumb/4/4d/Jorge_Ben_Jor_-_%C3%81frica_Brasil.jpg/82px-2%2C502%2C0%2C499-Jorge_Ben_Jor_-_%C3%81frica_Brasil.jpg" />
+		</a>
+
+		<span class="thumbcaption">
+			by <a href="/User:Ignor-the-ant" title="User:Ignor-the-ant">Ignor-the-ant</a><br/>
+			<time class="timeago" datetime="2013-04-18T01:33:15Z">2013-04-18T01:33:15Z</time><br/>
+
+						Posted in			<a href="/Jorge_Ben_Jor" title="Jorge Ben Jor" class="wikia-gallery-item-posted">Jorge Ben Jor</a>,&nbsp;<a href="/File:Jorge_Ben_Jor_-_%C3%81frica_Brasil.jpg#filelinks" class="wikia-gallery-item-more">more...</a>				</span>
+		</li>
+				<li class="see-all">
+			<a href="/Special:NewFiles" title="Special:NewFiles">See all photos</a>		</li>
+				</ul>
+		</div>
+	</div>
+	<a href="/Special:NewFiles" title="Special:NewFiles" class="more">See all photos ></a>
+
+</section>
+
+<!-- BEGIN SLOTNAME: MIDDLE_RIGHT_BOXAD -->
+<div id="MIDDLE_RIGHT_BOXAD" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["MIDDLE_RIGHT_BOXAD",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: MIDDLE_RIGHT_BOXAD -->
+
+<section class="WikiaActivityModule module" id="WikiaRecentActivity">
+	<h1 class="activity-heading">Recent Wiki Activity</h1>
+	<ul>
+		<li>
+			<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite new" height="20" width="20">
+			<em><a href="/Deine_Lieblingsrapper:Steh_Wieder_Auf">Deine Lieblingsrapper:Steh Wieder Auf</a></em>
+			<div class="edited-by">created by <a href="/User:Masel">Masel</a> 2 minutes ago</div>
+		</li>
+		<li>
+			<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite edit" height="20" width="20">
+			<em><a href="/DL_Incognito:Keep_It_Movin%27">DL Incognito:Keep It Movin'</a></em>
+			<div class="edited-by">edited by <a href="/Special:Contributions/12.148.227.250">A Wikia contributor</a> 8 minutes ago</div>
+		</li>
+		<li>
+			<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite edit" height="20" width="20">
+			<em><a href="/Defiance_(Disambiguation)">Defiance (Disambiguation)</a></em>
+			<div class="edited-by">edited by <a href="/User:EchoSierra">EchoSierra</a> 9 minutes ago</div>
+		</li>
+		<li>
+			<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite edit" height="20" width="20">
+			<em><a href="/Defiance_(punk)">Defiance (punk)</a></em>
+			<div class="edited-by">edited by <a href="/User:EchoSierra">EchoSierra</a> 10 minutes ago</div>
+		</li>
+	</ul>
+
+			<a href="/Special:WikiActivity" title="Special:WikiActivity" class="more">See more ></a>	</section>
+<section class="ChatModule module ChatModuleUninitialized"></section>
+<!-- BEGIN SLOTNAME: LEFT_SKYSCRAPER_2 -->
+<div id="LEFT_SKYSCRAPER_2" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["LEFT_SKYSCRAPER_2",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: LEFT_SKYSCRAPER_2 -->
+
+	<div id="WikiaAdInContentPlaceHolder"></div>
+
+</div>
+		
+		<footer id="WikiaFooter" class="WikiaFooter notoolbar">
+	
+<!-- BEGIN SLOTNAME: LEFT_SKYSCRAPER_3 -->
+<div id="LEFT_SKYSCRAPER_3" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["LEFT_SKYSCRAPER_3",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: LEFT_SKYSCRAPER_3 -->
+
+	
+	<section>
+	<div class="header-container">
+		<h1>Around Wikia's network</h1>
+		<a id="WikiaRandomWiki" href="http://community.wikia.com/wiki/Special:RandomWiki/43339" class="wikia-button">Random Wiki</a>
+	</div>
+	<script type='text/javascript'>
+		wgAfterContentAndJS.push(function() {
+			window.OpenXSPC = {};
+			window.OpenXSPC[ 'fillElem_SPOTLIGHT_FOOTER' ] = function() {
+				var output = window.OA_output || [];
+				( 14 in output ) && $( '#SPOTLIGHT_FOOTER_1' ).html( output[ 14 ] );
+				( 15 in output ) && $( '#SPOTLIGHT_FOOTER_2' ).html( output[ 15 ] );
+				( 16 in output ) && $( '#SPOTLIGHT_FOOTER_3' ).html( output[ 16 ] );
+			};
+		});
+	</script>
+	<ul id="SPOTLIGHT_FOOTER" class="LazyLoadAd SPOTLIGHT_FOOTER">
+		<li class="WikiaSpotlight item-1" id="SPOTLIGHT_FOOTER_1"></li>
+		<li class="WikiaSpotlight item-2" id="SPOTLIGHT_FOOTER_2"></li>
+		<li class="WikiaSpotlight item-3" id="SPOTLIGHT_FOOTER_3"></li>
+	</ul>
+</section>
+</footer>
+				<footer class="CorporateFooter">
+	<nav>
+		<h1>Wikia Inc Navigation</h1>
+		<div class="WikiaHubBranding HubBrandingBlackBackground">
+			<div class="wordmark">
+				<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="sprite logo3">
+			</div>
+						    <div class="hub"><a class="hub3" href="http://www.wikia.com/Entertainment">[ Entertainment ]</a></div>
+					</div>
+		<ul>
+			<li>
+							<a href="http://www.wikia.com/About"><span>About</span></a>
+						</li>
+				<li>
+							<a href="http://www.community.wikia.com"><span>Community Central</span></a>
+						</li>
+				<li>
+							<a href="http://www.wikia.com/Careers">Careers</a>
+						</li>
+				<li>
+							<a href="http://www.wikia.com/Advertising">Advertise</a>
+						</li>
+				<li>
+							<a href="http://api.wikia.com/"><span>API</span></a>
+						</li>
+				<li>
+							<a href="/Special:Contact">Contact Wikia</a>
+						</li>
+				<li>
+							<a href="http://www.wikia.com/Terms_of_Use">Terms of Use</a>
+						</li>
+				<li>
+							<a href="http://www.wikia.com/Privacy_Policy">Privacy Policy</a>
+						</li>
+				<li>
+			Content is available under <a href="/LyricWiki:Copyrights" title="LyricWiki:Copyrights">Copyright</a>.			</li>
+			</ul>
+	</nav>
+</footer>
+	</div>
+</section><!--WikiaPage-->
+
+			<div id="WikiaBarWrapper" class="WikiaBarWrapper hidden">
+				<div class="wikia-bar wikia-bar-anon">
+			<a href="#" class="arrow" data-tooltip="Collapse" data-tooltipshow="Show"></a>
+			<div class="ad">
+		<div id="WIKIA_BAR_BOXAD_1" class="noprint" style="width: 300px; position: relative;"></div>
+</div>
+<div
+	class="message"
+	data-messagetooltip="Click here for more information!"
+	data-wikiabarcontent="[{&quot;text&quot;:&quot;Follow Wikia on Facebook, share your stories!&quot;,&quot;href&quot;:&quot;https:\/\/www.facebook.com\/wikia&quot;},{&quot;text&quot;:&quot;Like Wikia on Facebook for the latest news!&quot;,&quot;href&quot;:&quot;https:\/\/www.facebook.com\/wikia&quot;},{&quot;text&quot;:&quot;Follow Wikia on Facebook, share your stories!&quot;,&quot;href&quot;:&quot;https:\/\/www.facebook.com\/wikia&quot;},{&quot;text&quot;:&quot;Like Wikia on Facebook for the latest news!&quot;,&quot;href&quot;:&quot;https:\/\/www.facebook.com\/wikia&quot;},{&quot;text&quot;:&quot;Follow Wikia on Facebook, share your stories!&quot;,&quot;href&quot;:&quot;https:\/\/www.facebook.com\/wikia&quot;}]"
+></div>
+	<a class="wikiabar-button" href="http://www.wikia.com/Entertainment" data-index="0">
+		<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="icon cup" />
+		<span>Entertainment</span>
+	</a>
+	<a class="wikiabar-button" href="http://www.wikia.com/Video_Games" data-index="1">
+		<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="icon cup" />
+		<span>Video Games</span>
+	</a>
+	<a class="wikiabar-button" href="http://www.wikia.com/Lifestyle" data-index="2">
+		<img src="data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D" class="icon cup" />
+		<span>Lifestyle</span>
+	</a>
+		</div>
+			</div>
+	<div class="WikiaBarCollapseWrapper">
+		<a href="#" class="wikia-bar-collapse" data-tooltip="Collapse"></a>
+	</div>
+
+
+<!-- BEGIN SLOTNAME: INVISIBLE_1 -->
+<div id="INVISIBLE_1" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["INVISIBLE_1",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: INVISIBLE_1 -->
+
+
+<!-- BEGIN SLOTNAME: INVISIBLE_2 -->
+<div id="INVISIBLE_2" class="wikia-ad noprint default-height">
+	<script>
+		window.adslots2.push(["INVISIBLE_2",null,"AdEngine2"]);
+	</script>
+</div>
+<!-- END SLOTNAME: INVISIBLE_2 -->
+
+
+	<!--[if lt IE 8]>
+		<script src="http://slot1.images.wikia.nocookie.net/__cb62132/common/resources/wikia/libraries/json2/json2.js"></script>
+	<![endif]-->
+
+	<!--[if lt IE 9]>
+		<script src="http://slot1.images.wikia.nocookie.net/__cb62132/common/resources/wikia/libraries/html5/html5.min.js"></script>
+	<![endif]-->
+
+	<!-- Combined JS files and head scripts -->
+	
+<!-- Liftium options -->
+<script>LiftiumOptions = {"pubid":999,"baseUrl":"\/__varnish_liftium\/","kv_wgDBname":"lyricwiki","kv_article_id":789958,"kv_wpage":"The_Ting_Tings:Great_DJ","kv_Hub":"Music","kv_skin":"oasis","kv_user_lang":"en","kv_cont_lang":"en","kv_isMainPage":false,"kv_page_type":"article","geoUrl":"http:\/\/geoiplookup.wikia.com\/","kv_dart":"age=13-17;age=18-34;eth=hisp;hhi=0-30","kv_domain":"lyrics.wikia.com","hasMoreCalls":true,"isCalledAfterOnload":true,"maxLoadDelay":6000};
+</script>
+<script src="http://lyrics.wikia.com/__load/-/cb%3D62132%26debug%3Dfalse%26lang%3Den%26only%3Dscripts%26skin%3Doasis/startup"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"The_Ting_Tings:Great_DJ","wgTitle":"The Ting Tings:Great DJ","wgCurRevisionId":10808718,"wgArticleId":789958,"wgIsArticle":true,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Song","Silver Songs","YouTube/Song","Wikipedia articles/Song","Songs G","Language/English","ITunes/Song","Amazon/Song","Allmusic/Song","MusicBrainz/Song"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgRelevantPageName":"The_Ting_Tings:Great_DJ","wgRestrictionEdit":[],"wgRestrictionMove":[],"wgSearchNamespaces":[0,220],"wgTimeAgoi18n":{"year":"a year ago","years":"%d years ago","month":"a month ago","months":"%d months ago","day":"a day ago","days":"%d days ago","hour":"an hour ago","hours":"%d hours ago","minute":"a minute ago","minutes":"%d minutes ago","seconds":"a minute ago","year-from-now":"\x26lt;timeago-year-from-now\x26gt;","years-from-now":"\x26lt;timeago-year-from-now\x26gt;","month-from-now":"a month from now","months-from-now":"%d months from now","day-from-now":"a day from now","days-from-now":"%d days from now","hour-from-now":"an hour from now","hours-from-now":"%d hours from now","minute-from-now":"a minute from now","minutes-from-now":"%d minutes from now","second-from-now":"a minute from now","seconds-from-now":"a minute from now"},"sassParams":{"background-align":"center","background-fixed":"false","background-image":"http://images3.wikia.nocookie.net/__cb7/lyricwiki/images/5/50/Wiki-background","background-tiled":"true","color-body":"#fff","color-buttons":"#006cb0","color-header":"#3a5766","color-links":"#006cb0","color-page":"#ffffff","page-opacity":"100","widthType":3,"wordmark-font":""},"wgAssetsManagerQuery":"/__am/%4$d/%1$s/%3$s/%2$s","wgCdnRootUrl":"http://slot1.images.wikia.nocookie.net","wgEnableAdsInContent":1,"wgEnableAdMeldAPIClientPixels":true,"wgEnableOpenXSPC":true,"wgAdDriverCookieLifetime":1,"wgHighValueCountries":{"AU":3,"CH":3,"BR":3,"AT":3,"UA":3,"BE":3,"DE":3,"CA":3,"FI":3,"FR":3,"GB":3,"HU":3,"NL":3,"NO":3,"SE":3,"LU":3,"PL":3,"RU":3,"ES":3,"DK":3,"UK":6,"US":3,"IT":3},"wgAdDriverUseExpiryStorage":true,"wgCatId":16,"wgParentCatId":0,"wgBlankImgUrl":"data:image/gif;base64,R0lGODlhAQABAIABAAAAAP///yH5BAEAAAEALAAAAAABAAEAQAICTAEAOw%3D%3D","wgPrivateTracker":true,"wgMainpage":"Lyrics Wiki","wgIsContentNamespace":true,"themename":"oasis","wgExtensionsPath":"http://slot1.images.wikia.nocookie.net/__cb62132/common/extensions","wgResourceBasePath":"http://slot1.images.wikia.nocookie.net/__cb62132/common","wgSitename":"LyricWiki","wgMWrevId":false,"wgRevisionId":10808718,"wgCookieDomain":".wikia.com","wgCookiePath":"/","wgEnableWikiaPhotoGalleryExt":true,"wgOasisGrid":true,"wgEnableUserLoginExt":true,"wgEnableLightboxExt":true,"wgShowAdModalInterstitialTimes":1,"wgEnableWikiaFollowedPages":true,"wgFollowedPagesPagerLimit":15,"wgFollowedPagesPagerLimitAjax":600,"wgWikiaChatModuleContent":"","wgWikiaChatWindowFeatures":"width=600,height=600,menubar=no,status=no,location=no,toolbar=no,scrollbars=no,resizable=yes","wgEnableWikiaBarExt":true,"wgEnableWikiaBarAds":true,"wgWikiaBarMainLanguages":["en","de","es","fr"],"WikiaEnableNewCreatepage":true,"ContentNamespacesText":["","Gracenote"],"wgCategoryTreePageCategoryOptions":"{\"mode\":0,\"hideprefix\":20,\"showcount\":true,\"namespaces\":false}","fbAppId":"112328095453510","fbScript":"http://connect.facebook.net/en_US/all.js","fbUseMarkup":true,"fbLogo":true,"fbLogoutURL":"/Special:UserLogout?returnto=The_Ting_Tings:Great_DJ","fbReturnToTitle":"The_Ting_Tings:Great_DJ","fbScriptLangCode":"en_US","wgCategorySelect":{"defaultNamespace":"Category","defaultNamespaces":"Category","defaultSeparator":":","defaultSortKey":"The Ting Tings:Great DJ"}});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function($){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":1,"editsectiononrightclick":0,"enotifminoredits":1,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":1,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"highlightbroken":1,"imagesize":1,"justify":0,"math":0,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":0,"showjumplinks":1,"shownumberswatching":1,"showtoc":1,"showtoolbar":1,"skin":"oasis","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":1,"watchcreations":1,"watchdefault":1,"watchdeletion":1,
+"watchlistdays":3,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"htmlemails":1,"watchlistdigest":1,"enablerichtext":1,"variant":"en","language":"en","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"searchNs110":false,"searchNs111":false,"searchNs112":false,"searchNs113":false,"searchNs220":true,"searchNs221":false,"searchNs222":false,"searchNs500":false,"searchNs501":false,"searchNs502":false,"searchNs503":false,"searchNs700":false,"searchNs701":false,"searchNs1200":false,"searchNs1201":false,"searchNs1202":false,"userlandingpage":1});;},{},{});mw.loader.implement("user.tokens",function($){mw.user.tokens.set({"editToken":"+\\",
+"watchToken":false});;},{},{});
+
+/* cache key: lyricwiki:resourceloader:filter:minify-js:7:c427c618cc297da8d80d6da04f495ab5 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax","amd.shared","mediawiki.user","mediawiki.page.ready","mediawiki.legacy.mwsuggest"]);
+}</script><script type="text/javascript">
+	var wsl_assets = {"oasis_shared_js":["http:\/\/slot1.images.wikia.nocookie.net\/__am\/62132\/groups\/-\/oasis_shared_core_js,adengine2_js,oasis_shared_js,oasis_anon_js"],"oasis_nojquery_shared_js":["http:\/\/slot1.images4.wikia.nocookie.net\/__am\/62132\/group\/-\/oasis_nojquery_shared_js_anon"],"references":["\/wikia.php?controller=JSMessages&method=getMessages&format=html&packages=ImagePlaceholder%2CVideoEmbedTool&uselang=en&cb=62132.12224367.60796"]};
+	var toload = wsl_assets.oasis_shared_js.concat(wsl_assets.references);
+
+	(function(){ wsl.loadScript(toload); })();
+</script>
+<script type="text/javascript">/*<![CDATA[*/ Wikia.LazyQueue.makeQueue(wgAfterContentAndJS, function(fn) {fn();}); wgAfterContentAndJS.start(); /*]]>*/</script>
+
+
+<script src="http://lyrics.wikia.com/__load/-/cb%3D62132%26debug%3Dfalse%26lang%3Den%26only%3Dscripts%26skin%3Doasis/site"></script>
+<script>if (JSSnippetsStack.length) $.getScript('http://slot1.images3.wikia.nocookie.net/__am/62132/one/minify%3D1/extensions/wikia/JSSnippets/js/JSSnippets.js');</script><!-- Facebook integration -->
+<div id="fb-root"></div>
+</body>
+
+<!-- Served by ap-s40 in 0.313 secs. -->
+
+</html>

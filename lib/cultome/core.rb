@@ -92,7 +92,7 @@ class CultomePlayer
 
 		generate_help(command_help)
  
-		return @command_registry
+		return @command_registry, @listener_registry
 	end
 
 	# Utility method for running a standalone player. Initialize the commands

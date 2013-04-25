@@ -1,0 +1,25 @@
+HTTP/1.1 200 OK
+Server: Apache
+X-Content-Type-Options: nosniff
+Cache-Control: max-age=3600, s-maxage=3600, public
+Content-Type: text/javascript; charset=UTF-8
+X-Cacheable: YES
+Content-Length: 363
+Accept-Ranges: bytes
+Date: Fri, 19 Apr 2013 21:42:19 GMT
+Connection: keep-alive
+X-Served-By: cache-s24-SJC, cache-s30-SJC2
+X-Cache: MISS, MISS
+X-Cache-Hits: 0, 0
+X-Timer: S1366407739.851858377,VS0,VS1,VE106,VE106
+Vary: Accept-Encoding
+Set-Cookie: wikia_beacon_id=3BtWWCBNLo; domain=.wikia.com; path=/; expires=Wed, 16 Oct 2013 21:42:19 GMT;
+Set-Cookie: Geo={%22city%22:%22FIXME%22%2C%22country%22:%22MX%22%2C%22continent%22:%22NA%22}; path=/
+X-Age: 0
+
+song = {
+'artist':'The Ting Tings',
+'song':'Great DJ',
+'lyrics':'Fed up with your indigestion\nSwallow words one by one\nFolks got high at a quarter to five\nDon\'t you feel you\'re growing up undone\n\nNothing but the local DJ\nHe said he had some songs to play\nWhat went down from this fooling [...]',
+'url':'http://lyrics.wikia.com/The_Ting_Tings:Great_DJ'
+}
