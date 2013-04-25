@@ -94,6 +94,11 @@ module Plugin
 					if param[:criteria] == :a then query[:and] << {id: 2, condition: 'artists.name like ?', value: param_value}
 					elsif param[:criteria] == :b then query[:and] << {id: 3, condition: 'albums.name like ?', value: param_value}
 					elsif param[:criteria] == :t then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
+				when :object
+					case param[:value]
+					when :artist then query[:and] << {id: 12, condition: 'artists.id = ?', value: @p.artist.id}
+					when :album then query[:and] << {id: 13, condition: 'albums.id = ?', value: @p.album.id}
+					end
 				end
 			end
 
