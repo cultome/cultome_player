@@ -127,9 +127,13 @@ module Plugin
 						when /playlist|search|history/ then @p.focus = obj = @p.instance_variable_get("@#{param[:value]}")
 						when /artist|album|drives|queue|focus/ then obj = @p.instance_variable_get("@#{param[:value]}")
 						when :recently_added then @p.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
+						when :genre then @p.focus = obj = Song.connected.joins(:genres).where('genres.name in (?)', @p.song.genres.collect{|g| g.name }).to_a
 						else
+							# intentamos matchear las unidades primero
 							drive = drives.find{|d| d.name.to_sym == param[:value]}
-							@p.focus = obj = Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
+							unless drive.nil?
+								@p.focus = obj = Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
+							end
 						end
 					else
 						obj = @p.song
