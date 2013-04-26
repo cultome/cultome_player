@@ -102,9 +102,14 @@ module Plugin
 				end
 			end
 
-			display(@p.search = @p.focus = find_by_query(query).to_a)
+			results = find_by_query(query).to_a
+			if results.empty?
+				display("No results found!")
+			else
+				display(@p.search = @p.focus = results)
+			end
 
-			@p.search
+			return results
 		end
 
 		# Display an object in the screen. If no parameter is proveided, shows the progress of the current song.
