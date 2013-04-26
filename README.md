@@ -1,7 +1,7 @@
 # CulToMe Player
 A handy music library explorer. Is designed to facilitate you to play the music you like in the moment you want.
 
-**"I want to play exactly this music""**
+**"I want to play exactly this music"**
 
 The player is designed around this concept, so it has commands to help you find music in your library and play it.
 
@@ -167,23 +167,26 @@ The commands are very rustic. Basicly consist in a command name and a list of pa
 
 The following command are implemented in this moment.
 
-* play (<number>|<criteria>|<object>|<literal>)*      Create and inmediatly plays playlists
-* enqueue (<number>|<criteria>|<object>|<literal>)*   Append the created playlist to the current playlist
-* search (<criteria>|<object>|<literal>)*             Find inside library for song with the given criteria.
-* show <object>                                       Display information about status, objects and library.
-* pause                                               Pause playback.
-* stop                                                Stops playback.
-* next                                                Play the next song in the queue.
-* prev                                                Play the previous song from the history.
-* connect <path> => <literal>                         Add files to the library.
-* disconnect <literal>                                Remove filesfrom the library.
-* quit                                                Exit the player.
-* ff                                                  Fast forward 5 sec.
-* fb                                                  Fast backward 5 sec.
-* shuffle <number>|<literal>                          Check and change the status of shuffle.
-* repeat                                              Repeat the current song.
-* kill                                                Delete from disk the current song.
-* help <literal>                                      Show this help.
+```
+* play (\<number\>|\<criteria\>|\<object\>|\<literal\>)*     Create and inmediatly plays playlists
+* enqueue (\<number\>|\<criteria\>|\<object\>|\<literal\>)*   Append the created playlist to the current playlist
+* search (\<criteria\>|\<object\>|\<literal\>)*               Find inside library for song with the given criteria.
+* show \<object\>                                             Display information about status, objects and library.
+* pause                                                       Pause playback.
+* stop                                                        Stops playback.
+* next                                                        Play the next song in the queue.
+* prev                                                        Play the previous song from the history.
+* connect \<path\> =\> \<literal\>                            Add files to the library.
+* disconnect \<literal\>                                      Remove filesfrom the library.
+* quit                                                        Exit the player.
+* ff                                                          Fast forward 5 sec.
+* fb                                                          Fast backward 5 sec.
+* shuffle \<number\>|\<literal\>                              Check and change the status of shuffle.
+* repeat                                                      Repeat the current song.
+* kill                                                        Delete from disk the current song.
+* copy \<object\> => \<path\>                                 Copy a player's object's songs to a directory
+* help \<literal\>                                            Show this help.
+```
 
 Parameters passed to commands that dont require any are simply ignored.
 
