@@ -1,7 +1,6 @@
 require 'cultome/plugin'
 require 'cultome/persistence'
 require 'cultome/user_input'
-require 'shellwords'
 
 # Plugin to handle basic commands of the player.
 module Plugin
@@ -21,7 +20,7 @@ module Plugin
 			Artist.find_or_create_by_id(id: 0, name: "unknown")
 		end
 
-		# Register the commands: play, enqueue, search, show, pause, stop, next, prev, connect, disconnect, quit, ff, fb, shuffle, repeat and kill.
+		# Register the commands: play, enqueue, search, show, pause, stop, next, prev, connect, disconnect, quit, ff, fb, shuffle, repeat.
 		# @note Required method for register commands
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
@@ -42,7 +41,6 @@ module Plugin
 				fb: {help: "Fast backward 5 sec.", params_format: ""},
 				shuffle: {help: "Check and change the status of shuffle.", params_format: "<number>|<literal>"},
 				repeat: {help: "Repeat the current song", params_format: ""},
-				kill: {help: "Delete from disk the current song", params_format: ""},
 			}
 		end
 
@@ -292,27 +290,6 @@ module Plugin
 		# Begin the current song from the begining.
 		def repeat(params=[])
 			@p.player.seek(0)
-		end
-
-		# Remove the current song from library and from filesystem.
-		def kill(params=[])
-			if get_confirmation("Are you sure you want to delete #{@p.song} ???")
-				# detenemos la reproduccion
-				self.stop
-
-				path = Shellwords.escape("#{@p.song.drive.path}/#{@p.song.relative_path}")
-				system("mv #{path} ~/tmp/#{rand()}.mp3")
-
-				if $?.exitstatus == 0
-					@p.song.delete
-					display("Song deleted!")
-				else
-					display("An error occurred when deleting the song #{@p.song}")
-				end
-
-				# reanudamos la reproduccion
-				self.next
-			end
 		end
 
 		private
