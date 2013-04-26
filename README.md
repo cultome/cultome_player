@@ -168,24 +168,24 @@ The commands are very rustic. Basicly consist in a command name and a list of pa
 The following command are implemented in this moment.
 
 ```
-* play (\<number\>|\<criteria\>|\<object\>|\<literal\>)*     Create and inmediatly plays playlists
-* enqueue (\<number\>|\<criteria\>|\<object\>|\<literal\>)*   Append the created playlist to the current playlist
-* search (\<criteria\>|\<object\>|\<literal\>)*               Find inside library for song with the given criteria.
-* show \<object\>                                             Display information about status, objects and library.
+* play (<number>|<criteria>|<object>|<literal>)*     Create and inmediatly plays playlists
+* enqueue (<number>|<criteria>|<object>|<literal>)*   Append the created playlist to the current playlist
+* search (<criteria>|<object>|<literal>)*               Find inside library for song with the given criteria.
+* show <object>                                             Display information about status, objects and library.
 * pause                                                       Pause playback.
 * stop                                                        Stops playback.
 * next                                                        Play the next song in the queue.
 * prev                                                        Play the previous song from the history.
-* connect \<path\> =\> \<literal\>                            Add files to the library.
-* disconnect \<literal\>                                      Remove filesfrom the library.
+* connect <path> => <literal>                            Add files to the library.
+* disconnect <literal>                                      Remove filesfrom the library.
 * quit                                                        Exit the player.
 * ff                                                          Fast forward 5 sec.
 * fb                                                          Fast backward 5 sec.
-* shuffle \<number\>|\<literal\>                              Check and change the status of shuffle.
+* shuffle <number>|<literal>                              Check and change the status of shuffle.
 * repeat                                                      Repeat the current song.
 * kill                                                        Delete from disk the current song.
-* copy \<object\> => \<path\>                                 Copy a player's object's songs to a directory
-* help \<literal\>                                            Show this help.
+* copy <object> => <path>                                 Copy a player's object's songs to a directory
+* help <literal>                                            Show this help.
 ```
 
 Parameters passed to commands that dont require any are simply ignored.
@@ -218,7 +218,7 @@ play
 ```
 
 ### TODO
-* Add test and update specs
+* Complete and update specs
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Leave JRuby and convert to pure Ruby
 * Change the underlying in.memory database for a real one, thinking on mongo
