@@ -3,6 +3,8 @@ require 'cultome/player_listener'
 require 'cultome/helper'
 require 'active_support'
 require 'active_support/inflector'
+require 'active_record'
+require 'logger'
 
 # This class represents and holds the music player's state in one moment.
 # This means that plugins can ask about, for example, current song, focused list or connected
@@ -100,7 +102,7 @@ class CultomePlayer
 	# When a error is detected, a call to #execute with 'next' input is invoked.
 	def start
 		# cargamos los plugins
-		load_commands
+		with_connection { load_commands }
 
 		@running = true
 
@@ -120,15 +122,17 @@ class CultomePlayer
 	# @param user_input [String] The user input
 	# @return (see #send_to_listeners)
 	def execute(user_input)
-		cmds = parse(user_input)
-		if cmds.empty?
-			cmds = @last_cmds
-		else
-			@last_cmds = cmds
-		end
+		with_connection do
+			cmds = parse(user_input)
+			if cmds.empty?
+				cmds = @last_cmds
+			else
+				@last_cmds = cmds
+			end
 
-		cmds.each do |cmd|
-			send_to_listeners(cmd)
+			cmds.each do |cmd|
+				send_to_listeners(cmd)
+			end
 		end
 	end
 
@@ -153,6 +157,24 @@ class CultomePlayer
 	end
 
 	private
+
+	# Create a context with a managed connection from the pool. The block passed will be
+	# inside a valid connection.
+	#
+	# @param db_logic [Block] The logic that require a valid db connection.
+	def with_connection(&db_logic)
+		begin
+			ActiveRecord::Base.connection_pool
+		rescue Exception => e
+			ActiveRecord::Base.establish_connection(
+				adapter: db_adapter,
+				database: db_file
+			)
+			ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
+		end
+
+		ActiveRecord::Base.connection_pool.with_connection(&db_logic)
+	end
 
 	# Send the command parameters to appropiated registered listeners/commands.
 	#
