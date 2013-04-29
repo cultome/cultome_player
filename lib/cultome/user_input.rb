@@ -1,4 +1,5 @@
 require 'readline'
+require 'cultome/exception'
 
 # A helper module to get and process user input. 
 # The main function of this module is to transform user input into player's commands.
@@ -20,7 +21,7 @@ module UserInput
 	# @return [String] An or-regex with the valid commands.
 	def valid_command
 		if @valid_commands.nil?
-			@valid_comands = @command_registry.keys.join('|')
+			@valid_comands = @command_registry.join('|')
 		end
 
 		@valid_comands
@@ -88,7 +89,7 @@ module UserInput
 	# @param (see #parse)
 	# @return [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
 	def parse_command(input)
-		raise "Invalid command. Try typing 'help' for information" if input !~ /\A(#{valid_command}|#{valid_alias})[\s]*(.*)?\Z/
+		raise CultomePlayerException.new(:invalid_command, input) if input !~ /\A(#{valid_command}|#{valid_alias})[\s]*(.*)?\Z/
 
 		cmd = $1.to_sym
 		# params = $2.split(' ').collect{|s| if s.blank? then nil else s end }

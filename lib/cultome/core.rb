@@ -1,6 +1,7 @@
 require 'cultome/user_input'
 require 'cultome/player_listener'
 require 'cultome/helper'
+require 'cultome/exception'
 require 'active_support'
 require 'active_support/inflector'
 require 'active_record'
@@ -57,7 +58,7 @@ class CultomePlayer
 		@is_shuffling = true
 		@is_playing_library = false
 		@current_command = nil
-		@command_registry = Hash.new{|h,k| h[k] = []}
+		@command_registry = []
 		@listener_registry = Hash.new{|h,k| h[k] = []}
 	end
 
@@ -78,7 +79,8 @@ class CultomePlayer
 
 				cmd_regs = command.get_command_registry if command.respond_to?(:get_command_registry)
 				cmd_regs.each{|k,v|
-					@command_registry[k] << command
+					@command_registry.push k
+					@listener_registry[k] << command
 					v[:command] = k
 					command_help << v
 				} unless cmd_regs.nil?
@@ -90,7 +92,8 @@ class CultomePlayer
 			end
 		}
 		# luego cargamos los comandos que provee esta clase
-		@command_registry[:help] << self
+		@command_registry.push :help
+		@listener_registry[:help] << self
 
 		generate_help(command_help)
  
@@ -110,9 +113,7 @@ class CultomePlayer
 			begin
 				execute get_command
 			rescue Exception => e
-				display e.message
-				# podriamos indicar que la cancion no toca simplemente y sacarla
-				execute('next') unless e.message =~ /Invalid command/
+				default_error_action e
 			end
 		end
 	end
@@ -122,17 +123,23 @@ class CultomePlayer
 	# @param user_input [String] The user input
 	# @return (see #send_to_listeners)
 	def execute(user_input)
-		with_connection do
+		begin
 			cmds = parse(user_input)
-			if cmds.empty?
+			if cmds.nil? || cmds.empty?
 				cmds = @last_cmds
 			else
 				@last_cmds = cmds
 			end
 
-			cmds.each do |cmd|
-				send_to_listeners(cmd)
+			with_connection do
+				cmds.each do |cmd|
+					send_to_listeners(cmd[:command], cmd[:params])
+				end
 			end
+		rescue CultomePlayerException => ctmex
+			default_error_action( ctmex ) unless send_to_listeners('player_exception_throwed', ctmex, :__PLAYER_EXCEPTIONS__)
+		rescue Exception => ex
+			default_error_action( ex ) unless send_to_listeners('exception_throwed', ctmex, :__EXCEPTIONS__)
 		end
 	end
 
@@ -158,6 +165,14 @@ class CultomePlayer
 
 	private
 
+	# Execute a defalt action when the player fails.
+	#
+	# @param ex [Exception] The exception throwed
+	def default_error_action(ex)
+		display ex.message
+		execute 'next' unless ex.message =~ /Invalid command/
+	end
+
 	# Create a context with a managed connection from the pool. The block passed will be
 	# inside a valid connection.
 	#
@@ -180,14 +195,16 @@ class CultomePlayer
 	#
 	# @param cmd [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
 	# @return What the plugin's appropiated command/listeners returns
-	def send_to_listeners(cmd)
-		listeners = @command_registry[cmd[:command]] + @listener_registry[cmd[:command]] + @listener_registry[:__ALL__]
+	def send_to_listeners(cmd, params, *filters)
+		listeners = @listener_registry.values_at(cmd, *filters).flatten
 		unless listeners.nil?
-			@current_command = cmd
+			@current_command = {command: cmd, params: params}
 			listeners.each{|listener|
-				listener.send(cmd[:command], cmd[:params])
+				listener.send(cmd, params)
 			}
 		end
+
+		return !listeners.nil? && !listeners.empty?
 	end
 
 	# Generates the in-app help from a list of command's help.
@@ -206,10 +223,8 @@ class CultomePlayer
 		@help_msg = "The following commands are loaded:\n"
 
 		command_help.each{|map| 
-			if map[:command] != :__ALL__
-				msg = "#{map[:command]} #{map[:params_format]}"
-				@help_msg += "  #{msg.ljust(offset)} #{map[:help]}\n"
-			end
+			msg = "#{map[:command]} #{map[:params_format]}"
+			@help_msg += "  #{msg.ljust(offset)} #{map[:help]}\n"
 		}
 
 		@help_msg += "\nThe following are the parameters types:\n"

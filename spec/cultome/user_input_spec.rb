@@ -5,7 +5,7 @@ class Test
 	include UserInput
 
 	def initialize
-		@command_registry = {prev: nil, play: nil, pause: nil, search: nil}
+		@command_registry = [ :prev, :play, :pause, :search ]
 	end
 
 	def display(msg)

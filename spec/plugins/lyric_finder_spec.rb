@@ -7,7 +7,7 @@ describe Plugin::LyricFinder do
 	let(:l){ Plugin::LyricFinder.new(get_fake_player) }
 
 	it 'Should register to listen for "lyric" command' do
-		l.get_command_registry.should have_key(:lyric)
+		l.get_command_registry.should include(:lyric)
 	end
 
 	it 'Should find the lyrics for the current song', resources: true do

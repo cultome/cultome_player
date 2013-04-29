@@ -7,7 +7,7 @@ describe Plugin::LastFm do
 	let(:f){ Plugin::LastFm.new(get_fake_player) }
 
 	it 'Should register to listen for "similar" command' do
-		f.get_command_registry.should have_key(:similar)
+		f.get_command_registry.should include(:similar)
 	end
 
 	it 'Should find similar songs to current song due empty params', resources: true do

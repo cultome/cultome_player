@@ -6,7 +6,7 @@ describe Plugin::GestureAnalizer do
 	let(:g){ Plugin::GestureAnalizer.new(nil) }
 
 	it 'Should register for all events' do
-		g.get_listener_registry.should include(:__ALL__)
+		g.get_listener_registry.should include(:__ALL_VALIDS__)
 	end
 
 	it 'Should add an event to the queue' do

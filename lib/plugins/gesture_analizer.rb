@@ -17,7 +17,7 @@ module Plugin
 		#
 		# @return [List<Symbol>] The name of the events to listen.
 		def get_listener_registry
-			[:__ALL__]
+			[:__ALL_VALIDS__]
 		end
 
 		private
