@@ -54,9 +54,11 @@ To understand the command interface, you need to understand its parameters types
 
 #### Criterio
 A criterio is a key:value pair. In this moment only three keys are valid:
+```
 * a    Stand for Artist
 * b    Stand for Album
 * t    Stand for Title
+```
 
 Examples of criterio are:
 
@@ -84,6 +86,7 @@ tunnels
 ```
 
 #### Object
+```
 The objects are words with special meaning to the player prefixed with an @. In this moment the fully recognized objects are:
 * @library         Refers to the complete list of songs in you *connected* collection.
 * @search          Refers to the list of songs returned in your last search.
@@ -94,7 +97,9 @@ The objects are words with special meaning to the player prefixed with an @. In 
 * @artist          Refers to the current song's artist playing.
 * @album           Refers to the current song's album playing.
 * @drives          Refers to all the drives the player knows.
+```
 
+```
 Some others are not player's objects but act as special functions placeholders.
 * @artists         Referes to the complete list of artists in you *connected* collection.
 * @albums          Referes to the complete list of albums in you *connected* collection.
@@ -104,10 +109,11 @@ Some others are not player's objects but act as special functions placeholders.
 * @more_played     Referes to the list of songs with more playbacks.
 * @less_played     Referes to the list of songs with less playbacks.
 * @populars        Referes to the list of songs with highest puntuations from playback preferences.
+```
 
 And anything else is interpreted as follow:
-1. If there is a @drive with the same name, the @drive is used. The spaces in the @drive name are replaced with _. So, @my_drive search a drive with name 'my drive', no matter the case.
-2. Try to match a genre, with same name tranformation as above. So, @rock refers to the genre named 'rock', no matter the case.
+1.  If there is a @drive with the same name, the @drive is used. The spaces in the @drive name are replaced with _. So, @my_drive search a drive with name 'my drive', no matter the case.
+2.  Try to match a genre, with same name tranformation as above. So, @rock refers to the genre named 'rock', no matter the case.
 
 #### Number
 The numbers refers to elements in a displayed list. When a list is displayed, that lists becomes the *focused list* and any given numerical parameter refers to the elements in this list. Depending on the list type, that will be the type of parameter used.A *focused list* is usually the latest list displayed by the player.
@@ -169,23 +175,23 @@ The following command are implemented in this moment.
 
 ```
 * play (<number>|<criteria>|<object>|<literal>)*     Create and inmediatly plays playlists
-* enqueue (<number>|<criteria>|<object>|<literal>)*   Append the created playlist to the current playlist
-* search (<criteria>|<object>|<literal>)*               Find inside library for song with the given criteria.
-* show <object>                                             Display information about status, objects and library.
-* pause                                                       Pause playback.
-* stop                                                        Stops playback.
-* next                                                        Play the next song in the queue.
-* prev                                                        Play the previous song from the history.
-* connect <path> => <literal>                            Add files to the library.
-* disconnect <literal>                                      Remove filesfrom the library.
-* quit                                                        Exit the player.
-* ff                                                          Fast forward 5 sec.
-* fb                                                          Fast backward 5 sec.
-* shuffle <number>|<literal>                              Check and change the status of shuffle.
-* repeat                                                      Repeat the current song.
-* kill                                                        Delete from disk the current song.
-* copy <object> => <path>                                 Copy a player's object's songs to a directory
-* help <literal>                                            Show this help.
+* enqueue (<number>|<criteria>|<object>|<literal>)*  Append the created playlist to the current playlist
+* search (<criteria>|<object>|<literal>)*            Find inside library for song with the given criteria.
+* show <object>                                      Display information about status, objects and library.
+* pause                                              Pause playback.
+* stop                                               Stops playback.
+* next                                               Play the next song in the queue.
+* prev                                               Play the previous song from the history.
+* connect <path> => <literal>                        Add files to the library.
+* disconnect <literal>                               Remove filesfrom the library.
+* quit                                               Exit the player.
+* ff                                                 Fast forward 5 sec.
+* fb                                                 Fast backward 5 sec.
+* shuffle <number>|<literal>                         Check and change the status of shuffle.
+* repeat                                             Repeat the current song.
+* kill                                               Delete from disk the current song.
+* copy <object> => <path>                            Copy a player's object's songs to a directory
+* help <literal>                                     Show this help.
 ```
 
 Parameters passed to commands that dont require any are simply ignored.
@@ -232,14 +238,15 @@ play
 ### Ideas for the next release
 
 * ASCII visualizations.
-* I want to implement __'Ey <friend name>, you got to listen this song!'__
+* I want to implement __"Ey wife/son/friend! you got to listen this song!"__.
 * Add tags to the songs, for example 'party' or 'sadness'.
 * Make it work in Windows... because as I said before, this was not my initial intention.
 * Better help in-app. Something more like git or rails.
+* Last.fm scrobbler, altough normally when I hear music the wifi is never available =S
 
 ### TODO
 * Complete and update specs
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Leave JRuby and convert to pure Ruby
-* Improve the memory usage, it simply to high!
+* Improve the memory usage, it simply too high!
 * Change the underlying in.memory database for a real one, thinking on mongo
