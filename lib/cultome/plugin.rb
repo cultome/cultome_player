@@ -24,15 +24,19 @@ module Plugin
 				# si no lo es, tira una exception
 				return super unless @p.respond_to?(method_name)
 
-				PluginBase.define_proxy method_name do |param|
-					@p.send(method_name, param)
+				self.class.class_eval do
+					define_method method_name do
+						@p.send(method_name, param)
+					end
 				end
 
 				return send(method_name, *args)
 			else
 				# es una variable
-				PluginBase.define_proxy method_name do
-					@p.instance_variable_get("@#{method_name}")
+				self.class.class_eval do
+					define_method method_name do
+						@p.instance_variable_get("@#{method_name}")
+					end
 				end
 
 				return @p.instance_variable_get("@#{method_name}")
@@ -41,10 +45,6 @@ module Plugin
 
 		def respond_to?(method)
 			@p.respond_to?( method ) || super
-		end
-
-		def self.define_proxy(name, &block)
-			define_method name, block
 		end
 	end
 end
