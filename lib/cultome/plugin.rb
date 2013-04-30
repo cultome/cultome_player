@@ -17,5 +17,31 @@ module Plugin
 		def display(msg, continuos=false)
 			@p.display(msg, continuos)
 		end
+
+		def method_missing(method_name, *args)
+			if @p.instance_variable_get("@#{method_name}").nil?
+				# podria ser un metodo...
+				# si no lo es, tira una exception
+				method = @p.public_method method_name
+				PluginBase.define_proxy method_name do |param|
+					method.call param
+				end
+			else
+				# es una variable
+				PluginBase.define_proxy method_name do
+					@p.instance_variable_get("@#{method_name}")
+				end
+			end
+
+			send(method_name, *args)
+		end
+
+		def respond_to?(method)
+			@p.respond_to?( method ) || super
+		end
+
+		def self.define_proxy(name, &block)
+			define_method name, block
+		end
 	end
 end

@@ -44,20 +44,13 @@ class CultomePlayer
 		@playlist = []
 		@history = []
 		@queue = []
-		@song = nil
-		@prev_song = nil
-		@artist = nil
-		@album = nil
 		@play_index = -1
 		@prompt = 'cultome> '
 		@status = :STOPPED
 		@song_status = {}
-		@focus = nil
-		@drives = nil
 		@last_cmds = []
 		@is_shuffling = true
 		@is_playing_library = false
-		@current_command = nil
 		@command_registry = []
 		@listener_registry = Hash.new{|h,k| h[k] = []}
 	end
