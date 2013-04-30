@@ -217,8 +217,29 @@ connect /home/user/music => main
 play
 ```
 
+### What's new
+**Version 0.2.0**
+
+* The code were reorganized to be more API-oriented, even when this was not the mainly intention of this project, but can be uselful for others to use it this way.
+* The some commands were extracted from the core, like help and kill.
+* The command 'copy <object> <destiny_path>' were added to copy all the songs in the objet to a directory in the filesystem.
+* The option 'search @<artist|album>' was implemented to facilitate the __'that album rocks! lets hear it!'__.
+* The player now emit exception-thrown events, a general exception and a player's exception.
+* The aliases/shortcuts/macros plugin is in place. With this you can translate user input into commands, for example type 'sa' and the players tranform it to 'search @artist'.
+* Changes in plugin structure. Not the final version but a step ahead for building a better plugin model.
+* Some minor bugs fixes, like the db hanging or the lost in focus when search is empty.
+
+### Ideas for the next release
+
+* ASCII visualizations.
+* I want to implement __'Ey <friend name>, you got to listen this song!'__
+* Add tags to the songs, for example 'party' or 'sadness'.
+* Make it work in Windows... because as I said before, this was not my initial intention.
+* Better help in-app. Something more like git or rails.
+
 ### TODO
 * Complete and update specs
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Leave JRuby and convert to pure Ruby
+* Improve the memory usage, it simply to high!
 * Change the underlying in.memory database for a real one, thinking on mongo
