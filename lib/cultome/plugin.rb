@@ -19,21 +19,24 @@ module Plugin
 		end
 
 		def method_missing(method_name, *args)
-			if @p.instance_variable_get("@#{method_name}").nil?
+			if @p.instance_variables.grep(/@#{method_name}/).empty?
 				# podria ser un metodo...
 				# si no lo es, tira una exception
-				method = @p.public_method method_name
+				return super unless @p.respond_to?(method_name)
+
 				PluginBase.define_proxy method_name do |param|
-					method.call param
+					@p.send(method_name, param)
 				end
+
+				return send(method_name, *args)
 			else
 				# es una variable
 				PluginBase.define_proxy method_name do
 					@p.instance_variable_get("@#{method_name}")
 				end
-			end
 
-			send(method_name, *args)
+				return @p.instance_variable_get("@#{method_name}")
+			end
 		end
 
 		def respond_to?(method)

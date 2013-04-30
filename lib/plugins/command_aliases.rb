@@ -22,7 +22,7 @@ module Plugin
 		# @param ex [CultomePlayerException] The exception throwed
 		def player_exception_throwed(ex)
 			raise ex if ALIAS[ex.data].nil?
-			return @p.execute ALIAS[ex.data]
+			return execute ALIAS[ex.data]
 		end
 	end
 end

@@ -132,6 +132,7 @@ class CultomePlayer
 		rescue CultomePlayerException => ctmex
 			default_error_action( ctmex ) unless send_to_listeners('player_exception_throwed', ctmex, :__PLAYER_EXCEPTIONS__)
 		rescue Exception => ex
+			#puts ex.backtrace
 			default_error_action( ex ) unless send_to_listeners('exception_throwed', ctmex, :__EXCEPTIONS__)
 		end
 	end

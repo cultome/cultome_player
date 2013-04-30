@@ -19,19 +19,19 @@ module Plugin
 
 		# Search and display the lyrics for the current song
 		def lyric(params=[])
-			song = @p.song.name
-			artist = @p.artist.name
+			song_name = song.name
+			artist_name = artist.name
 
-			display("Finding lyric for #{song}...")
+			display("Finding lyric for #{song_name}...")
 
-			url = "http://lyrics.wikia.com/api.php?artist=#{CGI::escape(artist)}&song=#{CGI::escape(song)}&fmt=json"
+			url = "http://lyrics.wikia.com/api.php?artist=#{CGI::escape(artist_name)}&song=#{CGI::escape(song_name)}&fmt=json"
 
 			response = Net::HTTP.get_response(URI(url)).body
 			json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
 			Net::HTTP.get_response(URI(json['url'])).body.lines.each do |line|
 				if line =~ /<div class='lyricbox'>/
 					lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
-					display(":::: Lyric for #{song} ::::")
+					display(":::: Lyric for #{song_name} ::::")
 					display(lyric)
 					return lyric
 				end

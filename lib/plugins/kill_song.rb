@@ -20,22 +20,22 @@ module Plugin
 
 		# Remove the current song from library and from filesystem.
 		def kill(params=[])
-			if get_confirmation("Are you sure you want to delete #{@p.song} ???")
+			if get_confirmation("Are you sure you want to delete #{song} ???")
 				# detenemos la reproduccion
-				@p.execute('stop')
+				execute('stop')
 
-				path = Shellwords.escape("#{@p.song.drive.path}/#{@p.song.relative_path}")
+				path = Shellwords.escape("#{song.drive.path}/#{song.relative_path}")
 				system("mv #{path} ~/tmp/#{rand()}.mp3")
 
 				if $?.exitstatus == 0
-					@p.song.delete
+					song.delete
 					display("Song deleted!")
 				else
-					display("An error occurred when deleting the song #{@p.song}")
+					display("An error occurred when deleting the song #{song}")
 				end
 
 				# reanudamos la reproduccion
-				@p.execute('next')
+				execute('next')
 			end
 		end
 	end

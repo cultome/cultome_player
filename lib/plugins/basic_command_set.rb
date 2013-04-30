@@ -57,7 +57,7 @@ module Plugin
 				@p.queue = []
 			end
 
-			@p.history.push @p.song unless @p.song.nil?
+			history.push song unless song.nil?
 			do_play
 		end
 
@@ -94,8 +94,8 @@ module Plugin
 					elsif param[:criteria] == :t then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
 				when :object
 					case param[:value]
-					when :artist then query[:and] << {id: 12, condition: 'artists.id = ?', value: @p.artist.id}
-					when :album then query[:and] << {id: 13, condition: 'albums.id = ?', value: @p.album.id}
+					when :artist then query[:and] << {id: 12, condition: 'artists.id = ?', value: artist.id}
+					when :album then query[:and] << {id: 13, condition: 'albums.id = ?', value: album.id}
 					end
 				end
 			end
@@ -116,7 +116,7 @@ module Plugin
 		# @return [String] The message displayed.
 		def show(params=[])
 			if params.blank?
-				display @p.song
+				display song
 				show_progress 
 			else
 				params.each do |param|
@@ -130,7 +130,7 @@ module Plugin
 						when /playlist|search|history/ then @p.focus = obj = @p.instance_variable_get("@#{param[:value]}")
 						when /artist|album|drives|queue|focus/ then obj = @p.instance_variable_get("@#{param[:value]}")
 						when :recently_added then @p.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
-						when :genre then @p.focus = obj = Song.connected.joins(:genres).where('genres.name in (?)', @p.song.genres.collect{|g| g.name }).to_a
+						when :genre then @p.focus = obj = Song.connected.joins(:genres).where('genres.name in (?)', song.genres.collect{|g| g.name }).to_a
 						else
 							# intentamos matchear las unidades primero
 							drive = drives.find{|d| d.name.to_sym == param[:value]}
@@ -139,7 +139,7 @@ module Plugin
 							end
 						end
 					else
-						obj = @p.song
+						obj = song
 					end # case
 					display(obj)
 				end # do
@@ -148,26 +148,26 @@ module Plugin
 
 		# Pause the current playback if playing and resume it if paused.
 		def pause(params=[])
-			@p.status =~ /PLAYING|RESUMED/ ? @p.player.pause : @p.player.resume
+			status =~ /PLAYING|RESUMED/ ? player.pause : player.resume
 		end
 
 		# Stop the current playback.
 		def stop(params=[])
-			@p.player.stop
+			player.stop
 		end
 
 		# Select the next song to be played and plays it.
 		#
 		# @return (see #do_play)
 		def next(params=[])
-			if @p.play_index + 1 < @p.playlist.size
-				@p.history.push @p.song unless @p.song.nil?
+			if play_index + 1 < playlist.size
+				history.push song unless song.nil?
 
-				if @p.is_shuffling
-					@p.queue.push @p.playlist[rand(@p.playlist.size)]
+				if is_shuffling
+					queue.push playlist[rand(playlist.size)]
 				else
 					@p.play_index += 1
-					@p.queue.push @p.playlist[@p.play_index]
+					queue.push playlist[play_index]
 				end
 
 				do_play
@@ -180,10 +180,10 @@ module Plugin
 		#
 		# @return (see #do_play)
 		def prev(params=[])
-			if @p.history.blank?
+			if history.blank?
 				display "There is no files in history"
 			else
-				@p.queue.unshift @p.history.pop
+				queue.unshift history.pop
 				@p.play_index -= 1 if @p.play_index > 0
 
 				do_play
@@ -255,19 +255,19 @@ module Plugin
 		# Stop the player and set the @running flag to false.
 		def quit(params=[])
 			@p.running = false
-			@p.player.stop
+			player.stop
 		end
 
 		# Fast forward to the current song.
 		def ff(params=[])
-			next_pos = @p.song_status["mp3.position.byte"] + (@p.song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
-			@p.player.seek(next_pos)
+			next_pos = song_status["mp3.position.byte"] + (song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+			player.seek(next_pos)
 		end
 
 		# Fast backward to the current song.
 		def fb(params=[])
-			next_pos = @p.song_status["mp3.position.byte"] - (@p.song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
-			@p.player.seek(next_pos)
+			next_pos = song_status["mp3.position.byte"] - (song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+			player.seek(next_pos)
 		end
 
 		# Check and change the shuffle setting. Without parameters just print the current state of shuffle. 
@@ -279,17 +279,17 @@ module Plugin
 		def shuffle(params=[])
 			unless params.empty?
 				params.each do |param|
-					@p.is_shuffling = is_true_value param[:value]
+					is_shuffling = is_true_value param[:value]
 				end
 			end
-			display(@p.is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
+			display(is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
 
-			return @p.is_shuffling
+			return is_shuffling
 		end
 
 		# Begin the current song from the begining.
 		def repeat(params=[])
-			@p.player.seek(0)
+			player.seek(0)
 		end
 
 		private
@@ -303,9 +303,9 @@ module Plugin
 			new_playlist = []
 			@p.is_playing_library = false
 
-			if params.empty? && @p.playlist.blank?
+			if params.empty? && playlist.blank?
 				new_playlist = find_by_query
-				@p.is_playing_library = true
+				is_playing_library = true
 
 				if new_playlist.blank?
 					display "No music connected yet. Try 'connect /home/csoria/music => music_library' first!"
@@ -319,21 +319,21 @@ module Plugin
 					case param[:type]
 					when /literal|criteria/ then search_criteria << param
 					when :number
-						if @p.focus[param[:value].to_i - 1].nil?
-							@p.queue.push @p.playlist[param[:value].to_i - 1]
+						if focus[param[:value].to_i - 1].nil?
+							queue.push playlist[param[:value].to_i - 1]
 						else
-							@p.queue.push @p.focus[param[:value].to_i - 1]
+							queue.push focus[param[:value].to_i - 1]
 						end
 					when :object
 						case param[:value]
 						when :library 
 							new_playlist = find_by_query
 							@p.is_playing_library = true
-						when :playlist then new_playlist = @p.playlist
-						when :search then new_playlist += @p.search
-						when :history then new_playlist += @p.history
-						when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @p.artist.name }%"}], and: []})
-						when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @p.album.name }%"}], and: []})
+						when :playlist then new_playlist = playlist
+						when :search then new_playlist += search
+						when :history then new_playlist += history
+						when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ artist.name }%"}], and: []})
+						when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ album.name }%"}], and: []})
 
 							# criterios de busqueda avanzados
 						when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'songs.created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
@@ -365,54 +365,54 @@ module Plugin
 		#
 		# @return [Song] The new song playing.
 		def do_play
-			if @p.queue.blank?
+			if queue.blank?
 				return self.next
 			end
 
-			@p.prev_song = @p.song
-			@p.song = @p.queue.shift
+			prev_song = song
+			@p.song = queue.shift
 
-			if @p.song.nil?
+			if song.nil?
 				display 'There is no song to play' 
 				return nil
 			end
 
-			if @p.song.class == Artist
-				@p.artist = @p.song
+			if song.class == Artist
+				@p.artist = song
 				return play([{type: :object, value: :artist}])
-			elsif @p.song.class == Album
-				@p.album = @p.song
+			elsif song.class == Album
+				@p.album = song
 				return play([{type: :object, value: :album}])
-			elsif @p.song.class == Genre
-				return play([{type: :object, value: @p.song.name.gsub(' ', '_').to_sym}])
+			elsif song.class == Genre
+				return play([{type: :object, value: song.name.gsub(' ', '_').to_sym}])
 			end
 
-			@p.album = @p.song.album 
-			@p.artist = @p.song.artist
+			@p.album = song.album 
+			@p.artist = song.artist
 
 			begin
-				@p.player.play(@p.song.path)
+				player.play(song.path)
 			rescue Exception => e
 				display("Error: #{e.message}")
-				return @p.execute('next')
+				return execute('next')
 			end
 
 			# agregamos al contador de reproducciones
-			Song.increment_counter :plays, @p.song.id
-			Song.update(@p.song.id, last_played_at: Time.now)
+			Song.increment_counter :plays, song.id
+			Song.update(song.id, last_played_at: Time.now)
 
-			display @p.song
+			display song
 
-			@p.song
+			song
 		end
 
 		# Show an ASCII bar with the time progress of the current song.
 		#
 		# @return [String] An ASCII bar with the time progress of the current song.
 		def show_progress
-			actual = @p.song_status["mp3.position.microseconds"] / 1000000
-			percentage = ((actual * 100) / @p.song.duration) / 10
-			display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(@p.song.duration)}"
+			actual = song_status["mp3.position.microseconds"] / 1000000
+			percentage = ((actual * 100) / song.duration) / 10
+			display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(song.duration)}"
 		end
 
 		# Retrive songs from connected drives with the given conditions.

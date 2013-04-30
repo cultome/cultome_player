@@ -27,12 +27,12 @@ module Plugin
 		#
 		# @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
 		def similar(params=[])
-			song = @p.song.name
-			artist = @p.artist.name
-			song_id = @p.song.id
-			artist_id = @p.artist.id
+			song_name = song.name
+			artist_name = artist.name
+			song_id = song.id
+			artist_id = artist.id
 
-			search_info = define_search(params, song, artist)
+			search_info = define_search(params, song_name, artist_name)
 
 			in_db = check_in_db(search_info)
 
@@ -55,7 +55,7 @@ module Plugin
 					end
 
 					artists_in_library = find_artists_in_library(artists)
-					show_artist(artist, artists, artists_in_library)
+					show_artist(artist_name, artists, artists_in_library)
 
 					return artists, artists_in_library
 				elsif !json['similartracks'].nil?
@@ -74,7 +74,7 @@ module Plugin
 						Song.find(song_id).similars.create(t)
 					end
 					tracks_in_library = find_tracks_in_library(tracks)
-					show_tracks(song, tracks, tracks_in_library)
+					show_tracks(song_name, tracks, tracks_in_library)
 
 					return tracks, tracks_in_library
 				else
@@ -85,12 +85,12 @@ module Plugin
 				# trabajamos con datos de la db
 				if search_info[:method] == GET_SIMILAR_ARTISTS_METHOD
 					artists_in_library = find_artists_in_library(in_db)
-					show_artist(artist, in_db, artists_in_library)
+					show_artist(artist_name, in_db, artists_in_library)
 
 					return in_db, artists_in_library
 				elsif search_info[:method] == GET_SIMILAR_TRACKS_METHOD
 					tracks_in_library = find_tracks_in_library(in_db)
-					show_tracks(song, in_db, tracks_in_library)
+					show_tracks(song_name, in_db, tracks_in_library)
 
 					return in_db, tracks_in_library
 				end
@@ -250,7 +250,7 @@ module Plugin
 			if tracks.empty? && tracks_in_library.empty?
 				display("No similarities found for #{song}") 
 			else
-				@p.focus = tracks_in_library
+				focus = tracks_in_library
 			end
 		end
 

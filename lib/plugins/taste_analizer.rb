@@ -25,16 +25,16 @@ module Plugin
 		# @param next_song [Song] The next song to be played
 		def calculate_songs_weight(song, next_song)
 			return -1 unless song.class == Song && next_song.class == Song
-			return 0 if @p.song_status.empty?
+			return 0 if song_status.empty?
 
-			#puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.song_status }, #{ @p.current_command }..."
+			#puts "Calificando cancion #{ song }, #{ next_song }, #{ song_status }, #{ current_command }..."
 
-			progress_in_sec = @p.song_status["mp3.position.microseconds"] / 1000000
+			progress_in_sec = song_status["mp3.position.microseconds"] / 1000000
 			percentage = (progress_in_sec * 100) / song.duration
 
 			points = 0
 
-			if @p.current_command[:command] =~ /next/
+			if current_command[:command] =~ /next/
 				Song.increment_counter(:points, song.id) if song == next_song
 				points += 1
 			end
@@ -60,7 +60,7 @@ module Plugin
 				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 
 				points += 1
-			elsif @p.current_command[:command] =~ /prev/
+			elsif current_command[:command] =~ /prev/
 				# le damos puntos a la proxima rola 
 				# porque la queremos volver a escuchar
 				Song.increment_counter :points, song.id
