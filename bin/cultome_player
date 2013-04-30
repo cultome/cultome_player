@@ -2,7 +2,7 @@
 
 system("clear")
 
-puts "Iniciando!" # aqui poner una frase humorisitca aleatoria
+puts "Starting Cultome Player!" # aqui poner una frase humorisitca aleatoria
 
 require 'cultome_player'
 require 'cultome/core'
