@@ -195,8 +195,8 @@ class CultomePlayer
 	#
 	# @param cmd [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
 	# @return What the plugin's appropiated command/listeners returns
-	def send_to_listeners(cmd, params, *filters)
-		listeners = @listener_registry.values_at(cmd, *filters).flatten
+	def send_to_listeners(cmd, params, filter=:__ALL_VALIDS__)
+		listeners = @listener_registry.values_at(cmd, filter).flatten
 		unless listeners.nil?
 			@current_command = {command: cmd, params: params}
 			listeners.each{|listener|
