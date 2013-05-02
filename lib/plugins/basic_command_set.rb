@@ -13,8 +13,8 @@ module Plugin
 		# Initialize two utility registers in Album and Artist models for unknown album or artist.
 		#
 		# @param player [CultomePlayer] An instance of the player to operate with.
-		def initialize(player)
-			super(player)
+		def initialize(player, config)
+			super(player, config)
 			# checamos si estan los registros default
 			Album.find_or_create_by_id(id: 0, name: "unknown")
 			Artist.find_or_create_by_id(id: 0, name: "unknown")
@@ -256,6 +256,7 @@ module Plugin
 		def quit(params=[])
 			@p.running = false
 			player.stop
+			@p.save_configuration
 		end
 
 		# Fast forward to the current song.

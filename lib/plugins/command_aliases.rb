@@ -10,6 +10,20 @@ module Plugin
 			[:__PLAYER_EXCEPTIONS__]
 		end
 
+		# Register the commands: alias
+		# @note Required method for register commands
+		#
+		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
+		def get_command_registry
+			{
+				:alias => {help: "Create an alias for one or many commands", params_format: "<literal> => <literal>"},
+			}
+		end
+
+		def alias(params=[])
+			puts "ALIAS: #{params.inspect}"
+		end
+
 		private
 
 		ALIAS = {

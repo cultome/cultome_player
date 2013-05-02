@@ -6,6 +6,7 @@ require 'active_support'
 require 'active_support/inflector'
 require 'active_record'
 require 'logger'
+require 'yaml'
 
 # This class represents and holds the music player's state in one moment.
 # This means that plugins can ask about, for example, current song, focused list or connected
@@ -16,6 +17,8 @@ class CultomePlayer
 	include UserInput
 	include PlayerListener
 	include Helper
+
+	CONFIG_FILE = "config.yaml"
 
 	attr_accessor :playlist
 	attr_accessor :search
@@ -39,13 +42,16 @@ class CultomePlayer
 	attr_reader :current_command
 
 	def initialize
+		@master_config = YAML.load_file(CONFIG_FILE)
+		@config = @master_config["core"]
+
 		@player = Player.new(self)
 		@search = []
 		@playlist = []
 		@history = []
 		@queue = []
 		@play_index = -1
-		@prompt = 'cultome> '
+		@prompt = @config["prompt"]
 		@status = :STOPPED
 		@song_status = {}
 		@last_cmds = []
@@ -67,8 +73,13 @@ class CultomePlayer
 			if file =~ /.rb\Z/
 				file_name = file.gsub('.rb', '')
 				require "plugins/#{file_name}"
-				
-				command = "Plugin::#{file_name.classify}".constantize.new(self)
+
+				plugin_cfg = @master_config[file_name]
+				if plugin_cfg.nil?
+					plugin_cfg = @master_config[file_name] = {}
+				end
+
+				command = "Plugin::#{file_name.classify}".constantize.new(self, plugin_cfg)
 
 				cmd_regs = command.get_command_registry if command.respond_to?(:get_command_registry)
 				cmd_regs.each{|k,v|
@@ -132,7 +143,7 @@ class CultomePlayer
 		rescue CultomePlayerException => ctmex
 			default_error_action( ctmex ) unless send_to_listeners('player_exception_throwed', ctmex, :__PLAYER_EXCEPTIONS__)
 		rescue Exception => ex
-			#puts ex.backtrace
+		puts ex.backtrace
 			default_error_action( ex ) unless send_to_listeners('exception_throwed', ctmex, :__EXCEPTIONS__)
 		end
 	end
@@ -156,6 +167,11 @@ class CultomePlayer
 		end
 		text
 	end
+	
+	# Persist the global configuration to the player's configuration file.
+	def save_configuration
+		File.open(CONFIG_FILE, 'w'){|f| YAML.dump(@master_config, f)}
+	end
 
 	private
 
@@ -164,7 +180,7 @@ class CultomePlayer
 	# @param ex [Exception] The exception throwed
 	def default_error_action(ex)
 		display ex.message
-		execute 'next' unless ex.message =~ /Invalid command/
+		execute('next') unless ex.message =~ /Invalid command/
 	end
 
 	# Create a context with a managed connection from the pool. The block passed will be

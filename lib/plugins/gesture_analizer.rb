@@ -7,8 +7,8 @@ module Plugin
 		# Initialize the queue used to track user events.
 		#
 		# @param player [CultomePlayer] An instance of the player to operate with.
-		def initialize(player)
-			super(player)
+		def initialize(player, config)
+			super(player, config)
 			@queue = EventQueue.new
 		end
 

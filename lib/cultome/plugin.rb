@@ -5,8 +5,9 @@ module Plugin
 		# Get and store a copy of the CultomePlayer instance to operate with.
 		#
 		# @param player [CultomePlayer] An instance of the player to operate with.
-		def initialize(player)
+		def initialize(player, config)
 			@p = player
+			@config = config
 		end
 
 		# A shortcut for the CultomePlayer#display method.

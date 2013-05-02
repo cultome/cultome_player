@@ -250,3 +250,4 @@ play
 * Leave JRuby and convert to pure Ruby
 * Improve the memory usage, it simply too high!
 * Change the underlying in.memory database for a real one, thinking on mongo
+* Updates to preserve db information
