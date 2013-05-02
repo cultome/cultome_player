@@ -26,11 +26,11 @@ module Plugin
 		# @param next_song [Song] The next song to be played
 		def calculate_songs_weight(song, next_song)
 			return -1 unless song.class == Song && next_song.class == Song
-			return 0 unless song_status.respond_to?(:[]) && !song_status["mp3.position.microseconds"].nil?
+			return 0 unless @p.song_status.respond_to?(:[]) && !@p.song_status["mp3.position.microseconds"].nil?
 
 			#puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.current_command }..."
 
-			progress_in_sec = song_status["mp3.position.microseconds"] / 1000000
+			progress_in_sec = @p.song_status["mp3.position.microseconds"] / 1000000
 			percentage = (progress_in_sec * 100) / song.duration
 
 			points = 0

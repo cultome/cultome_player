@@ -16,10 +16,6 @@ describe UserInput do
 
 	let(:u){ Test.new }
 
-	it 'Should return a valid aliases regex' do
-		u.valid_alias.should match(/([\w]+?\|?)+/)
-	end
-
 	it 'Should return a valid commands regex' do
 		u.valid_command.should match(/([\w]+?\|?)+/)
 	end

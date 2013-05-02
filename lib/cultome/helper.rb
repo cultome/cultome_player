@@ -1,8 +1,15 @@
 require 'active_support/inflector'
+require 'yaml'
 require 'mp3info'
 
 # Utility module with shared functions across the project.
 module Helper
+	CONFIG_FILE = "config.yaml"
+
+	# Return the path to the config file
+	def master_config
+		@master_config ||= YAML.load_file(CONFIG_FILE)
+	end
 
 	# Search and require the jar files required by the underlying music player.
 	#

@@ -45,3 +45,4 @@ def get_fake_player
 	fake_player.stub(:current_command){ {command: :next, params: []} }
 	fake_player
 end
+

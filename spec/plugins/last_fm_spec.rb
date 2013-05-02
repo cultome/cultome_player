@@ -4,7 +4,7 @@ require 'plugins/last_fm'
 
 describe Plugin::LastFm do
 
-	let(:f){ Plugin::LastFm.new(get_fake_player) }
+	let(:f){ Plugin::LastFm.new(get_fake_player, {}) }
 
 	it 'Should register to listen for "similar" command' do
 		f.get_command_registry.should include(:similar)

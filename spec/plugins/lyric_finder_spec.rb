@@ -4,7 +4,7 @@ require 'webmock/rspec'
 
 describe Plugin::LyricFinder do
 
-	let(:l){ Plugin::LyricFinder.new(get_fake_player) }
+	let(:l){ Plugin::LyricFinder.new(get_fake_player, {}) }
 
 	it 'Should register to listen for "lyric" command' do
 		l.get_command_registry.should include(:lyric)

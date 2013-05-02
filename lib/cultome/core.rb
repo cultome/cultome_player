@@ -6,7 +6,6 @@ require 'active_support'
 require 'active_support/inflector'
 require 'active_record'
 require 'logger'
-require 'yaml'
 
 # This class represents and holds the music player's state in one moment.
 # This means that plugins can ask about, for example, current song, focused list or connected
@@ -17,8 +16,6 @@ class CultomePlayer
 	include UserInput
 	include PlayerListener
 	include Helper
-
-	CONFIG_FILE = "config.yaml"
 
 	attr_accessor :playlist
 	attr_accessor :search
@@ -42,8 +39,7 @@ class CultomePlayer
 	attr_reader :current_command
 
 	def initialize
-		@master_config = YAML.load_file(CONFIG_FILE)
-		@config = @master_config["core"]
+		@config = master_config["core"]
 
 		@player = Player.new(self)
 		@search = []
@@ -74,9 +70,9 @@ class CultomePlayer
 				file_name = file.gsub('.rb', '')
 				require "plugins/#{file_name}"
 
-				plugin_cfg = @master_config[file_name]
+				plugin_cfg = master_config[file_name]
 				if plugin_cfg.nil?
-					plugin_cfg = @master_config[file_name] = {}
+					plugin_cfg = master_config[file_name] = {}
 				end
 
 				command = "Plugin::#{file_name.classify}".constantize.new(self, plugin_cfg)
@@ -135,6 +131,7 @@ class CultomePlayer
 				@last_cmds = cmds
 			end
 
+puts cmds.inspect
 			with_connection do
 				cmds.each do |cmd|
 					send_to_listeners(cmd[:command], cmd[:params])
@@ -170,7 +167,7 @@ class CultomePlayer
 	
 	# Persist the global configuration to the player's configuration file.
 	def save_configuration
-		File.open(CONFIG_FILE, 'w'){|f| YAML.dump(@master_config, f)}
+		File.open(CONFIG_FILE, 'w'){|f| YAML.dump(master_config, f)}
 	end
 
 	private

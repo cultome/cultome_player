@@ -3,7 +3,7 @@ require 'plugins/gesture_analizer'
 
 describe Plugin::GestureAnalizer do
 
-	let(:g){ Plugin::GestureAnalizer.new(nil) }
+	let(:g){ Plugin::GestureAnalizer.new(nil, {}) }
 
 	it 'Should register for all events' do
 		g.get_listener_registry.should include(:__ALL_VALIDS__)
