@@ -240,7 +240,6 @@ play
 * ASCII visualizations.
 * I want to implement __"Ey wife/son/friend! you got to listen this song!"__.
 * Add tags to the songs, for example 'party' or 'sadness'.
-* Make it work in Windows... because as I said before, this was not my initial intention.
 * Better help in-app. Something more like git or rails.
 * Last.fm scrobbler, altough normally when I hear music the wifi is never available =S
 
