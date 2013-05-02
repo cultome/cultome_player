@@ -250,3 +250,11 @@ play
 * Improve the memory usage, it simply too high!
 * Change the underlying in.memory database for a real one, thinking on mongo
 * Updates to preserve db information
+
+### Additional Information
+
+## jlGui BasicPlayer
+This component is what I use to play music and is included within the libraries of this project, dependencies included of course.
+
+[jlGui](http://www.javazoom.net/jlgui/developerguide.html)
+
