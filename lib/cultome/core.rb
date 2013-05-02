@@ -131,7 +131,6 @@ class CultomePlayer
 				@last_cmds = cmds
 			end
 
-puts cmds.inspect
 			with_connection do
 				cmds.each do |cmd|
 					send_to_listeners(cmd[:command], cmd[:params])
@@ -140,7 +139,7 @@ puts cmds.inspect
 		rescue CultomePlayerException => ctmex
 			default_error_action( ctmex ) unless send_to_listeners('player_exception_throwed', ctmex, :__PLAYER_EXCEPTIONS__)
 		rescue Exception => ex
-		puts ex.backtrace
+			puts ex.backtrace if ENV['environment'] == 'dev'
 			default_error_action( ex ) unless send_to_listeners('exception_throwed', ctmex, :__EXCEPTIONS__)
 		end
 	end

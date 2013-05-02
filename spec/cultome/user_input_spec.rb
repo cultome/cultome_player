@@ -29,16 +29,11 @@ describe UserInput do
 
 	it 'Should parse an user input into a commands list' do
 		u.parse('play something | search a:else').should eq([{
+			:command=>:play, 
+			:params=>[{:value=>"something", :type=>:literal}]
+		},{
 			:command=>:search, 
-			:params=>[
-				{:criteria=>:a, :value=>"else", :type=>:criteria},
-			   	{:type=>:command, 
-				:value=>{
-					:command=>:play, 
-					:piped=>true,
-					:params=>[{:value=>"something", :type=>:literal}]
-				}}
-			]
+			:params=>[{:criteria=>:a, :value=>"else", :type=>:criteria}]
 		}])
 	end
 

@@ -46,7 +46,7 @@ module Helper
 
 			return polish(info)
 		rescue
-			puts "The file '#{file_path}' could not be added"
+			display "The file '#{file_path}' could not be added"
 			return nil
 		end
 	end

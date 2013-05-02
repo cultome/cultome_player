@@ -25,16 +25,7 @@ module UserInput
 		prev_cmd = nil
 		cmds = input.split('|').collect{|cmd|
 			new_cmd = parse_command(cmd.strip)
-			if prev_cmd.nil?
-				prev_cmd = new_cmd
-			else
-				new_cmd[:params] << {type: :command, value: prev_cmd}
-				prev_cmd[:piped] = true
-				prev_cmd = new_cmd
-			end
 		}.compact
-
-		cmds.delete_if{|c| c[:piped] }
 
 		cmds # ver que hacer si hay nils
 	end
