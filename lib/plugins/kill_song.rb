@@ -25,7 +25,7 @@ module Plugin
 				execute('stop')
 
 				path = Shellwords.escape("#{song.drive.path}/#{song.relative_path}")
-				system("mv #{path} ~/tmp/#{rand()}.mp3")
+				system("rm #{path}")
 
 				if $?.exitstatus == 0
 					song.delete
