@@ -5,17 +5,6 @@ require 'cultome/exception'
 # The main function of this module is to transform user input into player's commands.
 module UserInput
 
-	# Create and return a valid aliases regex.
-	#
-	# @return [String] An or-regex with the valid aliases.
-	def valid_alias
-		if @valid_aliases.nil?
-			@valid_aliases = ALIAS.keys.join('|')
-		end
-
-		@valid_aliases
-	end
-
 	# Create and return a valid commands regex.
 	#
 	# @return [String] An or-regex with the valid commands.
@@ -77,10 +66,6 @@ module UserInput
 
 	private
 
-	ALIAS = {
-		exit: :quit,
-	}
-
 	VALID_CRITERIA_PREFIX = "[abt]"
 	BUBBLE_WORD = %w{=>}
 
@@ -89,7 +74,7 @@ module UserInput
 	# @param (see #parse)
 	# @return [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
 	def parse_command(input)
-		raise CultomePlayerException.new(:invalid_command, input) if input !~ /\A(#{valid_command}|#{valid_alias})[\s]*(.*)?\Z/
+		raise CultomePlayerException.new(:invalid_command, input) if input !~ /\A(#{valid_command})[\s]*(.*)?\Z/
 
 		cmd = $1.to_sym
 		# params = $2.split(' ').collect{|s| if s.blank? then nil else s end }
@@ -118,10 +103,6 @@ module UserInput
 		end
 
 		pretty_params = parse_params(params.compact)
-
-		unless ALIAS[cmd].nil?
-			cmd = ALIAS[cmd]
-		end
 
 		{command: cmd, params: pretty_params}
 	end

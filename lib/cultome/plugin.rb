@@ -26,7 +26,7 @@ module Plugin
 				return super unless @p.respond_to?(method_name)
 
 				self.class.class_eval do
-					define_method method_name do
+					define_method method_name do |param|
 						@p.send(method_name, param)
 					end
 				end

@@ -21,22 +21,38 @@ module Plugin
 		end
 
 		def alias(params=[])
-			puts "ALIAS: #{params.inspect}"
+			return nil if params.size != 2
+			return nil unless params.all?{|a| a[:type] == :literal || a[:type] == :unknown }
+
+			alias_name = params[0][:value]
+			alias_value = params[1][:value]
+
+			aliases[alias_name] = alias_value
 		end
 
 		private
-
-		ALIAS = {
-			'sa' => 'search @artist',
-			'n' => 'next'
-		}
 
 		# Invoked when a player exception is throwed
 		#
 		# @param ex [CultomePlayerException] The exception throwed
 		def player_exception_throwed(ex)
-			raise ex if ALIAS[ex.data].nil?
-			return execute ALIAS[ex.data]
+			# separamos el comando
+			split = ex.data.split(' ')
+			raise ex if split[0].nil? || aliases[split[0]].nil?
+
+			translated = aliases[split[0]]
+
+			if split.size > 1
+				1.upto(split.size - 1) do |c|
+					translated.gsub!(/\%#{c}/, split[c])
+				end
+			end
+
+			return execute translated
+		end
+
+		def aliases
+			@config["aliases"] ||= {"exit" => "quit"}
 		end
 	end
 end

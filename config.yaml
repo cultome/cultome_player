@@ -1,2 +1,13 @@
+---
 core:
   prompt: ! 'cultome> '
+basic_command_set: {}
+copy_to: {}
+last_fm: {}
+taste_analizer: {}
+kill_song: {}
+command_aliases:
+  aliases:
+    exit: quit
+gesture_analizer: {}
+lyric_finder: {}
