@@ -1,10 +1,64 @@
 ---
 core:
   prompt: ! 'cultome> '
-basic_command_set: {}
+basic_command_set:
+  seeker_step: 500
 copy_to: {}
-last_fm: {}
-taste_analizer: {}
+last_fm:
+  similar results_limit: 10
+taste_analizer:
+  genres compatibility:
+    ? - Rock
+      - Progressive Rock
+    : 0.9
+    ? - Rock
+      - Hard Rock
+    : 0.9
+    ? - Rock
+      - AlternRock
+    : 0.9
+    ? - Rock
+      - Metal
+    : 0.7
+    ? - Rock
+      - Heavy Metal
+    : 0.6
+    ? - Rock
+      - Pop
+    : 0.3
+    ? - Rock
+      - Hip-Hop
+    : 0.3
+    ? - Rock
+      - Alternative
+    : 0.2
+    ? - Pop
+      - BritPop
+    : 0.8
+    ? - Pop
+      - Dance
+    : 0.5
+    ? - Pop
+      - Club
+    : 0.5
+    ? - Pop
+      - Disco
+    : 0.4
+    ? - Pop
+      - Funk
+    : 0.2
+    ? - BritPop
+      - Dance
+    : 0.5
+    ? - BritPop
+      - Club
+    : 0.5
+    ? - BritPop
+      - Disco
+    : 0.4
+    ? - BritPop
+      - Funk
+    : 0.2
 kill_song: {}
 command_aliases:
   aliases:

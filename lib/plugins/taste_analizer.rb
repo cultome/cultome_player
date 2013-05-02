@@ -14,7 +14,8 @@ module Plugin
 
 		# When a callback is invoked in this listener, we give point to the last listened song.
 		def method_missing(method_name, *args)
-			calculate_songs_weight(@p.prev_song, @p.song) unless @p.prev_song.nil?
+			super unless get_listener_registry.include?(method_name)
+			calculate_songs_weight(prev_song, song) unless prev_song.nil?
 		end
 
 		private
@@ -25,16 +26,16 @@ module Plugin
 		# @param next_song [Song] The next song to be played
 		def calculate_songs_weight(song, next_song)
 			return -1 unless song.class == Song && next_song.class == Song
-			return 0 if song_status.empty?
+			return 0 unless song_status.respond_to?(:[]) && !song_status["mp3.position.microseconds"].nil?
 
-			#puts "Calificando cancion #{ song }, #{ next_song }, #{ song_status }, #{ current_command }..."
+			#puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.current_command }..."
 
 			progress_in_sec = song_status["mp3.position.microseconds"] / 1000000
 			percentage = (progress_in_sec * 100) / song.duration
 
 			points = 0
 
-			if current_command[:command] =~ /next/
+			if @p.current_command[:command] =~ /next/
 				Song.increment_counter(:points, song.id) if song == next_song
 				points += 1
 			end
@@ -60,7 +61,7 @@ module Plugin
 				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 
 				points += 1
-			elsif current_command[:command] =~ /prev/
+			elsif @p.current_command[:command] =~ /prev/
 				# le damos puntos a la proxima rola 
 				# porque la queremos volver a escuchar
 				Song.increment_counter :points, song.id
@@ -90,6 +91,11 @@ module Plugin
 			weight = product.inject(0){|sum, comb| sum += compare_genres(*comb)}
 			return weight / product.size
 		end
+		
+		# Lazy initializator for 'genres compatibility' configuration
+		def genre_compatibility
+			@config["genres compatibility"] ||= {}
+		end
 
 		# Calculate how much a genre is similar to other genre.
 		#
@@ -99,32 +105,13 @@ module Plugin
 		def compare_genres(g1, g2)
 			#puts "Comparando generos: #{g1.name} == #{g2.name}"
 			return 1.0 if g1.name == g2.name
-
-			case g1.name
-			when 'Rock'
-				case g2.name
-				when 'Progressive Rock' then return 0.9
-				when 'Hard Rock' then return 0.9
-				when 'AlternRock' then return 0.9
-				when 'Metal' then return 0.7
-				when 'Heavy Metal' then return 0.6
-				when 'Pop' then return 0.3
-				when 'Hip-Hop' then return 0.3
-				when 'Alternative' then return 0.2
-				end
-			when /Pop|BritPop/
-				case g2.name
-				when 'BritPop' then return 0.8
-				when 'Pop' then return 0.8
-				when 'Dance' then return 0.5
-				when 'Club' then return 0.5
-				when 'Disco' then return 0.4
-				when 'Funck' then return 0.2
-				end
-			end
-
-			return 0.0
+			similar = genre_compatibility[[g1.name, g2.name]]
+			#puts "1) G1: #{g1.name} G2: #{g2.name} => #{similar}"
+			return similar unless similar.nil?
+			#puts "2) G1: #{g2.name} G2: #{g1.name} => #{genre_compatibility[[g2.name, g1.name]]}"
+			return genre_compatibility[[g2.name, g1.name]] || 0.0
 		end
+
 		#Rock
 		#Pop
 		#BritPop

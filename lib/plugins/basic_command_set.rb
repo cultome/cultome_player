@@ -7,8 +7,6 @@ module Plugin
 	class BasicCommandSet < PluginBase
 		include UserInput
 
-		FAST_FORWARD_STEP = 500
-
 		# Get and store a copy of the CultomePlayer instance to operate with.
 		# Initialize two utility registers in Album and Artist models for unknown album or artist.
 		#
@@ -261,13 +259,13 @@ module Plugin
 
 		# Fast forward to the current song.
 		def ff(params=[])
-			next_pos = song_status["mp3.position.byte"] + (song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+			next_pos = song_status["mp3.position.byte"] + (song_status["mp3.frame.size.bytes"] * seeker_step)
 			player.seek(next_pos)
 		end
 
 		# Fast backward to the current song.
 		def fb(params=[])
-			next_pos = song_status["mp3.position.byte"] - (song_status["mp3.frame.size.bytes"] * FAST_FORWARD_STEP)
+			next_pos = song_status["mp3.position.byte"] - (song_status["mp3.frame.size.bytes"] * seeker_step)
 			player.seek(next_pos)
 		end
 
@@ -294,6 +292,10 @@ module Plugin
 		end
 
 		private
+
+		def seeker_step
+			@config["seeker_step"] ||= 500
+		end
 
 		# Given the parameters, generate a playlist for them.
 		#
@@ -370,7 +372,7 @@ module Plugin
 				return self.next
 			end
 
-			prev_song = song
+			@p.prev_song = song
 			@p.song = queue.shift
 
 			if song.nil?

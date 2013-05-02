@@ -20,6 +20,9 @@ module Plugin
 			}
 		end
 
+		# Create a persistent alias.
+		#
+		# @param params [List<Hash>] With parsed literals information.
 		def alias(params=[])
 			return nil if params.size != 2
 			return nil unless params.all?{|a| a[:type] == :literal || a[:type] == :unknown }

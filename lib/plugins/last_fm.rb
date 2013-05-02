@@ -10,7 +10,6 @@ module Plugin
 
 		LAST_FM_WS_ENDPOINT = 'http://ws.audioscrobbler.com/2.0/'
 		LAST_FM_API_KEY = 'bfc44b35e39dc6e8df68594a55a442c5'
-		SIMILARS_LIMIT = 10
 		GET_SIMILAR_TRACKS_METHOD = 'track.getSimilar'
 		GET_SIMILAR_ARTISTS_METHOD = 'artist.getSimilar'
 
@@ -99,6 +98,11 @@ module Plugin
 
 		private
 
+		# Lazy initializator for the 'similar results limit' configuration
+		def similar_results_limit
+			@config["similar results limit"] ||= 10
+		end
+
 		# Check if previously the similars has been inserted.
 		#
 		# @param (see #define_search)
@@ -174,7 +178,7 @@ module Plugin
 		def get_similars(search_info)
 			query_string = search_info.inject(""){|sum,map| sum += "#{map[0]}=#{CGI::escape(map[1])}&" }
 
-			url = "#{LAST_FM_WS_ENDPOINT}?api_key=#{LAST_FM_API_KEY}&limit=#{SIMILARS_LIMIT}&format=json&#{query_string}"
+			url = "#{LAST_FM_WS_ENDPOINT}?api_key=#{LAST_FM_API_KEY}&limit=#{similar_results_limit}&format=json&#{query_string}"
 
 			json_string = Net::HTTP::get_response(URI(url)).body
 
