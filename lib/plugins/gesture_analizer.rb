@@ -24,7 +24,7 @@ module Plugin
 
 		# When a callback is invoked in this listener, all we do is add that command into the queue.
 		def method_missing(method_name, *args)
-			add_command({command: method_name, params: args})
+			add_command({command: method_name, params: args.flatten})
 		end
 
 		# Add a command to the events' queue, then analize the queue looking for patterns.
