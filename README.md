@@ -253,7 +253,7 @@ play
 
 ### Additional Information
 
-## jlGui BasicPlayer
+#### jlGui BasicPlayer
 This component is what I use to play music and is included within the libraries of this project, dependencies included of course.
 
 [jlGui](http://www.javazoom.net/jlgui/developerguide.html)
