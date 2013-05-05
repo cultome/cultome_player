@@ -15,7 +15,7 @@ module Plugin
 		# When a callback is invoked in this listener, we give point to the last listened song.
 		def method_missing(method_name, *args)
 			super unless get_listener_registry.include?(method_name)
-			calculate_songs_weight(@p.prev_song, @p.song) unless @p.prev_song.nil?
+			calculate_songs_weight(@cultome.prev_song, @cultome.song) unless @cultome.prev_song.nil?
 		end
 
 		private
@@ -26,16 +26,16 @@ module Plugin
 		# @param next_song [Song] The next song to be played
 		def calculate_songs_weight(song, next_song)
 			return -1 unless song.class == Song && next_song.class == Song
-			return 0 unless @p.song_status.respond_to?(:[]) && !@p.song_status["mp3.position.microseconds"].nil?
+			return 0 unless @cultome.song_status.respond_to?(:[]) && !@cultome.song_status["mp3.position.microseconds"].nil?
 
-			#puts "Calificando cancion #{ song }, #{ next_song }, #{ @p.current_command }..."
+			#puts "Calificando cancion #{ song }, #{ next_song }, #{ @cultome.current_command }..."
 
-			progress_in_sec = @p.song_status["mp3.position.microseconds"] / 1000000
+			progress_in_sec = @cultome.song_status["mp3.position.microseconds"] / 1000000
 			percentage = (progress_in_sec * 100) / song.duration
 
 			points = 0
 
-			if @p.current_command[:command] =~ /next/
+			if @cultome.current_command[:command] =~ /next/
 				Song.increment_counter(:points, song.id) if song == next_song
 				points += 1
 			end
@@ -61,7 +61,7 @@ module Plugin
 				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 
 				points += 1
-			elsif @p.current_command[:command] =~ /prev/
+			elsif @cultome.current_command[:command] =~ /prev/
 				# le damos puntos a la proxima rola 
 				# porque la queremos volver a escuchar
 				Song.increment_counter :points, song.id

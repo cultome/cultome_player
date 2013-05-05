@@ -26,10 +26,10 @@ module Plugin
 		#
 		# @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
 		def similar(params=[])
-			song_name = @p.song.name
-			artist_name = @p.artist.name
-			song_id = @p.song.id
-			artist_id = @p.artist.id
+			song_name = @cultome.song.name
+			artist_name = @cultome.artist.name
+			song_id = @cultome.song.id
+			artist_id = @cultome.artist.id
 
 			search_info = define_search(params, song_name, artist_name)
 
@@ -254,7 +254,7 @@ module Plugin
 			if tracks.empty? && tracks_in_library.empty?
 				display("No similarities found for #{song}") 
 			else
-				@p.focus = tracks_in_library
+				@cultome.focus = tracks_in_library
 			end
 		end
 

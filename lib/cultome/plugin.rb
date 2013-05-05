@@ -6,7 +6,7 @@ module Plugin
 		#
 		# @param player [CultomePlayer] An instance of the player to operate with.
 		def initialize(player, config)
-			@p = player
+			@cultome = player
 			@config = config
 		end
 
@@ -16,7 +16,7 @@ module Plugin
 		# @param continuos [Boolean] If false a new line character is appended at the end of message.
 		# @return [String] The message printed.
 		def display(msg, continuos=false)
-			@p.display(msg, continuos)
+			@cultome.display(msg, continuos)
 		end
 	end
 end

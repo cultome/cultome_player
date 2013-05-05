@@ -51,7 +51,7 @@ module Plugin
 				end
 			end
 
-			return @p.execute translated
+			return @cultome.execute translated
 		end
 
 		def aliases

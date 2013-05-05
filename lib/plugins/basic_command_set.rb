@@ -50,12 +50,12 @@ module Plugin
 			pl = generate_playlist(params)
 			# si se encolan
 			unless pl.blank?
-				@p.playlist = @p.focus = pl
-				@p.play_index = -1
-				@p.queue = []
+				@cultome.playlist = @cultome.focus = pl
+				@cultome.play_index = -1
+				@cultome.queue = []
 			end
 
-			@p.history.push @p.song unless @p.song.nil?
+			@cultome.history.push @cultome.song unless @cultome.song.nil?
 			do_play
 		end
 
@@ -65,7 +65,7 @@ module Plugin
 		# @return [List<Song>] The new playlist.
 		def enqueue(params=[])
 			pl = generate_playlist(params)
-			@p.playlist = @p.focus = @p.playlist + pl 
+			@cultome.playlist = @cultome.focus = @cultome.playlist + pl 
 		end
 
 		# Search for songs in the connected drives.
@@ -92,8 +92,8 @@ module Plugin
 					elsif param[:criteria] == :t then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
 				when :object
 					case param[:value]
-					when :artist then query[:and] << {id: 12, condition: 'artists.id = ?', value: @p.artist.id}
-					when :album then query[:and] << {id: 13, condition: 'albums.id = ?', value: @p.album.id}
+					when :artist then query[:and] << {id: 12, condition: 'artists.id = ?', value: @cultome.artist.id}
+					when :album then query[:and] << {id: 13, condition: 'albums.id = ?', value: @cultome.album.id}
 					end
 				end
 			end
@@ -102,7 +102,7 @@ module Plugin
 			if results.empty?
 				display("No results found!")
 			else
-				display(@p.search = @p.focus = results)
+				display(@cultome.search = @cultome.focus = results)
 			end
 
 			return results
@@ -114,30 +114,30 @@ module Plugin
 		# @return [String] The message displayed.
 		def show(params=[])
 			if params.blank?
-				display @p.song
+				display @cultome.song
 				show_progress 
 			else
 				params.each do |param|
 					case param[:type]
 					when :object
 						case param[:value]
-						when :library then @p.focus = obj = find_by_query
-						when :artists then @p.focus = obj = Artist.all
-						when :albums then @p.focus = obj = Album.all
-						when :genres then @p.focus = obj = Genre.all
-						when /playlist|search|history/ then @p.focus = obj = @p.instance_variable_get("@#{param[:value]}")
-						when /artist|album|drives|queue|focus/ then obj = @p.instance_variable_get("@#{param[:value]}")
-						when :recently_added then @p.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
-						when :genre then @p.focus = obj = Song.connected.joins(:genres).where('genres.name in (?)', @p.song.genres.collect{|g| g.name }).to_a
+						when :library then @cultome.focus = obj = find_by_query
+						when :artists then @cultome.focus = obj = Artist.all
+						when :albums then @cultome.focus = obj = Album.all
+						when :genres then @cultome.focus = obj = Genre.all
+						when /playlist|search|history/ then @cultome.focus = obj = @cultome.instance_variable_get("@#{param[:value]}")
+						when /artist|album|drives|queue|focus/ then obj = @cultome.instance_variable_get("@#{param[:value]}")
+						when :recently_added then @cultome.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
+						when :genre then @cultome.focus = obj = Song.connected.joins(:genres).where('genres.name in (?)', @cultome.song.genres.collect{|g| g.name }).to_a
 						else
 							# intentamos matchear las unidades primero
 							drive = drives.find{|d| d.name.to_sym == param[:value]}
 							unless drive.nil?
-								@p.focus = obj = Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
+								@cultome.focus = obj = Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
 							end
 						end
 					else
-						obj = @p.song
+						obj = @cultome.song
 					end # case
 					display(obj)
 				end # do
@@ -146,26 +146,26 @@ module Plugin
 
 		# Pause the current playback if playing and resume it if paused.
 		def pause(params=[])
-			@p.status =~ /PLAYING|RESUMED/ ? @p.player.pause : @p.player.resume
+			@cultome.status =~ /PLAYING|RESUMED/ ? @cultome.player.pause : @cultome.player.resume
 		end
 
 		# Stop the current playback.
 		def stop(params=[])
-			@p.player.stop
+			@cultome.player.stop
 		end
 
 		# Select the next song to be played and plays it.
 		#
 		# @return (see #do_play)
 		def next(params=[])
-			if @p.play_index + 1 < @p.playlist.size
-				@p.history.push @p.song unless @p.song.nil?
+			if @cultome.play_index + 1 < @cultome.playlist.size
+				@cultome.history.push @cultome.song unless @cultome.song.nil?
 
-				if @p.is_shuffling
-					@p.queue.push @p.playlist[rand(@p.playlist.size)]
+				if @cultome.is_shuffling
+					@cultome.queue.push @cultome.playlist[rand(@cultome.playlist.size)]
 				else
-					@p.play_index += 1
-					@p.queue.push @p.playlist[@p.play_index]
+					@cultome.play_index += 1
+					@cultome.queue.push @cultome.playlist[@cultome.play_index]
 				end
 
 				do_play
@@ -178,11 +178,11 @@ module Plugin
 		#
 		# @return (see #do_play)
 		def prev(params=[])
-			if @p.history.blank?
+			if @cultome.history.blank?
 				display "There is no files in history"
 			else
-				@p.queue.unshift @p.history.pop
-				@p.play_index -= 1 if @p.play_index > 0
+				@cultome.queue.unshift @cultome.history.pop
+				@cultome.play_index -= 1 if @cultome.play_index > 0
 
 				do_play
 			end
@@ -252,21 +252,21 @@ module Plugin
 
 		# Stop the player and set the @running flag to false.
 		def quit(params=[])
-			@p.running = false
-			@p.player.stop
-			@p.save_configuration
+			@cultome.running = false
+			@cultome.player.stop
+			@cultome.save_configuration
 		end
 
 		# Fast forward to the current song.
 		def ff(params=[])
-			next_pos = @p.song_status["mp3.position.byte"] + (@p.song_status["mp3.frame.size.bytes"] * seeker_step)
-			@p.player.seek(next_pos)
+			next_pos = @cultome.song_status["mp3.position.byte"] + (@cultome.song_status["mp3.frame.size.bytes"] * seeker_step)
+			@cultome.player.seek(next_pos)
 		end
 
 		# Fast backward to the current song.
 		def fb(params=[])
-			next_pos = @p.song_status["mp3.position.byte"] - (@p.song_status["mp3.frame.size.bytes"] * seeker_step)
-			@p.player.seek(next_pos)
+			next_pos = @cultome.song_status["mp3.position.byte"] - (@cultome.song_status["mp3.frame.size.bytes"] * seeker_step)
+			@cultome.player.seek(next_pos)
 		end
 
 		# Check and change the shuffle setting. Without parameters just print the current state of shuffle. 
@@ -278,17 +278,17 @@ module Plugin
 		def shuffle(params=[])
 			unless params.empty?
 				params.each do |param|
-					@p.is_shuffling = is_true_value param[:value]
+					@cultome.is_shuffling = is_true_value param[:value]
 				end
 			end
-			display(@p.is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
+			display(@cultome.is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
 
-			return @p.is_shuffling
+			return @cultome.is_shuffling
 		end
 
 		# Begin the current song from the begining.
 		def repeat(params=[])
-			@p.player.seek(0)
+			@cultome.player.seek(0)
 		end
 
 		private
@@ -304,39 +304,39 @@ module Plugin
 		def generate_playlist(params)
 			search_criteria = []
 			new_playlist = []
-			@p.is_playing_library = false
+			@cultome.is_playing_library = false
 
-			if params.empty? && @p.playlist.blank?
+			if params.empty? && @cultome.playlist.blank?
 				new_playlist = find_by_query
-				@p.is_playing_library = true
+				@cultome.is_playing_library = true
 
 				if new_playlist.blank?
 					display "No music connected yet. Try 'connect /home/csoria/music => music_library' first!"
 					return nil
 				end
 
-				@p.artist = new_playlist[0].artist unless new_playlist[0].blank?
-				@p.album = new_playlist[0].album unless new_playlist[0].blank?
+				@cultome.artist = new_playlist[0].artist unless new_playlist[0].blank?
+				@cultome.album = new_playlist[0].album unless new_playlist[0].blank?
 			else
 				params.each do |param|
 					case param[:type]
 					when /literal|criteria/ then search_criteria << param
 					when :number
-						if @p.focus[param[:value].to_i - 1].nil?
-							@p.queue.push @p.playlist[param[:value].to_i - 1]
+						if @cultome.focus[param[:value].to_i - 1].nil?
+							@cultome.queue.push @cultome.playlist[param[:value].to_i - 1]
 						else
-							@p.queue.push @p.focus[param[:value].to_i - 1]
+							@cultome.queue.push @cultome.focus[param[:value].to_i - 1]
 						end
 					when :object
 						case param[:value]
 						when :library 
 							new_playlist = find_by_query
-							@p.is_playing_library = true
-						when :playlist then new_playlist = @p.playlist
-						when :search then new_playlist += @p.search
-						when :history then new_playlist += @p.history
-						when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @p.artist.name }%"}], and: []})
-						when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @p.album.name }%"}], and: []})
+							@cultome.is_playing_library = true
+						when :playlist then new_playlist = @cultome.playlist
+						when :search then new_playlist += @cultome.search
+						when :history then new_playlist += @cultome.history
+						when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ @cultome.artist.name }%"}], and: []})
+						when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ @cultome.album.name }%"}], and: []})
 
 							# criterios de busqueda avanzados
 						when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'songs.created_at > ?', value: Song.maximum('created_at') - (60*60*24)}], and: []})
@@ -368,54 +368,54 @@ module Plugin
 		#
 		# @return [Song] The new song playing.
 		def do_play
-			if @p.queue.blank?
+			if @cultome.queue.blank?
 				return self.next
 			end
 
-			@p.prev_song = @p.song
-			@p.song = @p.queue.shift
+			@cultome.prev_song = @cultome.song
+			@cultome.song = @cultome.queue.shift
 
-			if @p.song.nil?
+			if @cultome.song.nil?
 				display 'There is no song to play' 
 				return nil
 			end
 
-			if @p.song.class == Artist
-				@p.artist = @p.song
+			if @cultome.song.class == Artist
+				@cultome.artist = @cultome.song
 				return play([{type: :object, value: :artist}])
-			elsif @p.song.class == Album
-				@p.album = @p.song
+			elsif @cultome.song.class == Album
+				@cultome.album = @cultome.song
 				return play([{type: :object, value: :album}])
-			elsif @p.song.class == Genre
-				return play([{type: :object, value: @p.song.name.gsub(' ', '_').to_sym}])
+			elsif @cultome.song.class == Genre
+				return play([{type: :object, value: @cultome.song.name.gsub(' ', '_').to_sym}])
 			end
 
-			@p.album = @p.song.album 
-			@p.artist = @p.song.artist
+			@cultome.album = @cultome.song.album 
+			@cultome.artist = @cultome.song.artist
 
 			begin
-				@p.player.play(@p.song.path)
+				@cultome.player.play(@cultome.song.path)
 			rescue Exception => e
 				display("Error: #{e.message}")
-				return @p.execute('next')
+				return @cultome.execute('next')
 			end
 
 			# agregamos al contador de reproducciones
-			Song.increment_counter :plays, @p.song.id
-			Song.update(@p.song.id, last_played_at: Time.now)
+			Song.increment_counter :plays, @cultome.song.id
+			Song.update(@cultome.song.id, last_played_at: Time.now)
 
-			display @p.song
+			display @cultome.song
 
-			@p.song
+			@cultome.song
 		end
 
 		# Show an ASCII bar with the time progress of the current song.
 		#
 		# @return [String] An ASCII bar with the time progress of the current song.
 		def show_progress
-			actual = @p.song_status["mp3.position.microseconds"] / 1000000
-			percentage = ((actual * 100) / @p.song.duration) / 10
-			display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(@p.song.duration)}"
+			actual = @cultome.song_status["mp3.position.microseconds"] / 1000000
+			percentage = ((actual * 100) / @cultome.song.duration) / 10
+			display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(@cultome.song.duration)}"
 		end
 
 		# Retrive songs from connected drives with the given conditions.
@@ -490,7 +490,7 @@ module Plugin
 		end
 
 		def drives
-			@p.drives ||= Drive.all.to_a
+			@cultome.drives ||= Drive.all.to_a
 		end
 	end
 end

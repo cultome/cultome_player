@@ -43,7 +43,7 @@ module Plugin
 		# @param object [String] the name of the player's object.
 		# @return [List<String>, nil] The files path list or nil if problem.
 		def get_file_list(object)
-			list = @p.instance_variable_get("@#{object}")
+			list = @cultome.instance_variable_get("@#{object}")
 			return [list.path] if list.class == Song
 			return nil if list.empty?
 
