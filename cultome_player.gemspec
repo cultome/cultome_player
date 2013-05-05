@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
 	s.name = "cultome_player"
-	s.version = "0.2.1"
-	s.date        = '2013-04-29'
+	s.version = "0.2.2"
+	s.date        = '2013-05-04'
 	s.summary     = "CulToMe Player"
 	s.description = "A console music library explorer and player"
 	s.authors     = ["Carlos Soria"]
