@@ -15,7 +15,7 @@ module Plugin
 		# When a callback is invoked in this listener, we give point to the last listened song.
 		def method_missing(method_name, *args)
 			super unless get_listener_registry.include?(method_name)
-			calculate_songs_weight(prev_song, song) unless prev_song.nil?
+			calculate_songs_weight(@p.prev_song, @p.song) unless @p.prev_song.nil?
 		end
 
 		private

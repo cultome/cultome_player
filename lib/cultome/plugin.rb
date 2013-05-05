@@ -18,34 +18,5 @@ module Plugin
 		def display(msg, continuos=false)
 			@p.display(msg, continuos)
 		end
-
-		def method_missing(method_name, *args)
-			if @p.instance_variables.grep(/@#{method_name}/).empty?
-				# podria ser un metodo...
-				# si no lo es, tira una exception
-				return super unless @p.respond_to?(method_name)
-
-				self.class.class_eval do
-					define_method method_name do |param|
-						@p.send(method_name, param)
-					end
-				end
-
-				return send(method_name, *args)
-			else
-				# es una variable
-				self.class.class_eval do
-					define_method method_name do
-						@p.instance_variable_get("@#{method_name}")
-					end
-				end
-
-				return @p.instance_variable_get("@#{method_name}")
-			end
-		end
-
-		def respond_to?(method)
-			@p.respond_to?( method ) || super
-		end
 	end
 end

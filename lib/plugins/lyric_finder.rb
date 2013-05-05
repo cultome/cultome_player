@@ -19,8 +19,8 @@ module Plugin
 
 		# Search and display the lyrics for the current song
 		def lyric(params=[])
-			song_name = song.name
-			artist_name = artist.name
+			song_name = @p.song.name
+			artist_name = @p.artist.name
 
 			display("Finding lyric for #{song_name}...")
 

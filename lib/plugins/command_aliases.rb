@@ -51,7 +51,7 @@ module Plugin
 				end
 			end
 
-			return execute translated
+			return @p.execute translated
 		end
 
 		def aliases
