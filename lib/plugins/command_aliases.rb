@@ -43,7 +43,7 @@ module Plugin
 			split = ex.data.split(' ')
 			raise ex if split[0].nil? || aliases[split[0]].nil?
 
-			translated = aliases[split[0]]
+			translated = aliases[split[0]].clone
 
 			if split.size > 1
 				1.upto(split.size - 1) do |c|

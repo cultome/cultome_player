@@ -23,9 +23,23 @@ module UserInput
 	# @return [List<Hash>] The hashes contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
 	def parse(input)
 		prev_cmd = nil
-		cmds = input.split('|').collect{|cmd|
-			new_cmd = parse_command(cmd.strip)
-		}.compact
+		if input =~ /(["'].+?\|.+?["'])/
+			# pipe dentro de comillas
+			begin
+				piped = $1
+				escaped = piped.gsub('|', '__PIPE__')
+				input.gsub!(piped, escaped) =~ /(["'].+?\|.+?["'])/
+			end while !$1.nil?
+
+			cmds = input.split('|').collect{|cmd|
+				parse_command(cmd.strip.gsub('__PIPE__', '|'))
+			}.compact
+		else
+			# pipe simple o no pipe
+			cmds = input.split('|').collect{|cmd|
+				parse_command(cmd.strip)
+			}.compact
+		end
 
 		cmds # ver que hacer si hay nils
 	end

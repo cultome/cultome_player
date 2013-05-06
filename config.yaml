@@ -64,5 +64,6 @@ kill_song: {}
 command_aliases:
   aliases:
     exit: quit
+    sap: search %1 | play 1
 gesture_analizer: {}
 lyric_finder: {}

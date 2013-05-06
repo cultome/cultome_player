@@ -1,11 +1,12 @@
 require 'spec_helper'
 require 'cultome/user_input'
+require 'cultome/helper'
 
 class Test
 	include UserInput
 
 	def initialize
-		@command_registry = [ :prev, :play, :pause, :search ]
+		@command_registry = [ :prev, :play, :pause, :search, :alias]
 	end
 
 	def display(msg)
@@ -97,5 +98,13 @@ describe UserInput do
 			{value: '0', type: :unknown},
 			{value: '8:qwerty', type: :unknown},
 		])
+	end
+
+	it 'Should parse macros with pipes inclosed in " or \'' do
+		u.parse('alias space => "search space | play 1"').should eq([{
+			:command=>:alias, 
+			:params=>[{:value=>"space", :type=>:literal},
+					  {:value=>"search space | play 1", :type=>:unknown}]
+		}])
 	end
 end
