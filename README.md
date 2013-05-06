@@ -229,7 +229,7 @@ play
 * The code were reorganized to be more API-oriented, even when this was not the mainly intention of this project, but can be uselful for others to use it this way.
 * The some commands were extracted from the core, like help and kill.
 * The command 'copy <object> <destiny_path>' were added to copy all the songs in the objet to a directory in the filesystem.
-* The option 'search @<artist|album>' was implemented to facilitate the __'that album rocks! lets hear it!'__.
+* The option 'search @\<artist|album\>' was implemented to facilitate the __'that album rocks! lets hear it!'__.
 * The player now emit exception-thrown events, a general exception and a player's exception.
 * The aliases/shortcuts/macros plugin is in place. With this you can translate user input into commands, for example type 'sa' and the players tranform it to 'search @artist'.
 * Changes in plugin structure. Not the final version but a step ahead for building a better plugin model.
