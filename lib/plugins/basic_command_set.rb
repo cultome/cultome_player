@@ -122,9 +122,9 @@ module Plugin
 					when :object
 						case param[:value]
 						when :library then @cultome.focus = obj = find_by_query
-						when :artists then @cultome.focus = obj = Artist.all
-						when :albums then @cultome.focus = obj = Album.all
-						when :genres then @cultome.focus = obj = Genre.all
+						when :artists then @cultome.focus = obj = Artist.order(:name).all
+						when :albums then @cultome.focus = obj = Album.order(:name).all
+						when :genres then @cultome.focus = obj = Genre.order(:name).all
 						when /playlist|search|history/ then @cultome.focus = obj = @cultome.instance_variable_get("@#{param[:value]}")
 						when /artist|album|drives|queue|focus/ then obj = @cultome.instance_variable_get("@#{param[:value]}")
 						when :recently_added then @cultome.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
