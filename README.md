@@ -22,7 +22,7 @@ Generate a playlist with all the songs you have heard in this session.
 ```ruby
 play a:gorillaz b:demon
 ```
-Generate a playlist with songs whose from albums that contains the string 'demon' in their name and their artist's name contains the string 'gorillaz'
+Generate a playlist with songs from albums that contains the string 'demon' in their name and their artist's name contains the string 'gorillaz'
 
 ```ruby
 search rose
