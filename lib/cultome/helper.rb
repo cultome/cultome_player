@@ -119,7 +119,7 @@ end
 class Array
 	def to_s
 		idx = 0
-		self.collect{|e| "#{idx += 1} #{e}" }.join("\n")
+		self.collect{|e| "#{( idx += 1 ).to_s.rjust(4)} #{e}" }.join("\n")
 	end
 end
 
