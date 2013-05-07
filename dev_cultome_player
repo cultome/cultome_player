@@ -1,4 +1,0 @@
-#!/bin/bash
-
-export environment=dev
-jruby -Ilib bin/cultome_player
