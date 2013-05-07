@@ -21,17 +21,19 @@ end
 ENV['db_adapter'] = 'sqlite3'
 
 def get_fake_player
-	fake_player = double("cultome_player")
 	fake_song = double("song")
+	fake_song.stub(:name).and_return("Traffic Light", "Great Dj", "Up and Down")
+	fake_song.stub(:id).and_return(1067, 1066, 1086)
+	fake_song.stub(:path).and_return("spec/data/to_send/music.mp3")
+
+	fake_player = double("cultome_player")
 	fake_prev_song = double("prev_song")
 	fake_artist = double("artist")
 
 
 	fake_prev_song.stub(:name).and_return("Great Dj", "Up and Down", "Traffic Light")
-	fake_song.stub(:name).and_return("Traffic Light", "Great Dj", "Up and Down")
 	fake_artist.stub(:name).and_return("The Ting Tings", "The Ting Tings", "Vengaboys")
 
-	fake_song.stub(:id).and_return(1067, 1066, 1086)
 	fake_artist.stub(:id).and_return(160, 160, 138)
 
 	fake_player.stub(:song){ fake_song }
