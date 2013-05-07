@@ -158,11 +158,19 @@ play 151
 We get a playlist with all the songs of 'Ke$ha'. Similar behavior if we have had a albums list.
 
 #### Path
-A special parameter type which is used basicly by the 'connect' command. Is an absolute path inside the filesystem. As with literals if the path has any spaces in it, is required to be wrapped inside " or '. In this moment there is no route expansion, so path like ~/music are not valids.
+Is an absolute path inside the filesystem. As with literals if the path has any spaces in it, is required to be wrapped inside " or '. In this moment there is no route expansion, so path like ~/music are not valids.
 
 ```ruby
 /home/usuario/music
 ```
+
+#### IP
+A valid IP4 address.
+
+```ruby
+192.168.0.1
+```
+
 
 ### Commands
 The commands are very rustic. Basicly consist in a command name and a list of parameters.

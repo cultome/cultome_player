@@ -119,10 +119,11 @@ module UserInput
 	def parse_params(params)
 		params.collect{|param|
 			case param
-			when /\A[0-9]+\Z/ then {value: param, type: param.to_i > 0 ? :number : :unknown}
+			when /\A[0-9]+\Z/ then {value: param.to_i, type: param.to_i > 0 ? :number : :unknown}
 			when /\A([a-zA-Z]:[\/\\]|\/)(.+?)+\Z/ then {value: param.gsub(/(\/|\\)\Z/, ''), type: :path}
 			when /\A(#{VALID_CRITERIA_PREFIX}):([\w ]+)\Z/ then {criteria: $1.to_sym, value: $2, type: :criteria}
 			when /\A@([\w]+)\Z/ then {value: $1.to_sym, type: :object}
+			when /\A[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\Z/ then {value: param, type: :ip}
 			when /\A[\w\d ]+\Z/ then {value: param, type: :literal}
 			when /\A#{BUBBLE_WORD.join('|')}\Z/ then nil
 			else {value: param, type: :unknown}
