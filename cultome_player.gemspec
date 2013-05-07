@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 	s.add_runtime_dependency "rb-readline", [">= 0.4.2"]
 	s.add_runtime_dependency "htmlentities", [">= 4.3.1"]
 	s.add_runtime_dependency "json", [">= 1.7.7"]
+	s.add_runtime_dependency "share_this", [">= 0.1.0"]
 
 	s.executables << 'cultome_player'
 end

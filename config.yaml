@@ -67,3 +67,4 @@ command_aliases:
     sap: search %1 | play 1
 gesture_analizer: {}
 lyric_finder: {}
+share_it: {}
