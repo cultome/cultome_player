@@ -5,10 +5,9 @@ basic_command_set:
   seeker_step: 500
 copy_to: {}
 last_fm:
-  similar results_limit: 10
-  similar results limit: 10
+  similar_results_limit: 10
 taste_analizer:
-  genres compatibility:
+  genres_compatibility:
     ? - Rock
       - Progressive Rock
     : 0.9

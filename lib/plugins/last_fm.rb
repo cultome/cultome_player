@@ -100,7 +100,7 @@ module Plugin
 
 		# Lazy initializator for the 'similar results limit' configuration
 		def similar_results_limit
-			@config["similar results limit"] ||= 10
+			@config["similar_results_limit"] ||= 10
 		end
 
 		# Check if previously the similars has been inserted.

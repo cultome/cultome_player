@@ -94,7 +94,7 @@ module Plugin
 		
 		# Lazy initializator for 'genres compatibility' configuration
 		def genre_compatibility
-			@config["genres compatibility"] ||= {}
+			@config["genres_compatibility"] ||= {}
 		end
 
 		# Calculate how much a genre is similar to other genre.
