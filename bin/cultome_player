@@ -2,7 +2,8 @@
 
 system("clear")
 
-puts "Starting Cultome Player!" # aqui poner una frase humorisitca aleatoria
+require 'cultome/version'
+puts "Starting Cultome Player v#{CultomePlayer::VERSION}" # aqui poner una frase humorisitca aleatoria
 
 require 'cultome_player'
 require 'cultome/core'

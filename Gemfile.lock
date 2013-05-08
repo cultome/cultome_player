@@ -1,0 +1,53 @@
+PATH
+  remote: .
+  specs:
+    cultome_player (0.2.3)
+      activerecord (>= 3.2.13)
+      activerecord-jdbcsqlite3-adapter (>= 1.2.9)
+      activesupport (>= 3.2.13)
+      htmlentities (>= 4.3.1)
+      json (>= 1.7.7)
+      mp3info (>= 0.6.18)
+      rb-readline (>= 0.4.2)
+      share_this (>= 0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (3.2.13)
+      activesupport (= 3.2.13)
+      builder (~> 3.0.0)
+    activerecord (3.2.13)
+      activemodel (= 3.2.13)
+      activesupport (= 3.2.13)
+      arel (~> 3.0.2)
+      tzinfo (~> 0.3.29)
+    activerecord-jdbc-adapter (1.2.9)
+    activerecord-jdbcsqlite3-adapter (1.2.9)
+      activerecord-jdbc-adapter (~> 1.2.9)
+      jdbc-sqlite3 (~> 3.7.2)
+    activesupport (3.2.13)
+      i18n (= 0.6.1)
+      multi_json (~> 1.0)
+    arel (3.0.2)
+    builder (3.0.4)
+    eventmachine (1.0.3)
+    eventmachine (1.0.3-java)
+    htmlentities (4.3.1)
+    i18n (0.6.1)
+    jdbc-sqlite3 (3.7.2.1)
+    json (1.7.7)
+    json (1.7.7-java)
+    mp3info (0.6.18)
+    multi_json (1.5.0)
+    rb-readline (0.5.0)
+    share_this (0.1.0)
+      eventmachine (>= 1.0.3)
+    tzinfo (0.3.35)
+
+PLATFORMS
+  java
+  ruby
+
+DEPENDENCIES
+  cultome_player!
