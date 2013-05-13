@@ -235,8 +235,10 @@ module Plugin
 				music_files.each do |file_path|
 					create_song_from_file(file_path, new_drive)
 					imported += 1
-					display "Importing #{imported}/#{to_be_imported}..."
+					display "Importing #{imported}/#{to_be_imported}...\r", true
 				end
+
+				display "#{imported} files imported in drive #{new_drive.name}"
 
 				return music_files.size
 			end
