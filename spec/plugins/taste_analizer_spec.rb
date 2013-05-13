@@ -14,6 +14,6 @@ describe Plugin::TasteAnalizer do
 		ActiveRecord::Base.establish_connection(adapter: ENV['db_adapter'], database: 'db_cultome.dat')
 		rock = Song.joins(:genres).where("genres.name = ?", "Rock" ).first
 		metal = Song.joins(:genres).where("genres.name = ?", "Metal" ).first
-		t.send(:calculate_songs_weight, rock, metal).should == 0.7
+		t.send(:calculate_songs_weight, rock, metal).round(2).should == 0.7
 	end
 end
