@@ -3,11 +3,13 @@ require 'net/http'
 require 'json'
 require 'cgi'
 require 'htmlentities'
+require 'text_slider'
 
 # Plugin tha find the lyrics for the current song.
 module Plugin
 	class LyricFinder < PluginBase
 
+		include TextSlider
 
 		# Register the command: lyric
 		# @note Required method for register commands
@@ -21,20 +23,35 @@ module Plugin
 		def lyric(params=[])
 			song_name = @cultome.song.name
 			artist_name = @cultome.artist.name
+			found_txt = ":::: Lyric for #{song_name} ::::"
 
-			display("Finding lyric for #{song_name}...")
+			thrd = roll_text(" Finding lyric for #{song_name} ", { 
+				pad: '<', 
+				repeat: true, 
+				width: found_txt.length, 
+				background: true }
+			) do |text|
+				display(text, true)
+			end
 
 			url = "http://lyrics.wikia.com/api.php?artist=#{CGI::escape(artist_name)}&song=#{CGI::escape(song_name)}&fmt=json"
 
-			response = Net::HTTP.get_response(URI(url)).body
-			json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
-			Net::HTTP.get_response(URI(json['url'])).body.lines.each do |line|
-				if line =~ /<div class='lyricbox'>/
-					lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
-					display(":::: Lyric for #{song_name} ::::")
-					display(lyric)
-					return lyric
+			begin
+				response = Net::HTTP.get_response(URI(url)).body
+				json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
+				Net::HTTP.get_response(URI(json['url'])).body.lines.each do |line|
+					if line =~ /<div class='lyricbox'>/
+						lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
+
+						thrd.kill
+						display(found_txt)
+
+						display(lyric)
+						return lyric
+					end
 				end
+			ensure
+				thrd.kill if thrd.stop?
 			end
 		end
 	end
