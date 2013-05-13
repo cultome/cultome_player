@@ -3,10 +3,13 @@ require 'cultome/persistence'
 require 'net/http'
 require 'json'
 require 'cgi'
+require 'text_slider'
 
 # Plugin to use information from the Last.fm webservices.
 module Plugin
 	class LastFm < PluginBase
+
+		include TextSlider
 
 		LAST_FM_WS_ENDPOINT = 'http://ws.audioscrobbler.com/2.0/'
 		LAST_FM_API_KEY = 'bfc44b35e39dc6e8df68594a55a442c5'
@@ -26,73 +29,77 @@ module Plugin
 		#
 		# @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
 		def similar(params=[])
-			song_name = @cultome.song.name
-			artist_name = @cultome.artist.name
-			song_id = @cultome.song.id
-			artist_id = @cultome.artist.id
+			begin
+				song_name = @cultome.song.name
+				artist_name = @cultome.artist.name
+				song_id = @cultome.song.id
+				artist_id = @cultome.artist.id
 
-			search_info = define_search(params, song_name, artist_name)
+				search_info = define_search(params, song_name, artist_name)
 
-			in_db = check_in_db(search_info)
+				in_db = check_in_db(search_info)
 
-			if in_db.empty?
-				json = get_similars(search_info)
+				if in_db.empty?
+					json = get_similars(search_info)
 
-				if !json['similarartists'].nil?
-					# get the information form the reponse
-					artists = json['similarartists']['artist'].collect do |a|
-						{
-							artist: a['name'],
-							artist_url: a['url'],
-							similar_to: 'artist'
-						}
+					if !json['similarartists'].nil?
+						# get the information form the reponse
+						artists = json['similarartists']['artist'].collect do |a|
+							{
+								artist: a['name'],
+								artist_url: a['url'],
+								similar_to: 'artist'
+							}
+						end
+
+						# salvamos los similares
+						artists.each do |a|
+							Artist.find(artist_id).similars.create(a)
+						end
+
+						artists_in_library = find_artists_in_library(artists)
+						show_artist(artist_name, artists, artists_in_library)
+
+						return artists, artists_in_library
+					elsif !json['similartracks'].nil?
+						# convierte los datos del request en un hash mas manejable
+						tracks = json['similartracks']['track'].collect do |t|
+							{
+								track: t['name'],
+								artist: t['artist']['name'],
+								track_url: t['url'],
+								artist_url: t['artist']['url'],
+								similar_to: 'track'
+							}
+						end
+						# salvamos los similares
+						tracks.each do |t|
+							Song.find(song_id).similars.create(t)
+						end
+						tracks_in_library = find_tracks_in_library(tracks)
+						show_tracks(song_name, tracks, tracks_in_library)
+
+						return tracks, tracks_in_library
+					else
+						# seguramente un error
+						display("Problem! #{json['error']}: #{json['message']}")
 					end
-
-					# salvamos los similares
-					artists.each do |a|
-						Artist.find(artist_id).similars.create(a)
-					end
-
-					artists_in_library = find_artists_in_library(artists)
-					show_artist(artist_name, artists, artists_in_library)
-
-					return artists, artists_in_library
-				elsif !json['similartracks'].nil?
-					# convierte los datos del request en un hash mas manejable
-					tracks = json['similartracks']['track'].collect do |t|
-						{
-							track: t['name'],
-							artist: t['artist']['name'],
-							track_url: t['url'],
-							artist_url: t['artist']['url'],
-							similar_to: 'track'
-						}
-					end
-					# salvamos los similares
-					tracks.each do |t|
-						Song.find(song_id).similars.create(t)
-					end
-					tracks_in_library = find_tracks_in_library(tracks)
-					show_tracks(song_name, tracks, tracks_in_library)
-
-					return tracks, tracks_in_library
 				else
-					# seguramente un error
-					display("Problem! #{json['error']}: #{json['message']}")
-				end
-			else
-				# trabajamos con datos de la db
-				if search_info[:method] == GET_SIMILAR_ARTISTS_METHOD
-					artists_in_library = find_artists_in_library(in_db)
-					show_artist(artist_name, in_db, artists_in_library)
+					# trabajamos con datos de la db
+					if search_info[:method] == GET_SIMILAR_ARTISTS_METHOD
+						artists_in_library = find_artists_in_library(in_db)
+						show_artist(artist_name, in_db, artists_in_library)
 
-					return in_db, artists_in_library
-				elsif search_info[:method] == GET_SIMILAR_TRACKS_METHOD
-					tracks_in_library = find_tracks_in_library(in_db)
-					show_tracks(song_name, in_db, tracks_in_library)
+						return in_db, artists_in_library
+					elsif search_info[:method] == GET_SIMILAR_TRACKS_METHOD
+						tracks_in_library = find_tracks_in_library(in_db)
+						show_tracks(song_name, in_db, tracks_in_library)
 
-					return in_db, tracks_in_library
+						return in_db, tracks_in_library
+					end
 				end
+			ensure
+				@thrd.kill if !@thrd.nil? && @thrd.stop?
 			end
 		end
 
@@ -117,6 +124,23 @@ module Plugin
 			end
 		end
 
+		def change_text(text, options={})
+			opts = {
+				background: true, 
+				repeat: true, 
+				width: 50
+			}
+
+			opts.merge!(options)
+
+
+			@thrd = roll_text(text, opts) do |text|
+				display(text, true)
+			end
+
+			sleep(2)
+		end
+
 		# Given the command information, creates a search criteria.
 		#
 		# @param params [List<Hash>] Command's params information.
@@ -124,9 +148,11 @@ module Plugin
 		# @param artist [Artist] The artist to find similars, depending on the params.
 		# @return [Hash] With keys :method, :artist and :track, depending on the parameters.
 		def define_search(params, song, artist)
+
 			if params.empty?
 				# por default se buscan rolas similares
-				display("Looking for tracks similar to #{song} / #{artist}...")
+				change_text("Looking for tracks similar to #{song} / #{artist}...")
+
 				query = {
 					method: GET_SIMILAR_TRACKS_METHOD,
 					artist: artist,
@@ -138,14 +164,16 @@ module Plugin
 					when :object
 						case param[:value]
 						when :artist
-							display("Looking for artists similar to #{artist}...")
+							change_text("Looking for artists similar to #{artist}...")
+
 							query = {
 								method: GET_SIMILAR_ARTISTS_METHOD,
 								artist: artist
 							}
 
 						when :song
-							display("Looking for tracks similar to #{song} / #{artist}...")
+							change_text("Looking for tracks similar to #{song} / #{artist}...")
+
 							query = {
 								method: GET_SIMILAR_TRACKS_METHOD,
 								artist: artist,
@@ -193,21 +221,22 @@ module Plugin
 		def find_artists_in_library(artists)
 			in_library = []
 
-			display('Fetching similar artist from library', true)
+			change_text('... ', {
+				prefix: 'Fetching similar artist from library',
+				width: 3,
+				add_repeat_transition: false
+			})
 
 			artists.keep_if do |a|
-				display('.', true)
-
 				artist = Artist.find_by_name(a[:artist])
 				if artist.nil? 
-					# aqui meter a similars
+					# dejamos los artistas que no esten en nuestra library
 					true
 				else
 					in_library << artist
 					false
 				end
 			end
-			display("")
 
 			return in_library
 		end
@@ -220,7 +249,11 @@ module Plugin
 		def find_tracks_in_library(tracks)
 			in_library = []
 
-			display('Fetching similar tracks from library', true)
+			change_text("...", {
+				prefix: 'Fetching similar tracks from library',
+				width: 3,
+				add_repeat_transition: false
+			})
 
 			tracks.keep_if do |t|
 				display('.', true)
@@ -233,7 +266,6 @@ module Plugin
 					false
 				end
 			end
-			display("")
 
 			return in_library.flatten
 		end
