@@ -1,13 +1,105 @@
 #!/usr/bin/env jruby
+# encoding: utf-8
 
 system("clear")
 
 require 'cultome/version'
-puts "Starting Cultome Player v#{CultomePlayer::VERSION}" # aqui poner una frase humorisitca aleatoria
+require 'text_slider'
+include TextSlider
+
+puts "Starting Cultome Player v#{CultomePlayer::VERSION}"
+
+seq = [
+' • • • • • • • • • • • • • • ʘ',
+'ᗧ• • • • • • • • • • • • • • ʘ',
+' ᗧ • • • • • • • • • • • • • ʘ',
+'  ᗧ• • • • • • • • • • • • • ʘ',
+'   ᗧ • • • • • • • • • • • • ʘ',
+'    ᗧ• • • • • • • • • • • • ʘ',
+'     ᗧ • • • • • • • • • • • ʘ',
+'      ᗧ• • • • • • • • • • • ʘ',
+'       ᗧ • • • • • • • • • • ʘ',
+'        ᗧ• • • • • • • • • • ʘ',
+'  ᗣ      ᗧ • • • • • • • • • ʘ',
+'ᗣ  ᗣ      ᗧ• • • • • • • • • ʘ',
+' ᗣ  ᗣ      ᗧ • • • • • • • • ʘ',
+'  ᗣ  ᗣ      ᗧ• • • • • • • • ʘ',
+'ᗣ  ᗣ  ᗣ      ᗧ • • • • • • • ʘ',
+' ᗣ  ᗣ  ᗣ      ᗧ• • • • • • • ʘ',
+'  ᗣ  ᗣ  ᗣ      ᗧ • • • • • • ʘ',
+'ᗣ  ᗣ  ᗣ  ᗣ      ᗧ• • • • • • ʘ',
+' ᗣ  ᗣ  ᗣ  ᗣ      ᗧ • • • • • ʘ',
+'  ᗣ  ᗣ  ᗣ  ᗣ      ᗧ• • • • • ʘ',
+'   ᗣ  ᗣ  ᗣ  ᗣ      ᗧ • • • • ʘ',
+'    ᗣ  ᗣ  ᗣ  ᗣ      ᗧ• • • • ʘ',
+'     ᗣ  ᗣ  ᗣ  ᗣ      ᗧ • • • ʘ',
+'      ᗣ  ᗣ  ᗣ  ᗣ      ᗧ• • • ʘ',
+'       ᗣ  ᗣ  ᗣ  ᗣ      ᗧ • • ʘ',
+'        ᗣ  ᗣ  ᗣ  ᗣ      ᗧ• • ʘ',
+'         ᗣ  ᗣ  ᗣ  ᗣ      ᗧ • ʘ',
+'          ᗣ  ᗣ  ᗣ  ᗣ      ᗧ• ʘ',
+'           ᗣ  ᗣ  ᗣ  ᗣ      ᗧ ʘ',
+'            ᗣ  ᗣ  ᗣ  ᗣ      ᗧʘ',
+'             ᗣ  ᗣ  ᗣ  ᗣ      ᗤ',
+'            ᗣ  ᗣ  ᗣ  ᗣ     ᗤ  ',
+'           ᗣ  ᗣ  ᗣ  ᗣ    ᗤ    ',
+'          ᗣ  ᗣ  ᗣ  ᗣ   ᗤ      ',
+'         ᗣ  ᗣ  ᗣ  ᗣ  ᗤ        ',
+'        ᗣ  ᗣ  ᗣ  ᗣ ᗤ          ',
+'       ᗣ  ᗣ  ᗣ  ᗣᗤ            ',
+'      ᗣ  ᗣ  ᗣ  ᗤ              ',
+'     ᗣ  ᗣ  ᗣ ᗤ                ',
+'    ᗣ  ᗣ  ᗣᗤ                  ',
+'   ᗣ  ᗣ  ᗤ                    ',
+'  ᗣ  ᗣ ᗤ                      ',
+' ᗣ  ᗣᗤ                        ',
+'ᗣ  ᗤ                          ',
+' ᗤ                            ',
+'                             ᗣ',
+'                            ᗣ ',
+'                           ᗣ  ',
+'                          ᗣ   ',
+'                         ᗣ    ',
+'                        ᗣ    ᗤ',
+'                       ᗣ   ᗤ ʘ',
+'                      ᗣ  ᗤ • ʘ',
+'                     ᗣ ᗤ • • ʘ',
+'                    ᗣᗤ • • • ʘ',
+'                   ᗤ • • • • ʘ',
+'                 ᗤ • • • • • ʘ',
+'               ᗤ • • • • • • ʘ',
+'             ᗤ • • • • • • • ʘ',
+'           ᗤ • • • • • • • • ʘ',
+'         ᗤ • • • • • • • • • ʘ',
+'       ᗤ • • • • • • • • • • ʘ',
+'     ᗤ • • • • • • • • • • • ʘ',
+'   ᗤ • • • • • • • • • • • • ʘ',
+' ᗤ • • • • • • • • • • • • • ʘ',
+' • • • • • • • • • • • • • • ʘ',
+' • • • • • • • • • • • • • • ʘ',
+]
+
+thrd = roll_sequence(seq, {
+	width: 30, 
+	add_repeat_transition: false, 
+	background: true, 
+	clean_on_finish: false,
+	repeat: true,
+	tick: 0.1,
+})
 
 require 'cultome_player'
 require 'cultome/core'
-# iniciamos el reproductor
-CultomePlayer.new.start
 
-puts "Bye!" # aqui poner una frase humorisitca aleatoria
+player = CultomePlayer.new
+player.load_commands
+
+# detenemos la animacion
+thrd.kill
+thrd.join
+print "#{' ' * seq[0].length}\r"
+
+# iniciamos el reproductor
+player.start
+
+puts "Bye!"

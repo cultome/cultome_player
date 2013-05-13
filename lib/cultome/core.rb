@@ -55,6 +55,7 @@ class CultomePlayer
 		@is_playing_library = false
 		@command_registry = []
 		@listener_registry = Hash.new{|h,k| h[k] = []}
+		@commands_loaded = false
 	end
 
 	# Load and registers commands and listeners presents in folder lib/cultome/commands.
@@ -63,41 +64,45 @@ class CultomePlayer
 	#
 	# @return [Hash<Symbol, Class<? extends BaseCommand>>] The command registry after the load
 	def load_commands
-		command_help = []
-		commands_path = "#{project_path}/lib/plugins"
-		Dir.entries(commands_path).each{|file|
-			if file =~ /.rb\Z/
-				file_name = file.gsub('.rb', '')
-				require "plugins/#{file_name}"
+		with_connection do
+			command_help = []
+			commands_path = "#{project_path}/lib/plugins"
+			Dir.entries(commands_path).each{|file|
+				if file =~ /.rb\Z/
+					file_name = file.gsub('.rb', '')
+					require "plugins/#{file_name}"
 
-				plugin_cfg = master_config[file_name]
-				if plugin_cfg.nil?
-					plugin_cfg = master_config[file_name] = {}
+					plugin_cfg = master_config[file_name]
+					if plugin_cfg.nil?
+						plugin_cfg = master_config[file_name] = {}
+					end
+
+					command = "Plugin::#{file_name.classify}".constantize.new(self, plugin_cfg)
+
+					cmd_regs = command.get_command_registry if command.respond_to?(:get_command_registry)
+					cmd_regs.each{|k,v|
+						@command_registry.push k
+						@listener_registry[k] << command
+						v[:command] = k
+						command_help << v
+					} unless cmd_regs.nil?
+
+					listener_regs = command.get_listener_registry if command.respond_to?(:get_listener_registry)
+					listener_regs.each{|k,v|
+						@listener_registry[k] << command
+					} unless listener_regs.nil?
 				end
+			}
+			# luego cargamos los comandos que provee esta clase
+			@command_registry.push :help
+			@listener_registry[:help] << self
 
-				command = "Plugin::#{file_name.classify}".constantize.new(self, plugin_cfg)
+			generate_help(command_help)
 
-				cmd_regs = command.get_command_registry if command.respond_to?(:get_command_registry)
-				cmd_regs.each{|k,v|
-					@command_registry.push k
-					@listener_registry[k] << command
-					v[:command] = k
-					command_help << v
-				} unless cmd_regs.nil?
-
-				listener_regs = command.get_listener_registry if command.respond_to?(:get_listener_registry)
-				listener_regs.each{|k,v|
-					@listener_registry[k] << command
-				} unless listener_regs.nil?
-			end
-		}
-		# luego cargamos los comandos que provee esta clase
-		@command_registry.push :help
-		@listener_registry[:help] << self
-
-		generate_help(command_help)
- 
-		return @command_registry, @listener_registry
+			@commands_loaded = true
+	 
+			return @command_registry, @listener_registry
+		end
 	end
 
 	# Utility method for running a standalone player. Initialize the commands
@@ -105,7 +110,9 @@ class CultomePlayer
 	# When a error is detected, a call to #execute with 'next' input is invoked.
 	def start
 		# cargamos los plugins
-		with_connection { load_commands }
+		unless @commands_loaded
+			load_commands
+		end
 
 		@running = true
 
