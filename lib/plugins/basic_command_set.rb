@@ -67,6 +67,7 @@ module Plugin
 		def enqueue(params=[])
 			pl = generate_playlist(params)
 			@cultome.playlist = @cultome.focus = @cultome.playlist + pl 
+			@not_played << @cultome.playlist.size
 		end
 
 		# Search for songs in the connected drives.
