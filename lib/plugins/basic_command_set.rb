@@ -53,6 +53,7 @@ module Plugin
 				@cultome.playlist = @cultome.focus = pl
 				@cultome.play_index = -1
 				@cultome.queue = []
+				@not_played = (0...@cultome.playlist.size).to_a
 			end
 
 			@cultome.history.push @cultome.song unless @cultome.song.nil?
@@ -162,7 +163,15 @@ module Plugin
 				@cultome.history.push @cultome.song unless @cultome.song.nil?
 
 				if @cultome.is_shuffling
-					@cultome.queue.push @cultome.playlist[rand(@cultome.playlist.size)]
+					# Para tener un mejor random hacemos qur toque 
+					# primero toda la playlist antes de repetir las rolas
+					if @not_played.empty?
+						@not_played = (0...@cultome.playlist.size).to_a
+					end
+
+					idx = @not_played.sample
+					@not_played.delete(idx)
+					@cultome.queue.push @cultome.playlist[idx]
 				else
 					@cultome.play_index += 1
 					@cultome.queue.push @cultome.playlist[@cultome.play_index]
