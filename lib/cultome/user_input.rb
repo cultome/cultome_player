@@ -50,7 +50,7 @@ module UserInput
 	# @param msg [String] The prompt displayed to the user.
 	# @return (see #is_true_value)
 	def get_confirmation(msg)
-		display(msg)
+		display c5(msg)
 		is_true_value get_command("  [y/N]: ", false)
 	end
 
@@ -66,7 +66,7 @@ module UserInput
 	#
 	# @return [String] The user input.
 	def get_command(msg=@prompt, history=true)
-		Readline::readline(c1(msg), history)
+		Readline::readline(c4(msg), history)
 	end
 
 	private

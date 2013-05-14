@@ -97,7 +97,7 @@ HELP
 						return tracks, tracks_in_library
 					else
 						# seguramente un error
-						display("Problem! #{json['error']}: #{json['message']}")
+						display(c2("Problem! #{json['error']}: #{json['message']}"))
 					end
 				else
 					# trabajamos con datos de la db
@@ -150,7 +150,7 @@ HELP
 
 
 			@thrd = roll_text(text, opts) do |text|
-				display(text, true)
+				display(c4(text), true)
 			end
 
 			sleep(2)
@@ -195,10 +195,10 @@ HELP
 								track: song
 							}
 						else
-							display("You can only retrive similar @song or @artist.")
+							display e2("You can only retrive similar @song or @artist.")
 						end
 					else
-						display("You can only retrive similar @song or @artist.")
+						display e2("You can only retrive similar @song or @artist.")
 					end
 				end
 			end
@@ -271,7 +271,6 @@ HELP
 			})
 
 			tracks.keep_if do |t|
-				display('.', true)
 				song = Song.joins(:artist).where('songs.name = ? and artists.name = ?', t[:track], t[:artist]).to_a
 				if song.empty?
 					# aqui meter a similars
@@ -291,15 +290,15 @@ HELP
 		# @param tracks [List<Hash>] The song transformed information.
 		# @param tracks_in_library [List<Song>] The similari songs found in library.
 		def show_tracks(song, tracks, tracks_in_library)
-			display("Similar tracks to #{song}") unless tracks.empty?
-			tracks.each{|a| display("  #{a[:track]} / #{a[:artist]}") } unless tracks.empty?
+			display e4("Similar tracks to #{song}") unless tracks.empty?
+			tracks.each{|a| display e4("  #{a[:track]} / #{a[:artist]}") } unless tracks.empty?
 
-			display("Similar tracks to #{song} in library") unless tracks_in_library.empty?
-			display(tracks_in_library) unless tracks_in_library.empty?
+			display e4("Similar tracks to #{song} in library") unless tracks_in_library.empty?
+			display e4(tracks_in_library) unless tracks_in_library.empty?
 			#tracks_in_library.each{|a| display("  #{a.name} / #{a.artist.name}") } unless tracks_in_library.empty?
 
 			if tracks.empty? && tracks_in_library.empty?
-				display("No similarities found for #{song}") 
+				display e2("No similarities found for #{song}") 
 			else
 				@cultome.focus = tracks_in_library
 			end
@@ -311,13 +310,13 @@ HELP
 		# @param artists [List<Hash>] The artist transformed information.
 		# @param artists_in_library [List<Artist>] The similari artist found in library.
 		def show_artist(artist, artists, artists_in_library)
-			display("Similar artists to #{artist}") unless artists.empty?
-			artists.each{|a| display("  #{a[:artist]}") } unless artists.empty?
+			display e4("Similar artists to #{artist}") unless artists.empty?
+			artists.each{|a| display e4("  #{a[:artist]}") } unless artists.empty?
 
-			display("Similar artists to #{artist} in library") unless artists_in_library.empty?
+			display e4("Similar artists to #{artist} in library") unless artists_in_library.empty?
 			artists_in_library.each{|a| display("  #{a.name}") } unless artists_in_library.empty?
 
-			display("No similarities found for #{artist}") if artists.empty? && artists_in_library.empty?
+			display e2("No similarities found for #{artist}") if artists.empty? && artists_in_library.empty?
 		end
 	end
 end

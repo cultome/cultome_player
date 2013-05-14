@@ -163,6 +163,9 @@ And later, new song came to this folder, you can refresh the drive with the next
 	* connect /home/user/download => no_matter
 The name dont matter as the path is the same. The trailing dashes are ignored. In this forma the new songs are added but the older persist (no duplications).
 
+If you only want to re-connect the drive without scanning for new media just type:
+	* connect <drive_name>
+
 HELP
 				},
 
@@ -294,7 +297,7 @@ HELP
 
 			results = find_by_query(query).to_a
 			if results.empty?
-				display("No results found!")
+				display(c2("No results found!"))
 			else
 				display(@cultome.search = @cultome.focus = results)
 			end
@@ -320,7 +323,8 @@ HELP
 						when :albums then @cultome.focus = obj = Album.order(:name).all
 						when :genres then @cultome.focus = obj = Genre.order(:name).all
 						when /playlist|search|history/ then @cultome.focus = obj = @cultome.instance_variable_get("@#{param[:value]}")
-						when /artist|album|drives|queue|focus/ then obj = @cultome.instance_variable_get("@#{param[:value]}")
+						when /artist|album|queue|focus/ then obj = @cultome.instance_variable_get("@#{param[:value]}")
+						when /drives/ then obj = Drive.all.to_a
 						when :recently_added then @cultome.focus = obj = Song.where('created_at > ?', Song.maximum('created_at') - (60*60*24) )
 						when :genre then @cultome.focus = obj = Song.connected.joins(:genres).where('genres.name in (?)', @cultome.song.genres.collect{|g| g.name }).to_a
 						else
@@ -372,7 +376,7 @@ HELP
 
 				do_play
 			else
-				display "No more songs in playlist!"
+				display c2("No more songs in playlist!")
 			end
 		end
 
@@ -381,7 +385,7 @@ HELP
 		# @return (see #do_play)
 		def prev(params=[])
 			if @cultome.history.blank?
-				display "There is no files in history"
+				display c2("There is no files in history")
 			else
 				@cultome.queue.unshift @cultome.history.pop
 				@cultome.play_index -= 1 if @cultome.play_index > 0
@@ -402,7 +406,7 @@ HELP
 				drive_name = params.find{|p| p[:type] == :literal}
 				drive = Drive.find_by_name(drive_name[:value])
 				if drive.nil?
-					display("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
+					display c2("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
 				else
 					drive.update_attributes(connected: true)
 					drives << drive
@@ -418,7 +422,8 @@ HELP
 				if new_drive.nil?
 					drives << (new_drive = Drive.create(name: name_param[:value], path: path_param[:value]))
 				else
-					display("The drive '#{new_drive.name}' is refering the same path. Update of '#{new_drive.name}' is in progress.")
+					display c2("The drive '#{new_drive.name}' is refering the same path. Update of '#{new_drive.name}' is in progress.")
+					new_drive.update_attributes(connected: true)
 				end
 
 				music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
@@ -428,10 +433,10 @@ HELP
 				music_files.each do |file_path|
 					create_song_from_file(file_path, new_drive)
 					imported += 1
-					display "Importing #{imported}/#{to_be_imported}...\r", true
+					display(c4("Importing #{c14(imported.to_s)}/#{c14(to_be_imported.to_s)}...\r"), true)
 				end
 
-				display "#{imported} files imported in drive #{new_drive.name}"
+				display(c14(imported.to_s) + c4(" files imported in drive #{c14(new_drive.name)}"))
 
 				return music_files.size
 			end
@@ -445,7 +450,7 @@ HELP
 			drive_name = params.find{|p| p[:type] == :literal}
 			drive = Drive.find_by_name(drive_name[:value])
 			if drive.nil?
-				display("An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?")
+				display c2("An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?")
 			else
 				drive.update_attributes(connected: false)
 				drives.delete(drive)
@@ -485,7 +490,7 @@ HELP
 					@cultome.is_shuffling = is_true_value param[:value]
 				end
 			end
-			display(@cultome.is_shuffling ? "Everyday i'm shuffling" : "Shuffle is off")
+			display(@cultome.is_shuffling ? c3("Everyday i'm shuffling") : c2("Shuffle is off"))
 
 			return @cultome.is_shuffling
 		end
@@ -515,7 +520,7 @@ HELP
 				@cultome.is_playing_library = true
 
 				if new_playlist.blank?
-					display "No music connected yet. Try 'connect /home/csoria/music => music_library' first!"
+					display c2("No music connected yet. Try 'connect /home/csoria/music => music_library' first!")
 					return nil
 				end
 
@@ -580,7 +585,7 @@ HELP
 			@cultome.song = @cultome.queue.shift
 
 			if @cultome.song.nil?
-				display 'There is no song to play' 
+				display c2('There is no song to play')
 				return nil
 			end
 
@@ -600,7 +605,7 @@ HELP
 			begin
 				@cultome.player.play(@cultome.song.path)
 			rescue Exception => e
-				display("Error: #{e.message}")
+				display c2("Error: #{e.message}")
 				return @cultome.execute('next')
 			end
 
@@ -619,7 +624,7 @@ HELP
 		def show_progress
 			actual = @cultome.song_status["mp3.position.microseconds"] / 1000000
 			percentage = ((actual * 100) / @cultome.song.duration) / 10
-			display "#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(@cultome.song.duration)}"
+			display c4("#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(@cultome.song.duration)}")
 		end
 
 		# Retrive songs from connected drives with the given conditions.

@@ -14,7 +14,7 @@ core:
   - :magenta
   - :cyan
   - :white
-  - :light_black
+  - :default
   - :light_red
   - :light_green
   - :light_yellow
@@ -86,7 +86,6 @@ command_aliases:
     exit: quit
     sap: search %1 | play 1
     ls: show @playlist
-    p: pause
 gesture_analizer: {}
 lyric_finder: {}
 share_it: {}

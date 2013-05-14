@@ -48,3 +48,13 @@ def get_fake_player
 	fake_player
 end
 
+# definimos los metodos de los colores de tal forma que no afecten los specs
+require 'cultome/helper'
+
+50.times do |idx|
+	Helper.class_eval do
+		define_method "c#{idx}".to_sym do |str|
+			return str
+		end
+	end
+end

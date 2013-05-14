@@ -25,10 +25,19 @@ class Song < ActiveRecord::Base
 	end
 
 	def to_s
-		str = ":::: Song: #{self.name}"
-		str += " \\ Artist: #{self.artist.name}" unless self.artist.nil?
-		str += " \\ Album: #{self.album.name}" unless self.album.nil?
-		str += " ::::"
+		str = c4(":::: Song: ")
+		str += c10(self.name)
+
+		unless self.artist.nil?
+			str += c4(" \\ Artist: ")
+			str += c11(self.artist.name)
+		end
+
+		unless self.album.nil?
+			str += c4(" \\ Album: ")
+			str += c13(self.album.name)
+		end
+		str += c4(" ::::")
 	end
 end
 
@@ -41,7 +50,9 @@ class Artist < ActiveRecord::Base
 	has_many :similars, as: :similar
 
 	def to_s
-		":::: Artist: #{self.name} ::::"
+		str = c4(":::: Artist: ")
+		str += c11(self.name)
+		str += c4(" ::::")
 	end
 end
 
@@ -52,9 +63,15 @@ class Similar < ActiveRecord::Base
 	belongs_to :similar, polymorphic: true
 
 	def to_s
-		str = ":::: "
-		str += "Song: #{self.track} \\ " if self.type == 'track'
-		str += "Artist: #{self.artist} ::::"
+		str = c4(":::: ")
+		if self.type == 'track'
+			str += c4("Song: ")
+			str += c10(self.track)
+			str += c4(" \\ ")
+		end
+		str += c4("Artist: ")
+		str += c11(self.artist)
+		str += c4(" ::::")
 	end
 end
 
@@ -66,9 +83,13 @@ class Album < ActiveRecord::Base
 	has_many :artists, through: :songs
 
 	def to_s
-		str = ":::: Album: #{self.name}" 
-		str += " \\ Artist: #{self.artists.uniq.collect{|a| a.name}.join(', ')}" unless self.artists.nil? || self.artists.empty?
-		str += " ::::"
+		str = c4(":::: Album: ")
+		str += c13(self.name)
+		str += c4(" \\ Artist: ")
+		unless self.artists.nil? || self.artists.empty?
+			str += c11(self.artists.uniq.collect{|a| a.name}.join(', '))
+		end
+		str += c4(" ::::")
 	end
 end
 
@@ -79,7 +100,9 @@ class Genre < ActiveRecord::Base
 	has_and_belongs_to_many :songs
 
 	def to_s
-		":::: Genre: #{self.name} ::::"
+		str = c4(":::: Genre: ")
+		str += c15(self.name)
+		str += c4(" ::::")
 	end
 end
 
@@ -90,7 +113,15 @@ class Drive < ActiveRecord::Base
 	has_many :songs
 
 	def to_s
-		":::: Drive: #{self.name} => #{self.songs.size} songs => #{self.path} => #{connected ? "Online" : "Offline"} ::::"
+		str = c4(":::: Drive: ")
+		str += c14(self.name)
+		str += c4(" => ")
+		str += c14(self.songs.size.to_s)
+		str += c4(" songs => ")
+		str += c14(self.path)
+		str += c4(" => ")
+		str += connected ? c3("Online") : c2("Offline")
+		str += c4(" ::::")
 	end
 end
 

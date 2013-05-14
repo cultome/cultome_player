@@ -35,7 +35,7 @@ HELP
 			artist_name = @cultome.artist.name
 			found_txt = ":::: Lyric for #{song_name} ::::"
 
-			thrd = roll_text(" Finding lyric for #{song_name} ", { 
+			thrd = roll_text(c4(" Finding lyric for #{c14(song_name)} "), { 
 				pad: '<', 
 				repeat: true, 
 				width: found_txt.length, 
@@ -54,9 +54,9 @@ HELP
 						lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
 
 						thrd.kill
-						display(found_txt)
+						display c4(found_txt)
 
-						display(lyric)
+						display c12(lyric)
 						return lyric
 					end
 				end

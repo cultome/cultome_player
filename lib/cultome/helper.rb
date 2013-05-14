@@ -46,7 +46,7 @@ module Helper
 
 			return polish(info)
 		rescue
-			display "The file '#{file_path}' could not be added"
+			display c2("The file '#{file_path}' could not be added")
 			return nil
 		end
 	end
@@ -99,6 +99,41 @@ module Helper
 	# @return  [String] The path to the db data file.
 	def db_file
 		"#{project_path}/db_cultome.dat"
+	end
+
+	def define_color_palette
+		if @color_palette.nil?
+			@color_palette = @config["color_palette"]
+			if @color_palette.nil?
+				@color_palette = [
+					:black,			# c1
+					:red,			# c2
+					:green,			# c3
+					:yellow,		# c4
+					:blue,			# c5
+					:magenta,		# c6
+					:cyan,			# c7
+					:white,			# c8
+					:default,		# c9
+					:light_red,		# c10
+					:light_green,	# c11
+					:light_yellow,	# c12
+					:light_blue,	# c13
+					:light_magenta,	# c14
+					:light_cyan,	# c15
+					:light_white,	# c16
+				]
+				@config["color_palette"] = @color_palette
+			end
+		end
+
+		@color_palette.each_with_index do |color, idx|
+			Helper.class_eval do
+				define_method "c#{idx+1}".to_sym do |str|
+					str.send(color)
+				end
+			end
+		end
 	end
 
 	private

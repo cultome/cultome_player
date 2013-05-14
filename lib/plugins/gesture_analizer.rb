@@ -39,7 +39,7 @@ module Plugin
 		def analize_queue
 			# checamos el patron y vemos si matchea
 			if @queue.has(5, :next, 20)
-				display "#### Notifying: Looking for something"
+				display c2("#### Notifying: Looking for something")
 			end
 
 			@queue
