@@ -1,6 +1,10 @@
 ---
 core:
-  prompt: ! 'cultome> '
+  prompt: !ruby/string
+    str: ! 'cultome> '
+    mode: 0
+    uncolorized: ! 'cultome> '
+    background: 9
 basic_command_set:
   seeker_step: 500
 copy_to: {}
@@ -65,6 +69,7 @@ command_aliases:
     exit: quit
     sap: search %1 | play 1
     ls: show @playlist
+    p: pause
 gesture_analizer: {}
 lyric_finder: {}
 share_it: {}
