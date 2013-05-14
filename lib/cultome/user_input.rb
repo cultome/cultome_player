@@ -66,7 +66,7 @@ module UserInput
 	#
 	# @return [String] The user input.
 	def get_command(msg=@prompt, history=true)
-		Readline::readline(msg, history)
+		Readline::readline(c1(msg), history)
 	end
 
 	private

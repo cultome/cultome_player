@@ -4,12 +4,14 @@
 system("clear")
 
 require 'cultome/version'
-require 'text_slider'
 require 'colorize'
 
+print "Starting Cultome Player ".light_yellow
+puts "v#{CultomePlayer::VERSION}".light_blue
+
+require 'text_slider'
 include TextSlider
 
-puts "Starting Cultome Player v#{CultomePlayer::VERSION}"
 p = 'ᗧ'.yellow
 m = 'ᗤ'.yellow
 l = 'ᗣ'.light_yellow
@@ -64,8 +66,7 @@ seq = [
 "  #{c}  #{r} #{m}                      ",
 " #{c}  ᗣᗤ                        ",
 "#{c}  #{m}                          ",
-" #{m}                            ",
-"                             #{c}",
+" #{m}                           #{c}",
 "                            #{c} ",
 "                           #{c}  ",
 "                          #{c}   ",

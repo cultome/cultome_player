@@ -278,8 +278,42 @@ class CultomePlayer
 	# When no command is found for a user input,
 	# this method send the command to the underlying music player.
 	def method_missing(method_name, *args)
+		if method_name =~ /\Ac([\d]+)\Z/
+			if @color_palette.nil?
+				@color_palette = @config["color_palette"]
+				if @color_palette.nil?
+					@color_palette = [
+						:black,
+						:red,
+						:green,
+						:yellow,
+						:blue,
+						:magenta,
+						:cyan,
+						:white,
+						:light_black,
+						:light_red,
+						:light_green,
+						:light_yellow,
+						:light_blue,
+						:light_magenta,
+						:light_cyan,
+						:light_white,
+					]
+					@config["color_palette"] = @color_palette
+				end
+			end
+
+			Helper.class_eval do
+				define_method method_name do |str|
+					str.send(@color_palette[$1.to_i - 1])
+				end
+			end
+
+			send(method_name, *args)
+
 		# interrogando sobre el estatus del reproductor
-		if method_name =~ /\A(.*?)\?\Z/
+		elsif method_name =~ /\A(.*?)\?\Z/
 			self.class.class_eval do 
 				define_method method_name do
 					@status.downcase == $1.to_sym
