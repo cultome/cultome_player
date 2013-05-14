@@ -55,6 +55,7 @@ class CultomePlayer
 		@is_playing_library = false
 		@command_registry = []
 		@listener_registry = Hash.new{|h,k| h[k] = []}
+		@commands_help = {}
 		@commands_loaded = false
 	end
 
@@ -84,7 +85,7 @@ class CultomePlayer
 						@command_registry.push k
 						@listener_registry[k] << command
 						v[:command] = k
-						command_help << v
+						@commands_help[k] = v
 					} unless cmd_regs.nil?
 
 					listener_regs = command.get_listener_registry if command.respond_to?(:get_listener_registry)
@@ -97,7 +98,7 @@ class CultomePlayer
 			@command_registry.push :help
 			@listener_registry[:help] << self
 
-			generate_help(command_help)
+			generate_help(@commands_help.values)
 
 			@commands_loaded = true
 	 
@@ -153,7 +154,21 @@ class CultomePlayer
 
 	# Shows the generated in-app help message.
 	def help(params=[])
-		display(@help_msg)
+		if params.empty?
+			display(@help_msg)
+		else
+			cmd = params[0][:value].to_sym
+			cmd_help = @commands_help[cmd]
+			if cmd_help.nil?
+				display("Command invalid!")
+			elsif cmd_help[:usage].nil?
+				display("Help for command #{cmd} is not available!")
+			else
+				display("Usage: #{cmd_help[:command]} #{cmd_help[:params_format]}")
+				display("#{cmd_help[:help]}\n\n")
+				display(cmd_help[:usage])
+			end
+		end
 	end
 
 	# Print a message in the screen.

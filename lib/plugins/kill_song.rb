@@ -14,8 +14,17 @@ module Plugin
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
 		def get_command_registry
 			{
-				kill: {help: "Delete from disk the current song", params_format: ""}
-			}
+				kill: {
+					help: "Delete from disk the current song", 
+					params_format: "",
+					usage: <<HELP
+Have you ever downloaded a full record of a new artist to "hear something new"? Maybe not all songs are good enough to be kepped in you collection. So while you're
+listening the song and think "mmmmm not for me", just type
+	* kill
+The player ask you a confirmation of the deletion and there you are! the song is gone forever.
+
+HELP
+			}}
 		end
 
 		# Remove the current song from library and from filesystem.

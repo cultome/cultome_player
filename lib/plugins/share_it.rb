@@ -10,9 +10,31 @@ module Plugin
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
 		def get_command_registry
+			usage = <<HELP
+There are two steps to be done to share a file with another computer across the internet.
+The simple explanation is an example, so I'll tell you a history of two friends who enjoy listening music together, in two different places of earth, and are sharing their legally-acquaired music collection.
+
+	1.  The server or friend-who-receive-the-file, named Mustafa, types:
+		* receive /home/mustafa/received_songs MySecretPa55
+	2.  Mustafa sends the secret token (MySecretPa55) and his IP (223.12.1.222) to his friend Jonh through chat or email or skype or whatever they are using.
+	3.  Then Jonh plays the song he like to share with Mustafa and when is playing he types:
+		* share 223.12.1.222 MySecretPa55
+	4.  If all goes right and is done fast, the transfer must begin inmediatly and Mustafa receive the song.
+
+Why fast? Well for security purposes Mustafa will listen for connection for a brief time, so this must be almost simultaneously in both sides, BUT ALWAYS the server must be listenening before the client tries to connect.
+
+HELP
 			{
-				:share => {help: "Send the current song to someone else through the internet.", params_format: "<literal|ip> <literal|number>"},
-				:receive => {help: "Start listening for a music transfer connection.", params_format: "<path|object> <literal|number>"},
+				:share => {
+					help: "Send the current song to someone else through the internet.",
+				   	params_format: "<literal|ip> <literal|number>",
+					usage: usage
+				},
+				:receive => {
+					help: "Start listening for a music transfer connection.",
+				   	params_format: "<path|object> <literal|number>",
+					usage: usage
+				},
 			}
 		end
 

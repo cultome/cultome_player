@@ -16,7 +16,27 @@ module Plugin
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
 		def get_command_registry
 			{
-				:alias => {help: "Create an alias for one or many commands", params_format: "<literal> => <literal>"},
+				:alias => {
+					help: "Create an alias for one or many commands", 
+					params_format: "<literal> => <literal>",
+					usage: <<HELP
+Create a synonimous for a "command string", where "command string" is a valid sequence of commands. The command string can declare placeholder that will be filled with parameters provided by user.
+
+Some usages examples includes the followings:
+
+If you miss Vim you can alias the command quit with the string 'q!'. So the next time you want to close the player just type 'q!'.
+	* alias quit => q!
+
+If you are like me, and you like to hear a song that you know when you search it always appears in the same position in the results list, you can make a "macro" to play it. This way you preserve you current playlist and hear you song anytime.
+	* alias search_and_play => "search %1 | play %2"
+With this little "macro", you are declaring a placeholder that will be replaced with whaterever the user pass as parameter with your alias. For example
+	* search_and_play space 2
+Will be converted to
+	* search space | play 2
+You can declared as many place holders as you want. The rules of players' parameters are always presents, so if, for example, space characters exist in the command or command's parameter, this must be wrapped by " or '.
+
+HELP
+				}
 			}
 		end
 

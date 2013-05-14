@@ -22,7 +22,22 @@ module Plugin
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
 		def get_command_registry
-			{similar: {help: "Look in last.fm for similar artists or songs", params_format: "<object>"}}
+			{similar: {
+				help: "Look in last.fm for similar artists or songs", 
+				params_format: "<object>",
+				usage: <<HELP
+There are two primary uses for this plugin:
+	* find similar songs to the current song
+	* find similar artists of the artist of the current song
+
+To search for similar songs you dont need extra parameters, but if you wish to be explicit you can pass '@song' as parameter.
+
+To search for artist the parameter '@artist' is required.
+
+When the results are parsed successfully from Last.fm the first time, the results are stored in the local database, so, successives calls of this command, for the same song or artist dont require internet access.
+
+HELP
+			}}
 		end
 
 		# Display a list with similar artist or album of the give song or artist and shows a list with them, separing the one within our library.

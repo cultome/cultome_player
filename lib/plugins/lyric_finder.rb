@@ -16,7 +16,17 @@ module Plugin
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
 		def get_command_registry
-			{lyric: {help: "Find the lyric of the current song", params_format: ""}}
+			{lyric: {
+				help: "Find the lyric of the current song",
+				params_format: "",
+				usage: <<HELP
+Want to sing along with you favorite other-language-song? Ask the player to find the lyric with:
+	* lyric
+
+The lyric is searched using the lyrics.wikia.com webservice. So if the player dont find the lyrics, wouldn't it be nice if you search it and upload it to the site? Surely they appreciate it and the next other-language-singers too.
+
+HELP
+			}}
 		end
 
 		# Search and display the lyrics for the current song

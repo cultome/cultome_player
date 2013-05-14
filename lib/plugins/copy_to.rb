@@ -8,7 +8,26 @@ module Plugin
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
 		def get_command_registry
-			{copy: {help: "Copy a playlist to some filesystem folder", params_format: "<object> => <path>"}}
+			{
+				copy: {
+					help: "Copy a playlist to some filesystem folder", 
+					params_format: "<object> => <path>",
+					usage: <<HELP
+Copy a set of selected songs to a folder in the filesystem. The selected song set is the list holded by the <object> and the <path> is an absolute path in the filesystem, wrapped by " or ' if the path contains spaces.
+
+The song set can be reviewed with the command
+	* show <object>
+For example
+	* show @playlist
+	* show @history
+	* show @search
+
+A common usages would be as follow:
+	* copy @playlist => /mnt/mypod/music
+	* copy @history => "/home/other/my music"
+
+HELP
+			}}
 		end
 
 		# Copy an object, that represent a list of songs, into one folder of the filesystem
