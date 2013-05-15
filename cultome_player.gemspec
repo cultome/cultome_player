@@ -6,7 +6,6 @@ require 'cultome/version'
 Gem::Specification.new do |gem|
 	gem.name          = "cultome_player"
 	gem.version       = CultomePlayer::VERSION
-	gem.date          = '2013-05-15'
 	gem.summary       = "CulToMe Player"
 	gem.description   = "A console music library explorer and player"
 	gem.authors       = ["Carlos Soria"]
@@ -27,5 +26,5 @@ Gem::Specification.new do |gem|
 	gem.add_runtime_dependency "json", [">= 1.7.7"]
 	gem.add_runtime_dependency "share_this", [">= 0.1.0"]
 	gem.add_runtime_dependency "text_slider", [">= 0.1.0"]
-	gem.add_runtime_dependency "colorizer", [">= 0.5.8"]
+	gem.add_runtime_dependency "colorize", [">= 0.5.8"]
 end
