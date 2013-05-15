@@ -5,11 +5,41 @@ require 'mp3info'
 # Utility module with shared functions across the project.
 module Helper
 
+	CONFIG_FILE_NAME = "config.yaml"
+
+	# Return the directory inside user home where this player writes his configurations
+	#
+	# @return [String] The directory where player writes its configurations
+	def user_dir
+		@_usr_player_dir ||= File.join(Dir.home, ".cultome")
+	end
+
+	# Tries to detect the operating system in which is running.
+	#
+	# @return [Symbol] the OS detected
+	def os
+		@_os ||= (
+			host_os = RbConfig::CONFIG['host_os']
+			case host_os
+			when /mswin|msys|mingw|sygwin|bccwin|wince|emc/
+				:windows
+			when /darwin|mac os/
+				:macosx
+			when /linux/
+				:linux
+			when /solaris|bsd/
+				:unix
+			else
+				raise Exception("unknown os: #{host_os}")
+			end
+		)
+	end
+
 	# Return the path to the player's config file
 	#
 	# @return [String] The absoulute path to the config file
 	def config_file
-		File.join(project_path, "config.yaml")
+		File.join(user_dir, CONFIG_FILE_NAME)
 	end
 
 	# Return the path to the config file
@@ -106,7 +136,7 @@ module Helper
 	#
 	# @return  [String] The path to the db data file.
 	def db_file
-		"#{project_path}/db_cultome.dat"
+		File.join(user_dir, "db_cultome.dat")
 	end
 
 	def define_color_palette

@@ -34,7 +34,7 @@ describe Helper do
 	end
 
 	it 'Should return the db data file' do
-		h.db_file.end_with?('cultome_player/db_cultome.dat').should be_true
+		h.db_file.end_with?('.cultome/db_cultome.dat').should be_true
 	end
 
 	it 'Should detect the migrations folder path' do

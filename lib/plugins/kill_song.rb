@@ -34,7 +34,8 @@ HELP
 				@cultome.execute('stop')
 
 				path = Shellwords.escape("#{@cultome.song.drive.path}/#{@cultome.song.relative_path}")
-				system("rm #{path}")
+				File.detele(path)
+				#system("rm #{path}")
 
 				if $?.exitstatus == 0
 					@cultome.song.delete

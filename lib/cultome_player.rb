@@ -18,6 +18,10 @@ unless Dir.exist?(db_logs_folder_path)
 	end
 
 	system("mkdir #{db_logs_folder_path}")
+	system("mkdir #{user_dir}") unless File.exist?(user_dir)
+	unless File.exist?(config_file)
+		system("cp #{File.join(project_path, CONFIG_FILE_NAME)} #{config_file}")
+	end
 
 	Rake.application.rake_require("tasks/db_admin")
 	capture_stdout{Rake.application[:up].invoke}

@@ -19,7 +19,7 @@ describe Plugin::ShareIt do
 
 		after do
 			Process.waitpid(@server_pid)
-			system("rm spec/data/received/music.mp3")
+			File.delete("spec/data/received/music.mp3")
 		end
 
 		def client_tester(params)
@@ -69,7 +69,7 @@ describe Plugin::ShareIt do
 
 	context '#receive' do
 		after do
-			system("rm spec/data/received/music.mp3")
+			File.delete("spec/data/received/music.mp3")
 		end
 
 		it 'Should receive a file with path and number' do
