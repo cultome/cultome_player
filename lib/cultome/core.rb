@@ -188,7 +188,7 @@ class CultomePlayer
 	
 	# Persist the global configuration to the player's configuration file.
 	def save_configuration
-		File.open(CONFIG_FILE, 'w'){|f| YAML.dump(master_config, f)}
+		File.open(config_file, 'w'){|f| YAML.dump(master_config, f)}
 	end
 
 	private

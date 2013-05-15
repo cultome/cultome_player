@@ -4,11 +4,19 @@ require 'mp3info'
 
 # Utility module with shared functions across the project.
 module Helper
-	CONFIG_FILE = "config.yaml"
+
+	# Return the path to the player's config file
+	#
+	# @return [String] The absoulute path to the config file
+	def config_file
+		File.join(project_path, "config.yaml")
+	end
 
 	# Return the path to the config file
+	#
+	# @return [String] The path to the config file
 	def master_config
-		@master_config ||= YAML.load_file(File.join(project_path, CONFIG_FILE))
+		@master_config ||= YAML.load_file(config_file)
 	end
 
 	# Search and require the jar files required by the underlying music player.
