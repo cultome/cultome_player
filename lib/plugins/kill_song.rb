@@ -38,9 +38,9 @@ HELP
 
 				if $?.exitstatus == 0
 					@cultome.song.delete
-					display e4("Song deleted!")
+					display c4("Song deleted!")
 				else
-					display e2("An error occurred when deleting the song #{@cultome.song}")
+					display c2("An error occurred when deleting the song #{@cultome.song}")
 				end
 
 				# reanudamos la reproduccion
