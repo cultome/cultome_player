@@ -6,7 +6,7 @@ require 'cultome/version'
 Gem::Specification.new do |gem|
 	gem.name          = "cultome_player"
 	gem.version       = CultomePlayer::VERSION
-	gem.date          = '2013-05-04'
+	gem.date          = '2013-05-15'
 	gem.summary       = "CulToMe Player"
 	gem.description   = "A console music library explorer and player"
 	gem.authors       = ["Carlos Soria"]

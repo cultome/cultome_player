@@ -243,12 +243,18 @@ play
 * Changes in plugin structure. Not the final version but a step ahead for building a better plugin model.
 * Some minor bugs fixes, like the db hanging or the lost in focus when search is empty.
 
+**Version 0.3.0**
+
+* Colors!!! Yeah! a color schema that you can customize if you dont like mine.
+* Some ASCII progress bars to let you know the player is not stuck!
+* Improvement in the 'help <command>' command, to, hopefully help you you surf in the player.
+* Add but not yet fully tested the *share* command to share music between two machines.
+* Some minor bugs fixed.
+* Specs up to date! YEAH!
+
 ### Ideas for the next release
 
-* ASCII visualizations.
-* I want to implement __"Ey wife/son/friend! you got to listen this song!"__.
 * Add tags to the songs, for example 'party' or 'sadness'.
-* Better help in-app. Something more like git or rails.
 * Last.fm scrobbler, altough normally when I hear music the wifi is never available =S
 
 ### TODO
