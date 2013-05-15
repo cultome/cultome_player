@@ -182,24 +182,29 @@ The commands are very rustic. Basicly consist in a command name and a list of pa
 The following command are implemented in this moment.
 
 ```
-* play (<number>|<criteria>|<object>|<literal>)*     Create and inmediatly plays playlists
-* enqueue (<number>|<criteria>|<object>|<literal>)*  Append the created playlist to the current playlist
-* search (<criteria>|<object>|<literal>)*            Find inside library for song with the given criteria.
-* show <object>                                      Display information about status, objects and library.
-* pause                                              Pause playback.
-* stop                                               Stops playback.
-* next                                               Play the next song in the queue.
-* prev                                               Play the previous song from the history.
-* connect <path> => <literal>                        Add files to the library.
-* disconnect <literal>                               Remove filesfrom the library.
-* quit                                               Exit the player.
-* ff                                                 Fast forward 5 sec.
-* fb                                                 Fast backward 5 sec.
-* shuffle <number>|<literal>                         Check and change the status of shuffle.
-* repeat                                             Repeat the current song.
-* kill                                               Delete from disk the current song.
-* copy <object> => <path>                            Copy a player's object's songs to a directory
-* help <literal>                                     Show this help.
+* play (<number>|<criteria>|<object>|<literal>)*    Create and inmediatly plays playlists
+* enqueue (<number>|<criteria>|<object>|<literal>)* Append the created playlist to the current playlist
+* search (<criteria>|<object>|<literal>)*           Find inside library for song with the given criteria.
+* show [<object>]                                   Display information about status, objects and library.
+* pause                                             Pause playback.
+* stop                                              Stops playback.
+* next <number>                                     Play the next song in the queue.
+* prev                                              Play the previous song from the history.
+* connect <path> => <literal>                       Add files to the library.
+* disconnect <literal>                              Remove filesfrom the library.
+* quit                                              Exit the player.
+* ff                                                Fast forward the current playback.
+* fb                                                Fast backward the current playback.
+* shuffle <number>|<literal>                        Check and change the status of shuffle.
+* repeat                                            Repeat the current song
+* copy <object> => <path>                           Copy a playlist to some filesystem folder
+* similar <object>                                  Look in last.fm for similar artists or songs
+* kill                                              Delete from disk the current song
+* share <literal|ip> <literal|number>               Send the current song to someone else through the internet.
+* receive <path|object> <literal|number>            Start listening for a music transfer connection.
+* alias <literal> => <literal>                      Create an alias for one or many commands
+* lyric                                             Find the lyric of the current song
+* help <literal>                                    Show this help.
 ```
 
 Parameters passed to commands that dont require any are simply ignored.
@@ -214,6 +219,11 @@ The following search songs of artist named 'Poor' or 'Rich'
 
 ```ruby
 search a:Poor a:Rich
+```
+
+If in doubt of a command please refer to the help of the command inside the app with the following:
+```ruby
+help <command_name>
 ```
 
 ### Installation
@@ -252,18 +262,20 @@ play
 * Some minor bugs fixed.
 * Specs up to date! YEAH!
 
-### Ideas for the next release
+** Version 0.4.0**
+* Support for Windows! Yeah! at last my wife will be able to use it!
+* Now you database and your config file are inside you user directory, that mean every new version dont require re-connect you music or make your aliases again.
+* Scrobbler? of course! why not?
+
+### Ideas for next releases
 
 * Add tags to the songs, for example 'party' or 'sadness'.
-* Last.fm scrobbler, altough normally when I hear music the wifi is never available =S
 
 ### TODO
-* Complete and update specs
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Leave JRuby and convert to pure Ruby
 * Improve the memory usage, it simply too high!
 * Change the underlying in.memory database for a real one, thinking on mongo
-* Updates to preserve db information
 
 ### Additional Information
 
