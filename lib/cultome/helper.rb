@@ -8,7 +8,7 @@ module Helper
 
 	# Return the path to the config file
 	def master_config
-		@master_config ||= YAML.load_file(CONFIG_FILE)
+		@master_config ||= YAML.load_file(File.join(project_path, CONFIG_FILE))
 	end
 
 	# Search and require the jar files required by the underlying music player.
