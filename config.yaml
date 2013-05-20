@@ -27,6 +27,7 @@ basic_command_set:
 copy_to: {}
 last_fm:
   similar_results_limit: 10
+  secret: 2ff2254532bbae15b2fd7cfefa5ba018
 taste_analizer:
   genres_compatibility:
     ? - Rock
