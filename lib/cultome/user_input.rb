@@ -66,6 +66,11 @@ module UserInput
 	#
 	# @return [String] The user input.
 	def get_command(msg=@prompt, history=true)
+		if os == :windows
+			print msg
+			return gets.chomp
+		end
+		# requiere del stty
 		Readline::readline(c4(msg), history)
 	end
 

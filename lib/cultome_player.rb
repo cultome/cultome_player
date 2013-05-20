@@ -6,6 +6,7 @@ unless Dir.exist?(db_logs_folder_path)
 	puts "Running for the first time. Preparing environment..."
 
 	require 'rake'
+	require 'fileutils'
 
 	def capture_stdout
 		s = StringIO.new
@@ -17,10 +18,11 @@ unless Dir.exist?(db_logs_folder_path)
 		$stdout = oldstd
 	end
 
-	system("mkdir #{db_logs_folder_path}")
-	system("mkdir #{user_dir}") unless File.exist?(user_dir)
+	# creamos los archivo necesarios
+	FileUtils.mkpath(db_logs_folder_path)
+	FileUtils.mkpath(user_dir) unless File.exist?(user_dir)
 	unless File.exist?(config_file)
-		system("cp #{File.join(project_path, CONFIG_FILE_NAME)} #{config_file}")
+		FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file)
 	end
 
 	Rake.application.rake_require("tasks/db_admin")

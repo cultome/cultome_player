@@ -1,6 +1,7 @@
 require 'active_support/inflector'
 require 'yaml'
 require 'mp3info'
+require 'colorize'
 
 # Utility module with shared functions across the project.
 module Helper
@@ -141,7 +142,7 @@ module Helper
 
 	def define_color_palette
 		if @color_palette.nil?
-			@color_palette = @config["color_palette"]
+			@color_palette = master_config['core']["color_palette"]
 			if @color_palette.nil?
 				@color_palette = [
 					:black,			# c1
@@ -161,7 +162,7 @@ module Helper
 					:light_cyan,	# c15
 					:light_white,	# c16
 				]
-				@config["color_palette"] = @color_palette
+				master_config['core']["color_palette"] = @color_palette
 			end
 		end
 

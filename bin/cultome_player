@@ -1,57 +1,77 @@
 #!/usr/bin/env jruby
 # encoding: utf-8
 
-system("clear")
+puts "Loading CulToMe Player..."
 
+require 'cultome/helper'
 require 'cultome/version'
 require 'colorize'
 
-print "Starting Cultome Player ".light_yellow
+include Helper
+
+system("cls") if os == :windows
+system("clear") if os != :windows
+
+print "Starting CulToMe Player ".light_yellow
 puts "v#{CultomePlayer::VERSION}".light_blue
 
 require 'text_slider'
 include TextSlider
 
-p = 'ᗧ'.yellow
-m = 'ᗤ'.yellow
-l = 'ᗣ'.light_yellow
-b = 'ᗣ'.light_red
-r = 'ᗣ'.red
-c = 'ᗣ'.cyan
-h = 'ᗣ'.white
-y = 'ᗣ'.light_blue
-o = 'ʘ'.yellow
+if os != :windows
+	p = 'ᗧ'.yellow
+	m = 'ᗤ'.yellow
+	l = 'ᗣ'.light_yellow
+	b = 'ᗣ'.light_red
+	r = 'ᗣ'.red
+	c = 'ᗣ'.cyan
+	h = 'ᗣ'.white
+	y = 'ᗣ'.light_blue
+	o = 'ʘ'.yellow
+	i = '• '.yellow
+else
+	p = '<'
+	m = '>'
+	l = '^'
+	b = '^'
+	r = '^'
+	c = '^'
+	h = '^'
+	y = '^'
+	o = 'O'
+	i = '. '
+end
 
 seq = [
-" • • • • • • • • • • • • • • #{o}".yellow,
-" • • • • • • • • • • • • • • #{o}".yellow,
-"#{p}#{"• • • • • • • • • • • • • •".yellow} #{o}",
-" #{p} #{"• • • • • • • • • • • • •".yellow} #{o}",
-"  #{p}#{"• • • • • • • • • • • • •".yellow} #{o}",
-"   #{p} #{"• • • • • • • • • • • •".yellow} #{o}",
-"    #{p}#{"• • • • • • • • • • • •".yellow} #{o}",
-"     #{p} #{"• • • • • • • • • • •".yellow} #{o}",
-"      #{p}#{"• • • • • • • • • • •".yellow} #{o}",
-"       #{p} #{"• • • • • • • • • •".yellow} #{o}",
-"        #{p}#{"• • • • • • • • • •".yellow} #{o}",
-"  #{b}      #{p} #{"• • • • • • • • •".yellow} #{o}",
-"#{l}  #{b}      #{p}#{"• • • • • • • • •".yellow} #{o}",
-" #{l}  #{b}      #{p} #{"• • • • • • • •".yellow} #{o}",
-"  #{l}  #{b}      #{p}#{"• • • • • • • •".yellow} #{o}",
-"#{r}  #{l}  #{b}      #{p} #{"• • • • • • •".yellow} #{o}",
-" #{r}  #{l}  #{b}      #{p}#{"• • • • • • •".yellow} #{o}",
-"  #{r}  #{l}  #{b}      #{p} #{"• • • • • •".yellow} #{o}",
-"#{c}  #{r}  #{l}  #{b}      #{p}#{"• • • • • •".yellow} #{o}",
-" #{c}  #{r}  #{l}  #{b}      #{p} #{"• • • • •".yellow} #{o}",
-"  #{c}  #{r}  #{l}  #{b}      #{p}#{"• • • • •".yellow} #{o}",
-"   #{c}  #{r}  #{l}  #{b}      #{p} #{"• • • •".yellow} #{o}",
-"    #{c}  #{r}  #{l}  #{b}      #{p}#{"• • • •".yellow} #{o}",
-"     #{c}  #{r}  #{l}  #{b}      #{p} #{"• • •".yellow} #{o}",
-"      #{c}  #{r}  #{l}  #{b}      #{p}#{"• • •".yellow} #{o}",
-"       #{c}  #{r}  #{l}  #{b}      #{p} #{"• •".yellow} #{o}",
-"        #{c}  #{r}  #{l}  #{b}      #{p}#{"• •".yellow} #{o}",
-"         #{c}  #{r}  #{l}  #{b}      #{p} #{"•".yellow} #{o}",
-"          #{c}  #{r}  #{l}  #{b}      #{p}#{"•".yellow} #{o}",
+" #{i * 14}#{o}",
+" #{i * 14}#{o}",
+"#{p}#{(i * 14)}#{o}",
+" #{p} #{(i * 13)}#{o}",
+"  #{p}#{(i * 13)}#{o}",
+"   #{p} #{(i * 12)}#{o}",
+"    #{p}#{(i * 12)}#{o}",
+"     #{p} #{(i * 11)}#{o}",
+"      #{p}#{(i * 11)}#{o}",
+"       #{p} #{(i * 10)}#{o}",
+"        #{p}#{(i * 10)}#{o}",
+"  #{b}      #{p} #{(i * 9)}#{o}",
+"#{l}  #{b}      #{p}#{(i * 9)}#{o}",
+" #{l}  #{b}      #{p} #{(i * 8)}#{o}",
+"  #{l}  #{b}      #{p}#{(i * 8)}#{o}",
+"#{r}  #{l}  #{b}      #{p} #{(i * 7)}#{o}",
+" #{r}  #{l}  #{b}      #{p}#{(i * 7)}#{o}",
+"  #{r}  #{l}  #{b}      #{p} #{(i * 6)}#{o}",
+"#{c}  #{r}  #{l}  #{b}      #{p}#{(i * 6)}#{o}",
+" #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 5)}#{o}",
+"  #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 5)}#{o}",
+"   #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 4)}#{o}",
+"    #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 4)}#{o}",
+"     #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 3)}#{o}",
+"      #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 3)}#{o}",
+"       #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 2)}#{o}",
+"        #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 2)}#{o}",
+"         #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 1)}#{o}",
+"          #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 1)}#{o}",
 "           #{c}  #{r}  #{l}  #{b}      #{p} #{o}",
 "            #{c}  #{r}  #{l}  #{b}      ᗧʘ",
 "             #{h}  #{h}  #{h}  #{h}      #{m}",
@@ -75,20 +95,20 @@ seq = [
 "                         #{y}    ",
 "                        #{y}    #{m}",
 "                       #{h}   #{m} #{o}",
-"                      #{h}  #{m} #{"•".yellow} #{o}",
-"                     #{y} #{m} #{"• •".yellow} #{o}",
-"                    ᗣᗤ #{"• • •".yellow} #{o}",
-"                   #{m} #{"• • • •".yellow} #{o}",
-"                 #{m} #{"• • • • •".yellow} #{o}",
-"               #{m} #{"• • • • • •".yellow} #{o}",
-"             #{m} #{"• • • • • • •".yellow} #{o}",
-"           #{m} #{"• • • • • • • •".yellow} #{o}",
-"         #{m} #{"• • • • • • • • •".yellow} #{o}",
-"       #{m} #{"• • • • • • • • • •".yellow} #{o}",
-"     #{m} #{"• • • • • • • • • • •".yellow} #{o}",
-"   #{m} #{"• • • • • • • • • • • •".yellow} #{o}",
-" #{m} #{"• • • • • • • • • • • • •".yellow} #{o}",
-" • • • • • • • • • • • • • • #{o}".yellow,
+"                      #{h}  #{m} #{(i * 1)}#{o}",
+"                     #{y} #{m} #{(i * 2)}#{o}",
+"                    ᗣᗤ #{(i * 3)}#{o}",
+"                   #{m} #{(i * 4)}#{o}",
+"                 #{m} #{(i * 5)}#{o}",
+"               #{m} #{(i * 6)}#{o}",
+"             #{m} #{(i * 7)}#{o}",
+"           #{m} #{(i * 8)}#{o}",
+"         #{m} #{(i * 9)}#{o}",
+"       #{m} #{(i * 10)}#{o}",
+"     #{m} #{(i * 11)}#{o}",
+"   #{m} #{(i * 12)}#{o}",
+" #{m} #{(i * 13)}#{o}",
+" #{i * 14}#{o}",
 ]
 
 thrd = roll_sequence(seq, {
@@ -100,6 +120,10 @@ thrd = roll_sequence(seq, {
 	tick: 0.1,
 })
 
+# cargamos la paleta de colores
+define_color_palette
+
+# cargamos el reproductor completo
 require 'cultome_player'
 require 'cultome/core'
 

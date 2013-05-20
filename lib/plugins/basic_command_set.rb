@@ -520,7 +520,7 @@ HELP
 				@cultome.is_playing_library = true
 
 				if new_playlist.blank?
-					display c2("No music connected yet. Try 'connect /home/csoria/music => music_library' first!")
+					display c2("No music connected yet. Try 'connect /home/user_name/music => music_library' first!")
 					return nil
 				end
 
