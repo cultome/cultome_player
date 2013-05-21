@@ -11,3 +11,4 @@ test_music_2
 error
 *.dat
 checklist
+load.rb

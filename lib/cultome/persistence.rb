@@ -5,6 +5,13 @@ require 'active_record'
 
 include Helper
 
+# The ActiveRecord model for Scrobbles objects.
+class Scrobble < ActiveRecord::Base
+  attr_accessible :artist, :track, :timestamp, :scrobbled
+
+  scope :pending, where(scrobbled: false).limit(50)
+end
+
 # The ActiveRecord model for Song objects.
 class Song < ActiveRecord::Base
 	attr_accessible :name, :artist_id, :album_id, :year, :track, :duration, :relative_path, :drive_id, :points, :last_played_at

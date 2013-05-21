@@ -2,11 +2,31 @@ require 'active_support/inflector'
 require 'yaml'
 require 'mp3info'
 require 'colorize'
+require 'active_record'
+require 'logger'
 
 # Utility module with shared functions across the project.
 module Helper
 
 	CONFIG_FILE_NAME = "config.yaml"
+
+	# Create a context with a managed connection from the pool. The block passed will be
+	# inside a valid connection.
+	#
+	# @param db_logic [Block] The logic that require a valid db connection.
+	def with_connection(&db_logic)
+		begin
+			ActiveRecord::Base.connection_pool
+		rescue Exception => e
+			ActiveRecord::Base.establish_connection(
+				adapter: db_adapter,
+				database: db_file
+			)
+			ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
+		end
+
+		ActiveRecord::Base.connection_pool.with_connection(&db_logic)
+	end
 
 	# Return the directory inside user home where this player writes his configurations
 	#

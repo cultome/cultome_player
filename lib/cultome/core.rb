@@ -201,24 +201,6 @@ class CultomePlayer
 		execute('next') unless ex.message =~ /Invalid command/
 	end
 
-	# Create a context with a managed connection from the pool. The block passed will be
-	# inside a valid connection.
-	#
-	# @param db_logic [Block] The logic that require a valid db connection.
-	def with_connection(&db_logic)
-		begin
-			ActiveRecord::Base.connection_pool
-		rescue Exception => e
-			ActiveRecord::Base.establish_connection(
-				adapter: db_adapter,
-				database: db_file
-			)
-			ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
-		end
-
-		ActiveRecord::Base.connection_pool.with_connection(&db_logic)
-	end
-
 	# Send the command parameters to appropiated registered listeners/commands.
 	#
 	# @param cmd [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.

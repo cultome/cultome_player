@@ -26,8 +26,10 @@ unless Dir.exist?(db_logs_folder_path)
 	end
 
 	Rake.application.rake_require("tasks/db_admin")
-	capture_stdout{Rake.application[:up].invoke}
+
+
 	#capture_stdout{Rake.application[:down].invoke}
+	capture_stdout{Rake.application[:up].invoke}
 end
 
 require 'java'

@@ -12,7 +12,7 @@ class CreateSchema < ActiveRecord::Migration
       t.string :relative_path
       t.integer :points, default: 0
       t.integer :plays, default: 0
-	  t.datetime :last_played_at
+      t.datetime :last_played_at
       t.timestamps
     end
 
@@ -41,7 +41,7 @@ class CreateSchema < ActiveRecord::Migration
     create_table :drives do |t|
       t.string :name
       t.string :path
-	  t.boolean :connected, default: true
+      t.boolean :connected, default: true
       t.timestamps
     end
 
@@ -51,7 +51,7 @@ class CreateSchema < ActiveRecord::Migration
       t.string :artist_url
       t.string :track_url
       t.string :similar_to
-	  t.references :similar, polymorphic: true
+      t.references :similar, polymorphic: true
       t.timestamps
     end
   end
@@ -64,6 +64,7 @@ class CreateSchema < ActiveRecord::Migration
     drop_table :genres_songs
     drop_table :drives
     drop_table :similars
+    drop_table :scrobbles
   end
 end
 
