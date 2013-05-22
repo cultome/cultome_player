@@ -27,4 +27,8 @@ Gem::Specification.new do |gem|
 	gem.add_runtime_dependency "share_this", [">= 0.1.0"]
 	gem.add_runtime_dependency "text_slider", [">= 0.1.0"]
 	gem.add_runtime_dependency "colorize", [">= 0.5.8"]
+	gem.add_runtime_dependency "jdbc-sqlite3", [">= 3.7.2.0"]
+
+	gem.add_development_dependency "rspec", [">= 2.13.0"]
+	gem.add_development_dependency "webmock", [">= 1.11.0"]
 end
