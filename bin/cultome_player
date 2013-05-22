@@ -9,11 +9,14 @@ require 'colorize'
 
 include Helper
 
-system("cls") if os == :windows
-system("clear") if os != :windows
-
-print "Starting CulToMe Player ".light_yellow
-puts "v#{CultomePlayer::VERSION}".light_blue
+if os == :windows
+	system("cls") 
+	puts "Starting CulToMe Player v#{CultomePlayer::VERSION}"
+elsif os != :windows
+	system("clear") 
+	print "Starting CulToMe Player ".light_yellow
+	puts "v#{CultomePlayer::VERSION}".light_blue
+end
 
 require 'text_slider'
 include TextSlider
