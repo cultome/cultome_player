@@ -1,36 +1,42 @@
 # inicializamos la gem
 require 'cultome/helper'
+require 'fileutils'
+
 include Helper
 
-unless Dir.exist?(db_logs_folder_path)
-	puts "Running for the first time. Preparing environment..."
-
-	require 'rake'
-	require 'fileutils'
-
-	def capture_stdout
-		s = StringIO.new
-		oldstd = $stdout
-		$stdout = s
-		yield
-		s.string
-	ensure
-		$stdout = oldstd
-	end
-
-	# creamos los archivo necesarios
-	FileUtils.mkpath(db_logs_folder_path)
-	FileUtils.mkpath(user_dir) unless File.exist?(user_dir)
-	unless File.exist?(config_file)
-		FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file)
-	end
-
-	Rake.application.rake_require("tasks/db_admin")
-
-
-	#capture_stdout{Rake.application[:down].invoke}
-	capture_stdout{Rake.application[:up].invoke}
+def capture_stdout
+	s = StringIO.new
+	oldstd = $stdout
+	$stdout = s
+	yield
+	s.string
+ensure
+	$stdout = oldstd
 end
+
+def check_directories_integrity
+	FileUtils.mkpath(db_logs_folder_path) unless Dir.exist?(db_logs_folder_path)
+	FileUtils.mkpath(user_dir) unless File.exist?(user_dir)
+end
+
+def check_config_files_integrity
+	FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file) unless File.exist?(config_file)
+end
+
+def check_database_integrity
+	with_connection do
+		max_version = ActiveRecord::Migrator.migrations(migrations_path).max{|m| m.version }.version
+		current_version = ActiveRecord::Migrator.current_version
+
+		if max_version > current_version
+			capture_stdout { ActiveRecord::Migrator.migrate(migrations_path) }
+		end
+	end
+end
+
+check_directories_integrity
+check_config_files_integrity
+check_database_integrity
 
 require 'java'
 
