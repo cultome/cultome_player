@@ -22,14 +22,14 @@ ENV['db_adapter'] = 'sqlite3'
 
 def get_fake_player
 	fake_similars = double("similars")
-  fake_similars.stub(:create)
-  fake_similars.stub(:empty?).and_return(true)
+	fake_similars.stub(:create)
+	fake_similars.stub(:empty?).and_return(true)
 
 	fake_song = double("song")
 	fake_song.stub(:name).and_return("Traffic Light", "Great Dj", "Up and Down")
 	fake_song.stub(:id).and_return(1067, 1066, 1086)
 	fake_song.stub(:path).and_return("spec/data/to_send/music.mp3")
-  fake_song.stub(:similars).and_return(fake_similars)
+	fake_song.stub(:similars).and_return(fake_similars)
 
 	fake_player = double("cultome_player")
 	fake_prev_song = double("prev_song")
