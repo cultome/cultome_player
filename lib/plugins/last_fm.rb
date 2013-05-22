@@ -105,11 +105,11 @@ module Plugin
 			if query_info[:method] == LastFm::GET_SIMILAR_ARTISTS_METHOD
 				artist = Artist.includes(:similars).find_by_name(query_info[:artist])
 				return artist.similars unless artist.nil?
-        return []
+				return []
 			elsif query_info[:method] == LastFm::GET_SIMILAR_TRACKS_METHOD
 				track = Song.includes(:similars).find_by_name(query_info[:track])
 				return track.similars unless track.nil?
-        return []
+				return []
 			end
 		end
 
@@ -142,25 +142,32 @@ module Plugin
 				query_info[:api_sig] = generate_call_sign(query_info)
 			end
 
-      # siempre pedims la representacion en JSON, pero este parametro no se firma con el resto
+			# siempre pedims la representacion en JSON, pero este parametro no se firma con el resto
 			query_info[:format] = 'json'
 
 			query_string = get_query_string(query_info)
+			client = getClient
 
-      if method == :get
-        url = "#{LastFm::LAST_FM_WS_ENDPOINT}?#{query_string}"
-        json_string = Net::HTTP::get_response(URI(url)).body
-      elsif method == :post
-        url = LastFm::LAST_FM_WS_ENDPOINT
-        json_string = Net::HTTP::post_form(URI(url), query_info).body
-      end
-
+			if method == :get
+				url = "#{LastFm::LAST_FM_WS_ENDPOINT}?#{query_string}"
+				json_string = client.get_response(URI(url)).body
+			elsif method == :post
+				url = LastFm::LAST_FM_WS_ENDPOINT
+				json_string = client.post_form(URI(url), query_info).body
+			end
 			return JSON.parse(json_string)
+		end
+
+		def getClient
+			return Net::HTTP unless ENV['http_proxy']
+
+			proxy = URI.parse ENV['http_proxy']
+			Net::HTTP::Proxy(proxy.host, proxy.port)
 		end
 
 		def generate_call_sign(query_info)
 			params = query_info.sort.inject(""){|sum,map| sum += "#{map[0]}#{map[1]}" }
-			sign = params + @config['secret']
+			sign = params + LastFm::LAST_FM_SECRET
 			return Digest::MD5.hexdigest(sign)
 		end
 
@@ -258,9 +265,12 @@ module Plugin
 
 	module Scrobbler
 		def scrobble(params=[])
-			song_name = @cultome.song.name
-			artist_name = @cultome.artist.name
-			artist_id = @cultome.artist.id
+			p = @cultome.prev_song
+			return nil if p.nil?
+
+			song_name = p.name
+			artist_name = p.artist.name
+			artist_id = p.artist.id
 			progress = @cultome.song_status["mp3.position.microseconds"] / 1000000
 
 			# necesitamos que la cancion haya sido tocada almenos 30 segundos
@@ -274,33 +284,33 @@ module Plugin
 
 			query_info = define_query(:scrobble, song_name, artist_name)
 
-      begin
-        consult_lastfm(query_info, true, :post)
+			begin
+				consult_lastfm(query_info, true, :post)
 
-        check_pending_scrobbles
-      rescue Exception => e
-        raise e unless e.message =~ /name or service not known/
-        # guardamos los scrobbles para subirlos cuando haya conectividad
-        Scrobble.create(artist: artist_name, track: song_name, timestamp: query_info[:timestamp])
-      end
+				check_pending_scrobbles
+			rescue Exception => e
+				raise e unless e.message =~ /name or service not known/
+					# guardamos los scrobbles para subirlos cuando haya conectividad
+					Scrobble.create(artist: artist_name, track: song_name, timestamp: query_info[:timestamp])
+			end
 		end
 
-    private
+		private
 
-    def check_pending_scrobbles
-      pending = Scrobble.pending
-      if pending.size > 0
-        query = define_query(:multiple_scrobble, nil, nil, pending)
+		def check_pending_scrobbles
+			pending = Scrobble.pending
+			if pending.size > 0
+				query = define_query(:multiple_scrobble, nil, nil, pending)
 
-        consult_lastfm(query, true, :post)
+				consult_lastfm(query, true, :post)
 
-        # eliminamos los scrobbles
-        pending.each{|s| s.delete }
+				# eliminamos los scrobbles
+				pending.each{|s| s.delete }
 
-        # checamos si hay mas por enviar
-        return check_pending_scrobbles
-      end
-    end
+				# checamos si hay mas por enviar
+				return check_pending_scrobbles
+			end
+		end
 	end
 
 	class LastFm < PluginBase
@@ -311,6 +321,7 @@ module Plugin
 
 		LAST_FM_WS_ENDPOINT = 'http://ws.audioscrobbler.com/2.0/'
 		LAST_FM_API_KEY = 'bfc44b35e39dc6e8df68594a55a442c5'
+		LAST_FM_SECRET = '2ff2254532bbae15b2fd7cfefa5ba018'
 		GET_SIMILAR_TRACKS_METHOD = 'track.getSimilar'
 		GET_SIMILAR_ARTISTS_METHOD = 'artist.getSimilar'
 		SCROBBLE_METHOD = 'track.scrobble'
@@ -333,7 +344,7 @@ module Plugin
 			{similar: {
 				help: "Look in last.fm for similar artists or songs", 
 				params_format: "<object>",
-				usage: <<HELP
+				usage: <<-HELP
 There are two primary uses for this plugin:
 	* find similar songs to the current song
 	* find similar artists of the artist of the current song
@@ -344,12 +355,12 @@ To search for artist the parameter '@artist' is required.
 
 When the results are parsed successfully from Last.fm the first time, the results are stored in the local database, so, successives calls of this command, for the same song or artist dont require internet access.
 
-HELP
+				HELP
 			},
-			configure_lastfm: {
+				configure_lastfm: {
 				help: "Configure you Last.fm account to be able to scrobble.",
 				params_format: "literal",
-				usage: <<HELP
+				usage: <<-HELP
 Execute a little wizard to help you configure the scrobbler with your Last.fm account.
 
 To begin the wizard just type
@@ -359,7 +370,7 @@ To make successfuly configure the scrobbler you require an active internet conne
 	* configure_lastfm done
 
 This process is required only once, we promess you.
-HELP
+			HELP
 			}}
 		end
 
@@ -368,7 +379,7 @@ HELP
 			return nil unless params.size == 1 && params[0][:type] == :literal
 
 			if params[0][:value] == 'begin'
-				display c5(<<INFO 
+				display c5(<<-INFO 
 Hello! we're gonna setup the Last.fm scrobbler so this player can notify Last.fm the music you are hearing. So this is waht we'll do:
 	1) The default browser will be opened and you'll be required to login into your Last.fm account (you require  an internet connection).
 	2) You'll be asked to give authorization to this player to scrobble in your account.
@@ -376,36 +387,35 @@ Hello! we're gonna setup the Last.fm scrobbler so this player can notify Last.fm
 		configure_lastfm done
 
 Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready....
-
-INFO
+						   INFO
 						  )
-				# wait for user to be ready
-				gets
+						  # wait for user to be ready
+						  gets
 
-				auth_info = define_query(:token)
-				json = consult_lastfm(auth_info, true)
+						  auth_info = define_query(:token)
+						  json = consult_lastfm(auth_info, true)
 
-				return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['token'].nil?
+						  return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['token'].nil?
 
-				# guardamos el token para el segundo paso
-				@config['token'] = json['token']
+						  # guardamos el token para el segundo paso
+						  @config['token'] = json['token']
 
-				auth_url = "http://www.last.fm/api/auth?api_key=#{LAST_FM_API_KEY}&token=#{@config['token']}"
+						  auth_url = "http://www.last.fm/api/auth?api_key=#{LAST_FM_API_KEY}&token=#{@config['token']}"
 
-        if os == :windows
-          system("start \"\" \"#{auth_url}\"")
-        elsif os == :linux
-          system("gnome-open #{auth_url}")
-        else
-          display c4("Please write the next URL in your browser:\n#{auth_url}")
-        end
+						  if os == :windows
+							  system("start \"\" \"#{auth_url}\"")
+						  elsif os == :linux
+							  system("gnome-open \"#{auth_url}\" \"\"")
+						  else
+							  display c4("Please write the next URL in your browser:\n#{auth_url}")
+						  end
 
 			elsif params[0][:value] == 'done'
 				display c4("Thanks! Now we are validating the authorization and if it all right then we're done!. Wait a minute please...")
 				auth_info = define_query(:session)
 				json = consult_lastfm(auth_info, true)
 
-				return display(c2("Problem! #{json['error']}: #{json['message']}")) if json[:session].nil?
+				return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['session'].nil?
 
 				@config['session_key'] = json['session']['key']
 
@@ -452,11 +462,11 @@ INFO
 				query = {
 					method: LastFm::SCROBBLE_METHOD,
 				}
-        scrobbles.each_with_index do |s, idx|
-          query["artist[#{idx}]".to_sym] = s.artist
-          query["track[#{idx}]".to_sym] = s.track
-          query["timestamp[#{idx}]".to_sym] = s.timestamp
-        end
+				scrobbles.each_with_index do |s, idx|
+					query["artist[#{idx}]".to_sym] = s.artist
+					query["track[#{idx}]".to_sym] = s.track
+					query["timestamp[#{idx}]".to_sym] = s.timestamp
+				end
 
 			when :token
 				query = {
@@ -475,9 +485,9 @@ INFO
 			return query
 		end
 
-    def self.timestamp
-      @test_time || Time.now.to_i
-    end
+		def self.timestamp
+			@test_time || Time.now.to_i
+		end
 
 		# Create a safe query string to use with the request to the webservice.
 		#
@@ -490,7 +500,7 @@ INFO
 		def method_missing(method_name, *args)
 			return super if method_name !~ /next|prev|quit/
 
-			scrobble(*args)
+				scrobble(*args)
 		end
 	end
 
