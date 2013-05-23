@@ -59,8 +59,10 @@ HELP
 		#
 		# @param ex [CultomePlayerException] The exception throwed
 		def player_exception_throwed(ex)
+			return unless ex.respond_to?(:command)
+
 			# separamos el comando
-			split = ex.data.split(' ')
+			split = ex.command.split(' ')
 			raise ex if split[0].nil? || aliases[split[0]].nil?
 
 			translated = aliases[split[0]].clone

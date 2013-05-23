@@ -118,11 +118,7 @@ class CultomePlayer
 		@running = true
 
 		while(@running) do
-			begin
-				execute get_command
-			rescue Exception => e
-				default_error_action e
-			end
+			execute get_command
 		end
 	end
 
@@ -145,9 +141,9 @@ class CultomePlayer
 				end
 			end
 		rescue CultomePlayerException => ctmex
-			default_error_action( ctmex ) unless send_to_listeners('player_exception_throwed', ctmex, :__PLAYER_EXCEPTIONS__)
+			send_to_listeners('player_exception_throwed', ctmex, :__PLAYER_EXCEPTIONS__)
+			default_error_action( ctmex ) if ctmex.take_action?
 		rescue Exception => ex
-			puts ex.backtrace if ENV['environment'] == 'dev'
 			default_error_action( ex ) unless send_to_listeners('exception_throwed', ctmex, :__EXCEPTIONS__)
 		end
 	end
@@ -197,14 +193,27 @@ class CultomePlayer
 	#
 	# @param ex [Exception] The exception throwed
 	def default_error_action(ex)
-		display c2(ex.message)
-		execute('next') unless ex.message =~ /Invalid command/
+		if ex.respond_to?(:displayable)
+			display c2(ex.message) if ex.displayable?
+		else
+			case ex.message
+			when /(Connection refused|Network is unreachable)/ then display c2("The internet is not available!")
+			else
+				display c2(ex.message)
+				puts ex.backtrace if ENV['environment'] == 'dev'
+			end
+		end
+
+		#execute('next') unless ex.message =~ /Invalid command/
+		return execute('next') unless ex.respond_to?(:take_action?)
+
+		execute('next') if ex.take_action?
 	end
 
 	# Send the command parameters to appropiated registered listeners/commands.
 	#
 	# @param cmd [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
-	# @return What the plugin's appropiated command/listeners returns
+	# @return [Boolean] True is there was any listeners that receive the message, false otherwise.
 	def send_to_listeners(cmd, params, filter=:__ALL_VALIDS__)
 		listeners = @listener_registry.values_at(cmd, filter).flatten
 		unless listeners.nil?

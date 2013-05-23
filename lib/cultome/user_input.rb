@@ -84,7 +84,7 @@ module UserInput
 	# @param (see #parse)
 	# @return [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
 	def parse_command(input)
-		raise CultomePlayerException.new(:invalid_command, input) if input !~ /\A(#{valid_command})[\s]*(.*)?\Z/
+		raise CultomePlayerException.new(:invalid_command, command: input) if input !~ /\A(#{valid_command})[\s]*(.*)?\Z/
 
 		cmd = $1.to_sym
 		# params = $2.split(' ').collect{|s| if s.blank? then nil else s end }

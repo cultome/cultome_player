@@ -51,7 +51,7 @@ module Helper
 			when /solaris|bsd/
 				:unix
 			else
-				raise Exception("unknown os: #{host_os}")
+				raise Exception.new("unknown os: #{host_os}")
 			end
 		)
 	end

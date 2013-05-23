@@ -1,5 +1,6 @@
 require 'cultome/plugin'
 require 'cultome/persistence'
+require 'cultome/exception'
 require 'net/http'
 require 'json'
 require 'cgi'
@@ -13,7 +14,7 @@ module Plugin
 		#
 		# @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
 		def similar(params=[])
-			raise new CultomePlayerException("Invalid parameters!") if !params.empty? && params.find{|p| p[:type] == :object}.nil?
+			raise CultomePlayerException.new(:invalid_parameter, params: params) if !params.empty? && params.find{|p| p[:type] == :object}.nil?
 
 			begin
 				song_name = @cultome.song.name
@@ -271,14 +272,18 @@ module Plugin
 			song_name = p.name
 			artist_name = p.artist.name
 			artist_id = p.artist.id
-			progress = @cultome.song_status["mp3.position.microseconds"] / 1000000
+			if @cultome.song_status["mp3.position.microseconds"]
+				progress = @cultome.song_status["mp3.position.microseconds"] / 1000000
+			else
+				progress = 0
+			end
 
 			# necesitamos que la cancion haya sido tocada almenos 30 segundos
 			return nil if progress < 30
 			song_name = @cultome.song.name
 
 			# no hacemos scrobble si el artista o el track son desconocidos
-			raise CultomePlayerException("Can't scrobble if artist or track names are unknown. Edit the ID3 tag.") if artist_id == 1
+			raise CultomePlayerException.new(:unable_to_scrobble, error_message: "Can't scrobble if artist or track names are unknown. Edit the ID3 tag.") if artist_id == 1
 
 			return nil if @config['session_key'].nil?
 

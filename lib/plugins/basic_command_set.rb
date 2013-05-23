@@ -1,5 +1,6 @@
 require 'cultome/plugin'
 require 'cultome/persistence'
+require 'cultome/exception'
 require 'cultome/user_input'
 
 # Plugin to handle basic commands of the player.
@@ -605,8 +606,7 @@ HELP
 			begin
 				@cultome.player.play(@cultome.song.path)
 			rescue Exception => e
-				display c2("Error: #{e.message}")
-				return @cultome.execute('next')
+				raise CultomePlayerException.new(:unable_to_play, take_action: true, error_original: e.message)
 			end
 
 			# agregamos al contador de reproducciones
