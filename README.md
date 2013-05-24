@@ -264,8 +264,9 @@ play
 * Specs up to date! YEAH!
 
 ** Version 0.4.0**
-* Now you database and your config file are inside you user directory, that mean every new version dont require re-connect you music or make your aliases again.
+* Now you database and your config file are inside you user directory (~/.cultome), that mean every new version dont require re-connect you music or make your aliases again.
 * Scrobbler? of course! why not? but please run 'configure_lastfm begin' before use it.
+* Better environment startup check.
 
 ## TODO
 
