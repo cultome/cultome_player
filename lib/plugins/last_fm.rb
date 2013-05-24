@@ -15,12 +15,13 @@ module Plugin
 		# @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
 		def similar(params=[])
 			raise CultomePlayerException.new(:invalid_parameter, params: params) if !params.empty? && params.find{|p| p[:type] == :object}.nil?
+			return nil if @cultome.song.nil?
 
 			begin
 				song_name = @cultome.song.name
-				artist_name = @cultome.artist.name
+				artist_name = @cultome.song.artist.name
 				song_id = @cultome.song.id
-				artist_id = @cultome.artist.id
+				artist_id = @cultome.song.artist.id
 
 				type = params.empty? ? :song : params.find{|p| p[:type] == :object}[:value]
 				query_info = define_query(type, song_name, artist_name)
@@ -88,6 +89,7 @@ module Plugin
 				end
 			ensure
 				@thrd.kill if !@thrd.nil? && @thrd.stop?
+				print "#{" " * LastFm::TEXT_WIDTH}\r"
 			end
 		end
 
@@ -118,7 +120,7 @@ module Plugin
 			opts = {
 				background: true, 
 				repeat: true, 
-				width: 50
+				width: LastFm::TEXT_WIDTH
 			}
 
 			opts.merge!(options)
@@ -149,14 +151,18 @@ module Plugin
 			query_string = get_query_string(query_info)
 			client = getClient
 
-			if method == :get
-				url = "#{LastFm::LAST_FM_WS_ENDPOINT}?#{query_string}"
-				json_string = client.get_response(URI(url)).body
-			elsif method == :post
-				url = LastFm::LAST_FM_WS_ENDPOINT
-				json_string = client.post_form(URI(url), query_info).body
+			begin
+				if method == :get
+					url = "#{LastFm::LAST_FM_WS_ENDPOINT}?#{query_string}"
+						json_string = client.get_response(URI(url)).body
+				elsif method == :post
+					url = LastFm::LAST_FM_WS_ENDPOINT
+					json_string = client.post_form(URI(url), query_info).body
+				end
+				return JSON.parse(json_string)
+			rescue Exception => e
+				raise CultomePlayerException.new(:internet_not_available, error_message: e.message, take_action: false) if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
 			end
-			return JSON.parse(json_string)
 		end
 
 		def getClient
@@ -283,7 +289,7 @@ module Plugin
 			song_name = @cultome.song.name
 
 			# no hacemos scrobble si el artista o el track son desconocidos
-			raise CultomePlayerException.new(:unable_to_scrobble, error_message: "Can't scrobble if artist or track names are unknown. Edit the ID3 tag.") if artist_id == 1
+			raise CultomePlayerException.new(:unable_to_scrobble) if artist_id == 1
 
 			return nil if @config['session_key'].nil?
 
@@ -294,9 +300,10 @@ module Plugin
 
 				check_pending_scrobbles
 			rescue Exception => e
-				raise e unless e.message =~ /name or service not known/
-					# guardamos los scrobbles para subirlos cuando haya conectividad
-					Scrobble.create(artist: artist_name, track: song_name, timestamp: query_info[:timestamp])
+				# guardamos los scrobbles para subirlos cuando haya conectividad
+				Scrobble.create(artist: artist_name, track: song_name, timestamp: query_info[:timestamp])
+				e.displayable = false if e.respond_to?(:displayable=)
+				raise e
 			end
 		end
 
@@ -332,6 +339,7 @@ module Plugin
 		SCROBBLE_METHOD = 'track.scrobble'
 		GET_TOKEN_METHOD = 'auth.getToken'
 		GET_SESSION_METHOD = 'auth.getSession'
+		TEXT_WIDTH = 50
 
 		# Register this listener for the events: next, prev and quit
 		# @note Required method for register listeners

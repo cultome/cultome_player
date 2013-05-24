@@ -19,13 +19,13 @@ module Plugin
 			{lyric: {
 				help: "Find the lyric of the current song",
 				params_format: "",
-				usage: <<HELP
+				usage: <<-HELP
 Want to sing along with you favorite other-language-song? Ask the player to find the lyric with:
 	* lyric
 
 The lyric is searched using the lyrics.wikia.com webservice. So if the player dont find the lyrics, wouldn't it be nice if you search it and upload it to the site? Surely they appreciate it and the next other-language-singers too.
 
-HELP
+				HELP
 			}}
 		end
 
@@ -40,29 +40,32 @@ HELP
 				repeat: true, 
 				width: found_txt.length, 
 				background: true }
-			) do |text|
-				display(text, true)
-			end
+							) do |text|
+								display(text, true)
+							end
 
-			url = "http://lyrics.wikia.com/api.php?artist=#{CGI::escape(artist_name)}&song=#{CGI::escape(song_name)}&fmt=json"
+							url = "http://lyrics.wikia.com/api.php?artist=#{CGI::escape(artist_name)}&song=#{CGI::escape(song_name)}&fmt=json"
 
-			begin
-				response = Net::HTTP.get_response(URI(url)).body
-				json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
-				Net::HTTP.get_response(URI(json['url'])).body.lines.each do |line|
-					if line =~ /<div class='lyricbox'>/
-						lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
+							begin
+								response = Net::HTTP.get_response(URI(url)).body
+								json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
+								Net::HTTP.get_response(URI(json['url'])).body.lines.each do |line|
+									if line =~ /<div class='lyricbox'>/
+										lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
 
-						thrd.kill
-						display c4(found_txt)
+										thrd.kill
+										display c4(found_txt)
 
-						display c12(lyric)
-						return lyric
-					end
-				end
-			ensure
-				thrd.kill if thrd.stop?
-			end
+										display c12(lyric)
+										return lyric
+									end
+								end
+							rescue Exception => e
+								raise CultomePlayerException.new(:internet_not_available, error_message: e.message, take_action: false) if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
+							ensure
+								thrd.kill if thrd.stop?
+								print "#{" " * found_txt.length}\r"
+							end
 		end
 	end
 end

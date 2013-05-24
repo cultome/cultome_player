@@ -53,8 +53,6 @@ HELP
 			aliases[alias_name] = alias_value
 		end
 
-		private
-
 		# Invoked when a player exception is throwed
 		#
 		# @param ex [CultomePlayerException] The exception throwed
@@ -63,7 +61,7 @@ HELP
 
 			# separamos el comando
 			split = ex.command.split(' ')
-			raise ex if split[0].nil? || aliases[split[0]].nil?
+			return if split[0].nil? || aliases[split[0]].nil?
 
 			translated = aliases[split[0]].clone
 
@@ -72,6 +70,8 @@ HELP
 					translated.gsub!(/\%#{c}/, split[c])
 				end
 			end
+
+			ex.add_attribute(:displayable, false)
 
 			return @cultome.execute translated
 		end

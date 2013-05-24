@@ -1,35 +1,66 @@
 
 class CultomePlayerException < Exception
 
+	# Creates an exception and depending on the parameter __type__, change the message of the exception to a more user-friendly message.
+	# The accepted types are:
+	#	* :unable_to_play
+	#	* :invalid_parameter
+	#	* :unable_to_scrobble
+	#	* :internet_not_available
+	#	* :invalid_command
 	def initialize(type=:unknown, *data)
 		@data = {
 			displayable: true, 
 			take_action: false,
 		}.merge(data.empty? ? {} : data[0])
 
+		@accesors = []
+		@data.each do |k,v|
+			create_accessors(k)
+		end
+
 		case type
 		when :invalid_command then super("Invalid command. Type typing 'help' for information.")
 		when :unable_to_play then super("Unable to play.")
 		when :invalid_parameter then super("Invalid parameter.")
-		when :unable_to_scrobble then super(error_message)
+		when :unable_to_scrobble then super("Can't scrobble if artist or track names are unknown. Edit the ID3 tag.")
+		when :internet_not_available then super("Internet is not available!")
 		else super("Something went seriously wrong!!")
 		end
 	end
 
-	def method_missing(method_name, *args)
-		stripped_name, punctuation = method_name.to_s.sub(/([?!=])$/, '').to_sym, $1
-		return super unless @data[stripped_name]
-
-		CultomePlayerException.class_eval do
-			define_method "#{stripped_name}#{punctuation}" do
-				@data[stripped_name]
-			end
-		end
-
-		send method_name
+	def respond_to?(value)
+		@accesors.include?(value) || value == :exception
 	end
 
-	def respond_to?(value)
-		!@data[value].nil? || value == :exception
+	# Create an attribute in the data map with their respective accesors (see #create_accessors).
+	#
+	# @param attr [Symbol] The name of the attribute to be created
+	# @param value [Object] The value of the attribute
+	def add_attribute(attr, value)
+		@data[attr.to_sym] = value
+		create_accessors(attr)
+	end
+
+	private
+
+	# Creates three attribute accessor por every attribute: attr, attr= and attr?
+	#
+	# @param attr [Symbol] The attribute name to generate the accesors
+	def create_accessors(attr)
+		wr, rd, qt = "#{attr}=".to_sym, "#{attr}".to_sym, "#{attr}?".to_sym
+		@accesors << wr << rd << qt
+
+		CultomePlayerException.class_eval do
+			define_method wr do |new_value|
+				@data[attr] = new_value
+			end
+			define_method rd do
+				@data[attr]
+			end
+			define_method qt do
+				@data[attr]
+			end
+		end
 	end
 end

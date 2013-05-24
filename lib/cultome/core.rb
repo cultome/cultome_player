@@ -142,7 +142,7 @@ class CultomePlayer
 			end
 		rescue CultomePlayerException => ctmex
 			send_to_listeners('player_exception_throwed', ctmex, :__PLAYER_EXCEPTIONS__)
-			default_error_action( ctmex ) if ctmex.take_action?
+			default_error_action( ctmex )
 		rescue Exception => ex
 			default_error_action( ex ) unless send_to_listeners('exception_throwed', ctmex, :__EXCEPTIONS__)
 		end
@@ -204,7 +204,6 @@ class CultomePlayer
 			end
 		end
 
-		#execute('next') unless ex.message =~ /Invalid command/
 		return execute('next') unless ex.respond_to?(:take_action?)
 
 		execute('next') if ex.take_action?
