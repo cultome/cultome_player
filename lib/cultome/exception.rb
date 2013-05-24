@@ -8,6 +8,17 @@ class CultomePlayerException < Exception
 	#	* :unable_to_scrobble
 	#	* :internet_not_available
 	#	* :invalid_command
+	#
+	# The extended data actually includes:
+	#	* displayable (default: true)
+	#	* take_action (default: false)
+	#	* error_message 
+	#	* command 
+	#
+	#	Except for the first two, that are used by the player to identify when a error should be displayed and do the default error action, respectivly, the others are used as information only.
+	#
+	# @param type [Symbol] The type of exception
+	# @param data [Array] Extended exception information
 	def initialize(type=:unknown, *data)
 		@data = {
 			displayable: true, 

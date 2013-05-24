@@ -606,7 +606,7 @@ HELP
 			begin
 				@cultome.player.play(@cultome.song.path)
 			rescue Exception => e
-				raise CultomePlayerException.new(:unable_to_play, take_action: true, error_original: e.message)
+				raise CultomePlayerException.new(:unable_to_play, take_action: true, error_message: e.message)
 			end
 
 			# agregamos al contador de reproducciones
