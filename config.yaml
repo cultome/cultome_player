@@ -1,9 +1,9 @@
 ---
 core:
   prompt: !ruby/string
-    str: ! 'cultome> '
+    str: 'cultome> '
     mode: 0
-    uncolorized: ! 'cultome> '
+    uncolorized: 'cultome> '
     background: 9
   color_palette:
   - :black
@@ -27,7 +27,6 @@ basic_command_set:
 copy_to: {}
 last_fm:
   similar_results_limit: 10
-  secret: 2ff2254532bbae15b2fd7cfefa5ba018
 taste_analizer:
   genres_compatibility:
     ? - Rock
@@ -87,6 +86,7 @@ command_aliases:
     exit: quit
     sap: search %1 | play 1
     ls: show @playlist
+    p: pause
 gesture_analizer: {}
 lyric_finder: {}
 share_it: {}
