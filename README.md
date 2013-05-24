@@ -5,7 +5,7 @@ A handy music library explorer. Is designed to facilitate you to play the music 
 
 The player is designed around this concept, so it has commands to help you find music in your library and play it.
 
-### Usage examples
+## Usage
 
 Lets see a couple examples and translate it to what to expect
 
@@ -49,7 +49,7 @@ play @tribal
 ```
 Generates a playlist with song whose genres includes 'tribal'
 
-### Player's command interface
+## Player's command interface
 To understand the command interface, you need to understand its parameters types and formats.
 
 #### Criterio
@@ -172,7 +172,7 @@ A valid IP4 address.
 ```
 
 
-### Commands
+## Commands
 The commands are very rustic. Basicly consist in a command name and a list of parameters.
 
 ```ruby
@@ -204,6 +204,7 @@ The following command are implemented in this moment.
 * receive <path|object> <literal|number>            Start listening for a music transfer connection.
 * alias <literal> => <literal>                      Create an alias for one or many commands
 * lyric                                             Find the lyric of the current song
+* configure_lastfm <literal>                        Configure you Last.fm account to be able to scrobble.
 * help <literal>                                    Show this help.
 ```
 
@@ -226,7 +227,7 @@ If in doubt of a command please refer to the help of the command inside the app 
 help <command_name>
 ```
 
-### Installation
+## Installation
 First of all you need JRuby installed in your system. There are many tutorial in internet to do this.
 
 To distinguish from pure ruby, I'm gonna assume that all the JRuby executable are prepended with a j.
@@ -241,7 +242,7 @@ connect /home/user/music => main
 play
 ```
 
-### What's new
+## What's new
 **Version 0.2.0**
 
 * The code were reorganized to be more API-oriented, even when this was not the mainly intention of this project, but can be uselful for others to use it this way.
@@ -263,21 +264,30 @@ play
 * Specs up to date! YEAH!
 
 ** Version 0.4.0**
-* Support for Windows! Yeah! at last my wife will be able to use it!
 * Now you database and your config file are inside you user directory, that mean every new version dont require re-connect you music or make your aliases again.
-* Scrobbler? of course! why not?
+* Scrobbler? of course! why not? but please run 'configure_lastfm begin' before use it.
 
-### Ideas for next releases
+## TODO
 
 * Add tags to the songs, for example 'party' or 'sadness'.
-
-### TODO
+* A friend of mine give me an idea, when you are in a place where many people hear the same music, you should be able to decide what to play, as everyone else. So I will try an implementation of this idea, maybe a slave-masters model.
+* Connect with musicbrainz to tag correctly and beatifuly my music, this also surge as Last.fm is very picky with the information you submit with your scrobbles.
+* Support for Windows. Not my priority but would be nice my wife to use it.
+* Refactor the whole code. You know? I'm reading a good ruby book and a would like to apply the technics decribed there, but over all prettify my code. Also it would be nice if anyone could use this player with any other music backend or usea its plugins for hes own applications.
+* Add gestures to the detector and start making appropiated suggestions for them.
+* Extract the Java music player outside the code, even run it in another process. This to avoid using jruby, the memory consumption is too high.
 * Refine the taste analizer, which is the component that give preference points to songs.
-* Leave JRuby and convert to pure Ruby
-* Improve the memory usage, it simply too high!
-* Change the underlying in.memory database for a real one, thinking on mongo
+* Change the underlying in-file database for a real one, thinking on mongo or mysql.
 
-### Additional Information
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
+## Additional Information
 
 #### jlGui BasicPlayer
 This component is what I use to play music and is included within the libraries of this project, dependencies included of course.
