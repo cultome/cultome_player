@@ -8,6 +8,7 @@ class CultomePlayerException < Exception
 	#	* :unable_to_scrobble
 	#	* :internet_not_available
 	#	* :invalid_command
+	#	* :no_active_playback
 	#
 	# The extended data actually includes:
 	#	* displayable (default: true)
@@ -36,6 +37,7 @@ class CultomePlayerException < Exception
 		when :invalid_parameter then super("Invalid parameter.")
 		when :unable_to_scrobble then super("Can't scrobble if artist or track names are unknown. Edit the ID3 tag.")
 		when :internet_not_available then super("Internet is not available!")
+		when :no_active_playback then super("There is not active playback")
 		else super("Something went seriously wrong!!")
 		end
 	end

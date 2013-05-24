@@ -311,6 +311,8 @@ HELP
 		# @param params [List<Hash>] With parsed player's object information.
 		# @return [String] The message displayed.
 		def show(params=[])
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if @cultome.song.nil?
+
 			if params.blank?
 				display @cultome.song
 				show_progress 
@@ -469,12 +471,16 @@ HELP
 
 		# Fast forward to the current song.
 		def ff(params=[])
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if @cultome.song.nil?
+
 			next_pos = @cultome.song_status["mp3.position.byte"] + (@cultome.song_status["mp3.frame.size.bytes"] * seeker_step)
 			@cultome.player.seek(next_pos)
 		end
 
 		# Fast backward to the current song.
 		def fb(params=[])
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if @cultome.song.nil?
+
 			next_pos = @cultome.song_status["mp3.position.byte"] - (@cultome.song_status["mp3.frame.size.bytes"] * seeker_step)
 			@cultome.player.seek(next_pos)
 		end

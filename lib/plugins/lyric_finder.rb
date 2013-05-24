@@ -31,8 +31,10 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
 
 		# Search and display the lyrics for the current song
 		def lyric(params=[])
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if @cultome.song.nil?
+
 			song_name = @cultome.song.name
-			artist_name = @cultome.artist.name
+			artist_name = @cultome.song.artist.name
 			found_txt = ":::: Lyric for #{song_name} ::::"
 
 			thrd = roll_text(c4(" Finding lyric for #{c14(song_name)} "), { 

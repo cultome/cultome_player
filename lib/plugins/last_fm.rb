@@ -15,7 +15,7 @@ module Plugin
 		# @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
 		def similar(params=[])
 			raise CultomePlayerException.new(:invalid_parameter, params: params) if !params.empty? && params.find{|p| p[:type] == :object}.nil?
-			return nil if @cultome.song.nil?
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if @cultome.song.nil?
 
 			begin
 				song_name = @cultome.song.name
@@ -372,7 +372,7 @@ When the results are parsed successfully from Last.fm the first time, the result
 			},
 				configure_lastfm: {
 				help: "Configure you Last.fm account to be able to scrobble.",
-				params_format: "literal",
+				params_format: "<literal>",
 				usage: <<-HELP
 Execute a little wizard to help you configure the scrobbler with your Last.fm account.
 
