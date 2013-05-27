@@ -271,8 +271,13 @@ module Plugin
 	end
 
 	module Scrobbler
-		def scrobble(params=[])
-			p = @cultome.prev_song
+		def scrobble(cmd_name, params=[])
+            if cmd_name == :quit
+                p = @cultome.song
+            else
+                p = @cultome.prev_song
+            end
+
 			return nil if p.nil?
 
 			song_name = p.name
@@ -286,7 +291,6 @@ module Plugin
 
 			# necesitamos que la cancion haya sido tocada almenos 30 segundos
 			return nil if progress < 30
-			song_name = @cultome.song.name
 
 			# no hacemos scrobble si el artista o el track son desconocidos
 			raise CultomePlayerException.new(:unable_to_scrobble) if artist_id == 1
@@ -513,7 +517,7 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
 		def method_missing(method_name, *args)
 			return super if method_name !~ /next|prev|quit/
 
-				scrobble(*args)
+            scrobble(method_name, *args)
 		end
 	end
 
