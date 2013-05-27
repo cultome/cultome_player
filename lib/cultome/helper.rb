@@ -70,15 +70,6 @@ module Helper
 		@master_config ||= YAML.load_file(config_file)
 	end
 
-	# Search and require the jar files required by the underlying music player.
-	#
-	# @return [List<String>] A list with the names of the required jar files.
-	def require_jars
-		jars_path = "#{project_path}/jars"
-		Dir.entries(jars_path).select{|jar| 
-			require "#{jars_path}/#{jar}" if jar =~ /.jar\Z/
-		}
-	end
 
 	# Extract the ID3 tag information from a mp3 file.
 	#
