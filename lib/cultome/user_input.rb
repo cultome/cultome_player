@@ -23,7 +23,6 @@ module UserInput
 	# @param input [String] The user input.
 	# @return [List<Hash>] The hashes contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
 	def parse(input)
-puts "%%% parse #{input}"
 		prev_cmd = nil
 		if input =~ /(["'].+?\|.+?["'])/
 			# pipe dentro de comillas

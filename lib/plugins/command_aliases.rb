@@ -1,4 +1,3 @@
-require 'cultome/plugin'
 
 module Plugins
 	module CommandAlias

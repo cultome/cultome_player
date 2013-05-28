@@ -34,7 +34,6 @@ module Cultome
         # @param user_input [String] The user input
         # @return (see #send_to_listeners)
         def execute(user_input)
-puts "$$$$ execute #{user_input}"
             begin
                 cmds = parse(user_input)
                 if cmds.nil? || cmds.empty?
@@ -43,19 +42,15 @@ puts "$$$$ execute #{user_input}"
                     cultome.last_cmds = cmds
                 end
 
-puts "$$$$ comds #{cmds}"
                 with_connection do
                     cmds.each do |cmd|
-puts "$$$$ cmd #{cmd}"
                         send_to_listeners(cmd[:command], cmd[:params])
                     end
                 end
             rescue CultomePlayerException => ctmex
-puts "ERROR 1: (#{ctmex.message}) \n#{ctmex.backtrace}"
                 send_to_listeners(:player_exception_throwed, ctmex, :__PLAYER_EXCEPTIONS__)
                 default_error_action( ctmex )
             rescue Exception => ex
-puts "ERROR 2: (#{ex.message}) \n#{ex.backtrace}"
                 default_error_action( ex ) unless send_to_listeners(:exception_throwed, ctmex, :__EXCEPTIONS__)
             end
         end
@@ -77,7 +72,6 @@ puts "ERROR 2: (#{ex.message}) \n#{ex.backtrace}"
 
         # Persist the global configuration to the player's configuration file.
         def save_configuration
-puts "SAVING CONFIGURATION #{config_file} => #{Helper.master_config}"
             File.open(config_file, 'w'){|f| YAML.dump(Helper.master_config, f)}
         end
 
@@ -106,11 +100,9 @@ puts "SAVING CONFIGURATION #{config_file} => #{Helper.master_config}"
         # @param cmd [Hash] Contains the keys :command, :params. The latter is and array of hashes with the keys, dependending on the parameter type, :value, :type, :criteria.
         # @return [Boolean] True is there was any listeners that receive the message, false otherwise.
         def send_to_listeners(cmd, params, filter=:__ALL_VALIDS__)
-puts "###### send_to_listeners(#{cmd}, #{params})"
             listeners = []
             is_valid = respond_to?(cmd)
             # si es un comando
-puts "###### I respond to #{cmd} ? #{is_valid}"
             if is_valid
                 send cmd, params
                 self.current_command = {command: cmd, params: params}
@@ -118,14 +110,10 @@ puts "###### I respond to #{cmd} ? #{is_valid}"
             end
 
 
-puts "listeners: #{Plugins.listener_registry.inspect}"
-puts "commands: #{Plugins.command_registry.inspect}"
             listeners << Plugins.listener_registry[cmd]
-puts "###### LISTENERS: #{listeners.inspect}"
 
             unless listeners.empty?
                 listeners.flatten.each{|procedure|
-puts "###### LLamando a #{procedure} con #{params.inspect}"
                     procedure.call(self, params)
                 }
             end

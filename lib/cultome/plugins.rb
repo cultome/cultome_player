@@ -18,7 +18,6 @@ module Plugins
     end
 
     def self.included(base)
-        puts "$######## #{self} PLUGIN PARENT INCLUDED IN #{base}"
         commands_path = "#{project_path}/lib/plugins"
         Dir.entries(commands_path).each do |file|
             if file =~ /\.rb\Z/
@@ -26,8 +25,6 @@ module Plugins
                 class_name = file_name.classify
 
                 # Lo cargamos...
-puts "---> #{class_name.to_sym}"
-puts "---> #{file_name}"
                 autoload class_name.to_sym, "plugins/#{file_name}"
 
                 class_const = "Plugins::#{class_name}".constantize
@@ -46,7 +43,6 @@ puts "---> #{file_name}"
 
     module ClassMethods
         def included(base)
-            puts "######## #{self} PLUGINS CHILDREN INCLUDED IN #{base}"
 
             get_command_registry.each{|k,v|
                 Plugins.command_registry.push k
@@ -60,7 +56,6 @@ puts "---> #{file_name}"
         end
 
         def config
-puts "     - CONFIG: #{Helper.master_config[self.to_s]}"
             Helper.master_config[self.to_s] ||= {}
         end
     end

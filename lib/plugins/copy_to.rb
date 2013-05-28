@@ -49,8 +49,6 @@ HELP
 			return Plugins::CopyTo.copy_files(cultome, files, to_path)
 		end
 
-		#private
-
 		# Validate that the destination is an existing directory and we can write there.
 		#
 		# @param path [String] the path to a directory in the filesystem

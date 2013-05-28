@@ -1,4 +1,3 @@
-require 'cultome/plugin'
 require 'cultome/persistence'
 require 'cultome/exception'
 require 'cultome/user_input'
@@ -478,13 +477,9 @@ HELP
 
 		# Stop the player and set the @running flag to false.
 		def quit(params=[])
-puts "QUIT!!! 1"
 			cultome.running = false
-puts "QUIT!!! 2"
 			cultome.player.stop
-puts "QUIT!!! 3"
 			cultome.save_configuration
-puts "QUIT!!! 4"
 		end
 
 		# Fast forward to the current song.
@@ -544,10 +539,6 @@ puts "QUIT!!! 4"
             end
         end
 
-
-		#private
-
-
         # Accesos to class variable
         #
         # @return [String] The help generated
@@ -595,8 +586,10 @@ puts "QUIT!!! 4"
             help_msg
         end
 
+        # Lazy intializator for seeker_step
+        #
+        # @return [Integer] The number in wich the fast-forward or fast-backward are going.
 		def self.seeker_step
-puts "CONFIG: #{Plugins::BasicCommandSet.config["seeker_step"]}"
 			Plugins::BasicCommandSet.config["seeker_step"] ||= 500
 		end
 
@@ -791,6 +784,9 @@ puts "CONFIG: #{Plugins::BasicCommandSet.config["seeker_step"]}"
 			return song
 		end
 
+        # Lazy initializator for drives.
+        #
+        # @return [List<Drive>] The list of drives registered in the player.
 		def self.drives(cultome)
 			cultome.drives ||= Drive.all.to_a
 		end

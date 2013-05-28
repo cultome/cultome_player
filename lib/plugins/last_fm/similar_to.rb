@@ -5,7 +5,6 @@ module Plugins
         #
         # @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
         def similar(params=[])
-            puts "----------- SIMILAR"
             raise CultomePlayerException.new(:invalid_parameter, params: params) if !params.empty? && params.find{|p| p[:type] == :object}.nil?
             raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
@@ -85,9 +84,9 @@ module Plugins
             end
         end
 
-        #private
-
         # Lazy initializator for the 'similar results limit' configuration
+        #
+        # @return [Integer] The registries displayed for similar artist/song results.
         def self.similar_results_limit
             Plugins::LastFm.config["similar_results_limit"] ||= 10
         end
@@ -108,6 +107,10 @@ module Plugins
             end
         end
 
+        # Generate the Last.fm sign for the request. Basibly the sign is concatenate all the parameters with their values in alphabetical order and generate a 32 charcters MD5 hash.
+        #
+        # @param query_info [Hash] The parameters sended in the request.
+        # @return [String] The sign of this request.
         def self.generate_call_sign(query_info)
             params = query_info.sort.inject(""){|sum,map| sum += "#{map[0]}#{map[1]}" }
             sign = params + LastFm::LAST_FM_SECRET
