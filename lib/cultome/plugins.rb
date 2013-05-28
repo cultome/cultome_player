@@ -1,6 +1,9 @@
 require 'active_support/inflector'
+require 'active_support'
 
 module Plugins
+
+    extend ActiveSupport::Autoload
 
     def self.commands_help
         @commands_help ||= {}
@@ -18,12 +21,14 @@ module Plugins
         puts "$######## #{self} PLUGIN PARENT INCLUDED IN #{base}"
         commands_path = "#{project_path}/lib/plugins"
         Dir.entries(commands_path).each do |file|
-            if file =~ /\.plugin\.rb\Z/
-                file_name = file.gsub('.plugin.rb', '')
+            if file =~ /\.rb\Z/
+                file_name = file.gsub('.rb', '')
                 class_name = file_name.classify
 
                 # Lo cargamos...
-                autoload class_name.to_sym
+puts "---> #{class_name.to_sym}"
+puts "---> #{file_name}"
+                autoload class_name.to_sym, "plugins/#{file_name}"
 
                 class_const = "Plugins::#{class_name}".constantize
 
@@ -36,24 +41,31 @@ module Plugins
                 base.send :include, class_const
             end
         end
+
     end
 
     module ClassMethods
         def included(base)
             puts "######## #{self} PLUGINS CHILDREN INCLUDED IN #{base}"
-            cmd_regs = get_command_registry if respond_to?(:get_command_registry)
-            listener_regs = get_listener_registry if respond_to?(:get_listener_registry)
 
-            cmd_regs.each{|k,v|
+            get_command_registry.each{|k,v|
                 Plugins.command_registry.push k
-                Plugins.listener_registry[k] << nombre_metodo
                 v[:command] = k
                 Plugins.commands_help[k] = v
-            } unless cmd_regs.nil?
+            } if respond_to?(:get_command_registry)
 
-            listener_regs.each{|k,v|
-                Plugins.listener_registry[k] << command
-            } unless listener_regs.nil?
+            get_listener_registry.each{|k,v|
+                Plugins.listener_registry[k] << proc{|player, params| self.send v, player, params }
+            }if respond_to?(:get_listener_registry)
         end
+
+        def config
+puts "     - CONFIG: #{Helper.master_config[self.to_s]}"
+            Helper.master_config[self.to_s] ||= {}
+        end
+    end
+
+    def cultome
+        self
     end
 end

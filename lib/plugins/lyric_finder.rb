@@ -1,4 +1,3 @@
-require 'cultome/plugin'
 require 'net/http'
 require 'json'
 require 'cgi'
@@ -6,16 +5,16 @@ require 'htmlentities'
 require 'text_slider'
 
 # Plugin tha find the lyrics for the current song.
-module Plugin
-	class LyricFinder < PluginBase
+module Plugins
+	module LyricFinder
 
-		include TextSlider
+		extend TextSlider
 
 		# Register the command: lyric
 		# @note Required method for register commands
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
-		def get_command_registry
+		def self.get_command_registry
 			{lyric: {
 				help: "Find the lyric of the current song",
 				params_format: "",
@@ -31,10 +30,10 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
 
 		# Search and display the lyrics for the current song
 		def lyric(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if @cultome.song.nil?
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
-			song_name = @cultome.song.name
-			artist_name = @cultome.song.artist.name
+			song_name = cultome.song.name
+			artist_name = cultome.song.artist.name
 			found_txt = ":::: Lyric for #{song_name} ::::"
 
 			thrd = roll_text(c4(" Finding lyric for #{c14(song_name)} "), { 

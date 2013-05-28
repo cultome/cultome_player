@@ -1,20 +1,20 @@
 require 'cultome/plugin'
 
-module Plugin
-	class CommandAlias < PluginBase
+module Plugins
+	module CommandAlias
 		# Register this listener for the events: All the throws of player's exceptions events.
 		# @note Required method for register listeners
 		#
 		# @return [List<Symbol>] The name of the events to listen.
-		def get_listener_registry
-			[:__PLAYER_EXCEPTIONS__]
+		def self.get_listener_registry
+			{ player_exception_throwed: :player_exception_throwed}
 		end
 
 		# Register the commands: alias
 		# @note Required method for register commands
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
-		def get_command_registry
+		def self.get_command_registry
 			{
 				:alias => {
 					help: "Create an alias for one or many commands", 
@@ -50,20 +50,20 @@ HELP
 			alias_name = params[0][:value]
 			alias_value = params[1][:value]
 
-			aliases[alias_name] = alias_value
+			Plugins::CommandAlias.aliases[alias_name] = alias_value
 		end
 
 		# Invoked when a player exception is throwed
 		#
 		# @param ex [CultomePlayerException] The exception throwed
-		def player_exception_throwed(ex)
+		def self.player_exception_throwed(cultome, ex)
 			return unless ex.respond_to?(:command)
 
 			# separamos el comando
 			split = ex.command.split(' ')
-			return if split[0].nil? || aliases[split[0]].nil?
+			return if split[0].nil? || Plugins::CommandAlias.aliases[split[0]].nil?
 
-			translated = aliases[split[0]].clone
+			translated = Plugins::CommandAlias.aliases[split[0]].clone
 
 			if split.size > 1
 				1.upto(split.size - 1) do |c|
@@ -73,11 +73,11 @@ HELP
 
 			ex.add_attribute(:displayable, false)
 
-			return @cultome.execute translated
+			return cultome.execute translated
 		end
 
-		def aliases
-			@config["aliases"] ||= {"exit" => "quit"}
+		def self.aliases
+			config["aliases"] ||= {"exit" => "quit"}
 		end
 	end
 end

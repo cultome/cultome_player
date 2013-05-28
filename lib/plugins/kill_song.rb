@@ -1,18 +1,17 @@
-require 'cultome/plugin'
 require 'cultome/user_input'
 require 'cultome/persistence'
 require 'shellwords'
 
-module Plugin
-	class KillSong < PluginBase
+module Plugins
+	module KillSong
 
-		include UserInput
+		extend UserInput
 
 		# Register the commands: kill.
 		# @note Required method for register commands
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
-		def get_command_registry
+		def self.get_command_registry
 			{
 				kill: {
 					help: "Delete from disk the current song", 
@@ -29,23 +28,23 @@ HELP
 
 		# Remove the current song from library and from filesystem.
 		def kill(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if @cultome.song.nil?
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
-			if get_confirmation("Are you sure you want to delete #{@cultome.song} ???")
+			if get_confirmation("Are you sure you want to delete #{cultome.song} ???")
 				# detenemos la reproduccion
-				@cultome.execute('stop')
+				cultome.execute('stop')
 
-				File.delete(File.join(@cultome.song.drive.path, @cultome.song.relative_path))
+				File.delete(File.join(cultome.song.drive.path, cultome.song.relative_path))
 
 				if $?.exitstatus == 0
-					@cultome.song.delete
+					cultome.song.delete
 					display c4("Song deleted!")
 				else
-					display c2("An error occurred when deleting the song #{@cultome.song}")
+					display c2("An error occurred when deleting the song #{cultome.song}")
 				end
 
 				# reanudamos la reproduccion
-				@cultome.execute('next')
+				cultome.execute('next')
 			end
 		end
 	end

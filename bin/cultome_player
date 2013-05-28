@@ -131,8 +131,7 @@ require 'cultome_player'
 #require 'cultome/core'
 player = Cultome::CultomePlayer.new
 player.check_full_integrity
-#player.load_commands
-player.generate_help
+#player.generate_help
 
 # detenemos la animacion
 thrd.kill

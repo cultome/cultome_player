@@ -8,7 +8,31 @@ require 'logger'
 # Utility module with shared functions across the project.
 module Helper
 
-	CONFIG_FILE_NAME = "config.yaml"
+	CONFIG_FILE_NAME = "config.yml"
+
+    # Return the path to the config file
+    #
+    # @return [String] The path to the config file
+    def self.master_config
+        return @master_config if @master_config
+
+        begin
+            @master_config = YAML.load_file(config_file)
+
+            unless @master_config
+                @master_config = create_basic_config_file
+            end
+        rescue Exception => e
+            @master_config = create_basic_config_file
+        end
+        
+        return @master_config
+    end
+
+    def self.create_basic_config_file
+        File.open(config_file, 'w'){|f| YAML.dump({'core' => {'prompt' => 'cultome> '}}, f)}
+        YAML.load_file(config_file)
+    end
 
 	# Create a context with a managed connection from the pool. The block passed will be
 	# inside a valid connection.
@@ -62,14 +86,6 @@ module Helper
 	def config_file
 		File.join(user_dir, CONFIG_FILE_NAME)
 	end
-
-	# Return the path to the config file
-	#
-	# @return [String] The path to the config file
-	def master_config
-		@master_config ||= YAML.load_file(config_file)
-	end
-
 
 	# Extract the ID3 tag information from a mp3 file.
 	#
@@ -153,7 +169,7 @@ module Helper
 
 	def define_color_palette
 		if @color_palette.nil?
-			@color_palette = master_config['core']["color_palette"]
+			@color_palette = Helper.master_config['core']["color_palette"]
 			if @color_palette.nil?
 				@color_palette = [
 					:black,			# c1
@@ -173,14 +189,14 @@ module Helper
 					:light_cyan,	# c15
 					:light_white,	# c16
 				]
-				master_config['core']["color_palette"] = @color_palette
+				Helper.master_config['core']["color_palette"] = @color_palette
 			end
 		end
 
 		@color_palette.each_with_index do |color, idx|
 			Helper.class_eval do
 				define_method "c#{idx+1}".to_sym do |str|
-					str.send(color)
+					str.to_s.send(color)
 				end
 			end
 		end
