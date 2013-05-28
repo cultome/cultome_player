@@ -202,30 +202,45 @@ module Helper
 		end
 	end
 
-	private
+    # Print a message in the screen.
+    #
+    # @param object [Object] Any object that responds to #to_s.
+    # @param continuos [Boolean] If false a new line character is appended at the end of message.
+    # @return [String] The message printed.
+    def display(object, continuos=false)
+        text = object.to_s
+        if continuos
+            print text
+        else
+            puts text
+        end
+        text
+    end
 
-	# Clean and format the track information.
-	# @param info [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre.
-	# @return [Hash] The same hash but with polished values.
-	def polish(info)
-		[:name, :artist, :album].each{|k| info[k] = info[k].downcase.strip.titleize unless info[k].nil? }
-		[:track, :year].each{|k| info[k] = info[k].to_i if info[k] =~ /\A[\d]+\Z/ }
-		info[:duration] = info[:duration].to_i
+    private
 
-		info
-	end
+    # Clean and format the track information.
+    # @param info [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre.
+    # @return [Hash] The same hash but with polished values.
+    def polish(info)
+        [:name, :artist, :album].each{|k| info[k] = info[k].downcase.strip.titleize unless info[k].nil? }
+        [:track, :year].each{|k| info[k] = info[k].to_i if info[k] =~ /\A[\d]+\Z/ }
+        info[:duration] = info[:duration].to_i
+
+        info
+    end
 end
 
 # abrimos algunas clases con propositos utilitarios
 class Array
-	def to_s
-		idx = 0
-		self.collect{|e| "#{( idx += 1 ).to_s.rjust(4)} #{e}" }.join("\n")
-	end
+    def to_s
+        idx = 0
+        self.collect{|e| "#{( idx += 1 ).to_s.rjust(4)} #{e}" }.join("\n")
+    end
 end
 
 class String
-	def blank?
-		self.nil? || self.empty?
-	end
+    def blank?
+        self.nil? || self.empty?
+    end
 end

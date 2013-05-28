@@ -80,7 +80,7 @@ This process is required only once, we promess you.
             return nil unless params.size == 1 && params[0][:type] == :literal
 
             if params[0][:value] == 'begin'
-                cultome.display c5(<<-INFO 
+                display c5(<<-INFO 
 Hello! we're gonna setup the Last.fm scrobbler so this player can notify Last.fm the music you are hearing. So this is waht we'll do:
     1) The default browser will be opened and you'll be required to login into your Last.fm account (you require  an internet connection).
     2) You'll be asked to give authorization to this player to scrobble in your account.
@@ -96,7 +96,7 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
                           auth_info = Plugins::LastFm.define_query(:token)
                           json = Plugins::LastFm.consult_lastfm(auth_info, true)
 
-                          return cultome.display(c2("Problem! #{json['error']}: #{json['message']}")) if json['token'].nil?
+                          return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['token'].nil?
 
                           # guardamos el token para el segundo paso
                           LastFm.config['token'] = json['token']
@@ -108,19 +108,19 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
                           elsif os == :linux
                               system("gnome-open \"#{auth_url}\" \"\"")
                           else
-                              cultome.display c4("Please write the next URL in your browser:\n#{auth_url}")
+                              display c4("Please write the next URL in your browser:\n#{auth_url}")
                           end
 
             elsif params[0][:value] == 'done'
-                cultome.display c4("Thanks! Now we are validating the authorization and if it all right then we're done!. Wait a minute please...")
+                display c4("Thanks! Now we are validating the authorization and if it all right then we're done!. Wait a minute please...")
                 auth_info = Plugins::LastFm.define_query(:session)
                 json = Plugins::LastFm.consult_lastfm(auth_info, true)
 
-                return cultome.display(c2("Problem! #{json['error']}: #{json['message']}")) if json['session'].nil?
+                return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['session'].nil?
 
                 LastFm.config['session_key'] = json['session']['key']
 
-                cultome.display c4("Ok! everything is set and the scrobbler is working now! Enjoy!")
+                display c4("Ok! everything is set and the scrobbler is working now! Enjoy!")
             end
         end
 
@@ -221,7 +221,7 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
                     token: LastFm.config['token'],
                 }
             else
-                cultome.display c2("You can only retrive similar @song or @artist.")
+                display c2("You can only retrive similar @song or @artist.")
             end
 
             return query
@@ -253,7 +253,7 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
 
 
             @thrd = roll_text(text, opts) do |text|
-                cultome.display(c4(text), true)
+                display(c4(text), true)
             end
 
             sleep(2)

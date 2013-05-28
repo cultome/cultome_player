@@ -4,13 +4,11 @@ require 'cultome/helper'
 
 class Test
 	include UserInput
+	include Helper
+end
 
-	def initialize
-		@command_registry = [ :prev, :play, :pause, :search, :alias]
-	end
-
-	def display(msg)
-	end
+Plugins.module_eval do
+    @command_registry = [ :prev, :play, :pause, :search, :alias]
 end
 
 describe UserInput do

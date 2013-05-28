@@ -62,7 +62,7 @@ module Plugins
                         return tracks, tracks_in_library
                     else
                         # seguramente un error
-                        cultome.display(c2("Problem! #{json['error']}: #{json['message']}"))
+                        display(c2("Problem! #{json['error']}: #{json['message']}"))
                     end
                 else
                     # trabajamos con datos de la db
@@ -179,15 +179,15 @@ module Plugins
         # @param tracks [List<Hash>] The song transformed information.
         # @param tracks_in_library [List<Song>] The similari songs found in library.
         def self.show_tracks(song, tracks, tracks_in_library)
-            cultome.display c4("Similar tracks to #{song}") unless tracks.empty?
-            tracks.each{|a| cultome.display c4("  #{a[:track]} / #{a[:artist]}") } unless tracks.empty?
+            display c4("Similar tracks to #{song}") unless tracks.empty?
+            tracks.each{|a| display c4("  #{a[:track]} / #{a[:artist]}") } unless tracks.empty?
 
-            cultome.display c4("Similar tracks to #{song} in library") unless tracks_in_library.empty?
-            cultome.display c4(tracks_in_library) unless tracks_in_library.empty?
-            #tracks_in_library.each{|a| cultome.display("  #{a.name} / #{a.artist.name}") } unless tracks_in_library.empty?
+            display c4("Similar tracks to #{song} in library") unless tracks_in_library.empty?
+            display c4(tracks_in_library) unless tracks_in_library.empty?
+            #tracks_in_library.each{|a| display("  #{a.name} / #{a.artist.name}") } unless tracks_in_library.empty?
 
             if tracks.empty? && tracks_in_library.empty?
-                cultome.display c2("No similarities found for #{song}") 
+                display c2("No similarities found for #{song}") 
             else
                 cultome.focus = tracks_in_library
             end
@@ -199,13 +199,13 @@ module Plugins
         # @param artists [List<Hash>] The artist transformed information.
         # @param artists_in_library [List<Artist>] The similari artist found in library.
         def self.show_artist(artist, artists, artists_in_library)
-            cultome.display c4("Similar artists to #{artist}") unless artists.empty?
-            artists.each{|a| cultome.display c4("  #{a[:artist]}") } unless artists.empty?
+            display c4("Similar artists to #{artist}") unless artists.empty?
+            artists.each{|a| display c4("  #{a[:artist]}") } unless artists.empty?
 
-            cultome.display c4("Similar artists to #{artist} in library") unless artists_in_library.empty?
-            artists_in_library.each{|a| cultome.display("  #{a.name}") } unless artists_in_library.empty?
+            display c4("Similar artists to #{artist} in library") unless artists_in_library.empty?
+            artists_in_library.each{|a| display("  #{a.name}") } unless artists_in_library.empty?
 
-            cultome.display c2("No similarities found for #{artist}") if artists.empty? && artists_in_library.empty?
+            display c2("No similarities found for #{artist}") if artists.empty? && artists_in_library.empty?
         end
     end
 end

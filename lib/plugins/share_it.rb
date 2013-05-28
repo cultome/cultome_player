@@ -46,16 +46,16 @@ HELP
 			token = params[1][:value]
 			song_path = cultome.song.path
 
-			cultome.display(c4("You are transfering #{c14(cultome.song)}") + c4(" to #{c14(server)}..."))
+			display(c4("You are transfering #{c14(cultome.song)}") + c4(" to #{c14(server)}..."))
 
 			client = ShareThis::Client.new
 			success = client.send_to(server, token, song_path)
 			if success
-				cultome.display c4("The transfer was successful!")
+				display c4("The transfer was successful!")
 			else
-				cultome.display c2("There was an error with the transfer =S")
+				display c2("There was an error with the transfer =S")
 				if ENV['environment'] == 'dev'
-					cultome.display c2("ERROR (#{client.error_code}): #{client.message}")
+					display c2("ERROR (#{client.error_code}): #{client.message}")
 				end
 			end
 
@@ -77,17 +77,17 @@ HELP
 
 			token = params[1][:value]
 
-			cultome.display c4("You are waiting for connections...")
+			display c4("You are waiting for connections...")
 
 			server = ShareThis::Server.new
 			success = server.wait_for_connection(token, save_dir)
 
 			if success
-				cultome.display c4("The transfer was successful!")
+				display c4("The transfer was successful!")
 			else
-				cultome.display c2("There was an error with the transfer =S")
+				display c2("There was an error with the transfer =S")
 				if ENV['environment'] == 'dev'
-					cultome.display c2("ERROR (#{server.error_code}): #{server.message}")
+					display c2("ERROR (#{server.error_code}): #{server.message}")
 				end
 			end
 

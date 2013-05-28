@@ -24,7 +24,7 @@ module Plugins
         def self.analize_queue(cultome)
             # checamos el patron y vemos si matchea
             if Plugins::GestureAnalizer.queue.has(5, :next, 20)
-                cultome.display c2("#### Notifying: Looking for something")
+                display c2("#### Notifying: Looking for something")
             end
 
             Plugins::GestureAnalizer.queue

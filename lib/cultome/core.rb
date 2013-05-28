@@ -55,21 +55,6 @@ module Cultome
             end
         end
 
-        # Print a message in the screen.
-        #
-        # @param object [Object] Any object that responds to #to_s.
-        # @param continuos [Boolean] If false a new line character is appended at the end of message.
-        # @return [String] The message printed.
-        def display(object, continuos=false)
-            text = object.to_s
-            if continuos
-                print text
-            else
-                puts text
-            end
-            text
-        end
-
         # Persist the global configuration to the player's configuration file.
         def save_configuration
             File.open(config_file, 'w'){|f| YAML.dump(Helper.master_config, f)}

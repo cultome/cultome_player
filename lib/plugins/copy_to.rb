@@ -88,11 +88,11 @@ HELP
 		# @param files [List<String>] The absolute paths to files
 		# @param to_path[String] The path to the destination dir.
 		def self.copy_files(cultome, files, to_path)
-			cultome.display(c4("Copying #{c14(files.size.to_s)}") + c4(" files to #{c14(to_path)}..."))
+			display(c4("Copying #{c14(files.size.to_s)}") + c4(" files to #{c14(to_path)}..."))
 
 			dir_path = Shellwords.escape(to_path)
 			files.each do |f|
-				cultome.display(c14("  #{f}..."))
+				display(c14("  #{f}..."))
 				file_path = Shellwords.escape(f)
 
 				system("cp #{file_path} #{dir_path}")

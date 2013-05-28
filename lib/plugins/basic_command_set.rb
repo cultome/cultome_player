@@ -607,7 +607,7 @@ HELP
 				cultome.is_playing_library = true
 
 				if new_playlist.blank?
-					cultome.display c2("No music connected yet. Try 'connect /home/user_name/music => music_library' first!")
+					display c2("No music connected yet. Try 'connect /home/user_name/music => music_library' first!")
 					return nil
 				end
 
@@ -672,7 +672,7 @@ HELP
 			cultome.song = cultome.queue.shift
 
 			if cultome.song.nil?
-				cultome.display c2('There is no song to play')
+				display c2('There is no song to play')
 				return nil
 			end
 
@@ -699,7 +699,7 @@ HELP
 			Song.increment_counter :plays, cultome.song.id
 			Song.update(cultome.song.id, last_played_at: Time.now)
 
-			cultome.display cultome.song
+			display cultome.song
 
 			cultome.song
 		end
@@ -710,7 +710,7 @@ HELP
 		def self.show_progress(cultome)
 			actual = cultome.song_status["mp3.position.microseconds"] / 1000000
 			percentage = ((actual * 100) / cultome.song.duration) / 10
-			cultome.display c4("#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(cultome.song.duration)}")
+			display c4("#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(cultome.song.duration)}")
 		end
 
 		# Retrive songs from connected drives with the given conditions.
