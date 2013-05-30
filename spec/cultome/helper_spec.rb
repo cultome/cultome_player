@@ -1,13 +1,8 @@
 require 'spec_helper'
-require 'cultome/helper'
 
-class Test
-	include Helper
-end
+describe Cultome::Helper do
 
-describe Helper do
-
-	let(:h){ Test.new }
+	let(:h){ Cultome::Helper }
 
 	it 'Should detect the project root path' do
 		h.project_path.end_with?('cultome_player').should be_true
@@ -39,6 +34,10 @@ describe Helper do
 
 	it 'Should detect the migrations folder path' do
 		h.migrations_path.end_with?('cultome_player/db/migrate').should be_true
+	end
+
+	it 'Should display messages' do
+		p.display("message").should eq("message")
 	end
 
 	it 'Should require all the jars in the project', java: true do

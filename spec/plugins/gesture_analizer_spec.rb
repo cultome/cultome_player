@@ -1,22 +1,28 @@
 require 'spec_helper'
-require 'plugins/gesture_analizer'
 
-describe Plugin::GestureAnalizer do
+describe Plugins::GestureAnalizer do
 
-	let(:g){ Plugin::GestureAnalizer.new(nil, {}) }
+	let(:p){ Cultome::CultomePlayer.new }
+	let(:g){ Plugins::GestureAnalizer }
 
 	it 'Should register for all events' do
 		g.get_listener_registry.should include(:__ALL_VALIDS__)
 	end
 
 	it 'Should add an event to the queue' do
-		queue = g.play([{type: :literal, value: 'hola'}])
-		queue.has(1, :play).should be_true
-		queue.has(2, :play).should be_false
+        with_connection do
+            p.execute('play')
+            queue = g.gesture(p)
+            queue.has(1, :play).should be_true
+            queue.has(2, :play).should be_false
+        end
 	end
 
 	it 'Should detect a sequence of events' do
-		g.should_receive(:display).with("#### Notifying: Looking for something")
-		5.times{ g.next }
+		g.should_receive(:display).at_least(1)
+        with_connection do
+            p.execute('play')
+            6.times{ p.execute('next') }
+        end
 	end
 end

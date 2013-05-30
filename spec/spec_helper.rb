@@ -17,7 +17,9 @@ end
 
 # seteamos el ambiente para pruebas
 ENV['db_adapter'] = 'sqlite3'
+ENV['environment'] = 'dev'
 
+=begin
 def get_fake_player
 	fake_similars = double("similars")
 	fake_similars.stub(:create)
@@ -50,12 +52,36 @@ def get_fake_player
 	fake_player.stub(:current_command){ {command: :next, params: []} }
 	fake_player
 end
+=end
+
+require 'cultome_player'
+Cultome::CultomePlayer.class_eval do
+    class Player
+        def initialize(player)
+        end
+
+        def play(song)
+            song
+        end
+    end
+
+
+end
+
+require 'cultome/helper'
+include Cultome::Helper
+
+Cultome::Helper.module_eval do
+    alias :display_old :display
+
+    def display(msg, cont=false)
+        msg
+    end
+end
 
 # definimos los metodos de los colores de tal forma que no afecten los specs
-require 'cultome/helper'
-
 50.times do |idx|
-	Helper.class_eval do
+	Cultome::Helper.class_eval do
 		define_method "c#{idx}".to_sym do |str|
 			return str
 		end

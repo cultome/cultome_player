@@ -1,14 +1,21 @@
 require 'spec_helper'
-require 'cultome/persistence'
 require 'plugins/share_it'
 
-describe Plugin::ShareIt do
+describe Plugins::ShareIt do
 
-	let(:s){ Plugin::ShareIt.new(get_fake_player, {})}
-	let(:c){ Plugin::ShareIt.new(get_fake_player, {})}
+	let(:s){ Cultome::CultomePlayer.new }
+	let(:c){ Cultome::CultomePlayer.new }
 
-	context '#share' do
+	context '#share', resources: true do
 		before :each do
+            @song = nil
+            with_connection do
+                begin
+                    c.execute('play')
+                    @song = $1 if c.song.relative_path =~ /([^\/]+?)\Z/
+                end while @song !~ /\A[\w\d\s.-]+\Z/
+            end
+
 			@server_pid = fork do
 				s.receive([
 					{type: :path, value: 'spec/data/received'},
@@ -19,16 +26,7 @@ describe Plugin::ShareIt do
 
 		after do
 			Process.waitpid(@server_pid)
-			File.delete("spec/data/received/music.mp3")
-		end
-
-		def client_tester(params)
-			client_pid = fork do
-				exit 1 unless c.share(params)
-			end
-			Process.waitpid(client_pid)
-			$?.exitstatus.should == 0
-			File.exist?('spec/data/received/music.mp3').should be_true
+			File.delete("spec/data/received/#{@song}")
 		end
 
 		it 'Should transfer a file with hostname and number' do
@@ -65,11 +63,27 @@ describe Plugin::ShareIt do
 				{type: :literal, value: '12345'}
 			])
 		end
+
+		def client_tester(params)
+			client_pid = fork do
+				exit 1 unless c.share(params)
+			end
+			Process.waitpid(client_pid)
+			$?.exitstatus.should == 0
+			File.exist?("spec/data/received/#{@song}").should be_true
+		end
 	end
 
-	context '#receive' do
+	context '#receive', resources: true do
+        before :each do
+            with_connection do
+                c.execute('play')
+                @song = $1 if c.song.relative_path =~ /([^\/]+?)\Z/
+            end
+        end
+
 		after do
-			File.delete("spec/data/received/music.mp3")
+			File.delete("spec/data/received/#{@song}")
 		end
 
 		it 'Should receive a file with path and number' do
@@ -87,7 +101,7 @@ describe Plugin::ShareIt do
 		end
 
 		it 'Should receive a file with drive and number' do
-			Drive.stub!(:find_by_name).with("drive").and_return(stub(path: "spec/data/received"))
+			Cultome::Drive.stub!(:find_by_name).with("drive").and_return(stub(path: "spec/data/received"))
 			server_tester([
 				{type: :object, value: 'drive'},
 				{type: :number, value: 12345}
@@ -95,7 +109,7 @@ describe Plugin::ShareIt do
 		end
 
 		it 'Should receive a file with drive and literal' do
-			Drive.stub!(:find_by_name).with("drive").and_return(stub(path: "spec/data/received"))
+			Cultome::Drive.stub!(:find_by_name).with("drive").and_return(stub(path: "spec/data/received"))
 			server_tester([
 				{type: :object, value: 'drive'},
 				{type: :literal, value: '12345'}
@@ -109,7 +123,7 @@ describe Plugin::ShareIt do
 			run_client
 			Process.waitpid(server_pid)
 			$?.exitstatus.should == 0
-			File.exist?('spec/data/received/music.mp3').should be_true
+			File.exist?("spec/data/received/#{@song}").should be_true
 		end
 
 		def run_client

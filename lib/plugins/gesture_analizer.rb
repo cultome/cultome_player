@@ -1,6 +1,8 @@
+require 'cultome/helper'
 
 module Plugins
     module GestureAnalizer
+        extend Cultome::Helper
 
         # Register this listener for the events: All the events.
         # @note Required method for register listeners
@@ -15,7 +17,7 @@ module Plugins
         # @param cmd [Hash] With the command information
         def self.gesture(cultome, params=[])
             cultome.last_cmds.each do |cmd|
-                GestureAnalizer.queue.add_event(cmd)
+                queue.add_event(cmd)
             end
             analize_queue(cultome)
         end
@@ -23,11 +25,11 @@ module Plugins
         # Look for known patterns and interpret them.
         def self.analize_queue(cultome)
             # checamos el patron y vemos si matchea
-            if GestureAnalizer.queue.has(5, :next, 20)
+            if queue.has(5, :next, 20)
                 display c2("#### Notifying: Looking for something")
             end
 
-            GestureAnalizer.queue
+            queue
         end
 
         def self.queue

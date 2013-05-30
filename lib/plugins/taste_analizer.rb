@@ -74,7 +74,6 @@ module Plugins
 			genres_weight = calculate_genre_compatibility(song.genres, next_song.genres)
 			#puts "Genre weight: #{genres_weight}"
 
-puts "YYYYYYYELLLOW! #{points} + #{genres_weight}"
 			return points + genres_weight
 		end
 
@@ -103,7 +102,6 @@ puts "YYYYYYYELLLOW! #{points} + #{genres_weight}"
 		# @param g2 [Genre] Another genre to compre with.
 		# @return [Float] A number between 0 and 1. Denotes the similitud between genres.
 		def self.compare_genres(g1, g2)
-			#puts "Comparando generos: #{g1.name} == #{g2.name}"
 			return 1.0 if g1.name == g2.name
 			similar = genre_compatibility[[g1.name, g2.name]]
 			#puts "1) G1: #{g1.name} G2: #{g2.name} => #{similar}"

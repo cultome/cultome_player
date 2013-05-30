@@ -1,19 +1,8 @@
 require 'spec_helper'
-require 'cultome/user_input'
-require 'cultome/helper'
-
-class Test
-	include UserInput
-	include Helper
-end
-
-Plugins.module_eval do
-    @command_registry = [ :prev, :play, :pause, :search, :alias]
-end
 
 describe UserInput do
 
-	let(:u){ Test.new }
+	let(:u){ Cultome::CultomePlayer.new }
 
 	it 'Should return a valid commands regex' do
 		u.valid_command.should match(/([\w]+?\|?)+/)

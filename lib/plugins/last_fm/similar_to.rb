@@ -15,12 +15,12 @@ module Plugins
                 artist_id = cultome.song.artist.id
 
                 type = params.empty? ? :song : params.find{|p| p[:type] == :object}[:value]
-                query_info = Plugins::LastFm.define_query(type, song_name, artist_name)
+                query_info = LastFm.define_query(type, song_name, artist_name)
 
-                in_db = Plugins::SimilarTo.check_in_db(query_info)
+                in_db = SimilarTo.check_in_db(query_info)
 
                 if in_db.empty?
-                    json = Plugins::LastFm.consult_lastfm(query_info)
+                    json = LastFm.consult_lastfm(query_info)
 
                     if !json['similarartists'].nil?
                         # get the information form the reponse
@@ -37,8 +37,8 @@ module Plugins
                             Cultome::Artist.find(artist_id).similars.create(a)
                         end
 
-                        artists_in_library = Plugins::SimilarTo.find_artists_in_library(artists)
-                        Plugins::SimilarTo.show_artist(artist_name, artists, artists_in_library)
+                        artists_in_library = SimilarTo.find_artists_in_library(artists)
+                        SimilarTo.show_artist(cultome, artist_name, artists, artists_in_library)
 
                         return artists, artists_in_library
                     elsif !json['similartracks'].nil?
@@ -56,8 +56,8 @@ module Plugins
                         tracks.each do |t|
                             Cultome::Song.find(song_id).similars.create(t)
                         end
-                        tracks_in_library = Plugins.SimilarTo.find_tracks_in_library(tracks)
-                        Plugins.SimilarTo.show_tracks(song_name, tracks, tracks_in_library)
+                        tracks_in_library = SimilarTo.find_tracks_in_library(tracks)
+                        SimilarTo.show_tracks(cultome, song_name, tracks, tracks_in_library)
 
                         return tracks, tracks_in_library
                     else
@@ -67,13 +67,13 @@ module Plugins
                 else
                     # trabajamos con datos de la db
                     if query_info[:method] == LastFm::GET_SIMILAR_ARTISTS_METHOD
-                        artists_in_library = Plugins.SimilarTo.find_artists_in_library(in_db)
-                        Plugins.SimilarTo.show_artist(artist_name, in_db, artists_in_library)
+                        artists_in_library = SimilarTo.find_artists_in_library(in_db)
+                        SimilarTo.show_artist(cultome, artist_name, in_db, artists_in_library)
 
                         return in_db, artists_in_library
                     elsif query_info[:method] == LastFm::GET_SIMILAR_TRACKS_METHOD
-                        tracks_in_library = Plugins.SimilarTo.find_tracks_in_library(in_db)
-                        Plugins.SimilarTo.show_tracks(song_name, in_db, tracks_in_library)
+                        tracks_in_library = SimilarTo.find_tracks_in_library(in_db)
+                        SimilarTo.show_tracks(cultome, song_name, in_db, tracks_in_library)
 
                         return in_db, tracks_in_library
                     end
@@ -88,7 +88,7 @@ module Plugins
         #
         # @return [Integer] The registries displayed for similar artist/song results.
         def self.similar_results_limit
-            Plugins::LastFm.config["similar_results_limit"] ||= 10
+            LastFm.config["similar_results_limit"] ||= 10
         end
 
         # Check if previously the similars has been inserted.
@@ -115,7 +115,7 @@ module Plugins
         def self.find_artists_in_library(artists)
             in_library = []
 
-            LastFm::LastFm.change_text('... ', {
+            LastFm.change_text('... ', {
                 prefix: 'Fetching similar artist from library',
                 width: 3,
                 add_repeat_transition: false
@@ -143,7 +143,7 @@ module Plugins
         def self.find_tracks_in_library(tracks)
             in_library = []
 
-            LastFm::LastFm.change_text("...", {
+            LastFm.change_text("...", {
                 prefix: 'Fetching similar tracks from library',
                 width: 3,
                 add_repeat_transition: false
@@ -168,7 +168,7 @@ module Plugins
         # @param song [Song] The song compared.
         # @param tracks [List<Hash>] The song transformed information.
         # @param tracks_in_library [List<Song>] The similari songs found in library.
-        def self.show_tracks(song, tracks, tracks_in_library)
+        def self.show_tracks(cultome, song, tracks, tracks_in_library)
             display c4("Similar tracks to #{song}") unless tracks.empty?
             tracks.each{|a| display c4("  #{a[:track]} / #{a[:artist]}") } unless tracks.empty?
 
@@ -188,7 +188,7 @@ module Plugins
         # @param artist [Artist] The artist compared.
         # @param artists [List<Hash>] The artist transformed information.
         # @param artists_in_library [List<Artist>] The similari artist found in library.
-        def self.show_artist(artist, artists, artists_in_library)
+        def self.show_artist(cultome, artist, artists, artists_in_library)
             display c4("Similar artists to #{artist}") unless artists.empty?
             artists.each{|a| display c4("  #{a[:artist]}") } unless artists.empty?
 

@@ -42,7 +42,6 @@ module Plugins
 
     module ClassMethods
         def included(base)
-
             get_command_registry.each{|k,v|
                 Plugins.command_registry.push k
                 v[:command] = k

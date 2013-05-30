@@ -1,16 +1,8 @@
 require 'spec_helper'
-require 'cultome/core'
-
-class CultomePlayer 
-	class Player
-		def initialize(p)
-		end
-	end
-end
 
 describe CultomePlayer do
 
-	let(:p){ CultomePlayer.new }
+	let(:p){ Cultome::CultomePlayer.new }
 
 	it 'Should load every plugin in the folder lib/cultome/commands', java:true do
 		p.load_commands
@@ -23,14 +15,6 @@ describe CultomePlayer do
 			params: [{type: :literal, value: 'algodon'}]
 		}])
 		p.should_receive(:send_to_listeners)
-		p.execute('play algodon')
-	end
-
-	it 'Should generate an in-app help' do
-		p.help.should_not be_nil
-	end
-
-	it 'Should display messages' do
-		p.display("message").should eq("message")
+		with_connection { p.execute('play algodon') }
 	end
 end

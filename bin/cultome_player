@@ -7,7 +7,7 @@ require 'cultome/helper'
 require 'cultome/version'
 require 'colorize'
 
-include Helper
+include Cultome::Helper
 
 if os == :windows
 	system("cls") 

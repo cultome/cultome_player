@@ -62,7 +62,7 @@ module Cultome
 
         # Persist the global configuration to the player's configuration file.
         def save_configuration
-            File.open(config_file, 'w'){|f| YAML.dump(Helper.master_config, f)}
+            File.open(Helper.config_file, 'w'){|f| YAML.dump(Helper.master_config, f)}
         end
 
         # Execute a defalt action when the player fails.

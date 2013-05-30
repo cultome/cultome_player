@@ -15,7 +15,7 @@ module Cultome
         #
         # @return [String] The path to the config file
         def self.master_config
-            return @master_config if @master_config
+            return @master_config unless @master_config.nil?
 
             begin
                 @master_config = YAML.load_file(config_file)

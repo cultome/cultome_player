@@ -11,7 +11,7 @@ require 'digest'
 # Plugin to use information from the Last.fm webservices.
 module Plugins
     module LastFm
-        include TextSlider
+        extend TextSlider
         include SimilarTo
         include Scrobbler
 
@@ -154,7 +154,7 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
             begin
                 if method == :get
                     url = "#{LastFm::LAST_FM_WS_ENDPOINT}?#{query_string}"
-                        json_string = getClient.get_response(URI(url)).body
+                    json_string = getClient.get_response(URI(url)).body
                 elsif method == :post
                     url = LastFm::LAST_FM_WS_ENDPOINT
                     json_string = getClient.post_form(URI(url), query_info).body
@@ -207,7 +207,7 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
                     method: LastFm::SCROBBLE_METHOD,
                     artist: artist,
                     track: song,
-                    timestamp: Plugin::LastFm.timestamp,
+                    timestamp: LastFm.timestamp,
                 }
 
             when :multiple_scrobble
