@@ -116,7 +116,7 @@ module Cultome
         # this method send the command to the underlying music player.
         def method_missing(method_name, *args)
             if method_name =~ /\Ac([\d]+)\Z/
-                define_color_palette
+                Helper.define_color_palette
                 send(method_name, *args)
                 # interrogando sobre el estatus del reproductor
             elsif method_name =~ /\A(.*?)\?\Z/

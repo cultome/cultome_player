@@ -35,24 +35,6 @@ module Cultome
             YAML.load_file(config_file)
         end
 
-        # Create a context with a managed connection from the pool. The block passed will be
-        # inside a valid connection.
-        #
-        # @param db_logic [Block] The logic that require a valid db connection.
-        def with_connection(&db_logic)
-            begin
-                ActiveRecord::Base.connection_pool
-            rescue Exception => e
-                ActiveRecord::Base.establish_connection(
-                    adapter: Helper.db_adapter,
-                    database: Helper.db_file
-                )
-                ActiveRecord::Base.logger = Logger.new(File.open(Helper.db_log_path, 'a'))
-            end
-
-            ActiveRecord::Base.connection_pool.with_connection(&db_logic)
-        end
-
         # Return the directory inside user home where this player writes his configurations
         #
         # @return [String] The directory where player writes its configurations
@@ -60,70 +42,12 @@ module Cultome
             @_usr_player_dir ||= File.join(Dir.home, ".cultome")
         end
 
-        # Tries to detect the operating system in which is running.
-        #
-        # @return [Symbol] the OS detected
-        def os
-            @_os ||= (
-                host_os = RbConfig::CONFIG['host_os']
-                case host_os
-                when /mswin|msys|mingw|sygwin|bccwin|wince|emc/
-                    :windows
-                when /darwin|mac os/
-                    :macosx
-                when /linux/
-                    :linux
-                when /solaris|bsd/
-                    :unix
-                else
-                    raise Exception.new("unknown os: #{host_os}")
-                end
-            )
-        end
-
         # Return the path to the player's config file
         #
         # @return [String] The absoulute path to the config file
         def self.config_file
-            File.join(user_dir, CONFIG_FILE_NAME)
-        end
-
-        # Extract the ID3 tag information from a mp3 file.
-        #
-        # @param file_path [String] The full path to a mp3 file.
-        # @return [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre. nil if something is wrong.
-        def extract_mp3_information(file_path)
-            info = nil
-            begin
-                Mp3Info.open(file_path) do |mp3|
-                    info = {
-                        name: mp3.tag.title,
-                        artist: mp3.tag.artist,
-                        album: mp3.tag.album,
-                        track: mp3.tag.tracknum,
-                        duration: mp3.length,
-                        year: mp3.tag1["year"],
-                        genre: mp3.tag1["genre_s"]
-                    }
-                end
-
-                if info[:name].nil?
-                    info[:name] = file_path.split('/').last
-                end
-
-                return polish(info)
-            rescue
-                display c2("The file '#{file_path}' could not be added")
-                return nil
-            end
-        end
-
-        # Convert an amount of seconds to its representation mm:ss
-        #
-        # @param seconds [Integer] The number of seconds to convert.
-        # @return [String] A time representation of mm:ss
-        def to_time(seconds)
-            "#{(seconds/60).to_s.rjust(2, '0')}:#{(seconds%60).to_s.rjust(2, '0')}"
+            return File.join(user_dir, CONFIG_FILE_NAME) unless ENV['environment']
+            File.join(project_path, CONFIG_FILE_NAME)
         end
 
         # Return the path to the base of the instalation.
@@ -168,7 +92,7 @@ module Cultome
             File.join(user_dir, "db_cultome.dat")
         end
 
-        def define_color_palette
+        def self.define_color_palette
             if @color_palette.nil?
                 @color_palette = Helper.master_config['core']["color_palette"]
                 if @color_palette.nil?
@@ -203,6 +127,57 @@ module Cultome
             end
         end
 
+        # Extract the ID3 tag information from a mp3 file.
+        #
+        # @param file_path [String] The full path to a mp3 file.
+        # @return [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre. nil if something is wrong.
+        def self.extract_mp3_information(file_path)
+            info = nil
+            begin
+                Mp3Info.open(file_path) do |mp3|
+                    info = {
+                        name: mp3.tag.title,
+                        artist: mp3.tag.artist,
+                        album: mp3.tag.album,
+                        track: mp3.tag.tracknum,
+                        duration: mp3.length,
+                        year: mp3.tag1["year"],
+                        genre: mp3.tag1["genre_s"]
+                    }
+                end
+
+                if info[:name].nil?
+                    info[:name] = file_path.split('/').last
+                end
+
+                return polish(info)
+            rescue
+                display c2("The file '#{file_path}' could not be added")
+                return nil
+            end
+        end
+
+        # Tries to detect the operating system in which is running.
+        #
+        # @return [Symbol] the OS detected
+        def os
+            @_os ||= (
+                host_os = RbConfig::CONFIG['host_os']
+                case host_os
+                when /mswin|msys|mingw|sygwin|bccwin|wince|emc/
+                    :windows
+                when /darwin|mac os/
+                    :macosx
+                when /linux/
+                    :linux
+                when /solaris|bsd/
+                    :unix
+                else
+                    raise Exception.new("unknown os: #{host_os}")
+                end
+            )
+        end
+
         # Print a message in the screen.
         #
         # @param object [Object] Any object that responds to #to_s.
@@ -216,6 +191,24 @@ module Cultome
                 puts text
             end
             text
+        end
+
+        # Create a context with a managed connection from the pool. The block passed will be
+        # inside a valid connection.
+        #
+        # @param db_logic [Block] The logic that require a valid db connection.
+        def with_connection(&db_logic)
+            begin
+                ActiveRecord::Base.connection_pool
+            rescue Exception => e
+                ActiveRecord::Base.establish_connection(
+                    adapter: Helper.db_adapter,
+                    database: Helper.db_file
+                )
+                ActiveRecord::Base.logger = Logger.new(File.open(Helper.db_log_path, 'a'))
+            end
+
+            ActiveRecord::Base.connection_pool.with_connection(&db_logic)
         end
 
         private
@@ -244,5 +237,15 @@ end
 class String
     def blank?
         self.nil? || self.empty?
+    end
+end
+
+class Fixnum
+    # Convert an amount of seconds to its representation mm:ss
+    #
+    # @param seconds [Integer] The number of seconds to convert.
+    # @return [String] A time representation of mm:ss
+    def to_time
+        "#{(self/60).to_s.rjust(2, '0')}:#{(self%60).to_s.rjust(2, '0')}"
     end
 end

@@ -710,7 +710,7 @@ HELP
 		def self.show_progress(cultome)
 			actual = cultome.song_status["mp3.position.microseconds"] / 1000000
 			percentage = ((actual * 100) / cultome.song.duration) / 10
-			display c4("#{to_time(actual)} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{to_time(cultome.song.duration)}")
+			display c4("#{actual.to_time} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{cultome.song.duration.to_time}")
 		end
 
 		# Retrive songs from connected drives with the given conditions.
@@ -758,7 +758,7 @@ HELP
 		# @param drive [Drive] The connected drive where the file will live.
 		# @return [Song] The added song.
 		def self.create_song_from_file(file_path, drive)
-			info = extract_mp3_information(file_path)
+			info = Helper.extract_mp3_information(file_path)
 
 			return nil if info.nil?
 
