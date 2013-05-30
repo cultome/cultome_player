@@ -3,13 +3,11 @@ module Plugins
     module Scrobbler
 
         def self.included(base)
-puts "++++++++++ Including Scrobbler in #{base}"
             base.extend ClassMethods
         end
 
         module ClassMethods
             def scrobble(cultome, params=[])
-puts "----------- SCROBBLE"
                 p = cultome.prev_song
                 return nil if p.nil?
 

@@ -24,7 +24,7 @@ module Plugins
 			song = cultome.prev_song
             next_song = cultome.song
 
-			return -1 unless song.class == Song && next_song.class == Song
+			return -1 unless song.class == Cultome::Song && next_song.class == Cultome::Song
 			return 0 unless cultome.song_status.respond_to?(:[]) && !cultome.song_status["mp3.position.microseconds"].nil?
 
 			#puts "Calificando cancion #{ song }, #{ next_song }, #{ cultome.current_command }..."
@@ -35,37 +35,37 @@ module Plugins
 			points = 0
 
 			if cultome.current_command[:command] =~ /next/
-				Song.increment_counter(:points, song.id) if song == next_song
+				Cultome::Song.increment_counter(:points, song.id) if song == next_song
 				points += 1
 			end
 
 			if percentage < 20
 				# restamos puntos a la rola actual
-				Song.decrement_counter :points, song.id
-				Album.decrement_counter :points, song.album.id unless song.album.nil?
-				Artist.decrement_counter :points, song.artist.id unless song.artist.id if song.artist != next_song.artist
+				Cultome::Song.decrement_counter :points, song.id
+				Cultome::Album.decrement_counter :points, song.album.id unless song.album.nil?
+				Cultome::Artist.decrement_counter :points, song.artist.id unless song.artist.id if song.artist != next_song.artist
 
 				points -= 1
 			elsif percentage > 60 && percentage < 90
 				# damos un punto a la rola actual
-				Song.increment_counter :points, song.id
-				Album.increment_counter :points, song.album.id unless song.album.nil?
-				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
+				Cultome::Song.increment_counter :points, song.id
+				Cultome::Album.increment_counter :points, song.album.id unless song.album.nil?
+				Cultome::Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 
 				points += 1
 			elsif percentage >= 90
 				# damos 2 puntos a la rola actual
-				Song.update_counters song.id, points: 2
-				Album.increment_counter :points, song.album.id unless song.album.nil?
-				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
+				Cultome::Song.update_counters song.id, points: 2
+				Cultome::Album.increment_counter :points, song.album.id unless song.album.nil?
+				Cultome::Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 
 				points += 1
 			elsif cultome.current_command[:command] =~ /prev/
 				# le damos puntos a la proxima rola 
 				# porque la queremos volver a escuchar
-				Song.increment_counter :points, song.id
-				Album.increment_counter :points, song.album.id unless song.album.nil?
-				Artist.increment_counter :points, song.artist.id unless song.artist.nil?
+				Cultome::Song.increment_counter :points, song.id
+				Cultome::Album.increment_counter :points, song.album.id unless song.album.nil?
+				Cultome::Artist.increment_counter :points, song.artist.id unless song.artist.nil?
 
 				points += 1
 			end
@@ -74,6 +74,7 @@ module Plugins
 			genres_weight = calculate_genre_compatibility(song.genres, next_song.genres)
 			#puts "Genre weight: #{genres_weight}"
 
+puts "YYYYYYYELLLOW! #{points} + #{genres_weight}"
 			return points + genres_weight
 		end
 

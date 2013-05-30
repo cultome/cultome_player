@@ -15,7 +15,7 @@ module Plugins
         # @param cmd [Hash] With the command information
         def self.gesture(cultome, params=[])
             cultome.last_cmds.each do |cmd|
-                Plugins::GestureAnalizer.queue.add_event(cmd)
+                GestureAnalizer.queue.add_event(cmd)
             end
             analize_queue(cultome)
         end
@@ -23,11 +23,11 @@ module Plugins
         # Look for known patterns and interpret them.
         def self.analize_queue(cultome)
             # checamos el patron y vemos si matchea
-            if Plugins::GestureAnalizer.queue.has(5, :next, 20)
+            if GestureAnalizer.queue.has(5, :next, 20)
                 display c2("#### Notifying: Looking for something")
             end
 
-            Plugins::GestureAnalizer.queue
+            GestureAnalizer.queue
         end
 
         def self.queue

@@ -1,13 +1,15 @@
+require 'cultome/core'
+
 module Cultome
     require 'cultome/installation_integrity'
-    require 'cultome/jl_gui_basic_player'
+    require 'cultome/jl_gui_basic_player' if ENV['environment'] != 'dev'
     require 'cultome/user_input'
     require 'cultome/helper'
     require 'cultome/plugins'
     require 'cultome/core'
 
     class CultomePlayer
-        include Cultome::CultomePlayerCore
+        include CultomePlayerCore
 
         attr_accessor :playlist
         attr_accessor :search_results

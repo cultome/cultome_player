@@ -1,9 +1,8 @@
+require 'cultome/helper'
 require 'active_support/inflector'
 require 'active_support'
 
 module Plugins
-
-    extend ActiveSupport::Autoload
 
     def self.commands_help
         @commands_help ||= {}
@@ -18,14 +17,14 @@ module Plugins
     end
 
     def self.included(base)
-        commands_path = "#{project_path}/lib/plugins"
+        commands_path = "#{Cultome::Helper.project_path}/lib/plugins"
         Dir.entries(commands_path).each do |file|
             if file =~ /\.rb\Z/
                 file_name = file.gsub('.rb', '')
                 class_name = file_name.classify
 
                 # Lo cargamos...
-                autoload class_name.to_sym, "plugins/#{file_name}"
+                require "plugins/#{file_name}"
 
                 class_const = "Plugins::#{class_name}".constantize
 
@@ -56,7 +55,7 @@ module Plugins
         end
 
         def config
-            Helper.master_config[self.to_s] ||= {}
+            Cultome::Helper.master_config[self.to_s] ||= {}
         end
     end
 

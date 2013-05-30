@@ -70,7 +70,7 @@ HELP
 			if params[0][:type] == :path
 				save_dir = params[0][:value]
 			elsif params[0][:type] == :object
-				drive = Drive.find_by_name(params[0][:value])
+				drive = Cultome::Drive.find_by_name(params[0][:value])
 				return nil if drive.nil?
 				save_dir = drive.path
 			end

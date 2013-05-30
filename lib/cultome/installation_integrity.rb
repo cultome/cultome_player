@@ -11,12 +11,12 @@ module Cultome
         end
 
         def check_directories_integrity
-            FileUtils.mkpath(db_logs_folder_path) unless Dir.exist?(db_logs_folder_path)
-            FileUtils.mkpath(user_dir) unless File.exist?(user_dir)
+            FileUtils.mkpath(Helper.db_logs_folder_path) unless Dir.exist?(Helper.db_logs_folder_path)
+            FileUtils.mkpath(Helper.user_dir) unless File.exist?(Helper.user_dir)
         end
 
         def check_config_files_integrity
-            FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file) unless File.exist?(config_file)
+            FileUtils.cp(File.join(Helper.project_path, CONFIG_FILE_NAME), Helper.config_file) unless File.exist?(Helper.config_file)
         end
 
         def check_database_integrity
@@ -43,7 +43,3 @@ module Cultome
         end
     end
 end
-
-#check_directories_integrity
-#check_config_files_integrity
-#check_database_integrity

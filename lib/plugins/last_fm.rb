@@ -93,8 +93,8 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
                           # wait for user to be ready
                           gets
 
-                          auth_info = Plugins::LastFm.define_query(:token)
-                          json = Plugins::LastFm.consult_lastfm(auth_info, true)
+                          auth_info = LastFm.define_query(:token)
+                          json = LastFm.consult_lastfm(auth_info, true)
 
                           return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['token'].nil?
 
@@ -113,8 +113,8 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
 
             elsif params[0][:value] == 'done'
                 display c4("Thanks! Now we are validating the authorization and if it all right then we're done!. Wait a minute please...")
-                auth_info = Plugins::LastFm.define_query(:session)
-                json = Plugins::LastFm.consult_lastfm(auth_info, true)
+                auth_info = LastFm.define_query(:session)
+                json = LastFm.consult_lastfm(auth_info, true)
 
                 return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['session'].nil?
 
@@ -122,6 +122,16 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
 
                 display c4("Ok! everything is set and the scrobbler is working now! Enjoy!")
             end
+        end
+
+        # Generate the Last.fm sign for the request. Basibly the sign is concatenate all the parameters with their values in alphabetical order and generate a 32 charcters MD5 hash.
+        #
+        # @param query_info [Hash] The parameters sended in the request.
+        # @return [String] The sign of this request.
+        def self.generate_call_sign(query_info)
+            params = query_info.sort.inject(""){|sum,map| sum += "#{map[0]}#{map[1]}" }
+            sign = params + LastFm::LAST_FM_SECRET
+            return Digest::MD5.hexdigest(sign)
         end
 
         # Make a request to the last.fm webservice, and parse the response with JSON.
@@ -133,13 +143,13 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
 
             if signed
                 query_info[:sk] = LastFm.config['session_key'] unless LastFm.config['session_key'].nil?
-                query_info[:api_sig] = Plugins.SimilarTo.generate_call_sign(query_info)
+                query_info[:api_sig] = generate_call_sign(query_info)
             end
 
             # siempre pedims la representacion en JSON, pero este parametro no se firma con el resto
             query_info[:format] = 'json'
 
-            query_string = Plugins::LastFm.get_query_string(query_info)
+            query_string = LastFm.get_query_string(query_info)
 
             begin
                 if method == :get
@@ -179,17 +189,17 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
                 query = {
                     method: LastFm::GET_SIMILAR_ARTISTS_METHOD,
                     artist: artist,
-                    limit: Plugins::SimilarTo.similar_results_limit,
+                    limit: SimilarTo.similar_results_limit,
                 }
 
             when :song
-                Plugins::LastFm.change_text("Looking for tracks similar to #{song} / #{artist}...")
+                LastFm.change_text("Looking for tracks similar to #{song} / #{artist}...")
 
                 query = {
                     method: LastFm::GET_SIMILAR_TRACKS_METHOD,
                     artist: artist,
                     track: song,
-                    limit: Plugins::SimilarTo.similar_results_limit,
+                    limit: SimilarTo.similar_results_limit,
                 }
 
             when :scrobble

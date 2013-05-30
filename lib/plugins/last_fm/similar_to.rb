@@ -34,7 +34,7 @@ module Plugins
 
                         # salvamos los similares
                         artists.each do |a|
-                            Artist.find(artist_id).similars.create(a)
+                            Cultome::Artist.find(artist_id).similars.create(a)
                         end
 
                         artists_in_library = Plugins::SimilarTo.find_artists_in_library(artists)
@@ -54,7 +54,7 @@ module Plugins
                         end
                         # salvamos los similares
                         tracks.each do |t|
-                            Song.find(song_id).similars.create(t)
+                            Cultome::Song.find(song_id).similars.create(t)
                         end
                         tracks_in_library = Plugins.SimilarTo.find_tracks_in_library(tracks)
                         Plugins.SimilarTo.show_tracks(song_name, tracks, tracks_in_library)
@@ -97,24 +97,14 @@ module Plugins
         # @return [List<Similar>] A list with the result of the search for similars for this criterio.
         def self.check_in_db(query_info)
             if query_info[:method] == LastFm::GET_SIMILAR_ARTISTS_METHOD
-                artist = Artist.includes(:similars).find_by_name(query_info[:artist])
+                artist = Cultome::Artist.includes(:similars).find_by_name(query_info[:artist])
                 return artist.similars unless artist.nil?
                 return []
             elsif query_info[:method] == LastFm::GET_SIMILAR_TRACKS_METHOD
-                track = Song.includes(:similars).find_by_name(query_info[:track])
+                track = Cultome::Song.includes(:similars).find_by_name(query_info[:track])
                 return track.similars unless track.nil?
                 return []
             end
-        end
-
-        # Generate the Last.fm sign for the request. Basibly the sign is concatenate all the parameters with their values in alphabetical order and generate a 32 charcters MD5 hash.
-        #
-        # @param query_info [Hash] The parameters sended in the request.
-        # @return [String] The sign of this request.
-        def self.generate_call_sign(query_info)
-            params = query_info.sort.inject(""){|sum,map| sum += "#{map[0]}#{map[1]}" }
-            sign = params + LastFm::LAST_FM_SECRET
-            return Digest::MD5.hexdigest(sign)
         end
 
         # For the given artist list, find in the library if that artist exists, if exist, remove it from the parameter list.
@@ -132,7 +122,7 @@ module Plugins
             })
 
             artists.keep_if do |a|
-                artist = Artist.find_by_name(a[:artist])
+                artist = Cultome::Artist.find_by_name(a[:artist])
                 if artist.nil? 
                     # dejamos los artistas que no esten en nuestra library
                     true
@@ -160,7 +150,7 @@ module Plugins
             })
 
             tracks.keep_if do |t|
-                song = Song.joins(:artist).where('songs.name = ? and artists.name = ?', t[:track], t[:artist]).to_a
+                song = Cultome::Song.joins(:artist).where('songs.name = ? and artists.name = ?', t[:track], t[:artist]).to_a
                 if song.empty?
                     # aqui meter a similars
                     true

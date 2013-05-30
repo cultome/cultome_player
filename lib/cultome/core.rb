@@ -1,5 +1,9 @@
+require 'cultome/installation_integrity'
+require 'cultome/user_input'
 require 'cultome/player_listener'
+require 'cultome/helper'
 require 'cultome/exception'
+require 'cultome/plugins'
 require 'active_support'
 require 'active_support/inflector'
 require 'active_record'
@@ -36,6 +40,7 @@ module Cultome
         def execute(user_input)
             begin
                 cmds = parse(user_input)
+                # TODO meter blank?
                 if cmds.nil? || cmds.empty?
                     cmds = cultome.last_cmds
                 else
@@ -64,6 +69,8 @@ module Cultome
         #
         # @param ex [Exception] The exception throwed
         def default_error_action(ex)
+            puts ex.backtrace if ENV['environment'] == 'dev'
+
             if ex.respond_to?(:displayable)
                 display c2(ex.message) if ex.displayable?
             else
@@ -71,7 +78,6 @@ module Cultome
                 when /(Connection refused|Network is unreachable)/ then display c2("The internet is not available!")
                 else
                     display c2(ex.message)
-                    puts ex.backtrace if ENV['environment'] == 'dev'
                 end
             end
 

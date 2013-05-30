@@ -49,7 +49,7 @@ HELP
 			alias_name = params[0][:value]
 			alias_value = params[1][:value]
 
-			Plugins::CommandAlias.aliases[alias_name] = alias_value
+			CommandAlias.aliases[alias_name] = alias_value
 		end
 
 		# Invoked when a player exception is throwed
@@ -60,9 +60,9 @@ HELP
 
 			# separamos el comando
 			split = ex.command.split(' ')
-			return if split[0].nil? || Plugins::CommandAlias.aliases[split[0]].nil?
+			return if split[0].nil? || CommandAlias.aliases[split[0]].nil?
 
-			translated = Plugins::CommandAlias.aliases[split[0]].clone
+			translated = CommandAlias.aliases[split[0]].clone
 
 			if split.size > 1
 				1.upto(split.size - 1) do |c|

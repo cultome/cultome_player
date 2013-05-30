@@ -40,13 +40,13 @@ HELP
 			return nil unless params.one?{|a| a[:type] == :object }
 			return nil unless params.one?{|a| a[:type] == :path }
 
-			to_path = Plugins::CopyTo.validate_path(params.find{|a| a[:type] == :path }[:value])
+			to_path = CopyTo.validate_path(params.find{|a| a[:type] == :path }[:value])
 			return nil if to_path.nil?
 
-			files = Plugins::CopyTo.get_file_list(cultome, params.find{|a| a[:type] == :object }[:value])
+			files = CopyTo.get_file_list(cultome, params.find{|a| a[:type] == :object }[:value])
 			return nil if files.nil?
 
-			return Plugins::CopyTo.copy_files(cultome, files, to_path)
+			return CopyTo.copy_files(cultome, files, to_path)
 		end
 
 		# Validate that the destination is an existing directory and we can write there.
@@ -63,19 +63,19 @@ HELP
 		# @return [List<String>, nil] The files path list or nil if problem.
 		def self.get_file_list(cultome, object)
 			list = cultome.instance_variable_get("@#{object}")
-			return [list.path] if list.class == Song
+			return [list.path] if list.class == Cultome::Song
 			return nil if list.empty?
 
 
-			if list[0].class == Song
+			if list[0].class == Cultome::Song
 				return list.collect{|s| s.path }
-			elsif list[0].class == Artist
+			elsif list[0].class == Cultome::Artist
 				artists_ids = list.collect{|a| a.id }
-				songs = Song.joins(:artists).where('artists.id in (?)', artists_ids).to_s
+				songs = Cultome::Song.joins(:artists).where('artists.id in (?)', artists_ids).to_s
 				return songs.collect{|s| s.path }
-			elsif list[0].class == Album
+			elsif list[0].class == Cultome::Album
 				albums_ids = list.collect{|a| a.id }
-				songs = Song.joins(:albums).where('albums.id in (?)', albums_ids).to_s
+				songs = Cultome::Song.joins(:albums).where('albums.id in (?)', albums_ids).to_s
 				return songs.collect{|s| s.path }
 			else
 				# podrian ser los similares
