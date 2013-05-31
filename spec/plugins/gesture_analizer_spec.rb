@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'cultome_player'
+require 'plugins/gesture_analizer'
 
 describe Plugins::GestureAnalizer do
 

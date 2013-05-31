@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'cultome_player'
+require 'plugins/taste_analizer'
 require 'cultome/persistence'
 
 describe Plugins::TasteAnalizer do

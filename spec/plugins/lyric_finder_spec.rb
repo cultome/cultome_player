@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cultome_player'
 require 'plugins/lyric_finder'
 require 'webmock/rspec'
 

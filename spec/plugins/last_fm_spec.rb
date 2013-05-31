@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cultome_player'
 require 'webmock/rspec'
 require 'plugins/last_fm'
 

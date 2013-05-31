@@ -44,9 +44,10 @@ module Cultome
             return @master_config
         end
 
-        def self.create_basic_config_file
-            File.open(config_file, 'w'){|f| YAML.dump({'core' => {'prompt' => 'cultome> '}}, f)}
-            YAML.load_file(config_file)
+        def self.create_basic_config_file(custom_file=nil)
+            file_to_use = custom_file || config_file
+            File.open(file_to_use, 'w'){|f| YAML.dump({'core' => {'prompt' => 'cultome> '}}, f)}
+            YAML.load_file(file_to_use)
         end
 
         # Return the directory inside user home where this player writes his configurations
@@ -109,30 +110,33 @@ module Cultome
             environment['database_file'] || File.join(user_dir, "db_cultome.dat")
         end
 
+        def self.color_palette
+            @color_palette || define_color_palette
+        end
+
         def self.define_color_palette
+            @color_palette = Helper.master_config['core']["color_palette"]
+
             if @color_palette.nil?
-                @color_palette = Helper.master_config['core']["color_palette"]
-                if @color_palette.nil?
-                    @color_palette = [
-                        :black,			# c1
-                        :red,			# c2
-                        :green,			# c3
-                        :yellow,		# c4
-                        :blue,			# c5
-                        :magenta,		# c6
-                        :cyan,			# c7
-                        :white,			# c8
-                        :default,		# c9
-                        :light_red,		# c10
-                        :light_green,	# c11
-                        :light_yellow,	# c12
-                        :light_blue,	# c13
-                        :light_magenta,	# c14
-                        :light_cyan,	# c15
-                        :light_white,	# c16
-                    ]
-                    Helper.master_config['core']["color_palette"] = @color_palette
-                end
+                @color_palette = [
+                    :black,			# c1
+                    :red,			# c2
+                    :green,			# c3
+                    :yellow,		# c4
+                    :blue,			# c5
+                    :magenta,		# c6
+                    :cyan,			# c7
+                    :white,			# c8
+                    :default,		# c9
+                    :light_red,		# c10
+                    :light_green,	# c11
+                    :light_yellow,	# c12
+                    :light_blue,	# c13
+                    :light_magenta,	# c14
+                    :light_cyan,	# c15
+                    :light_white,	# c16
+                ]
+                Helper.master_config['core']["color_palette"] = @color_palette
             end
 
             @color_palette.each_with_index do |color, idx|

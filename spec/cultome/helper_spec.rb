@@ -1,4 +1,4 @@
-require 'spec_helper_basic'
+require 'spec_helper'
 require 'cultome/helper'
 
 describe Cultome::Helper do
@@ -26,9 +26,10 @@ describe Cultome::Helper do
         end
 
         it 'Should create a basic config file from nothing' do
-            File.delete(h.config_file) if File.exist?(h.config_file)
-            h.create_basic_config_file
-            File.exist?(h.config_file).should be_true
+            dummy_file = 'spec/data/config_dummy.yml'
+            File.delete(dummy_file) if File.exist?(dummy_file)
+            h.create_basic_config_file(dummy_file)
+            File.exist?(dummy_file).should be_true
             h.master_config['core']['prompt'].should eq('cultome> ')
         end
 
@@ -61,14 +62,20 @@ describe Cultome::Helper do
         end
 
         it 'Should return the db data file' do
-            h.db_file.end_with?('.cultome/db_cultome.dat').should be_true
+            if Cultome::Helper.environment['database_file']
+                h.db_file.should_not be_empty
+            else
+                h.db_file.end_with?('.cultome/db_cultome.dat').should be_true
+            end
         end
 
 
         it 'Should define a palette of colors' do
-            expect{test_class.c8("Color 8")}.to raise_error(NoMethodError)
+            undefine_colors
+            h.respond_to?(:c8).should be_false
             Cultome::Helper.define_color_palette
-            test_class.c8("Color 8").should_not be_nil
+            h.respond_to?(:c8).should be_true
+            undefine_colors && override_colors
         end
 
         it 'Should polish the information in the hash' do
@@ -115,6 +122,7 @@ describe Cultome::Helper do
         end
 
         it 'Should create a context with DB access' do
+            ActiveRecord::Base.remove_connection
             expect { Cultome::Song.all }.to raise_error(ActiveRecord::ConnectionNotEstablished)
 
             with_connection{ Cultome::Song.all.should_not be_nil }

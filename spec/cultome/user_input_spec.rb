@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cultome/user_input'
 
 describe UserInput do
 
