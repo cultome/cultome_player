@@ -16,7 +16,7 @@ RSpec.configure do |config|
 end
 
 # seteamos el ambiente para pruebas
-ENV['environment'] = 'rspec'
+ENV['cultome_env'] = 'rspec'
 
 require 'cultome_player'
 Cultome::CultomePlayer.class_eval do
