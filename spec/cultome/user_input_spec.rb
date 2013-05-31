@@ -25,7 +25,16 @@ describe UserInput do
 		}])
 	end
 
-	it 'Should ask and receive an afirmative confirmation from user' do
+    it 'Should parse a command with number parameters'
+    it 'Should parse a command with path parameters'
+    it 'Should parse a command with criteria parameters'
+    it 'Should parse a command with object parameters'
+    it 'Should parse a command with ip parameters'
+    it 'Should parse a command with literal parameters'
+    it 'Should parse a command with only bubble words'
+    it 'Should parse a command with unknown parameters'
+
+	it 'Should ask and receive an affirmative confirmation from user' do
 		u.should_receive(:display).once.with('message')
 		u.stub(:get_command).and_return('y')
 		u.get_confirmation('message').should be_true
@@ -37,7 +46,7 @@ describe UserInput do
 		u.get_confirmation('message').should be_false
 	end
 
-	it 'Should recognize as afirmative expression /Y|y|yes|1|si|s|ok/' do
+	it 'Should recognize as affirmative expression /Y|y|yes|1|si|s|ok/' do
 		%w{Y y yes 1 si s ok}.each{|y| u.is_true_value(y).should be_true }
 	end
 
