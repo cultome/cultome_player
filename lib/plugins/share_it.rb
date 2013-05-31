@@ -54,9 +54,7 @@ HELP
 				display c4("The transfer was successful!")
 			else
 				display c2("There was an error with the transfer =S")
-				if ENV['environment'] == 'dev'
-					display c2("ERROR (#{client.error_code}): #{client.message}")
-				end
+                display c2("ERROR (#{client.error_code}): #{client.message}") if Cultome::Helper.dev?
 			end
 
 			return success
@@ -86,9 +84,7 @@ HELP
 				display c4("The transfer was successful!")
 			else
 				display c2("There was an error with the transfer =S")
-				if ENV['environment'] == 'dev'
-					display c2("ERROR (#{server.error_code}): #{server.message}")
-				end
+                display c2("ERROR (#{server.error_code}): #{server.message}") if Cultome::Helper.dev?
 			end
 
 			return success

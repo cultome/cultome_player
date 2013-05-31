@@ -11,6 +11,20 @@ module Cultome
 
         CONFIG_FILE_NAME = "config.yml"
 
+        # Return the environment configurations
+        #
+        # @return [Hash] With the environment configurations
+        def self.environment
+            @env ||= YAML.load_file("#{project_path}/env/#{ENV['environment'] || 'user'}/env.yml") || {}
+        end
+
+        # Check if he current environment is development.
+        #
+        # @return [Boolean] True is running in development environment, false otherwise.
+        def self.dev?
+            environment['name'] == 'dev'
+        end
+
         # Return the path to the config file
         #
         # @return [String] The path to the config file
@@ -46,8 +60,11 @@ module Cultome
         #
         # @return [String] The absoulute path to the config file
         def self.config_file
-            return File.join(user_dir, CONFIG_FILE_NAME) unless ENV['environment']
-            File.join(project_path, CONFIG_FILE_NAME)
+            environment['config_file'] || File.join(user_dir, CONFIG_FILE_NAME)
+        end
+
+        def self.player_implementation
+            environment['player_implementation'] || 'cultome/jl_gui_basic_player'
         end
 
         # Return the path to the base of the instalation.
@@ -82,14 +99,14 @@ module Cultome
         #
         # @return [String] The db adapter name.
         def self.db_adapter
-            ENV['db_adapter'] || 'jdbcsqlite3'
+            environment['db_adapter'] || 'jdbcsqlite3'
         end
 
         # Return the path to the db data file.
         #
         # @return  [String] The path to the db data file.
         def self.db_file
-            File.join(user_dir, "db_cultome.dat")
+            environment['database_file'] || File.join(user_dir, "db_cultome.dat")
         end
 
         def self.define_color_palette

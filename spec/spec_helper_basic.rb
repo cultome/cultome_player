@@ -16,8 +16,7 @@ RSpec.configure do |config|
 end
 
 # seteamos el ambiente para pruebas
-ENV['db_adapter'] = 'sqlite3'
-ENV['environment'] = 'dev'
+ENV['environment'] = 'rspec'
 
 require 'cultome_player'
 Cultome::CultomePlayer.class_eval do

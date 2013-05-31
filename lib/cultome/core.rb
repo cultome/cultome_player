@@ -69,7 +69,7 @@ module Cultome
         #
         # @param ex [Exception] The exception throwed
         def default_error_action(ex)
-            puts ex.backtrace if ENV['environment'] == 'dev'
+            puts ex.backtrace if Helper.dev?
 
             if ex.respond_to?(:displayable)
                 display c2(ex.message) if ex.displayable?

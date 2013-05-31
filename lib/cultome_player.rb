@@ -2,11 +2,11 @@ require 'cultome/core'
 
 module Cultome
     require 'cultome/installation_integrity'
-    require 'cultome/jl_gui_basic_player' if ENV['environment'] != 'dev'
     require 'cultome/user_input'
     require 'cultome/helper'
     require 'cultome/plugins'
     require 'cultome/core'
+    require Helper.player_implementation
 
     class CultomePlayer
         include CultomePlayerCore

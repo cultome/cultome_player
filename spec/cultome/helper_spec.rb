@@ -53,7 +53,7 @@ describe Cultome::Helper do
         end
 
         it 'Should return the db adapter name' do
-            if ENV['db_adapter']
+            if Cultome::Helper.environment['db_adapter']
                 h.db_adapter.should_not be_nil
             else
                 h.db_adapter.should eq('jdbcsqlite3')
