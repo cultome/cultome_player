@@ -14,21 +14,21 @@ module Cultome
         # Return the environment configurations
         #
         # @return [Hash] With the environment configurations
-        def self.environment
+        def environment
             @env ||= YAML.load_file("#{project_path}/env/#{ENV['cultome_env'] || 'user'}/env.yml") || {}
         end
 
         # Check if he current environment is development.
         #
         # @return [Boolean] True is running in development environment, false otherwise.
-        def self.dev?
+        def dev?
             environment['name'] == 'dev'
         end
 
         # Return the path to the config file
         #
         # @return [String] The path to the config file
-        def self.master_config
+        def master_config
             return @master_config unless @master_config.nil?
 
             begin
@@ -44,7 +44,7 @@ module Cultome
             return @master_config
         end
 
-        def self.create_basic_config_file(custom_file=nil)
+        def create_basic_config_file(custom_file=nil)
             file_to_use = custom_file || config_file
             File.open(file_to_use, 'w'){|f| YAML.dump({'core' => {'prompt' => 'cultome> '}}, f)}
             YAML.load_file(file_to_use)
@@ -53,69 +53,69 @@ module Cultome
         # Return the directory inside user home where this player writes his configurations
         #
         # @return [String] The directory where player writes its configurations
-        def self.user_dir
+        def user_dir
             @_usr_player_dir ||= File.join(Dir.home, ".cultome")
         end
 
         # Return the path to the player's config file
         #
         # @return [String] The absoulute path to the config file
-        def self.config_file
+        def config_file
             environment['config_file'] || File.join(user_dir, CONFIG_FILE_NAME)
         end
 
-        def self.player_implementation
+        def player_implementation
             environment['player_implementation'] || 'cultome/jl_gui_basic_player'
         end
 
         # Return the path to the base of the instalation.
         #
         # @return [String] The path to the base of the instalation.
-        def self.project_path
+        def project_path
             @_project_path ||= File.expand_path(File.dirname(__FILE__) + "/../..")
         end
 
         # Return the path to the migrations folder.
         #
         # @return [String] The path to the migrations folder.
-        def self.migrations_path
+        def migrations_path
             "#{ project_path }/db/migrate"
         end
 
         # Return the path to the logs folder.
         #
         # @return [String] The path to the logs folder.
-        def self.db_logs_folder_path
+        def db_logs_folder_path
             "#{ project_path }/logs"
         end
 
         # Return the path to the log file.
         #
         # @return [String] The path to the log file.
-        def self.db_log_path
+        def db_log_path
             "#{db_logs_folder_path}/db.log"
         end
 
         # Return the db adapter name used.
         #
         # @return [String] The db adapter name.
-        def self.db_adapter
+        def db_adapter
             environment['db_adapter'] || 'jdbcsqlite3'
         end
 
         # Return the path to the db data file.
         #
         # @return  [String] The path to the db data file.
-        def self.db_file
+        def db_file
             environment['database_file'] || File.join(user_dir, "db_cultome.dat")
         end
 
-        def self.color_palette
+        def color_palette
             @color_palette || define_color_palette
         end
 
-        def self.define_color_palette
-            @color_palette = Helper.master_config['core']["color_palette"]
+        def define_color_palette
+            @color_palette = master_config['core']["color_palette"]
 
             if @color_palette.nil?
                 @color_palette = [
@@ -136,7 +136,7 @@ module Cultome
                     :light_cyan,	# c15
                     :light_white,	# c16
                 ]
-                Helper.master_config['core']["color_palette"] = @color_palette
+                master_config['core']["color_palette"] = @color_palette
             end
 
             @color_palette.each_with_index do |color, idx|
@@ -152,7 +152,7 @@ module Cultome
         #
         # @param file_path [String] The full path to a mp3 file.
         # @return [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre. nil if something is wrong.
-        def self.extract_mp3_information(file_path)
+        def extract_mp3_information(file_path)
             info = nil
             begin
                 Mp3Info.open(file_path) do |mp3|
@@ -223,10 +223,10 @@ module Cultome
                 ActiveRecord::Base.connection_pool
             rescue Exception => e
                 ActiveRecord::Base.establish_connection(
-                    adapter: Helper.db_adapter,
-                    database: Helper.db_file
+                    adapter: db_adapter,
+                    database: db_file
                 )
-                ActiveRecord::Base.logger = Logger.new(File.open(Helper.db_log_path, 'a'))
+                ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
             end
 
             ActiveRecord::Base.connection_pool.with_connection(&db_logic)
@@ -255,7 +255,7 @@ class Array
     end
 end
 
-class String
+class Object
     def blank?
         self.nil? || self.empty?
     end

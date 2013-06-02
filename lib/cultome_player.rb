@@ -1,12 +1,8 @@
 require 'cultome/core'
 
 module Cultome
-    require 'cultome/installation_integrity'
-    require 'cultome/user_input'
-    require 'cultome/helper'
-    require 'cultome/plugins'
-    require 'cultome/core'
-    require Helper.player_implementation
+
+    require player_implementation
 
     class CultomePlayer
         include CultomePlayerCore
@@ -46,7 +42,7 @@ module Cultome
             @last_cmds = []
             @is_shuffling = true
             @is_playing_library = false
-            @prompt = Helper.master_config['core']['prompt']
+            @prompt = master_config['core']['prompt']
         end
     end
 end

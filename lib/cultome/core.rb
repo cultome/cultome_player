@@ -1,13 +1,8 @@
-require 'cultome/installation_integrity'
-require 'cultome/user_input'
-require 'cultome/player_listener'
-require 'cultome/helper'
-require 'cultome/exception'
 require 'cultome/plugins'
-require 'active_support'
-require 'active_support/inflector'
-require 'active_record'
-require 'logger'
+require 'cultome/user_input'
+require 'cultome/installation_integrity'
+require 'cultome/player_listener'
+require 'cultome/exception'
 
 # This class represents and holds the music player's state in one moment.
 # This means that plugins can ask about, for example, current song, focused list or connected
@@ -16,11 +11,13 @@ require 'logger'
 # and call listeners/commands registered.
 module Cultome
     module CultomePlayerCore
-        include InstallationIntegrity
-        include UserInput
-        include PlayerListener
-        include Helper
-        include Plugins
+
+        def self.included(base)
+            base.send :include, Plugins
+            base.send :include, UserInput
+            base.send :include, InstallationIntegrity
+            base.send :include, PlayerListener
+        end
 
         # Utility method for running a standalone player. Initialize the commands
         # and loop to get user input until @running flag is set to false.
@@ -40,8 +37,7 @@ module Cultome
         def execute(user_input)
             begin
                 cmds = parse(user_input)
-                # TODO meter blank?
-                if cmds.nil? || cmds.empty?
+                if cmds.blank?
                     cmds = cultome.last_cmds
                 else
                     cultome.last_cmds = cmds
@@ -62,14 +58,14 @@ module Cultome
 
         # Persist the global configuration to the player's configuration file.
         def save_configuration
-            File.open(Helper.config_file, 'w'){|f| YAML.dump(Helper.master_config, f)}
+            File.open(config_file, 'w'){|f| YAML.dump(master_config, f)}
         end
 
         # Execute a defalt action when the player fails.
         #
         # @param ex [Exception] The exception throwed
         def default_error_action(ex)
-            puts ex.backtrace if Helper.dev?
+            puts ex.backtrace if dev?
 
             if ex.respond_to?(:displayable)
                 display c2(ex.message) if ex.displayable?
@@ -85,6 +81,8 @@ module Cultome
 
             execute('next') if ex.take_action?
         end
+
+        private
 
         # Send the command parameters to appropiated registered listeners/commands.
         #
@@ -116,7 +114,7 @@ module Cultome
         # this method send the command to the underlying music player.
         def method_missing(method_name, *args)
             if method_name =~ /\Ac([\d]+)\Z/
-                Helper.define_color_palette
+                define_color_palette
                 send(method_name, *args)
                 # interrogando sobre el estatus del reproductor
             elsif method_name =~ /\A(.*?)\?\Z/

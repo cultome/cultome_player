@@ -4,6 +4,8 @@ require 'active_support'
 
 module Plugins
 
+    extend Cultome::Helper
+
     def self.commands_help
         @commands_help ||= {}
     end
@@ -17,7 +19,7 @@ module Plugins
     end
 
     def self.included(base)
-        commands_path = "#{Cultome::Helper.project_path}/lib/plugins"
+        commands_path = "#{project_path}/lib/plugins"
         Dir.entries(commands_path).each do |file|
             if file =~ /\.rb\Z/
                 file_name = file.gsub('.rb', '')
@@ -54,7 +56,7 @@ module Plugins
         end
 
         def config
-            Cultome::Helper.master_config[self.to_s] ||= {}
+            master_config[self.to_s] ||= {}
         end
     end
 

@@ -13,8 +13,8 @@ describe Plugins::LyricFinder do
 	end
 
 	it 'Should find the lyrics for the current song', resources: true do
-		stub_request(:get, "http://lyrics.wikia.com/api.php?artist=The%20Ting%20Tings&fmt=json&song=Traffic%20Light").to_return(File.new("#{Helper.project_path}/spec/data/search_lyric"))
-		stub_request(:get, "http://lyrics.wikia.com/The_Ting_Tings:Great_DJ").to_return(File.new("#{Helper.project_path}/spec/data/lyric_found"))
+		stub_request(:get, "http://lyrics.wikia.com/api.php?artist=The%20Ting%20Tings&fmt=json&song=Traffic%20Light").to_return(File.new("#{project_path}/spec/data/search_lyric"))
+		stub_request(:get, "http://lyrics.wikia.com/The_Ting_Tings:Great_DJ").to_return(File.new("#{project_path}/spec/data/lyric_found"))
 
 		player.lyric.should_not be_blank
 	end

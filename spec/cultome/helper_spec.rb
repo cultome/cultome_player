@@ -49,7 +49,7 @@ describe Cultome::Helper do
         end
 
         it 'Should return the db adapter name' do
-            if Cultome::Helper.environment['db_adapter']
+            if environment['db_adapter']
                 h.db_adapter.should_not be_nil
             else
                 h.db_adapter.should eq('jdbcsqlite3')
@@ -57,7 +57,7 @@ describe Cultome::Helper do
         end
 
         it 'Should return the db data file' do
-            if Cultome::Helper.environment['database_file']
+            if environment['database_file']
                 h.db_file.should_not be_empty
             else
                 h.db_file.end_with?('.cultome/db_cultome.dat').should be_true
@@ -68,7 +68,7 @@ describe Cultome::Helper do
         it 'Should define a palette of colors' do
             undefine_colors
             h.respond_to?(:c8).should be_false
-            Cultome::Helper.define_color_palette
+            define_color_palette
             h.respond_to?(:c8).should be_true
             undefine_colors && override_colors
         end

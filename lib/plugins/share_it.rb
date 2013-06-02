@@ -54,7 +54,7 @@ HELP
 				display c4("The transfer was successful!")
 			else
 				display c2("There was an error with the transfer =S")
-                display c2("ERROR (#{client.error_code}): #{client.message}") if Cultome::Helper.dev?
+                display c2("ERROR (#{client.error_code}): #{client.message}") if dev?
 			end
 
 			return success
@@ -84,7 +84,7 @@ HELP
 				display c4("The transfer was successful!")
 			else
 				display c2("There was an error with the transfer =S")
-                display c2("ERROR (#{server.error_code}): #{server.message}") if Cultome::Helper.dev?
+                display c2("ERROR (#{server.error_code}): #{server.message}") if dev?
 			end
 
 			return success

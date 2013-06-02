@@ -1,11 +1,9 @@
 require 'cultome/persistence'
 require 'cultome/exception'
-require 'cultome/user_input'
 
 # Plugin to handle basic commands of the player.
 module Plugins
 	module BasicCommandSet
-		include UserInput
 
 		# Get and store a copy of the CultomePlayer instance to operate with.
 		# Initialize two utility registers in Album and Artist models for unknown album or artist.
@@ -447,7 +445,7 @@ HELP
 				to_be_imported = music_files.size
 
 				music_files.each do |file_path|
-					BasicCommandSet.create_song_from_file(file_path, new_drive)
+					BasicCommandSet.create_song_from_file(cultome, file_path, new_drive)
 					imported += 1
 					display(c4("Importing #{c14(imported.to_s)}/#{c14(to_be_imported.to_s)}...\r"), true)
 				end
@@ -757,8 +755,8 @@ HELP
 		# @param file_path [String] The full path to the mp3 file.
 		# @param drive [Drive] The connected drive where the file will live.
 		# @return [Song] The added song.
-		def self.create_song_from_file(file_path, drive)
-			info = Helper.extract_mp3_information(file_path)
+		def self.create_song_from_file(cultome, file_path, drive)
+			info = cultome.extract_mp3_information(file_path)
 
 			return nil if info.nil?
 

@@ -19,7 +19,7 @@ describe Plugins::Scrobbler do
             "sk"=>"00585dbbedb14ac55d9f9e6f60257a8d",
             "timestamp"=>"1369147228",
             "track"=>"Great Dj"})
-            .to_return(File.new("#{Cultome::Helper.project_path}/spec/data/track.scrobble"))
+            .to_return(File.new("#{project_path}/spec/data/track.scrobble"))
 
             Plugins::Scrobbler.should_receive(:check_pending_scrobbles)
             Plugins::LastFm.stub(:config){{'session_key' => '1234567890'}}
@@ -40,7 +40,7 @@ describe Plugins::Scrobbler do
             "format"=>"json", 
             "method"=>"track.scrobble", 
             "sk"=>"00585dbbedb14ac55d9f9e6f60257a8d", 
-        })).to_return(File.new("#{Cultome::Helper.project_path}/spec/data/track.multiple_scrobble"))
+        })).to_return(File.new("#{project_path}/spec/data/track.multiple_scrobble"))
 
         with_connection do
             initial = Cultome::Scrobble.all.size

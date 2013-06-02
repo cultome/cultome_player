@@ -34,7 +34,7 @@ describe Plugins::SimilarTo do
 
     it 'Should find similar songs to current song due empty params' do
         stub_request(:get, "http://ws.audioscrobbler.com/2.0/?api_key=bfc44b35e39dc6e8df68594a55a442c5&artist=The%20Ting%20Tings&format=json&limit=10&method=track.getSimilar&track=Traffic%20Light").to_return(
-            File.new("#{Cultome::Helper.project_path}/spec/data/track.getSimilar")
+            File.new("#{project_path}/spec/data/track.getSimilar")
         )
 
         player.stub(:song){fixed_song}
@@ -49,7 +49,7 @@ describe Plugins::SimilarTo do
 
     it 'Should find similar songs to current song' do
         stub_request(:get, "http://ws.audioscrobbler.com/2.0/?api_key=bfc44b35e39dc6e8df68594a55a442c5&artist=The%20Ting%20Tings&format=json&limit=10&method=track.getSimilar&track=Traffic%20Light").to_return(
-            File.new("#{Cultome::Helper.project_path}/spec/data/track.getSimilar")
+            File.new("#{project_path}/spec/data/track.getSimilar")
         )
 
         player.stub(:song){fixed_song}
@@ -64,7 +64,7 @@ describe Plugins::SimilarTo do
 
     it 'Should find similar artists to current artist' do
         stub_request(:get, "http://ws.audioscrobbler.com/2.0/?api_key=bfc44b35e39dc6e8df68594a55a442c5&artist=The%20Ting%20Tings&format=json&limit=10&method=artist.getSimilar").to_return(
-            File.new("#{Cultome::Helper.project_path}/spec/data/artist.getSimilar")
+            File.new("#{project_path}/spec/data/artist.getSimilar")
         )
         player.stub(:song){fixed_song}
         Cultome::Artist.should_receive(:find).at_least(1).and_return(fixed_song.artist)

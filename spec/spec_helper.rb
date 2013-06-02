@@ -19,6 +19,7 @@ end
 ENV['cultome_env'] = 'rspec'
 
 require 'cultome/helper'
+include Cultome::Helper
 
 Cultome::Helper.module_eval do
     alias :display_old :display
@@ -30,13 +31,13 @@ end
 
 # definimos los metodos de los colores de tal forma que no afecten los specs
 def undefine_colors
-    Cultome::Helper.color_palette.size.times do |idx|
+    color_palette.size.times do |idx|
         Cultome::Helper.class_eval { remove_method "c#{idx + 1}" }
     end
 end
 
 def override_colors
-    Cultome::Helper.color_palette.size.times do |idx|
+    color_palette.size.times do |idx|
         Cultome::Helper.class_eval do
             define_method "c#{idx + 1}".to_sym do |str|
                 return str
@@ -47,4 +48,3 @@ end
 
 override_colors
 
-include Cultome::Helper
