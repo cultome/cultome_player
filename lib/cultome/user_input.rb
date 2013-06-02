@@ -1,5 +1,6 @@
 require 'readline'
 require 'cultome/exception'
+require 'cultome/plugins'
 
 # A helper module to get and process user input. 
 # The main function of this module is to transform user input into player's commands.
@@ -10,7 +11,7 @@ module UserInput
 	# @return [String] An or-regex with the valid commands.
 	def valid_command
 		if @valid_commands.nil?
-			@valid_comands = @command_registry.join('|')
+			@valid_comands = Plugins.command_registry.join('|')
 		end
 
 		@valid_comands
@@ -65,7 +66,7 @@ module UserInput
 	# Read the user input. Provide funcitonality like history and limited autocomplete.
 	#
 	# @return [String] The user input.
-	def get_command(msg=@prompt, history=true)
+	def get_command(msg=prompt, history=true)
 		if os == :windows
 			print msg
 			return gets.chomp

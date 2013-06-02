@@ -1,15 +1,14 @@
-require 'cultome/plugin'
 require 'cultome/persistence'
 require 'share_this/client'
 require 'share_this/server'
 
-module Plugin
-	class ShareIt < PluginBase
+module Plugins
+	module ShareIt
 		# Register the commands: share
 		# @note Required method for register commands
 		#
 		# @return [Hash] Where the keys are symbols named after the registered command, and values are the help hash.
-		def get_command_registry
+		def self.get_command_registry
 			usage = <<HELP
 There are two steps to be done to share a file with another computer across the internet.
 The simple explanation is an example, so I'll tell you a history of two friends who enjoy listening music together, in two different places of earth, and are sharing their legally-acquaired music collection.
@@ -45,9 +44,9 @@ HELP
 
 			server = params[0][:value]
 			token = params[1][:value]
-			song_path = @cultome.song.path
+			song_path = cultome.song.path
 
-			display(c4("You are transfering #{c14(@cultome.song)}") + c4(" to #{c14(server)}..."))
+			display(c4("You are transfering #{c14(cultome.song)}") + c4(" to #{c14(server)}..."))
 
 			client = ShareThis::Client.new
 			success = client.send_to(server, token, song_path)
@@ -55,9 +54,7 @@ HELP
 				display c4("The transfer was successful!")
 			else
 				display c2("There was an error with the transfer =S")
-				if ENV['environment'] == 'dev'
-					display c2("ERROR (#{client.error_code}): #{client.message}")
-				end
+                display c2("ERROR (#{client.error_code}): #{client.message}") if Cultome::Helper.dev?
 			end
 
 			return success
@@ -71,7 +68,7 @@ HELP
 			if params[0][:type] == :path
 				save_dir = params[0][:value]
 			elsif params[0][:type] == :object
-				drive = Drive.find_by_name(params[0][:value])
+				drive = Cultome::Drive.find_by_name(params[0][:value])
 				return nil if drive.nil?
 				save_dir = drive.path
 			end
@@ -87,9 +84,7 @@ HELP
 				display c4("The transfer was successful!")
 			else
 				display c2("There was an error with the transfer =S")
-				if ENV['environment'] == 'dev'
-					display c2("ERROR (#{server.error_code}): #{server.message}")
-				end
+                display c2("ERROR (#{server.error_code}): #{server.message}") if Cultome::Helper.dev?
 			end
 
 			return success

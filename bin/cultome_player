@@ -7,7 +7,7 @@ require 'cultome/helper'
 require 'cultome/version'
 require 'colorize'
 
-include Helper
+include Cultome::Helper
 
 if os == :windows
 	system("cls") 
@@ -124,14 +124,14 @@ thrd = roll_sequence(seq, {
 })
 
 # cargamos la paleta de colores
-define_color_palette
+Cultome::Helper.define_color_palette
 
 # cargamos el reproductor completo
 require 'cultome_player'
-require 'cultome/core'
-
-player = CultomePlayer.new
-player.load_commands
+#require 'cultome/core'
+player = Cultome::CultomePlayer.new
+player.check_full_integrity
+#player.generate_help
 
 # detenemos la animacion
 thrd.kill

@@ -1,19 +1,24 @@
 require 'spec_helper'
-require 'cultome/helper'
+require 'cultome_player'
 require 'plugins/taste_analizer'
+require 'cultome/persistence'
 
-describe Plugin::TasteAnalizer do
+describe Plugins::TasteAnalizer do
 
-	let(:t){ Plugin::TasteAnalizer.new(get_fake_player, master_config["taste_analizer"]) }
+	let(:t){ Plugins::TasteAnalizer }
+	let(:p){ Cultome::CultomePlayer.new }
 
 	it 'Should register to listen for "similar" command' do
 		t.get_listener_registry.should include(:next, :prev)
 	end
 
 	it 'Should calculate preferences' do
-		ActiveRecord::Base.establish_connection(adapter: ENV['db_adapter'], database: 'db_cultome.dat')
-		rock = Song.joins(:genres).where("genres.name = ?", "Rock" ).first
-		metal = Song.joins(:genres).where("genres.name = ?", "Metal" ).first
-		t.send(:calculate_songs_weight, rock, metal).round(2).should == 0.7
+        p.stub(:song_status){ {"mp3.position.microseconds" => 30000000 } }
+        p.stub(:current_command){ {command: :next} }
+        with_connection do
+            p.prev_song = Cultome::Song.joins(:genres).where("genres.name = ?", "Rock" ).first
+            p.song = Cultome::Song.joins(:genres).where("genres.name = ?", "Metal" ).first
+            t.calculate_songs_weight(p).round(2).should == 0.7
+        end
 	end
 end

@@ -27,7 +27,7 @@ basic_command_set:
 copy_to: {}
 last_fm:
   similar_results_limit: 10
-taste_analizer:
+Plugins::TasteAnalizer:
   genres_compatibility:
     ? - Rock
       - Progressive Rock
@@ -90,3 +90,9 @@ command_aliases:
 gesture_analizer: {}
 lyric_finder: {}
 share_it: {}
+Plugins::CommandAlias:
+  aliases:
+    exit: quit
+    sap: search %1 | play 1
+Plugins::LastFm:
+  similar_results_limit: 10
