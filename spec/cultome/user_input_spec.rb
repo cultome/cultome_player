@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'cultome/user_input'
+require 'cultome_player'
 
 describe UserInput do
 
@@ -7,13 +8,6 @@ describe UserInput do
 
 	it 'Should return a valid commands regex' do
 		u.valid_command.should match(/([\w]+?\|?)+/)
-	end
-
-	it 'Should parse an user input into a command' do
-		u.parse('play something').should eq([{
-			command: :play,
-			params: [{type: :literal, value: 'something'}]
-		}])
 	end
 
 	it 'Should parse an user input into a commands list' do
@@ -26,14 +20,129 @@ describe UserInput do
 		}])
 	end
 
-    it 'Should parse a command with number parameters'
-    it 'Should parse a command with path parameters'
-    it 'Should parse a command with criteria parameters'
-    it 'Should parse a command with object parameters'
-    it 'Should parse a command with ip parameters'
-    it 'Should parse a command with literal parameters'
-    it 'Should parse a command with only bubble words'
-    it 'Should parse a command with unknown parameters'
+    it 'Should parse a command with one number parameter' do
+		u.parse('play 1').should eq([{
+			command: :play,
+			params: [{type: :number, value: 1}]
+		}])
+    end
+
+    it 'Should parse a command with number parameters' do
+		u.parse('play 1 2').should eq([{
+			command: :play,
+			params: [{type: :number, value: 1}, {type: :number, value: 2}]
+		}])
+	end
+
+    it 'Should parse a command with path parameters' do
+		u.parse('play /home/user/no_spaces/').should eq([{
+			command: :play,
+			params: [{type: :path, value: '/home/user/no_spaces'}]
+		}])
+    end
+
+    it 'Should parse a command with a path containig spaces' do
+		u.parse('play "/home/user/no spaces/"').should eq([{
+			command: :play,
+			params: [{type: :path, value: '/home/user/no spaces'}]
+		}])
+	end
+
+    it 'Should parse paramters with bubble word in the middle' do
+		u.parse('connect drive => /home/user/no_spaces/').should eq([{
+			command: :connect,
+			params: [
+                {type: :literal, value: 'drive'},
+                {type: :path, value: '/home/user/no_spaces'}
+            ]
+		}])
+    end
+
+    it 'Should parse a command with one criteria parameter' do
+		u.parse('play a:uno').should eq([{
+			command: :play,
+			params: [{type: :criteria, criteria: :a, value: 'uno'}]
+		}])
+    end
+
+    it 'Should parse a command with one criteria parameter with values that contain spaces' do
+		u.parse('play b:"uno dos"').should eq([{
+			command: :play,
+			params: [{type: :criteria, criteria: :b, value: 'uno dos'}]
+		}])
+    end
+
+    it 'Should parse a command with more tha one criteria parameter' do
+		u.parse('play b:"uno dos" t:tres').should eq([{
+			command: :play,
+			params: [
+                {type: :criteria, criteria: :b, value: 'uno dos'},
+                {type: :criteria, criteria: :t, value: 'tres'}
+            ]
+		}])
+	end
+
+    it 'Should parse a command with one object parameter' do
+		u.parse('play @object').should eq([{
+			command: :play,
+			params: [{type: :object, value: :object}]
+		}])
+    end
+
+    it 'Should parse a command with one object parameter' do
+		u.parse('play @object @another').should eq([{
+			command: :play,
+			params: [
+                {type: :object, value: :object},
+                {type: :object, value: :another}
+            ]
+		}])
+	end
+
+    it 'Should parse a command with ip parameter' do
+		u.parse('play 1.2.3.4').should eq([{
+			command: :play,
+			params: [{type: :ip, value: '1.2.3.4'}]
+		}])
+    end
+
+    it 'Should parse a command with more than one ip parameters' do
+		u.parse('play 1.2.3.4 11.22.33.44').should eq([{
+			command: :play,
+			params: [
+                {type: :ip, value: '1.2.3.4'},
+                {type: :ip, value: '11.22.33.44'}
+            ]
+		}])
+	end
+
+    it 'Should parse a command with literal parameters' do
+		u.parse('play something').should eq([{
+			command: :play,
+			params: [{type: :literal, value: 'something'}]
+		}])
+	end
+
+    it 'Should parse a command with only bubble words' do
+		u.parse('play =>').should eq([{
+			command: :play,
+			params: []
+		}])
+	end
+
+    it 'Should parse a command with unknown parameter' do
+		u.parse('play 0').should eq([{
+			command: :play,
+			params: [{type: :unknown, value: 0}]
+		}])
+    end
+
+    it 'Should parse a command with more than one unknown parameters' do
+		u.parse('play g:nada').should eq([{
+			command: :play,
+			params: [{type: :unknown, value: 'g:nada'}]
+		}])
+	end
 
 	it 'Should ask and receive an affirmative confirmation from user' do
 		u.should_receive(:display).once.with('message')
