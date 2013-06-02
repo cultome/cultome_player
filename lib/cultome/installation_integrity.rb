@@ -1,10 +1,8 @@
 # inicializamos la gem
-require 'cultome/helper'
 require 'fileutils'
 
 module Cultome
     module InstallationIntegrity
-        include Helper
 
         def check_full_integrity
             check_directories_integrity && check_config_files_integrity && check_database_integrity

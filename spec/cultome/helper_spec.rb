@@ -4,11 +4,6 @@ require 'cultome/helper'
 describe Cultome::Helper do
 
     let(:h){ Cultome::Helper }
-    let(:test_class){
-        (class Test
-         include Cultome::Helper
-        end).new
-    }
 
     context 'class methods' do
         it 'Should load the master configuration from config file' do
@@ -114,11 +109,11 @@ describe Cultome::Helper do
             module RbConfig
                 Config = {'host_os' => :linux}
             end
-            test_class.os.should eq(:linux)
+            h.os.should eq(:linux)
         end
 
         it 'Should display messages' do
-            test_class.display("message").should eq("message")
+            h.display("message").should eq("message")
         end
 
         it 'Should create a context with DB access' do
