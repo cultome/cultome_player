@@ -25,11 +25,11 @@ module Plugins
             next_song = cultome.song
 
 			return -1 unless song.class == Cultome::Song && next_song.class == Cultome::Song
-			return 0 unless cultome.song_status.respond_to?(:[]) && !cultome.song_status["mp3.position.microseconds"].nil?
+			return 0 unless cultome.song_status.respond_to?(:[]) && !cultome.song_status[:seconds].nil?
 
 			#puts "Calificando cancion #{ song }, #{ next_song }, #{ cultome.current_command }..."
 
-			progress_in_sec = cultome.song_status["mp3.position.microseconds"] / 1000000
+			progress_in_sec = cultome.song_status[:seconds]
 			percentage = (progress_in_sec * 100) / song.duration
 
 			points = 0

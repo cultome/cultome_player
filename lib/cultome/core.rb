@@ -16,7 +16,7 @@ module Cultome
             base.send :include, Plugins
             base.send :include, UserInput
             base.send :include, InstallationIntegrity
-            base.send :include, PlayerListener
+            base.send :include, CultomePlayerListener
         end
 
         # Utility method for running a standalone player. Initialize the commands

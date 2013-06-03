@@ -23,7 +23,7 @@ describe Plugins::Scrobbler do
 
             Plugins::Scrobbler.should_receive(:check_pending_scrobbles)
             Plugins::LastFm.stub(:config){{'session_key' => '1234567890'}}
-            player.stub(:song_status){{"mp3.position.microseconds" => 31000000}}
+            player.stub(:song_status){{seconds: 31000000}}
 
             with_connection do
                 player.play

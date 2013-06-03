@@ -14,11 +14,7 @@ module Plugins
                 song_name = p.name
                 artist_name = p.artist.name
                 artist_id = p.artist.id
-                if cultome.song_status["mp3.position.microseconds"]
-                    progress = cultome.song_status["mp3.position.microseconds"] / 1000000
-                else
-                    progress = 0
-                end
+                progress = cultome.song_status[:seconds] || 0
 
                 # necesitamos que la cancion haya sido tocada almenos 30 segundos
                 return nil if progress < 30

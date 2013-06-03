@@ -65,7 +65,7 @@ module Cultome
         end
 
         def player_implementation
-            environment['player_implementation'] || 'cultome/jl_gui_basic_player'
+            environment['player_implementation'] || 'player/jl_gui_basic_player'
         end
 
         # Return the path to the base of the instalation.

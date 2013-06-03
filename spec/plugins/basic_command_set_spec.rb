@@ -9,4 +9,8 @@ describe Plugins::BasicCommandSet do
 	it 'Should generate an in-app help' do
 		p.help.should_not be_nil
 	end
+
+    context 'with empty current playlist' do
+        it '#play should create a playlist with the entire library'
+    end
 end

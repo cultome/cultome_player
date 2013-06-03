@@ -484,7 +484,7 @@ HELP
 		def ff(params=[])
 			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
-			next_pos = cultome.song_status["mp3.position.byte"] + (cultome.song_status["mp3.frame.size.bytes"] * BasicCommandSet.seeker_step)
+			next_pos = cultome.song_status[:bytes] + (cultome.song_status[:frame_size] * BasicCommandSet.seeker_step)
 			cultome.player.seek(next_pos)
 		end
 
@@ -492,7 +492,7 @@ HELP
 		def fb(params=[])
 			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
-			next_pos = cultome.song_status["mp3.position.byte"] - (cultome.song_status["mp3.frame.size.bytes"] * BasicCommandSet.seeker_step)
+			next_pos = cultome.song_status[:bytes] - (cultome.song_status[:frame_size] * BasicCommandSet.seeker_step)
 			cultome.player.seek(next_pos)
 		end
 
@@ -706,7 +706,7 @@ HELP
 		#
 		# @return [String] An ASCII bar with the time progress of the current song.
 		def self.show_progress(cultome)
-			actual = cultome.song_status["mp3.position.microseconds"] / 1000000
+			actual = cultome.song_status[:seconds]
 			percentage = ((actual * 100) / cultome.song.duration) / 10
 			display c4("#{actual.to_time} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{cultome.song.duration.to_time}")
 		end

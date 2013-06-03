@@ -13,7 +13,7 @@ describe Plugins::TasteAnalizer do
 	end
 
 	it 'Should calculate preferences' do
-        p.stub(:song_status){ {"mp3.position.microseconds" => 30000000 } }
+        p.stub(:song_status){ {seconds: 30000000 } }
         p.stub(:current_command){ {command: :next} }
         with_connection do
             p.prev_song = Cultome::Song.joins(:genres).where("genres.name = ?", "Rock" ).first
