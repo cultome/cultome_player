@@ -60,7 +60,7 @@ module UserInput
 	# @param value [String] The value to be compared with regex
 	# @return [Boolean] true if value matches /Y|y|yes|1|si|s|ok/, false otherwise.
 	def is_true_value(value)
-		value =~ /Y|y|yes|1|si|s|ok/
+		value =~ /Y|y|yes|1|si|s|ok|on/
 	end
 
 	# Read the user input. Provide funcitonality like history and limited autocomplete.

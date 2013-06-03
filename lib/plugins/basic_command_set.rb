@@ -358,11 +358,13 @@ HELP
 
 		# Pause the current playback if playing and resume it if paused.
 		def pause(params=[])
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 			cultome.status =~ /PLAYING|RESUMED/ ? cultome.player.pause : cultome.player.resume
 		end
 
 		# Stop the current playback.
 		def stop(params=[])
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 			cultome.player.stop
 		end
 
@@ -515,6 +517,7 @@ HELP
 
 		# Begin the current song from the begining.
 		def repeat(params=[])
+			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 			cultome.player.seek(0)
 		end
 
@@ -601,7 +604,7 @@ HELP
 			cultome.is_playing_library = false
 
 			if params.empty? && cultome.playlist.blank?
-				new_playlist = BasicCommandSet.find_by_query
+				new_playlist = find_by_query
 				cultome.is_playing_library = true
 
 				if new_playlist.blank?
@@ -624,28 +627,28 @@ HELP
 					when :object
 						case param[:value]
 						when :library 
-							new_playlist = BasicCommandSet.find_by_query
+							new_playlist = find_by_query
 							cultome.is_playing_library = true
 						when :playlist then new_playlist = cultome.playlist
 						when /search|search_results/ then new_playlist += cultome.search_results
 						when :history then new_playlist += cultome.history
-						when :artist then new_playlist += BasicCommandSet.find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ cultome.artist.name }%"}], and: []})
-						when :album then new_playlist += BasicCommandSet.find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ cultome.album.name }%"}], and: []})
+						when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ cultome.artist.name }%"}], and: []})
+						when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ cultome.album.name }%"}], and: []})
 
 							# criterios de busqueda avanzados
-						when :recently_added then new_playlist += BasicCommandSet.find_by_query({or: [{id: 6, condition: 'songs.created_at > ?', value: Cultome::Song.maximum('created_at') - (60*60*24)}], and: []})
-						when :recently_played then new_playlist += BasicCommandSet.find_by_query({or: [{id: 7, condition: 'last_played_at > ?', value: Cultome::Song.maximum('last_played_at') - (60*60*24)}], and: []})
-						when :more_played then new_playlist += BasicCommandSet.find_by_query({or: [{id: 8, condition: 'plays > ?', value: Cultome::Song.maximum('plays') - Cultome::Song.average('plays')}], and: []})
-						when :less_played then new_playlist += BasicCommandSet.find_by_query({or: [{id: 9, condition: 'plays < ?', value: Cultome::Song.average('plays')}], and: []})
-						when :populars then new_playlist += BasicCommandSet.find_by_query({or: [{id: 10, condition: 'songs.points > ?', value: Cultome::Song.average('points').ceil.to_i}], and: []})
+						when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'songs.created_at > ?', value: Cultome::Song.maximum('created_at') - (60*60*24)}], and: []})
+						when :recently_played then new_playlist += find_by_query({or: [{id: 7, condition: 'last_played_at > ?', value: Cultome::Song.maximum('last_played_at') - (60*60*24)}], and: []})
+						when :more_played then new_playlist += find_by_query({or: [{id: 8, condition: 'plays > ?', value: Cultome::Song.maximum('plays') - Cultome::Song.average('plays')}], and: []})
+						when :less_played then new_playlist += find_by_query({or: [{id: 9, condition: 'plays < ?', value: Cultome::Song.average('plays')}], and: []})
+						when :populars then new_playlist += find_by_query({or: [{id: 10, condition: 'songs.points > ?', value: Cultome::Song.average('points').ceil.to_i}], and: []})
 						else
 							# intentamos matchear las unidades primero
-							drive = BasicCommandSet.drives(cultome).find{|d| d.name.to_sym == param[:value]}
+							drive = drives(cultome).find{|d| d.name.to_sym == param[:value]}
 							if drive.nil?
 								# intetamos matchear por genero
 								new_playlist += Cultome::Song.connected.joins(:genres).where('genres.name like ?', "%#{param[:value].to_s.gsub('_', ' ')}%" )
 							else
-								new_playlist += BasicCommandSet.find_by_query({or: [{id: 11, condition: 'drive_id = ?', value: drive.id}], and: []})
+								new_playlist += find_by_query({or: [{id: 11, condition: 'drive_id = ?', value: drive.id}], and: []})
 							end
 						end
 					end # case

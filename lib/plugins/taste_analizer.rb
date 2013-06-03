@@ -29,8 +29,7 @@ module Plugins
 
 			#puts "Calificando cancion #{ song }, #{ next_song }, #{ cultome.current_command }..."
 
-			progress_in_sec = cultome.song_status[:seconds]
-			percentage = (progress_in_sec * 100) / song.duration
+			percentage = (cultome.song_status[:seconds] * 100) / song.duration
 
 			points = 0
 
