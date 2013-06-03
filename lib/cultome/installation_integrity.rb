@@ -5,7 +5,9 @@ module Cultome
     module InstallationIntegrity
 
         def check_full_integrity
-            check_directories_integrity && check_config_files_integrity && check_database_integrity
+            check_directories_integrity
+            check_config_files_integrity
+            check_database_integrity
         end
 
         def check_directories_integrity
@@ -14,7 +16,15 @@ module Cultome
         end
 
         def check_config_files_integrity
-            FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file) unless File.exist?(config_file)
+            if File.exist?(config_file)
+                FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file) 
+            else
+                # checamos que sea valido
+                if master_config['core'].nil? || master_config['core']['prompt'].nil?
+                    File.delete(config_file)
+                    create_basic_config_file
+                end
+            end
         end
 
         def check_database_integrity
@@ -23,21 +33,19 @@ module Cultome
                 current_version = ActiveRecord::Migrator.current_version
 
                 if max_version > current_version
+                    def capture_stdout
+                        s = StringIO.new
+                        oldstd = $stdout
+                        $stdout = s
+                        yield
+                        s.string
+                    ensure
+                        $stdout = oldstd
+                    end
+
                     capture_stdout { ActiveRecord::Migrator.migrate(migrations_path) }
                 end
             end
-        end
-
-        private
-
-        def capture_stdout
-            s = StringIO.new
-            oldstd = $stdout
-            $stdout = s
-            yield
-            s.string
-        ensure
-            $stdout = oldstd
         end
     end
 end
