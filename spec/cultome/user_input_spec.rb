@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'cultome/user_input'
-require 'cultome_player'
 
 describe UserInput do
 

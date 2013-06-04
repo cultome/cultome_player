@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'plugins/basic_command_set'
-require 'cultome_player'
 
 describe Plugins::BasicCommandSet do
 

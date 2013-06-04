@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'cultome/installation_integrity'
-require 'cultome_player'
 
 describe Cultome::InstallationIntegrity do
     let(:p){ Cultome::CultomePlayer.new }

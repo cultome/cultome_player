@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'cultome_player'
 require 'plugins/share_it'
 
 describe Plugins::ShareIt do

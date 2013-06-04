@@ -45,3 +45,5 @@ def override_colors
         end
     end
 end
+
+require 'cultome_player'
