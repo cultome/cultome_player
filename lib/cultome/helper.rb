@@ -22,7 +22,7 @@ module Cultome
         #
         # @return [Boolean] True is running in development environment, false otherwise.
         def dev?
-            environment['name'] == 'dev'
+            ENV['RAILS_ENV'] == 'local'
         end
 
         def self.master_config=(value)
@@ -70,7 +70,7 @@ module Cultome
         #
         # @return [String] The absoulute path to the config file
         def config_file
-            environment['config_file'] || File.join(user_dir, CONFIG_FILE_NAME)
+            instance_eval(environment['config_file']) || File.join(user_dir, CONFIG_FILE_NAME)
         end
 
         def player_implementation
@@ -116,7 +116,7 @@ module Cultome
         #
         # @return  [String] The path to the db data file.
         def db_file
-            environment['database_file'] || File.join(user_dir, "db_cultome.dat")
+            instance_eval(environment['database_file']) || File.join(user_dir, "db_cultome.dat")
         end
 
         def color_palette

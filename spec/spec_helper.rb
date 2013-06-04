@@ -17,6 +17,7 @@ end
 
 # seteamos el ambiente para pruebas
 ENV['RAILS_ENV'] ||= 'local'
+puts "Using #{ENV['RAILS_ENV']} environment..."
 
 require 'cultome/helper'
 include Cultome::Helper
