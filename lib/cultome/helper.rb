@@ -25,23 +25,32 @@ module Cultome
             environment['name'] == 'dev'
         end
 
+        def self.master_config=(value)
+            @master_config=value
+        end
+
+
+        def self.master_config
+            @master_config
+        end
+
         # Return the path to the config file
         #
         # @return [String] The path to the config file
         def master_config
-            return @master_config unless @master_config.nil?
+            return Helper.master_config unless Helper.master_config.nil?
 
             begin
-                @master_config = YAML.load_file(config_file)
+                Helper.master_config = YAML.load_file(config_file)
 
-                unless @master_config
-                    @master_config = create_basic_config_file
+                unless Helper.master_config
+                    Helper.master_config = create_basic_config_file
                 end
             rescue Exception => e
-                @master_config = create_basic_config_file
+                Helper.master_config = create_basic_config_file
             end
 
-            return @master_config
+            return Helper.master_config
         end
 
         def create_basic_config_file(custom_file=nil)

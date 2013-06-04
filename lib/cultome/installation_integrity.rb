@@ -17,13 +17,13 @@ module Cultome
 
         def check_config_files_integrity
             if File.exist?(config_file)
-                FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file) 
-            else
                 # checamos que sea valido
                 if master_config['core'].nil? || master_config['core']['prompt'].nil?
                     File.delete(config_file)
                     create_basic_config_file
                 end
+            else
+                FileUtils.cp(File.join(project_path, CONFIG_FILE_NAME), config_file) 
             end
         end
 

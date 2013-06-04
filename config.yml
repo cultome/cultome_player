@@ -22,11 +22,6 @@ core:
   - :light_magenta
   - :light_cyan
   - :light_white
-basic_command_set:
-  seeker_step: 500
-copy_to: {}
-last_fm:
-  similar_results_limit: 10
 Plugins::TasteAnalizer:
   genres_compatibility:
     ? - Rock
@@ -80,16 +75,6 @@ Plugins::TasteAnalizer:
     ? - BritPop
       - Funk
     : 0.2
-kill_song: {}
-command_aliases:
-  aliases:
-    exit: quit
-    sap: search %1 | play 1
-    ls: show @playlist
-    p: pause
-gesture_analizer: {}
-lyric_finder: {}
-share_it: {}
 Plugins::CommandAlias:
   aliases:
     exit: quit
