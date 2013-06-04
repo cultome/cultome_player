@@ -274,15 +274,25 @@ play
 * Scrobbler? of course! why not? but please run **'configure_lastfm begin'** before use it.
 * Better environment startup check.
 
+**Version 0.5.0**
+
+At first glace there is nothing different in the surface... and that is right! but that dont mean I did nothing with the code but the contrair, this has been the most worked release in this project.
+
+I basicly reorganize all the code a couple times until I a was satisfied with the result. **What I won with this?** Well! I would say testeability, manteinability, standar error handling, a little of performance, aisle the java music player (hopefully to replace it in the future with no efford), a cleaner code and lot of learning in Ruby language.
+
+Also added a lot of spec , missing and news, to the code in order to deliver better quality each release, and with this my compromise to each release add a few more specs to the collection.
+
+And as a try to reach better code quality I register the project in [Travis CI](http://travis-ci.org) to have the test run automaticly in every commit and in differente platforms (maybe in the future...)
+
+Well, in few words, this release contains no new funcitonality, but all the funcionality was rethinked. I see you in the next version with, I promise, MusicBrainz integration.
+
 ## TODO
 
+* Connect with musicbrainz to tag correctly and beatifuly my music, this also surge as Last.fm is very picky with the information you submit with your scrobbles.
 * Add tags to the songs, for example 'party' or 'sadness'.
 * A friend of mine give me an idea, when you are in a place where many people hear the same music, you should be able to decide what to play, as everyone else. So I will try an implementation of this idea, maybe a slave-masters model.
-* Connect with musicbrainz to tag correctly and beatifuly my music, this also surge as Last.fm is very picky with the information you submit with your scrobbles.
 * Support for Windows. Not my priority but would be nice my wife to use it.
-* Refactor the whole code. You know? I'm reading a good ruby book and a would like to apply the technics decribed there, but over all prettify my code. Also it would be nice if anyone could use this player with any other music backend or usea its plugins for hes own applications.
 * Add gestures to the detector and start making appropiated suggestions for them.
-* Extract the Java music player outside the code, even run it in another process. This to avoid using jruby, the memory consumption is too high.
 * Refine the taste analizer, which is the component that give preference points to songs.
 * Change the underlying in-file database for a real one, thinking on mongo or mysql.
 
