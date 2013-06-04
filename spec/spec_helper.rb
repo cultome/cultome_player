@@ -16,7 +16,7 @@ RSpec.configure do |config|
 end
 
 # seteamos el ambiente para pruebas
-ENV['cultome_env'] = 'rspec'
+ENV['RAILS_ENV'] ||= 'local'
 
 require 'cultome/helper'
 include Cultome::Helper

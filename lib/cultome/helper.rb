@@ -15,7 +15,7 @@ module Cultome
         #
         # @return [Hash] With the environment configurations
         def environment
-            @env ||= YAML.load_file("#{project_path}/env/#{ENV['cultome_env'] || 'user'}/env.yml") || {}
+            @env ||= YAML.load_file("#{project_path}/env/#{ENV['RAILS_ENV'] || 'user'}/env.yml") || {}
         end
 
         # Check if he current environment is development.
