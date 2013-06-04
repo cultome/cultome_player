@@ -282,7 +282,7 @@ I basicly reorganize all the code a couple times until I a was satisfied with th
 
 Also added a lot of spec , missing and news, to the code in order to deliver better quality each release, and with this my compromise to each release add a few more specs to the collection.
 
-And as a try to reach better code quality I register the project in [Travis CI](http://travis-ci.org) to have the test run automaticly in every commit and in differente platforms (maybe in the future...)
+And as a try to reach better code quality I register the project in [Travis CI](https://travis-ci.org/csoriav/cultome_player) to have the test run automaticly in every commit and in differente platforms, in this momement jruby and ruby 1.9. And to check code coverage we're on [Coveralls](https://coveralls.io/r/csoriav/cultome_player).
 
 Well, in few words, this release contains no new funcitonality, but all the funcionality was rethinked. I see you in the next version with, I promise, MusicBrainz integration.
 
