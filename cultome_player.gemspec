@@ -25,7 +25,7 @@ Gem::Specification.new do |gem|
 	gem.add_runtime_dependency "htmlentities", [">= 4.3.1"]
 	gem.add_runtime_dependency "json", [">= 1.7.7"]
 	gem.add_runtime_dependency "share_this", [">= 0.1.0"]
-	gem.add_runtime_dependency "text_slider", [">= 0.1.0"]
+	gem.add_runtime_dependency "text_slider", [">= 1.0.0"]
 	gem.add_runtime_dependency "colorize", [">= 0.5.8"]
 	gem.add_runtime_dependency "jdbc-sqlite3", [">= 3.7.2.0"]
 

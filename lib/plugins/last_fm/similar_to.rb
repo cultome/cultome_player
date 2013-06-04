@@ -79,8 +79,7 @@ module Plugins
                     end
                 end
             ensure
-                @thrd.kill if !@thrd.nil? && @thrd.stop?
-                print "#{" " * LastFm::TEXT_WIDTH}\r"
+                LastFm.change_text(nil)
             end
         end
 

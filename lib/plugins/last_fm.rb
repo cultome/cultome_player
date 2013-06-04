@@ -5,13 +5,12 @@ require 'plugins/last_fm/scrobbler'
 require 'net/http'
 require 'json'
 require 'cgi'
-require 'text_slider'
 require 'digest'
 
 # Plugin to use information from the Last.fm webservices.
 module Plugins
     module LastFm
-        extend TextSlider
+        include TextSlider
         include SimilarTo
         include Scrobbler
 
@@ -253,6 +252,10 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
         end
 
         def self.change_text(text, options={})
+            if text.nil?
+                return @thrd.kill unless @thrd.nil?
+            end
+
             opts = {
                 background: true, 
                 repeat: true, 
@@ -262,7 +265,7 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
             opts.merge!(options)
 
 
-            @thrd = roll_text(text, opts) do |text|
+            @thrd = text.roll(opts) do |text|
                 display(c4(text), true)
             end
 

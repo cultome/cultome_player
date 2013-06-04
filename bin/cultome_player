@@ -114,7 +114,7 @@ seq = [
 " #{i * 14}#{o}",
 ]
 
-thrd = roll_sequence(seq, {
+thrd = seq.roll({
 	width: 30, 
 	add_repeat_transition: false, 
 	background: true, 

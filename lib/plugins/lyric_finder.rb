@@ -2,13 +2,12 @@ require 'net/http'
 require 'json'
 require 'cgi'
 require 'htmlentities'
-require 'text_slider'
 
 # Plugin tha find the lyrics for the current song.
 module Plugins
 	module LyricFinder
 
-		extend TextSlider
+		include TextSlider
 
 		# Register the command: lyric
 		# @note Required method for register commands
@@ -36,7 +35,7 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
 			artist_name = cultome.song.artist.name
 			found_txt = ":::: Lyric for #{song_name} ::::"
 
-			thrd = roll_text(c4(" Finding lyric for #{c14(song_name)} "), { 
+			thrd = c4(" Finding lyric for #{c14(song_name)} ").roll({ 
 				pad: '<', 
 				repeat: true, 
 				width: found_txt.length, 
@@ -64,8 +63,7 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
 							rescue Exception => e
 								raise CultomePlayerException.new(:internet_not_available, error_message: e.message, take_action: false) if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
 							ensure
-								thrd.kill if thrd.stop?
-								print "#{" " * found_txt.length}\r"
+								thrd.kill if !thrd.nil? && thrd.alive?
 							end
 		end
 	end
