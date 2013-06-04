@@ -15,12 +15,17 @@ RSpec.configure do |config|
 	config.order = 'random'
 end
 
+require 'cultome/helper'
+include Cultome::Helper
+
 # seteamos el ambiente para pruebas
 ENV['RAILS_ENV'] ||= 'local'
 puts "Using #{ENV['RAILS_ENV']} environment..."
-
-require 'cultome/helper'
-include Cultome::Helper
+puts "   project_path: #{project_path}"
+puts "   config_file: #{config_file}"
+puts "   database_file: #{db_file}"
+puts "   db_adapter: #{db_adapter}"
+puts "   player_implementation: #{player_implementation}"
 
 Cultome::Helper.module_eval do
     alias :display_old :display
