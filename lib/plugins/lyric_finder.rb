@@ -27,7 +27,7 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
 
 		# Search and display the lyrics for the current song
 		def lyric(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
 			song_name = cultome.song.name
 			artist_name = cultome.song.artist.name
@@ -59,7 +59,7 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
 									end
 								end
 							rescue Exception => e
-								raise CultomePlayerException.new(:internet_not_available, error_message: e.message, take_action: false) if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
+								raise Cultome::CultomePlayerException.new(:internet_not_available, error_message: e.message, take_action: false) if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
 							ensure
 								thrd.kill if !thrd.nil? && thrd.alive?
 							end

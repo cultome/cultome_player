@@ -321,7 +321,7 @@ HELP
 		# @param params [List<Hash>] With parsed player's object information.
 		# @return [String] The message displayed.
 		def show(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
 			if params.blank?
 				display cultome.song
@@ -358,13 +358,13 @@ HELP
 
 		# Pause the current playback if playing and resume it if paused.
 		def pause(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 			cultome.status =~ /PLAYING|RESUMED/ ? cultome.player.pause : cultome.player.resume
 		end
 
 		# Stop the current playback.
 		def stop(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 			cultome.player.stop
 		end
 
@@ -484,7 +484,7 @@ HELP
 
 		# Fast forward to the current song.
 		def ff(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
 			next_pos = cultome.song_status[:bytes] + (cultome.song_status[:frame_size] * BasicCommandSet.seeker_step)
 			cultome.player.seek(next_pos)
@@ -492,7 +492,7 @@ HELP
 
 		# Fast backward to the current song.
 		def fb(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
 			next_pos = cultome.song_status[:bytes] - (cultome.song_status[:frame_size] * BasicCommandSet.seeker_step)
 			cultome.player.seek(next_pos)
@@ -517,7 +517,7 @@ HELP
 
 		# Begin the current song from the begining.
 		def repeat(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 			cultome.player.seek(0)
 		end
 
@@ -693,7 +693,7 @@ HELP
 			begin
 				cultome.player.play(cultome.song.path)
 			rescue Exception => e
-				raise CultomePlayerException.new(:unable_to_play, take_action: true, error_message: e.message)
+				raise Cultome::CultomePlayerException.new(:unable_to_play, take_action: true, error_message: e.message)
 			end
 
 			# agregamos al contador de reproducciones

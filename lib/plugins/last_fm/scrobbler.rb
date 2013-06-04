@@ -21,7 +21,7 @@ module Plugins
                 song_name = cultome.song.name
 
                 # no hacemos scrobble si el artista o el track son desconocidos
-                raise CultomePlayerException.new(:unable_to_scrobble) if artist_id == 1
+                raise Cultome::CultomePlayerException.new(:unable_to_scrobble) if artist_id == 1
                 return nil if LastFm.config['session_key'].nil?
 
                 query_info = LastFm.define_query(:scrobble, song_name, artist_name)

@@ -5,8 +5,8 @@ module Plugins
         #
         # @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
         def similar(params=[])
-            raise CultomePlayerException.new(:invalid_parameter, params: params) if !params.empty? && params.find{|p| p[:type] == :object}.nil?
-            raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+            raise Cultome::CultomePlayerException.new(:invalid_parameter, params: params) if !params.empty? && params.find{|p| p[:type] == :object}.nil?
+            raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
             begin
                 song_name = cultome.song.name

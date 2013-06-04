@@ -34,7 +34,7 @@ HELP
 		#
 		# @param params [List<Hash>] With parsed player's object information and one path.
 		def copy(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
 			return nil if params.size != 2
 			return nil unless params.one?{|a| a[:type] == :object }

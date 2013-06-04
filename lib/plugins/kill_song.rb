@@ -28,7 +28,7 @@ HELP
 
 		# Remove the current song from library and from filesystem.
 		def kill(params=[])
-			raise CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
+			raise Cultome::CultomePlayerException.new(:no_active_playback, take_action: false) if cultome.song.nil?
 
 			if get_confirmation("Are you sure you want to delete #{cultome.song} ???")
 				# detenemos la reproduccion

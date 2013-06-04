@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CultomePlayer do
+describe Cultome::CultomePlayer do
 
 	let(:p){ Cultome::CultomePlayer.new }
 
