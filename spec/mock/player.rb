@@ -1,4 +1,8 @@
+require 'cultome/helper'
+
 class Player
+    include Cultome::Helper
+
     def initialize(player)
         @player = player
 
@@ -8,6 +12,14 @@ class Player
             end
             def set_song_status(seconds, bytes, frame)
                 update_progress(seconds, bytes, frame)
+            end
+        end
+
+        color_palette.size.times do |idx|
+            Cultome::CultomePlayer.class_eval do
+                define_method "c#{idx + 1}".to_sym do |str|
+                    return str
+                end
             end
         end
     end

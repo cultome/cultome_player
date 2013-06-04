@@ -1,9 +1,10 @@
 require 'spec_helper'
 require 'cultome/helper'
+require 'cultome/persistence'
 
 describe Cultome::Helper do
 
-    let(:h){ Cultome::Helper }
+    let(:h){ class Test ; include Cultome::Helper ; end }
 
     context 'class methods' do
         it 'Should load the master configuration from config file' do
@@ -64,13 +65,12 @@ describe Cultome::Helper do
             end
         end
 
-
         it 'Should define a palette of colors' do
             undefine_colors
             h.respond_to?(:c8).should be_false
             define_color_palette
             h.respond_to?(:c8).should be_true
-            undefine_colors && override_colors
+            #override_colors
         end
 
         it 'Should polish the information in the hash' do

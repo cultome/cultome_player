@@ -10,7 +10,6 @@ require 'digest'
 # Plugin to use information from the Last.fm webservices.
 module Plugins
     module LastFm
-        include TextSlider
         include SimilarTo
         include Scrobbler
 
@@ -253,7 +252,8 @@ Thats it! Not so hard right? So, lets begin! Press <enter> when you are ready...
 
         def self.change_text(text, options={})
             if text.nil?
-                return @thrd.kill unless @thrd.nil?
+                @thrd.kill unless @thrd.nil?
+                return
             end
 
             opts = {

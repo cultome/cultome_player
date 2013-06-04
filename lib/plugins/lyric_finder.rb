@@ -7,8 +7,6 @@ require 'htmlentities'
 module Plugins
 	module LyricFinder
 
-		include TextSlider
-
 		# Register the command: lyric
 		# @note Required method for register commands
 		#

@@ -5,6 +5,7 @@ require 'cultome/player_listener'
 require 'cultome/exception'
 require 'cultome/persistence'
 require 'text_slider'
+require 'cultome/helper'
 
 # This class represents and holds the music player's state in one moment.
 # This means that plugins can ask about, for example, current song, focused list or connected
@@ -15,10 +16,12 @@ module Cultome
     module CultomePlayerCore
 
         def self.included(base)
+            base.send :include, Helper
             base.send :include, Plugins
             base.send :include, UserInput
             base.send :include, InstallationIntegrity
             base.send :include, CultomePlayerListener
+            base.send :include, TextSlider
         end
 
         # Utility method for running a standalone player. Initialize the commands

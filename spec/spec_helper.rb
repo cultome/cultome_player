@@ -38,13 +38,10 @@ end
 
 def override_colors
     color_palette.size.times do |idx|
-        Cultome::Helper.class_eval do
+        Cultome::CultomePlayer.class_eval do
             define_method "c#{idx + 1}".to_sym do |str|
                 return str
             end
         end
     end
 end
-
-override_colors
-
