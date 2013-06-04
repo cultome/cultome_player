@@ -3,6 +3,7 @@ require 'cultome/user_input'
 require 'cultome/installation_integrity'
 require 'cultome/player_listener'
 require 'cultome/exception'
+require 'cultome/persistence'
 
 # This class represents and holds the music player's state in one moment.
 # This means that plugins can ask about, for example, current song, focused list or connected

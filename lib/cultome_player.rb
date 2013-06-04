@@ -31,6 +31,9 @@ module Cultome
         attr_reader :song_status
 
         def initialize
+            check_full_integrity
+            define_color_palette
+
             @player = Player.new(self)
             @search_results= []
             @playlist = []

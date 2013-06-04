@@ -45,6 +45,10 @@ module Cultome
 
                     capture_stdout { ActiveRecord::Migrator.migrate(migrations_path) }
                 end
+
+                # checamos dos registros clave
+                Cultome::Artist.find_or_create_by_id(id: 0, name: 'Unknown')
+                Cultome::Album.find_or_create_by_id(id: 0, name: 'Unknown')
             end
         end
     end

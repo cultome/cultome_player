@@ -255,9 +255,9 @@ class Array
     end
 end
 
-class Object
+module Kernel
     def blank?
-        self.nil? || self.empty?
+        self.respond_to?(:empty?) ? self.empty? : !self
     end
 end
 

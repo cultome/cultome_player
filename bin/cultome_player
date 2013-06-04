@@ -123,15 +123,9 @@ thrd = roll_sequence(seq, {
 	tick: 0.1,
 })
 
-# cargamos la paleta de colores
-Cultome::Helper.define_color_palette
-
 # cargamos el reproductor completo
 require 'cultome_player'
-#require 'cultome/core'
 player = Cultome::CultomePlayer.new
-player.check_full_integrity
-#player.generate_help
 
 # detenemos la animacion
 thrd.kill

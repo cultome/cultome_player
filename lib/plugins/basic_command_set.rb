@@ -132,7 +132,7 @@ HELP
 
 				:next => {
 					help: "Play the next song in the queue.",
-				   	params_format: "<number>",
+				   	params_format: "",
 					usage: <<HELP
 When next is invoked, the calculation for the next song is made. If shuffle is on, the next song is defined by selecting a song not played yet, if remains any, if not, the complete current playlist is reprogramed to be played again.
 HELP

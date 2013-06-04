@@ -1,11 +1,8 @@
 # encoding: UTF-8
 
-require 'cultome/helper'
 require 'active_record'
 
 module Cultome
-    extend Helper
-
     # The ActiveRecord model for Scrobbles objects.
     class Scrobble < ActiveRecord::Base
         attr_accessible :artist, :track, :timestamp, :scrobbled
