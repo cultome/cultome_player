@@ -1,4 +1,5 @@
 require 'shellwords'
+require 'fileutils'
 
 module CultomePlayer::Extras
     module KillSong
@@ -30,12 +31,11 @@ The player ask you a confirmation of the deletion and there you are! the song is
                 # detenemos la reproduccion
                 stop
 
-                File.delete(File.join(current_song.drive.path, current_song.relative_path))
-
-                if $?.exitstatus == 0
+                begin
+                    FileUtils.rm(File.join(current_song.drive.path, current_song.relative_path))
                     current_song.delete
                     display c4("Song deleted!")
-                else
+                rescue Exception => e
                     display c2("An error occurred when deleting the song #{current_song}")
                 end
 
