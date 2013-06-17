@@ -21,6 +21,9 @@ RSpec.configure do |config|
 end
 
 require 'cultome_player'
+require 'cultome_player/helper'
+
+include CultomePlayer::Helper
 
 class TestOutput
     def print(msg)
@@ -35,7 +38,7 @@ class Test
 
     def initialize
         set_environment({
-            user_dir: '/home/csoria/tmp'
+            user_dir: "#{project_path}/spec/data/user"
         })
     end
 
@@ -52,4 +55,4 @@ end
 
 require 'active_record'
 
-ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: '/home/csoria/tmp/db_cultome.dat')
+ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: "#{project_path}/spec/data/user/db_cultome.dat")
