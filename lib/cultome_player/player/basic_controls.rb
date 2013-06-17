@@ -35,7 +35,7 @@ module CultomePlayer::Player
                 player.playlist = player.focus = pl
                 player.play_index = -1
                 player.queue = []
-                song_not_played_in_playlist = (0...current_playlist.size).to_a
+                @song_not_played_in_playlist = (0...current_playlist.size).to_a
             end
 
             player.history.push current_song unless current_song.nil?

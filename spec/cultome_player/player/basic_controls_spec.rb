@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CultomePlayer::Player::BasicControls do
 
-    COLLECTION_SIZE = 1006
+    COLLECTION_SIZE = 1005
 
     let(:t){ Test.new }
 
