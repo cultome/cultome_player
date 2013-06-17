@@ -274,17 +274,19 @@ play
 * Scrobbler? of course! why not? but please run **'configure_lastfm begin'** before use it.
 * Better environment startup check.
 
-**Version 0.5.0**
+**Version 1.0.0**
 
-At first glace there is nothing different in the surface... and that is right! but that dont mean I did nothing with the code but the contrair, this has been the most worked release in this project.
+I took so long I know, but it was for a good cause. When I realized thanks to [Travis CI](https://travis-ci.org/csoriav/cultome_player) that my code was a little more than difficult to test in more than one environment, considering the weird hybrid that result the JRuby thing, I decided to rewrite all the player, and that was what i been doing since then.
 
-I basicly reorganize all the code a couple times until I a was satisfied with the result. **What I won with this?** Well! I would say testeability, manteinability, standar error handling, a little of performance, aisle the java music player (hopefully to replace it in the future with no efford), a cleaner code and lot of learning in Ruby language.
+With the hope to deliver zero-defect, multiple-environment-friendly, less error prone code, a better developer experience and a truly code that could be called gem, I invest a lot of effort writing with a test-first methodology with new version. As you can see mi test coverage incremented radically, oposed to the documentation jejejeje but who needs documentation when you write functional test!... although I promise complete the documentation in the next releases.
 
-Also added a lot of spec , missing and news, to the code in order to deliver better quality each release, and with this my compromise to each release add a few more specs to the collection.
+As you can imagine, I test a lot, but even with my greattest efforts is possible that some escenaris have gone under the radar. I'm also conscient that this version still has some jagged edges, mostly of then I have identified but, by the nature of this change and the time it took, i decide to release this stable version and polish all the other things in a future release.
 
-And as a try to reach better code quality I register the project in [Travis CI](https://travis-ci.org/csoriav/cultome_player) to have the test run automaticly in every commit and in differente platforms, in this momement jruby and ruby 1.9. And to check code coverage we're on [Coveralls](https://coveralls.io/r/csoriav/cultome_player).
+So, whats new with this release? Well at first sight you will feel the speed in the starting, also will note the memory consumption is now less than half than before. I also remove dependencies and over all now the player is **PURE RUBY**... but you still need to have java installed because the music player is the same, but now run in a separate process and the communication between ruby and java is with sockets. This allows to use the gem even without a music player or connect a nother player, lets say mplayer, with just overwriting a couple methods =D (I will refine this idea in the future).
 
-Well, in few words, this release contains no new funcitonality, but all the funcionality was rethinked. I see you in the next version with, I promise, MusicBrainz integration.
+I remove the share funcitonality in this version, but it will come back in esteroids in future releases.
+
+Whats next? Musicbrainz integration, I need to tags correctly all the songs if I want to go further. So, see you next version!
 
 ## TODO
 

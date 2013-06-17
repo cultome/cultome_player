@@ -1,138 +1,31 @@
-#!/usr/bin/env jruby
+#!/usr/bin/env ruby
 # encoding: utf-8
 
-puts "Loading CulToMe Player..."
-
-require 'cultome/helper'
-require 'cultome/version'
-require 'colorize'
-
-include Cultome::Helper
-
-if os == :windows
-	system("cls") 
-	puts "Starting CulToMe Player v#{CultomePlayer::VERSION}"
-elsif os != :windows
-	system("clear") 
-	print "Starting CulToMe Player ".light_yellow
-	puts "v#{CultomePlayer::VERSION}".light_blue
-end
-
-require 'text_slider'
-include TextSlider
-
-if os != :windows
-	p = 'ᗧ'.yellow
-	m = 'ᗤ'.yellow
-	l = 'ᗣ'.light_yellow
-	b = 'ᗣ'.light_red
-	r = 'ᗣ'.red
-	c = 'ᗣ'.cyan
-	h = 'ᗣ'.white
-	y = 'ᗣ'.light_blue
-	o = 'ʘ'.yellow
-	i = '• '.yellow
-else
-	p = '<'
-	m = '>'
-	l = '^'
-	b = '^'
-	r = '^'
-	c = '^'
-	h = '^'
-	y = '^'
-	o = 'O'
-	i = '. '
-end
-
-seq = [
-" #{i * 14}#{o}",
-" #{i * 14}#{o}",
-"#{p}#{(i * 14)}#{o}",
-" #{p} #{(i * 13)}#{o}",
-"  #{p}#{(i * 13)}#{o}",
-"   #{p} #{(i * 12)}#{o}",
-"    #{p}#{(i * 12)}#{o}",
-"     #{p} #{(i * 11)}#{o}",
-"      #{p}#{(i * 11)}#{o}",
-"       #{p} #{(i * 10)}#{o}",
-"        #{p}#{(i * 10)}#{o}",
-"  #{b}      #{p} #{(i * 9)}#{o}",
-"#{l}  #{b}      #{p}#{(i * 9)}#{o}",
-" #{l}  #{b}      #{p} #{(i * 8)}#{o}",
-"  #{l}  #{b}      #{p}#{(i * 8)}#{o}",
-"#{r}  #{l}  #{b}      #{p} #{(i * 7)}#{o}",
-" #{r}  #{l}  #{b}      #{p}#{(i * 7)}#{o}",
-"  #{r}  #{l}  #{b}      #{p} #{(i * 6)}#{o}",
-"#{c}  #{r}  #{l}  #{b}      #{p}#{(i * 6)}#{o}",
-" #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 5)}#{o}",
-"  #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 5)}#{o}",
-"   #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 4)}#{o}",
-"    #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 4)}#{o}",
-"     #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 3)}#{o}",
-"      #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 3)}#{o}",
-"       #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 2)}#{o}",
-"        #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 2)}#{o}",
-"         #{c}  #{r}  #{l}  #{b}      #{p} #{(i * 1)}#{o}",
-"          #{c}  #{r}  #{l}  #{b}      #{p}#{(i * 1)}#{o}",
-"           #{c}  #{r}  #{l}  #{b}      #{p} #{o}",
-"            #{c}  #{r}  #{l}  #{b}      ᗧʘ",
-"             #{h}  #{h}  #{h}  #{h}      #{m}",
-"            #{h}  #{h}  #{h}  #{h}     #{m}  ",
-"           #{y}  #{y}  #{y}  #{y}    #{m}    ",
-"          #{y}  #{y}  #{y}  #{y}   #{m}      ",
-"         #{h}  #{h}  #{h}  #{h}  #{m}        ",
-"        #{h}  #{h}  #{h}  #{h} #{m}          ",
-"       #{y}  #{y}  #{y}  ᗣᗤ            ",
-"      #{y}  #{y}  #{y}  #{m}              ",
-"     #{h}  #{h}  #{h} #{m}                ",
-"    #{h}  #{h}  ᗣᗤ                  ",
-"   #{y}  #{y}  #{m}                    ",
-"  #{y}  #{y} #{m}                      ",
-" #{h}  ᗣᗤ                        ",
-"#{h}  #{m}                          ",
-" #{m}                           #{y}",
-"                            #{y} ",
-"                           #{h}  ",
-"                          #{h}   ",
-"                         #{y}    ",
-"                        #{y}    #{m}",
-"                       #{h}   #{m} #{o}",
-"                      #{h}  #{m} #{(i * 1)}#{o}",
-"                     #{y} #{m} #{(i * 2)}#{o}",
-"                    ᗣᗤ #{(i * 3)}#{o}",
-"                   #{m} #{(i * 4)}#{o}",
-"                 #{m} #{(i * 5)}#{o}",
-"               #{m} #{(i * 6)}#{o}",
-"             #{m} #{(i * 7)}#{o}",
-"           #{m} #{(i * 8)}#{o}",
-"         #{m} #{(i * 9)}#{o}",
-"       #{m} #{(i * 10)}#{o}",
-"     #{m} #{(i * 11)}#{o}",
-"   #{m} #{(i * 12)}#{o}",
-" #{m} #{(i * 13)}#{o}",
-" #{i * 14}#{o}",
-]
-
-thrd = seq.roll({
-	width: 30, 
-	add_repeat_transition: false, 
-	background: true, 
-	clean_on_finish: false,
-	repeat: true,
-	tick: 0.1,
-})
-
-# cargamos el reproductor completo
 require 'cultome_player'
-player = Cultome::CultomePlayer.new
+#require 'active_record'
 
-# detenemos la animacion
-thrd.kill
-thrd.join
-print "#{' ' * seq[0].length}\r"
+#ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: '/home/csoria/.cultome/db_cultome.dat')
 
-# iniciamos el reproductor
-player.start
+class MyPlayer
+    include CultomePlayer
 
-puts "Bye!".blue
+    def initialize(env={})
+        set_environment(env)
+    end
+end
+
+@p = MyPlayer.new({
+    user_dir: '/home/csoria/tmp',
+})
+@p.check_integrity
+@p.launch_external_music_player
+@p.connect_external_music_player('localhost', 20103)
+@p.register_event_listener(:player_state_updated) do |old_state, new_state|
+    #puts "##### player_state_updated: OLD: #{old_state} => New: #{new_state}"
+    @p.display_with_prompt(@p.execute('next').first) if new_state == :EOM 
+end
+
+system("clear") if @p.os == :linux
+
+@p.begin_interactive
+@p.stop_in_external_player
