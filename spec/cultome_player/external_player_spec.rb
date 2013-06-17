@@ -26,25 +26,25 @@ describe CultomePlayer::ExternalPlayer do
             @pid.should be_kind_of(Fixnum)
         end
 
-        it 'update the state of player' do
+        it 'update the state of player', resources: true do
             t.connect_external_music_player('localhost', 20103)
-            sleep(2.0)
+            sleep(0.5)
 
             t.player.state.should eq(:STOPPED)
 
             expect{
                 t.play_in_external_player(CultomePlayer::Model::Song.first.path)
-                sleep(2.0)
+                sleep(1.0)
             }.to change{ t.player.state }.from(:STOPPED).to(:PLAYING)
 
             expect{
                 t.pause_in_external_player
-                sleep(2.0)
+                sleep(1.0)
             }.to change{ t.player.state }.from(:PLAYING).to(:PAUSED)
 
             expect{
                 t.resume_in_external_player
-                sleep(2.0)
+                sleep(0.5)
             }.to change{ t.player.state }.from(:PAUSED).to(:RESUMED)
         end
 
