@@ -43,7 +43,8 @@ module CultomePlayer::Player
             player.history.push current_song unless current_song.nil?
             do_play
 
-            return current_playlist
+            return current_playlist unless params.empty?
+            return current_song
         end
 
 		# Add songs to the current playlist.
@@ -238,6 +239,7 @@ module CultomePlayer::Player
 
             next_pos = player.song_status[:bytes] + (player.song_status[:frame_size] * seeker_step)
             seek_in_music_player(next_pos)
+            return show
         end
 
         # Fast backward to the current song.
@@ -246,6 +248,7 @@ module CultomePlayer::Player
 
             next_pos = player.song_status[:bytes] - (player.song_status[:frame_size] * seeker_step)
             seek_in_music_player(next_pos)
+            return show
         end
 
 		# Check and change the shuffle setting. Without parameters just print the current state of shuffle. 
