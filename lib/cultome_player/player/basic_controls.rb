@@ -42,6 +42,8 @@ module CultomePlayer::Player
 
             player.history.push current_song unless current_song.nil?
             do_play
+
+            return current_playlist
         end
 
 		# Add songs to the current playlist.
@@ -52,6 +54,7 @@ module CultomePlayer::Player
 			pl = generate_playlist(params)
 			player.playlist = player.focus = current_playlist + pl 
 			song_not_played_in_playlist << current_playlist.size
+            return current_playlist
 		end
 
         # Search for songs in the connected drives.
