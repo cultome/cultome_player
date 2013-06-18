@@ -280,6 +280,7 @@ module CultomePlayer::Player
 		def repeat(params=[])
             raise 'This command is not valid in this moment.' if current_song.nil?
             seek_in_music_player(0)
+            return current_song
 		end
 
         private
