@@ -8,7 +8,7 @@ describe CultomePlayer::Player::PlayerExposer do
     end
 
     it 'consult the playing status of the player' do
-        t.playing?.should be_false
+        t.should_not be_playing
     end
 
     describe '#show' do

@@ -126,7 +126,7 @@ describe CultomePlayer::Player::BasicControls do
         context '#play' do
             it 'play a song' do
                 t.play
-                t.playing?.should be_true
+                t.should be_playing
             end
 
             it 'creates a playlist' do
@@ -177,7 +177,7 @@ describe CultomePlayer::Player::BasicControls do
         context '#play' do
             it 'play a song' do
                 t.play
-                t.playing?.should be_true
+                t.should be_playing
             end
 
             it 'creates a playlist' do
