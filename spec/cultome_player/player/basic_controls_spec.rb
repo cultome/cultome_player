@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CultomePlayer::Player::BasicControls do
 
-    COLLECTION_SIZE = 1005
+    COLLECTION_SIZE = 1006
 
     let(:t){ Test.new }
 
@@ -92,7 +92,7 @@ describe CultomePlayer::Player::BasicControls do
         ]) }.to raise_error('directory doesnt exist!')
     end
 
-    context '#disconnect' do
+    describe '#disconnect' do
         before :each do
             CultomePlayer::Model::Drive.all.each{|d| d.update_attributes(connected: true) }
         end
@@ -123,7 +123,7 @@ describe CultomePlayer::Player::BasicControls do
             expect{ t.enqueue([{type: :literal, value: 'judas'}]) }.to change{ t.current_playlist }.by( t.search([{type: :literal, value: 'judas'}]) )
         end
 
-        context '#play' do
+        describe '#play' do
             it 'play a song' do
                 t.play
                 t.should be_playing
@@ -160,7 +160,7 @@ describe CultomePlayer::Player::BasicControls do
             t.current_playlist.should be_empty
         end
 
-        context '#prev' do
+        describe '#prev' do
             describe 'if there is no history' do
                 it 'display an alert saying "No more song in playlist"' do
                     expect{ t.prev }.to raise_error("There is no files in history")
@@ -168,13 +168,13 @@ describe CultomePlayer::Player::BasicControls do
             end
         end
 
-        context '#next' do
+        describe '#next' do
             it 'display an alert saying "No more song in playlist"' do
                 expect{ t.next }.to raise_error("No more songs in playlist!")
             end
         end
 
-        context '#play' do
+        describe '#play' do
             it 'play a song' do
                 t.play
                 t.should be_playing
@@ -223,25 +223,25 @@ describe CultomePlayer::Player::BasicControls do
             end
         end
 
-        context '#play' do
+        describe '#play' do
             it 'replace the current playlist' do
                 expect{ t.play([{type: :literal, value: 'oasis'}]) }.to change{ t.current_playlist }.to( t.search([{type: :literal, value: 'oasis'}]) )
             end
         end
 
-        context '#next' do
+        describe '#next' do
             it 'change the current playback to the next in the playlist' do
                 expect{ t.next }.to change{ t.current_song }
             end
 
             it 'update the repeat-during-shuffle lock' do
                 t.should be_shuffling
-                expect{ t.next }.to change{ t.send :song_not_played_in_playlist }
+                expect{ t.next }.to change{ t.send :songs_not_played_in_playlist }
             end
         end
 
-        context '#prev' do
-            context 'with history non-empty' do
+        describe '#prev' do
+            describe 'with history non-empty' do
 
                 before :each do
                     @prev_song = t.current_song
@@ -263,37 +263,37 @@ describe CultomePlayer::Player::BasicControls do
     ################### ALL without playback ################
     #########################################################
     context 'without active playback' do
-        context '#repeat' do
+        describe '#repeat' do
             it 'repeat from the beginning the current song' do
                 expect { t.repeat }.to raise_error('This command is not valid in this moment.')
             end
         end
 
-        context '#pause' do
+        describe '#pause' do
             it 'raise an error saying the command is not valid right now' do
                 expect { t.pause }.to raise_error('This command is not valid in this moment.')
             end
         end
 
-        context '#ff' do
+        describe '#ff' do
             it 'raise an error saying the command is not valid right now' do
                 expect { t.ff }.to raise_error('This command is not valid in this moment.')
             end
         end
 
-        context '#fb' do
+        describe '#fb' do
             it 'raise an error a message saying the command is not valid right now' do
                 expect { t.fb }.to raise_error('This command is not valid in this moment.')
             end
         end
 
-        context '#stop' do
+        describe '#stop' do
             it 'raise an error saying the command is not valid right now' do
                 expect { t.stop }.to raise_error('This command is not valid in this moment.')
             end
         end
 
-        context '#shuffle' do
+        describe '#shuffle' do
             it 'turn on and off the shuffle alternatively' do
                 if t.shuffling?
                     expect{ t.turn_shuffle :off }.to change{ t.shuffling? }.from(true).to(false)
@@ -329,7 +329,25 @@ describe CultomePlayer::Player::BasicControls do
             t.current_playlist.should_not be_empty
         end
 
-        context '#pause' do
+        describe '#select_play_return_value' do
+            it 'return a list of songs when only one literal parameter is provided' do
+                t.send(:select_play_return_value, [{type: :literal, value: 'judas'}]).should be_kind_of(Array)
+            end
+
+            it 'return a song when no parameters are provided' do
+                t.send(:select_play_return_value, []).should be_kind_of(CultomePlayer::Model::Song)
+            end
+
+            it 'return a list of songs when more than one parameter is provided' do
+                t.send(:select_play_return_value, [{type: :literal, value: 'lily'}, {type: :literal, value: 'oasis'}]).should be_kind_of(Array)
+            end
+
+            it 'return a song when only one number parameter is provided' do
+                t.send(:select_play_return_value, [{type: :number, value: 1}]).should be_kind_of(CultomePlayer::Model::Song)
+            end
+        end
+
+        describe '#pause' do
             it 'if playback is playing, stop the current playback' do
                 t.play unless t.playing?
                 expect { t.pause }.to change{ t.playing? }.from(true).to(false)
@@ -359,7 +377,7 @@ describe CultomePlayer::Player::BasicControls do
             end
         end
 
-        context '#ff' do
+        describe '#ff' do
             it 'fast forward the current playback' do
                 initial = t.player.song_status[:seconds]
                 t.ff
@@ -367,7 +385,7 @@ describe CultomePlayer::Player::BasicControls do
             end
         end
 
-        context '#fb' do
+        describe '#fb' do
             it 'fast backward the current playback' do
                 initial = t.player.song_status[:seconds]
                 t.fb
@@ -375,11 +393,137 @@ describe CultomePlayer::Player::BasicControls do
             end
         end
 
-        context '#stop' do
+        describe '#stop' do
             it 'stop the current playback' do
                 t.play unless t.playing?
                 expect{ t.stop }.to change{ t.playing? }.from(true).to(false)
             end
         end
     end
+
+    #########################################################
+    ################### Utilities ###########################
+    #########################################################
+    describe '#create_song_from_file' do
+        it 'create a song in the database with information of a mp3 file' do
+            t.should_receive(:extract_mp3_information).with("/home/user/fake.mp3").and_return({
+                name: "Fake Name",
+                artist: "Fake Artist",
+                album: "Fake Album",
+                track: 99,
+                duration: 125,
+                year: 2014,
+                genre: "Psicoledia",
+            })
+            CultomePlayer::Model::Artist.should_receive(:find_or_create_by_name).and_call_original
+            CultomePlayer::Model::Album.should_receive(:find_or_create_by_name).and_call_original
+            CultomePlayer::Model::Genre.should_receive(:find_or_create_by_name).and_call_original
+
+            t.send(:create_song_from_file, '/home/user/fake.mp3', CultomePlayer::Model::Drive.all.first).should be_kind_of CultomePlayer::Model::Song
+        end
+    end
+
+    describe '#generate_playlist' do
+        it 'generate a playlist with a literal parameter' do
+            playlist = t.send(:generate_playlist, [{type: :literal, value: 'oasis'}])
+            playlist.should be_kind_of Array
+            playlist.should_not be_empty
+        end
+
+        it 'generate a plylist with the entire library if no parameter are provided and the current playlist is empty' do
+            t.current_playlist.should be_empty
+            playlist = t.send(:generate_playlist, [])
+            playlist.should have(COLLECTION_SIZE).items
+        end
+    end
+
+    describe '#find_by_query' do
+        it 'create an OR condition from criteria' do
+            results = t.send(:find_by_query, {or: [
+                   {id: 1, condition: '(artists.name like ?)', value: 'oasis'},
+                   {id: 1, condition: '(artists.name like ?)', value: 'lily'},
+            ], and: []})
+
+            results.each{|r| r.artist.name.downcase.should match /(oasis|lily)/}
+        end
+
+        it 'create an AND condition from criteria' do
+            results = t.send(:find_by_query, {or: [], and: [
+                   {id: 1, condition: '(artists.name like ?)', value: 'oasis'},
+                   {id: 2, condition: '(albums.name like ?)', value: 'unplugged'},
+            ]})
+
+            results.each do |r| 
+                r.artist.name.downcase.should eq("oasis")
+                r.album.name.downcase.should eq("mtv unplugged")
+            end
+        end
+    end
+
+    describe '#do_play' do
+        it 'call next when the playback queue is empty' do
+            t.should_receive(:next)
+            t.send(:do_play)
+        end
+
+        it 'program the next song in the playback queue to be played' do
+            next_song = CultomePlayer::Model::Song.all.first
+            t.player.queue << next_song
+            t.send(:do_play)
+            t.current_song.should eq(next_song)
+        end
+
+        describe 'if the object in the playback queue is an Artist' do
+            it "create a playlist with the artist's songs" do
+                next_artist = CultomePlayer::Model::Artist.all.first
+                t.player.queue << next_artist
+                t.send(:do_play)
+                t.current_playlist.each{|s| s.artist.should eq(next_artist)}
+            end
+        end
+
+        describe 'if the object in the playback queue is an Album' do
+            it "create a playlist with the album's songs" do
+                next_album = CultomePlayer::Model::Album.all.first
+                t.player.queue << next_album
+                t.send(:do_play)
+                t.current_playlist.each{|s| s.album.should eq(next_album)}
+            end
+        end
+
+        describe 'if the object in the playback queue is an Genre' do
+            it "create a playlist with songs of the genre" do
+                next_genre = CultomePlayer::Model::Genre.all.last
+                t.player.queue << next_genre
+                t.send(:do_play)
+                t.current_playlist.each{|s| s.genres.should include(next_genre)}
+            end
+        end
+    end
+
+    describe '#polish_mp3_info' do
+        it 'clean the information in a song hash' do
+            info = {
+                name: "fake name",
+                artist: " Fake artist ",
+                album: "Fake album",
+                track: '99',
+                duration: '125',
+                year: '2014',
+                genre: "     psicoledia      ",
+            }
+
+            t.send(:polish_mp3_info, info).should eq({
+                name: "Fake Name",
+                artist: "Fake Artist",
+                album: "Fake Album",
+                track: 99,
+                duration: 125,
+                year: 2014,
+                genre: "Psicoledia",
+            })
+        end
+    end
+
+    describe '#songs_not_played_in_playlist'
 end

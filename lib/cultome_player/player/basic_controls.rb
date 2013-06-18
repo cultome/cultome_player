@@ -37,28 +37,13 @@ module CultomePlayer::Player
                 player.playlist = player.focus = pl
                 player.play_index = -1
                 player.queue = []
-                @song_not_played_in_playlist = (0...current_playlist.size).to_a
+                @songs_not_played_in_playlist = (0...current_playlist.size).to_a
             end
 
             player.history.push current_song unless current_song.nil?
             do_play
 
             return select_play_return_value(params)
-        end
-
-
-        def select_play_return_value(params)
-            if params.empty?
-                return current_song
-            elsif params.size == 1
-                case params[0][:type]
-                when :number then return current_song
-                when /\A(object|literal|criteria)\Z/ then return current_playlist
-                end
-
-            else
-                return current_playlist
-            end
         end
 
 		# Add songs to the current playlist.
@@ -68,7 +53,7 @@ module CultomePlayer::Player
 		def enqueue(params=[])
 			pl = generate_playlist(params)
 			player.playlist = player.focus = current_playlist + pl 
-			song_not_played_in_playlist << current_playlist.size
+			songs_not_played_in_playlist << current_playlist.size
             return current_playlist
 		end
 
@@ -119,12 +104,12 @@ module CultomePlayer::Player
                 if player.shuffling?
                     # Para tener un mejor random hacemos qur toque 
                     # primero toda la playlist antes de repetir las rolas
-                    if song_not_played_in_playlist.empty?
-                        @song_not_played_in_playlist = (0...current_playlist.size).to_a
+                    if songs_not_played_in_playlist.empty?
+                        @songs_not_played_in_playlist = (0...current_playlist.size).to_a
                     end
 
-                    idx = song_not_played_in_playlist.sample
-                    song_not_played_in_playlist.delete(idx)
+                    idx = songs_not_played_in_playlist.sample
+                    songs_not_played_in_playlist.delete(idx)
                     player.queue.push current_playlist[idx]
                 else
                     player.play_index += 1
@@ -307,6 +292,24 @@ module CultomePlayer::Player
 		end
 
         private
+
+        # Given the parameter passed to the play command, it selects the better response object.
+        #
+        # @param params [Array<Hash>] The user command' parameter for the command play
+        # @return [CultomePlayer::Model::Song|Array<CultomePlayer::Model::Songi>] The object that suit better a response in the player context
+        def select_play_return_value(params)
+            if params.empty?
+                return current_song
+            elsif params.size == 1
+                case params[0][:type]
+                when :number then return current_song
+                when /\A(object|literal|criteria)\Z/ then return current_playlist
+                end
+
+            else
+                return current_playlist
+            end
+        end
 
 		# Insert a song in the library given its file_path and drive connected.
 		#
@@ -526,7 +529,7 @@ module CultomePlayer::Player
         # @param info [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre.
         # @return [Hash] The same hash but with polished values.
         def polish_mp3_info(info)
-            [:name, :artist, :album].each{|k| info[k] = info[k].downcase.strip.titleize unless info[k].nil? }
+            [:genre, :name, :artist, :album].each{|k| info[k] = info[k].downcase.strip.titleize unless info[k].nil? }
             [:track, :year].each{|k| info[k] = info[k].to_i if info[k] =~ /\A[\d]+\Z/ }
             info[:duration] = info[:duration].to_i
 
@@ -536,8 +539,8 @@ module CultomePlayer::Player
         # The collection of songs not yet played in the current playlist when the shuffle is on.
         #
         # @return [Array] with the songs not yet played.
-        def song_not_played_in_playlist 
-            @song_not_played_in_playlist ||= []
+        def songs_not_played_in_playlist 
+            @songs_not_played_in_playlist ||= []
         end
     end
 end
