@@ -18,6 +18,9 @@ module CultomePlayer
             10 =>:GAIN
         }
 
+        # The number of retries that this player try to connect with external player during launch. Every try wait 0.5 seconds before do another.
+        EXTERNAL_LAUNCH_MAX_RETRIES = 6
+
         # Once the external player is running you can open a socket connection between this player and the external player.
         #
         # @param host [String] The hostname or ip of the machine running the external player.
@@ -25,34 +28,46 @@ module CultomePlayer
         def connect_external_music_player(host, port)
             raise 'One external player is already connected' if @socket
 
-            attach_to_socket(host, port, :external_player_data_in)
-
-            @connected = true
+            begin
+                attach_to_socket(host, port, :external_player_data_in)
+                @connected = true
+            rescue Exception => e
+                kill_external_music_player unless @external_player_pid.blank?
+            end
         end
 
         # Check the connection state of this player.
         #
         # @return [Boolean] true is this player is connected with an external player, false otherwise.
         def external_player_connected?
-            @connected
+            @connected.blank?
         end
 
         # Run a user-defined command to initiate the external player. ALso record the process id in case the user wants to kill the process.
         #
         # @return [Integer] The process id captured if the external player was successfully launched.
         def launch_external_music_player
-            last_java_process = 0
-            Thread.new do
-                last_java_process = `ps -A | grep java`.each_line.map{|l| l =~ /\A([\s\d]+)/; $1.to_i }.max
+            retries = 1
+            @external_player_pid = last_java_process = `ps -A | grep java`.each_line.map{|l| l =~ /\A([\s\d]+)/; $1.to_i }.max
 
+            Thread.new do
+                sleep(1.0)
                 launch_external_music_player_command
             end
+
+            begin
+                # espera para crear el proceso java
+                sleep(0.5)
+                @external_player_pid = `ps -A | grep java`.each_line.map{|l| l =~ /\A([\s\d]+)/; $1.to_i }.max
+                retries += 1
+            end while retries < EXTERNAL_LAUNCH_MAX_RETRIES && last_java_process == @external_player_pid
+
+            # espera para levantar el server
             sleep(1)
-            this_process = `ps -A | grep java`.each_line.map{|l| l =~ /\A([\s\d]+)/; $1.to_i }.max
 
-            raise 'External music player not launched!' if last_java_process == this_process
+            raise 'External music player not launched!' if last_java_process == @external_player_pid
 
-            return @external_player_pid = this_process
+            return @external_player_pid
         end
 
         # Execute a kill in the process id captured by #launch_external_music_player. If no pid was captured an exception is arised.
