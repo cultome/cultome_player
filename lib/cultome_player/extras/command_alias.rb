@@ -35,8 +35,8 @@ You can declared as many place holders as you want. The rules of players' parame
 		#
 		# @param params [List<Hash>] With parsed literals information.
 		def alias(params=[])
-			return nil if params.size != 2
-			return nil unless params.all?{|a| a[:type] == :literal || a[:type] == :unknown }
+			raise "Incorrect parameters format. Type 'help alias' for more information." if params.size != 2
+            raise "Incorrect parameters format. Type 'help alias' for more information." unless params.all?{|a| a[:type] == :literal || a[:type] == :unknown }
 
 			alias_name = params[0][:value]
 			alias_value = params[1][:value]
