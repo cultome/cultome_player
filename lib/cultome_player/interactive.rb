@@ -38,7 +38,12 @@ Shutdown the player. In this moment is when the player save the plugin configura
                 with_connection do
                     begin
                         return_value = execute input
-                        display return_value.last if displayable?(return_value.last.to_s) 
+
+                        if return_value.last.blank?
+                            display c2("Nothing to see here... by now") 
+                        else
+                            display return_value.last if displayable?(return_value.last.to_s) 
+                        end
                     rescue Exception => e
                         display c2(e.message)
                     end

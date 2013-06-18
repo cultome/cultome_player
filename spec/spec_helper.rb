@@ -33,11 +33,11 @@ class MockMusicPlayer
 
     def play(path)
         @status.state = :PLAYING
-        @status.song_status = {seconds: 10, bytes: 1000, frame_size: 125}
+        @status.song_status = {seconds: 10, bytes: 1000, frame_size: 100}
     end
 
     def seek(next_pos)
-        @status.song_status = {seconds: next_pos, bytes: next_pos, frame_size: 100}
+        @status.song_status = {seconds: next_pos > 0 ? 35 : 9, bytes: next_pos, frame_size: 100}
     end
 
     def pause

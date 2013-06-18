@@ -48,46 +48,43 @@ When an object is passed but not finded among the player objects nor the pseudo-
             }
         end
 
-		# Return an string with and object representations. If no parameter is provided, shows the progress of the current song.
-		#
-		# @param params [List<Hash>] With parsed player's object information.
-		# @return [String] The message displayed.
-		def show(params=[])
-			raise 'no active playback' if current_song.nil?
+        # Return an string with and object representations. If no parameter is provided, shows the progress of the current song.
+        #
+        # @param params [List<Hash>] With parsed player's object information.
+        # @return [String] The message displayed.
+        def show(params=[])
+            raise 'no active playback' if current_song.nil?
 
-			if params.blank?
-                return "#{current_song}\n#{playback_progress}"
+            return "#{current_song}\n#{playback_progress}" if params.blank?
 
-			else
-				params.each do |param|
-					case param[:type]
-					when :object
-						case param[:value]
-						when :library then player.focus = obj = find_by_query
-						when :artists then player.focus = obj = CultomePlayer::Model::Artist.order(:name).all
-						when :albums then player.focus = obj = CultomePlayer::Model::Album.order(:name).all
-						when :genres then player.focus = obj = CultomePlayer::Model::Genre.order(:name).all
-						when /playlist|search_results|history/ then player.focus = obj = player.instance_variable_get("@#{param[:value]}")
-						when /search/ then player.focus = obj = player.search_results
-						when /song|artist|album|queue|focus/ then obj = player.instance_variable_get("@#{param[:value]}")
-						when /drives/ then obj = CultomePlayer::Model::Drive.all.to_a
-						when :recently_added then player.focus = obj = CultomePlayer::Model::Song.where('created_at > ?', CultomePlayer::Model::Song.maximum('created_at') - (60*60*24) )
-						when :genre then player.focus = obj = CultomePlayer::Model::Song.connected.joins(:genres).where('genres.name in (?)', current_song.genres.collect{|g| g.name }).to_a
-						else
-							# intentamos matchear las unidades primero
-							drive = drives_registered.find{|d| d.name.to_sym == param[:value]}
-							unless drive.nil?
-								player.focus = obj = CultomePlayer::Model::Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
-							end
-						end
-					else
-						obj = current_song 
-					end # case
-					#display(obj)
-                    return obj
-				end # do
-			end # if
-		end
+            params.each do |param|
+                case param[:type]
+                when :object
+                    case param[:value]
+                    when :library then player.focus = obj = find_by_query
+                    when :artists then player.focus = obj = CultomePlayer::Model::Artist.order(:name).all
+                    when :albums then player.focus = obj = CultomePlayer::Model::Album.order(:name).all
+                    when :genres then player.focus = obj = CultomePlayer::Model::Genre.order(:name).all
+                    when /playlist|search_results|history/ then player.focus = obj = player.instance_variable_get("@#{param[:value]}")
+                    when /search/ then player.focus = obj = player.search_results
+                    when /song|artist|album|queue|focus/ then obj = player.instance_variable_get("@#{param[:value]}")
+                    when /drives/ then obj = CultomePlayer::Model::Drive.all.to_a
+                    when :recently_added then player.focus = obj = CultomePlayer::Model::Song.where('created_at > ?', CultomePlayer::Model::Song.maximum('created_at') - (60*60*24) )
+                    when :genre then player.focus = obj = CultomePlayer::Model::Song.connected.joins(:genres).where('genres.name in (?)', current_song.genres.collect{|g| g.name }).to_a
+                    else
+                        # intentamos matchear las unidades primero
+                        drive = drives_registered.find{|d| d.name.to_sym == param[:value]}
+                        unless drive.nil?
+                            player.focus = obj = CultomePlayer::Model::Song.where('drive_id = ?', drive.id).to_a unless drive.nil?
+                        end
+                    end
+                else
+                    obj = current_song 
+                end # case
+                #display(obj)
+                return obj
+            end # do
+        end
 
         private
 

@@ -58,13 +58,11 @@ describe CultomePlayer::Player do
     end
 
     it 'show in-app help' do
-        t.should_receive(:display)
-        t.help
+        t.help.should_not be_empty
     end
 
     it 'show command help' do
-        t.should_receive(:display)
-        t.help([{type: :literal, value: 'play'}])
+        t.help([{type: :literal, value: 'play'}]).should_not be_empty
     end
 
     it 'generate dinamicly the in-app help' do
