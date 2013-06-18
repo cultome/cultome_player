@@ -43,8 +43,22 @@ module CultomePlayer::Player
             player.history.push current_song unless current_song.nil?
             do_play
 
-            return current_playlist unless params.empty?
-            return current_song
+            return select_play_return_value(params)
+        end
+
+
+        def select_play_return_value(params)
+            if params.empty?
+                return current_song
+            elsif params.size == 1
+                case params[0][:type]
+                when :number then return current_song
+                when /\A(object|literal|criteria)\Z/ then return current_playlist
+                end
+
+            else
+                return current_playlist
+            end
         end
 
 		# Add songs to the current playlist.
@@ -222,8 +236,11 @@ module CultomePlayer::Player
         def turn_pause(state)
             raise 'This command is not valid in this moment.' if current_song.nil?
             raise 'Invalid parameter. Only :on or :off are valids' if state !~ /\Aon|off\Z/
-                return pause_in_music_player if state == :on
-            return resume_in_music_player
+
+            inverse_pause_state = paused? ? c4("Playback resumed!") : c4("Holding your horses")
+            state == :on ?  pause_in_music_player : resume_in_music_player
+            
+            return inverse_pause_state
         end
 
         # Stop the current playback.
