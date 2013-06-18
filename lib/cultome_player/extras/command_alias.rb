@@ -73,7 +73,9 @@ You can declared as many place holders as you want. The rules of players' parame
 
 			#ex.add_attribute(:displayable, false)
 
-			return execute translated
+			ret_value = execute translated
+            return ret_value.last if ret_value.respond_to?(:last)
+			return ret_value
 		end
     end
 end
