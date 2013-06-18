@@ -102,19 +102,22 @@ But you can also pass a command name to receive help specific and extended to th
         # @param params [Array<Hash>] If a command name is passed as literal, shows the command help. Otherwise shows the general help.
         def help(params=[])
             if params.empty?
-                display c4(help_message)
+                return c4(help_message)
             else
+                help = ""
                 cmd = params[0][:value].downcase.to_sym
                 cmd_help = Player.command_help_registry[cmd]
                 if cmd_help.nil?
-                    display c2("Command invalid!")
+                    help << c2("Command invalid!")
                 elsif cmd_help[:usage].nil?
-                    display c4("Help for command #{cmd} is not available!")
+                    help << c4("Help for command #{cmd} is not available!")
                 else
-                    display c3("Usage: #{cmd} #{cmd_help[:params_format]}")
-                    display c3("#{cmd_help[:help]}\n")
-                    display c12(cmd_help[:usage])
+                    help << c3("Usage: #{cmd} #{cmd_help[:params_format]}")
+                    help << c3("#{cmd_help[:help]}\n")
+                    help << c12(cmd_help[:usage])
                 end
+
+                return help
             end
         end
 
