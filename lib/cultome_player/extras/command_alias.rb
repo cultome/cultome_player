@@ -42,6 +42,8 @@ You can declared as many place holders as you want. The rules of players' parame
 			alias_value = params[1][:value]
 
 			registered_aliases[alias_name] = alias_value
+
+			return c4("Alias '#{alias_name}' was successfuly registered!")
 		end
 
         # Accessor for registered aliases, persistend and no-yet persisted.
