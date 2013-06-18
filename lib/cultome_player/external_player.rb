@@ -40,7 +40,7 @@ module CultomePlayer
         #
         # @return [Boolean] true is this player is connected with an external player, false otherwise.
         def external_player_connected?
-            @connected.blank?
+            @connected
         end
 
         # Run a user-defined command to initiate the external player. ALso record the process id in case the user wants to kill the process.

@@ -1,7 +1,7 @@
 require 'cultome_player/player/basic_controls'
 require 'cultome_player/player/player_exposer'
 require 'cultome_player/player/player_state_holder'
-require 'cultome_player/player/generic_music_player'
+require 'cultome_player/player/local_player_base'
 
 module CultomePlayer
     module Player
@@ -122,29 +122,29 @@ But you can also pass a command name to receive help specific and extended to th
         #
         # @param path [String] The path to the music file to be played.
         def play_in_music_player(path)
-            external_player_connected? ? play_in_external_player(path) : generic_music_player.play(path)
+            external_player_connected? ? play_in_external_player(path) : play_in_local_player(path)
         end
 
         # Catwalk command to choose where to execute the seek command depending on the actual conditions.
         #
         # @param next_pos [Integer] The position where to jump in the current playback.
         def seek_in_music_player(next_pos)
-            external_player_connected? ? seek_in_external_player(next_pos) : generic_music_player.seek(next_pos)
+            external_player_connected? ? seek_in_external_player(next_pos) : seek_in_local_player(next_pos)
         end
 
         # Catwalk command to choose where to execute the pause command depending on the actual conditions.
         def pause_in_music_player
-            external_player_connected? ? pause_in_external_player : generic_music_player.pause
+            external_player_connected? ? pause_in_external_player : pause_in_local_player
         end
 
         # Catwalk command to choose where to execute the resume command depending on the actual conditions.
         def resume_in_music_player
-            external_player_connected? ? resume_in_external_player : generic_music_player.resume
+            external_player_connected? ? resume_in_external_player : resume_in_local_player
         end
 
         # Catwalk command to choose where to execute the stop command depending on the actual conditions.
         def stop_in_music_player
-            external_player_connected? ? stop_in_external_player : generic_music_player.stop
+            external_player_connected? ? stop_in_external_player : stop_in_local_player
         end
 
         # Get the generated in-app help.
@@ -172,11 +172,6 @@ But you can also pass a command name to receive help specific and extended to th
         end
 
         private
-
-        # A temporary music player, basicly a mock to test offline.
-        def generic_music_player
-            @generic_music_player ||= GenericMusicPlayer.new(player)
-        end
 
         # Generates the in-app help from a list of command's help.
         #
