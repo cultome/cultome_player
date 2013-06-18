@@ -96,6 +96,8 @@ A common usages would be as follow:
 
                 system("cp #{file_path} #{dir_path}")
             end
+            
+            return files.size
         end
     end
 end
