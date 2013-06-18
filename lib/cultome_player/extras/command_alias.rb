@@ -59,7 +59,7 @@ You can declared as many place holders as you want. The rules of players' parame
 		def search_for_command_alias(user_input)
 			# separamos el comando
 			split = user_input.split(' ')
-			return if split[0].nil? || registered_aliases[split[0]].nil?
+			raise 'Invalid command' if split[0].nil? || registered_aliases[split[0]].nil?
 
 			translated = registered_aliases[split[0]].clone
 
