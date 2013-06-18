@@ -11,6 +11,7 @@ require 'cultome_player/installation_integrity'
 require 'cultome_player/extras'
 require 'cultome_player/error_handler'
 
+# Main module in the gem. Includes everything that is needed to operate the player.
 module CultomePlayer
     include SocketAdapter
     include Player

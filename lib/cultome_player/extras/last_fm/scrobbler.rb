@@ -1,14 +1,19 @@
 
 module CultomePlayer::Extras::LastFm
     module Scrobbler
+
+        # Register event listener for next, prev and quit commands.
         def self.included(base)
-            CultomePlayer::Player.register_event_listener(:next, :scrobble)
-            CultomePlayer::Player.register_event_listener(:prev, :scrobble)
-            CultomePlayer::Player.register_event_listener(:quit, :scrobble)
+            CultomePlayer::Player.register_event_listener(:next, :scrobble_next)
+            CultomePlayer::Player.register_event_listener(:prev, :scrobble_prev)
+            CultomePlayer::Player.register_event_listener(:quit, :scrobble_quit)
         end
 
+        # Submit a scrobble to Last.fm given the conditions of the player and the command provided as parameter.
+        #
+        # @param command [Symbol] The command that fire this scrobble. The posibble values are :next, :prev and :quit.
         def scrobble(command)
-            p = player.prev_song
+            p = song_to_scrobble_when(command)
             return nil if p.nil?
 
             song_name = p.name
@@ -17,7 +22,7 @@ module CultomePlayer::Extras::LastFm
             progress = player.song_status[:seconds] || 0
             # necesitamos que la cancion haya sido tocada almenos 30 segundos
             return nil if progress < 30
-            song_name = player.song.name
+            song_name = current_song.name
 
             # no hacemos scrobble si el artista o el track son desconocidos
             raise 'unable_to_scrobble' if artist_id == 1
@@ -37,8 +42,43 @@ module CultomePlayer::Extras::LastFm
             end
         end
 
+        # Given a command valid for scrobbler, select the song that will me scrobbled with the current state of the player.
+        #
+        # @param command [Symbol] A valid command for scrobbler (:next, :prev or :quit).
+        # @return [CultomePlayer::Model::Song] The song that will be scrobbled with the actual state of the player.
+        def song_to_scrobble_when(command)
+            case command
+            when /next|prev/
+                player.prev_song
+            when :quit
+                current_song
+            end
+        end
+
         private
 
+        # Utility method to send the correct parameter (next) to scrobble
+        #
+        # @param params [Array] The parameters supplied with the command.
+        def scrobble_next(params)
+            scrobble(:next)
+        end
+
+        # Utility method to send the correct parameter (prev) to scrobble
+        #
+        # @param params [Array] The parameters supplied with the command.
+        def scrobble_prev(params)
+            scrobble(:prev)
+        end
+
+        # Utility method to send the correct parameter (quit) to scrobble
+        #
+        # @param params [Array] The parameters supplied with the command.
+        def scrobble_quit(params)
+            scrobble(:quit)
+        end
+
+        # Review the database for pending scrobbles to send to Last.fm and send them.
         def check_pending_scrobbles
             pending = CultomePlayer::Model::Scrobble.pending
             if pending.size > 0

@@ -2,6 +2,9 @@
 module CultomePlayer::Player
     module PlayerExposer
 
+        # Register the command show.
+        #
+        # @param base [Class] The Class where this module is included.
         def self.included(base)
             base.command_registry << :show
 
@@ -45,7 +48,7 @@ When an object is passed but not finded among the player objects nor the pseudo-
             }
         end
 
-		# Display an object in the screen. If no parameter is proveided, shows the progress of the current song.
+		# Return an string with and object representations. If no parameter is provided, shows the progress of the current song.
 		#
 		# @param params [List<Hash>] With parsed player's object information.
 		# @return [String] The message displayed.
@@ -100,30 +103,52 @@ When an object is passed but not finded among the player objects nor the pseudo-
 end
 
 module CultomePlayer::Player::PlayerExposer
+
+    # State checker of playing status.
+    #
+    # @return [Boolean] true if player is playing, false otherwise.
     def playing?
         player.state =~ /\ARESUMED|PLAYING\Z/ ? true : false
     end
 
+    # State checker of library playing.
+    #
+    # @return [Boolean] true if the player is playing the library, false otherwise.
     def playing_library?
         player.playing_library?
     end
 
+    # State checker of shuffle.
+    #
+    # @return [Boolean] true if the player is shuffling, false otherwise.
     def shuffling?
         player.shuffling
     end
 
+    # State checker of pause.
+    #
+    # @return [Boolean] true if the player is paused, false otherwise.
     def paused?
         player.state =~ /\APAUSED\Z/ ? true : false
     end
 
+    # Accessor for registered drives.
+    #
+    # @return [Array<CultomePlayer::Model::Drive>] With the drives registered in the player.
     def drives_registered 
         player.drives
     end
 
+    # Accessor for the current playlist.
+    #
+    # @return [Array<CultomePlayer::Model::Song>] The current playlist.
     def current_playlist
         player.playlist
     end
 
+    # Accesor for the current song
+    #
+    # @return [CultomePlayer::Model::Song] The current song.
     def current_song
         player.song
     end

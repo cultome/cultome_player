@@ -1,6 +1,8 @@
 
 module CultomePlayer::Extras
     module TasteAnalizer
+
+        # Register the event listener for next and prev commands.
         def self.included(base)
             CultomePlayer::Player.register_event_listener(:next, :qualify_song_preference)
             CultomePlayer::Player.register_event_listener(:prev, :qualify_song_preference)

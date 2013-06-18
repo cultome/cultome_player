@@ -1,6 +1,8 @@
 
 module CultomePlayer::Extras::LastFm
     module SimilarTo
+
+        # Register similar command.
         def self.included(base)
             CultomePlayer::Player.command_registry << :similar
             CultomePlayer::Player.command_help_registry[:similar] = {
@@ -26,12 +28,12 @@ When the results are parsed successfully from Last.fm the first time, the result
         # @param params [List<Hash>] With parsed player's object information. Only @artist and @song are valid.
         def similar(params=[])
             raise 'invalid parameter' if !params.empty? && params.find{|p| p[:type] == :object}.nil?
-            raise 'no active playback' if player.song.nil?
+            raise 'no active playback' if current_song.nil?
 
-                song_name = player.song.name
-                artist_name = player.song.artist.name
-                song_id = player.song.id
-                artist_id = player.song.artist.id
+                song_name = current_song.name
+                artist_name = current_song.artist.name
+                song_id = current_song.id
+                artist_id = current_song.artist.id
 
                 type = params.empty? ? :song : params.find{|p| p[:type] == :object}[:value]
                 query_info = define_lastfm_query(type, song_name, artist_name)

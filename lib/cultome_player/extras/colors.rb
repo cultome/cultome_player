@@ -3,9 +3,7 @@ require 'colorize'
 module CultomePlayer::Extras
     module Colors
 
-        def self.included(base)
-        end
-
+        # Look for color methods and define them if necessary.
         def method_missing(mtd, *args, &block)
             return super unless mtd =~ /\Ac([\d]+)\Z/
             return super unless (1..colors_defined.size).include?($1.to_i) 
@@ -14,6 +12,7 @@ module CultomePlayer::Extras
             send(mtd, *args)
         end
 
+        # Look for color methods and define them if necessary.
         def respond_to?(mtd, view_privates=false)
             return super unless mtd =~ /\Ac([\d]+)\Z/
             is_valid_color = (1..colors_defined.size).include?($1.to_i)
@@ -22,6 +21,9 @@ module CultomePlayer::Extras
             return is_valid_color
         end
 
+        # Accesor and initializator for the color palette.
+        #
+        # @return [Array<Symbol>] The color palette.
         def colors_defined
             @colors_defined ||= [
                 :black,			# c1
@@ -43,6 +45,7 @@ module CultomePlayer::Extras
             ]
         end
 
+        # Helper method to define the color methods
         def define_color_methods
             colors_defined.each_with_index do |color, idx|
                 self.class_eval do

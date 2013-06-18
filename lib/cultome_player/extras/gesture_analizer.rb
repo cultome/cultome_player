@@ -26,6 +26,9 @@ module CultomePlayer::Extras
             user_actions
         end
 
+        # Hold the history of user actions in this player session.
+        #
+        # @return [EventQueue] The object holding the history of user actions.
         def user_actions
             @queue ||= EventQueue.new
         end

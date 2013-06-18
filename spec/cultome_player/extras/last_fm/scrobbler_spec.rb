@@ -7,18 +7,18 @@ describe CultomePlayer::Extras::LastFm::Scrobbler do
 
     it 'register to listen event next' do
         t.event_listeners.should include(:next)
-        t.event_listeners[:next].should include(:scrobble)
+        t.event_listeners[:next].should include(:scrobble_next)
 
     end
 
     it 'register to listen event prev' do
         t.event_listeners.should include(:prev)
-        t.event_listeners[:prev].should include(:scrobble)
+        t.event_listeners[:prev].should include(:scrobble_prev)
     end
 
     it 'register to listen event quit' do
         t.event_listeners.should include(:quit)
-        t.event_listeners[:quit].should include(:scrobble)
+        t.event_listeners[:quit].should include(:scrobble_quit)
     end
 
     it 'scrobble one song' do
@@ -56,5 +56,25 @@ describe CultomePlayer::Extras::LastFm::Scrobbler do
         52.times {|idx| CultomePlayer::Model::Scrobble.create(artist: "Artist #{idx}", track: "Track #{idx}", timestamp: idx.to_s) }
 
         expect{ t.send :check_pending_scrobbles }.to change{ CultomePlayer::Model::Scrobble.all.size }.from(initial + 52).to(0)
+    end
+
+    it 'select the previous song to scrobble if command is next' do
+        t.play
+        prev_song = t.current_song
+        t.next
+        t.song_to_scrobble_when(:next).should eq(prev_song)
+    end
+
+    it 'select the previous song to scrobble if command is prev' do
+        t.play
+        t.next
+        prev_song = t.current_song
+        t.prev
+        t.song_to_scrobble_when(:prev).should eq(prev_song)
+    end
+
+    it 'select the current song to scrobble if command is quit' do
+        t.play
+        t.song_to_scrobble_when(:quit).should eq(t.current_song)
     end
 end

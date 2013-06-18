@@ -1,6 +1,9 @@
 module CultomePlayer
     module Interactive
 
+        # Register the command quit.
+        #
+        # @param base [Class] The class where this module is inserted.
         def self.included(base)
             Player.command_registry << :quit
             Player.command_help_registry[:quit] = {
@@ -13,6 +16,10 @@ Shutdown the player. In this moment is when the player save the plugin configura
             }
         end
 
+        # Start a infinite cycle in which the user is asked to type player's commands and receive feedback. 
+        # You can use the command quit to exit the cycle and continue.
+        #
+        # @param prompt [String] Optional. A user-defined prompt to show when asking for user commands.
         def begin_interactive(prompt=nil)
             @running = true
 
@@ -41,6 +48,7 @@ Shutdown the player. In this moment is when the player save the plugin configura
             display c4("Bye!")
         end
 
+        # Command to terminate the interactive session.
         def quit(params=[])
             @running = false
             emit_event(:quitting)
@@ -48,6 +56,10 @@ Shutdown the player. In this moment is when the player save the plugin configura
 
         private
 
+        # Do a logic to determine if a message returned from the player is appropiated to be displayed to the user.
+        #
+        # @param value [String] The message to test.
+        # @return [Boolean] true if the message should be displayed to the user, false otherwise.
         def displayable?(value)
             value =~ /\A([\d\s]+)?(#<.*>|[\d]+|\{.*\})\Z/ ? false : true
         end

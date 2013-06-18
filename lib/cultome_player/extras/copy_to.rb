@@ -2,6 +2,8 @@ require 'shellwords'
 
 module CultomePlayer::Extras
     module CopyTo
+
+        # Register the command copy.
         def self.included(base)
             CultomePlayer::Player.command_registry << :copy
             CultomePlayer::Player.command_help_registry[:copy] = {

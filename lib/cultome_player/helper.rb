@@ -3,8 +3,13 @@ require 'logger'
 module CultomePlayer
     module Helper
 
+        # The default configuration file's name
         CONFIG_FILE_NAME = "config.yml"
 
+        # Send a message to the defined output
+        #
+        # @param msg [String] The message to be printed
+        # @param continous [Boolean] If false (as default) append a new line character at the end of the message.
         def display(msg, continous=false)
             if continous
                 output.print msg.to_s
@@ -13,10 +18,16 @@ module CultomePlayer
             end
         end
 
+        # Send a message to the defined output appending the application prompt as a new lines in the message
+        #
+        # @param msg [String] The message to be printed.
         def display_with_prompt(msg)
             display("\r#{msg}\n#{c4(player.current_prompt)}", true)
         end
 
+        # Accesor to the defined output source. If not defined used STDOUT.
+        #
+        # @return An object that respond to #puts and #print.
         def output
             @output ||= respond_to?(:player_output) ? player_output : $stdout
         end
@@ -100,7 +111,6 @@ module CultomePlayer
         # @return [String] The directory where player writes its configurations
         def user_dir
             environment[:user_dir]
-            #@user_dir ||= File.join(Dir.home, ".cultome")
         end
 
         # Return the path to the player's config file
@@ -124,10 +134,17 @@ module CultomePlayer
             @env ||= set_environment
         end
 
+        # Return the path where the external player is installed.
+        #
+        # @return [String] The path where the external player is installed.
         def default_external_player_installation_path 
             @default_external_player_installation_path ||= "#{project_path}/ext_player"
         end
 
+        # Set the environment variables. This should be the first thing you do, because once initialized, the variables can be updated. Is recommended to use this method during the initialize method.
+        #
+        # @param new_env [Hash] With any of the following keys: db_adapter, database_file, config_file, user_dir or ext_player_launch_cmd.
+        # @return [Hash] The new environment variables.
         def set_environment(new_env={})
             # setteamos las configuracion por default mezcladas con las del usuario
             user_dir = new_env[:user_dir] || File.join(Dir.home, ".cultome")

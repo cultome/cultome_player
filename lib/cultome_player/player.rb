@@ -5,18 +5,33 @@ require 'cultome_player/player/generic_music_player'
 
 module CultomePlayer
     module Player
+
+        # Return a class that holds the current state of the player at all times.
+        #
+        # @return [PlayerStateHolder] an instance of PlayerStateHolder
         def player
             @player ||= PlayerStateHolder.new
         end
 
+        # Register an event listener.
+        #
+        # @param event [Symbol] The event name to listen to.
+        # @param callback_method [Symbol] The name of the callback method to be called when event is emited.
         def self.register_event_listener(event, callback_method)
             event_listeners[event] << callback_method
         end
 
+        # Register an event listener.
+        #
+        # @param event [Symbol] The event name to listen to.
+        # @param block The logic to be executed when the event is emited. This event is a closure so is evaluated in its own context.
         def register_event_listener(event, &block)
             event_listeners[event] << block
         end
 
+        # Interpret a user command.
+        #
+        # @param user_input [String] The user command to be interpreted.
         def execute(user_input)
             begin
                 cmds = parse(user_input)
@@ -43,18 +58,30 @@ module CultomePlayer
             end
         end
 
+        # Accessor for the event_listeners registry.
+        #
+        # @return [Hash] The event_listeners registry. The keys are the events and the values are their listeners.
         def self.event_listeners
             @event_listeners ||= Hash.new{|h,k| h[k] = []}
         end
 
+        # Accessor for the event_listeners registry.
+        #
+        # @return [Hash] The event_listeners registry. The keys are the events and the values are their listeners.
         def event_listeners
             Player.event_listeners
         end
 
+        # Accessor for the command registry.
+        #
+        # @return [Array] the command that this player responds to.
         def self.command_registry
             @command_registry ||= [:help]
         end
 
+        # Accessor for the command help registry.
+        #
+        # @return [Hash] The keys are the command and the value are a hash with the help content.
         def self.command_help_registry
             @command_help_registry ||= { help: {
                 help: "Show the application help",
@@ -70,7 +97,9 @@ But you can also pass a command name to receive help specific and extended to th
             }}
         end
 
-        # Shows the generated in-app help message.
+        # Command to show the generated in-app help message.
+        #
+        # @param params [Array<Hash>] If a command name is passed as literal, shows the command help. Otherwise shows the general help.
         def help(params=[])
             if params.empty?
                 display c4(help_message)
@@ -89,33 +118,46 @@ But you can also pass a command name to receive help specific and extended to th
             end
         end
 
+        # Catwalk command to choose where to execute the play command depending on the actual conditions.
+        #
+        # @param path [String] The path to the music file to be played.
         def play_in_music_player(path)
             external_player_connected? ? play_in_external_player(path) : generic_music_player.play(path)
         end
 
+        # Catwalk command to choose where to execute the seek command depending on the actual conditions.
+        #
+        # @param next_pos [Integer] The position where to jump in the current playback.
         def seek_in_music_player(next_pos)
             external_player_connected? ? seek_in_external_player(next_pos) : generic_music_player.seek(next_pos)
         end
 
+        # Catwalk command to choose where to execute the pause command depending on the actual conditions.
         def pause_in_music_player
             external_player_connected? ? pause_in_external_player : generic_music_player.pause
         end
 
+        # Catwalk command to choose where to execute the resume command depending on the actual conditions.
         def resume_in_music_player
             external_player_connected? ? resume_in_external_player : generic_music_player.resume
         end
 
+        # Catwalk command to choose where to execute the stop command depending on the actual conditions.
         def stop_in_music_player
             external_player_connected? ? stop_in_external_player : generic_music_player.stop
         end
 
-        # Accesos to class variable
+        # Get the generated in-app help.
         #
         # @return [String] The help generated
         def help_message
             @help_msg ||= regenerate_help
         end
 
+        # Broadcast an event to the registered listeners.
+        #
+        # @param event [Symbol] The event name
+        # @param params [Array] The parameters to send to the listeners of the event.
         def emit_event(event, *params)
             ret_values = []
             event_listeners[event].each do |listener|
@@ -131,6 +173,7 @@ But you can also pass a command name to receive help specific and extended to th
 
         private
 
+        # A temporary music player, basicly a mock to test offline.
         def generic_music_player
             @generic_music_player ||= GenericMusicPlayer.new(player)
         end

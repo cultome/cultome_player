@@ -15,16 +15,31 @@ module CultomePlayer::Extras
         include SimilarTo
         include Scrobbler
 
+        # Last.fm webservice endpoint
         LAST_FM_WS_ENDPOINT = 'http://ws.audioscrobbler.com/2.0/'
-        LAST_FM_API_KEY = 'bfc44b35e39dc6e8df68594a55a442c5'
-        LAST_FM_SECRET = '2ff2254532bbae15b2fd7cfefa5ba018'
-        GET_SIMILAR_TRACKS_METHOD = 'track.getSimilar'
-        GET_SIMILAR_ARTISTS_METHOD = 'artist.getSimilar'
-        SCROBBLE_METHOD = 'track.scrobble'
-        GET_TOKEN_METHOD = 'auth.getToken'
-        GET_SESSION_METHOD = 'auth.getSession'
-        TEXT_WIDTH = 50
 
+        # CulToMe Player's Last.fm API key
+        LAST_FM_API_KEY = 'bfc44b35e39dc6e8df68594a55a442c5'
+
+        # CulToMe Player's Last.fm secret
+        LAST_FM_SECRET = '2ff2254532bbae15b2fd7cfefa5ba018'
+
+        # Get similar tracks's webservice method name
+        GET_SIMILAR_TRACKS_METHOD = 'track.getSimilar'
+
+        # Get similar artist's webservice method name
+        GET_SIMILAR_ARTISTS_METHOD = 'artist.getSimilar'
+
+        # Submit scrobble's webservice method name
+        SCROBBLE_METHOD = 'track.scrobble'
+
+        # Get token's webservice method name
+        GET_TOKEN_METHOD = 'auth.getToken'
+
+        # Get session's webservice method name
+        GET_SESSION_METHOD = 'auth.getSession'
+
+        # Register the configure_lastfm command.
         def self.included(base)
             CultomePlayer::Player.command_registry << :configure_lastfm
             CultomePlayer::Player.command_help_registry[:configure_lastfm] = {
@@ -44,6 +59,9 @@ This process is required only once, we promess you.
             }
         end
 
+        # Configure the user cultome player client for scrobble.
+        #
+        # @param [Array<Hash>] It receive one literal parameter and the only two valid values for this is 'begin' and 'done'.
         def configure_lastfm(params=[])
             return nil if params.empty?
             return nil unless params.size == 1 && params[0][:type] == :literal

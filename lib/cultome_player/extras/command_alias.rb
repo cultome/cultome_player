@@ -1,6 +1,8 @@
 
 module CultomePlayer::Extras
     module CommandAlias
+
+        # Include de command alias and register a listener for event invalid_command_error.
         def self.included(base)
             CultomePlayer::Player.command_registry << :alias
             CultomePlayer::Player.command_help_registry[:alias] = {
@@ -42,6 +44,9 @@ You can declared as many place holders as you want. The rules of players' parame
 			registered_aliases[alias_name] = alias_value
 		end
 
+        # Accessor for registered aliases, persistend and no-yet persisted.
+        #
+        # @return [Hash] With the key being the alias and the values their respective tranlations.
         def registered_aliases
 			extras_config['aliases'] ||= {"exit" => "quit"}
 		end

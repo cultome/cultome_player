@@ -204,8 +204,6 @@ The following command are implemented in this moment.
 * copy <object> => <path>                           Copy a playlist to some filesystem folder
 * similar <object>                                  Look in last.fm for similar artists or songs
 * kill                                              Delete from disk the current song
-* share <literal|ip> <literal|number>               Send the current song to someone else through the internet.
-* receive <path|object> <literal|number>            Start listening for a music transfer connection.
 * alias <literal> => <literal>                      Create an alias for one or many commands
 * lyric                                             Find the lyric of the current song
 * configure_lastfm <literal>                        Configure you Last.fm account to be able to scrobble.
@@ -232,12 +230,10 @@ help <command_name>
 ```
 
 ## Installation
-First of all you need JRuby installed in your system. There are many tutorial in internet to do this.
-
-To distinguish from pure ruby, I'm gonna assume that all the JRuby executable are prepended with a j.
+You need Java installed in your system and you path must be configured to use it.
 
 ```ruby
-jgem install cultome_player
+gem install cultome_player
 
 cultome_player
 
@@ -280,7 +276,7 @@ I took so long I know, but it was for a good cause. When I realized thanks to [T
 
 With the hope to deliver zero-defect, multiple-environment-friendly, less error prone code, a better developer experience and a truly code that could be called gem, I invest a lot of effort writing with a test-first methodology with new version. As you can see mi test coverage incremented radically, oposed to the documentation jejejeje but who needs documentation when you write functional test!... although I promise complete the documentation in the next releases.
 
-As you can imagine, I test a lot, but even with my greattest efforts is possible that some escenaris have gone under the radar. I'm also conscient that this version still has some jagged edges, mostly of then I have identified but, by the nature of this change and the time it took, i decide to release this stable version and polish all the other things in a future release.
+As you can imagine, I test a lot, but even with my greattest efforts is possible that some scenarios have gone under the radar. I'm also conscient that this version still has some jagged edges, mostly of then I have identified but, by the nature of this change and the time it took, i decide to release this stable version and polish all the other things in the next release.
 
 So, whats new with this release? Well at first sight you will feel the speed in the starting, also will note the memory consumption is now less than half than before. I also remove dependencies and over all now the player is **PURE RUBY**... but you still need to have java installed because the music player is the same, but now run in a separate process and the communication between ruby and java is with sockets. This allows to use the gem even without a music player or connect a nother player, lets say mplayer, with just overwriting a couple methods =D (I will refine this idea in the future).
 

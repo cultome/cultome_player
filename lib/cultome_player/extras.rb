@@ -18,6 +18,9 @@ module CultomePlayer
         include LyricFinder
         include LastFm
 
+        # Register a callback to the event quitting.
+        #
+        # @param base [Class] The class where this module was included.
         def self.included(base)
             CultomePlayer::Player.register_event_listener(:quitting, :save_extras_config_file)
         end
@@ -29,12 +32,18 @@ module CultomePlayer
             File.open(config_file, 'w'){|f| YAML.dump(merged, f)}
         end
 
+        # Accessor for the persistent configurations hash.
+        #
+        # @return [Hash] The persistent configurations.
         def extras_config
             @extras_config ||= load_config_file
         end
 
         private
 
+        # Load the config file from the config_file path.
+        #
+        # @return [Hash] A hash with the persisted configuration or empty if there is any.
         def load_config_file
             return {} unless File.exist?(config_file)
             config = YAML.load_file(config_file)

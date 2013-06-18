@@ -5,8 +5,10 @@ require 'mp3info'
 module CultomePlayer::Player
     module BasicControls
 
+        # Register all the command provided by this module to the player, which are: play, enqueue, search, pause, stop, next, prev, connect, disconnect, ff, fb, shuffle, repeat
+        #
+        # @param base [Class] The class where this module was included.
         def self.included(base)
-            # registramos los comandos provistos por este modulo
             base.command_registry << :play
             base.command_registry << :enqueue
             base.command_registry << :search
@@ -205,11 +207,14 @@ module CultomePlayer::Player
             turn_pause player.state =~ /PLAYING|RESUMED/ ? :on : :off
         end
 
+        # Change the pause status of the player between PAUSED and RESUMED.
         def toggle_pause
             turn_pause player.state =~ /PLAYING|RESUMED/ ? :on : :off
-
         end
 
+        # Change the status of the pause.
+        #
+        # @param state [Symbol] Valid values are :on and :off.
         def turn_pause(state)
             raise 'This command is not valid in this moment.' if current_song.nil?
             raise 'Invalid parameter. Only :on or :off are valids' if state !~ /\Aon|off\Z/
@@ -258,10 +263,14 @@ module CultomePlayer::Player
 			return player.shuffling
 		end
 
+        # Change the shuffle status of the player between ON and OFF.
         def toggle_shuffle
             shuffle([{value: !player.shuffling }])
         end
 
+        # Change the status of the shuffle.
+        #
+        # @param state [Symbol] Valid values are :on and :off.
         def turn_shuffle(state)
             raise 'Invalid parameter. Only :on or :off are valids' if state !~ /\Aon|off\Z/
             shuffle([{value: state}])
@@ -336,6 +345,9 @@ module CultomePlayer::Player
             end
         end
 
+        # The seeker step to jump between playback positions.
+        #
+        # @return [Integer] The seeker step
         def seeker_step
             500
         end
@@ -497,6 +509,9 @@ module CultomePlayer::Player
             info
         end
 
+        # The collection of songs not yet played in the current playlist when the shuffle is on.
+        #
+        # @return [Array] with the songs not yet played.
         def song_not_played_in_playlist 
             @song_not_played_in_playlist ||= []
         end

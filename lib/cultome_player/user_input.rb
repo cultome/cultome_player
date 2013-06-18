@@ -3,7 +3,10 @@ require 'readline'
 module CultomePlayer
     module UserInput
 
+        # The valid criteria prefixes.
         VALID_CRITERIA_PREFIX = "[abt]"
+
+        # The recognised bubble words.
         BUBBLE_WORD = %w{=>}
 
         # Read the user input. Provide funcitonality like history and limited autocomplete.
@@ -59,7 +62,7 @@ module CultomePlayer
         # Return true if value matches /Y|y|yes|1|si|s|ok/
         #
         # @param value [String] The value to be compared with regex
-        # @return [Boolean] true if value matches /Y|y|yes|1|si|s|ok/, false otherwise.
+        # @return [Boolean] true if value matches /Y|y|yes|1|si|s|ok|true/, false otherwise.
         def is_true_value(value)
             value =~ /\A(Y|y|yes|1|si|s|ok|on|true)\Z/ ? true : false
         end
