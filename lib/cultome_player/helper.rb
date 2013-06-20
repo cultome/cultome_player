@@ -160,5 +160,17 @@ module CultomePlayer
                 ext_player_launch_cmd:  "java -cp \"#{classpath}\" com.cultome.cultomeplayer.Main"
             }.merge(new_env)
         end
+
+        # Capture and dispose the standard output sended inside the block provided.
+        def swallow_stdout
+            s = StringIO.new
+            oldstd = $stdout
+            $stdout = s
+            yield
+            s.string
+        ensure
+            $stdout = oldstd
+        end
+
     end
 end

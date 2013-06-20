@@ -18,21 +18,32 @@ module CultomePlayer
             raise 'Socket already attached!' if @socket
 
             @socket = TCPSocket.new(host, port)
+            @listening_socket = true
+
             Thread.new do
                 buffer = ""
-                while(true) do
-                    buffer << @socket.recv(1024)
-                    split = buffer.split(CMD_TERMINATOR_SEQ)
+                while(@listening_socket) do
+                    begin
+                        buffer << @socket.recv(1024)
+                        split = buffer.split(CMD_TERMINATOR_SEQ)
 
-                    buffer = buffer.end_with?(CMD_TERMINATOR_SEQ) ?  "" : split.pop
+                        buffer = buffer.end_with?(CMD_TERMINATOR_SEQ) ?  "" : split.pop
 
-                    split.each do |cmd| 
-                        send(data_in_callback, cmd)
+                        split.each do |cmd| 
+                            send(data_in_callback, cmd)
+                        end
+                    rescue Exception => e
+                        @listening_socket = false
                     end
                 end
             end
 
             return @socket
+        end
+
+        # Unbind the socket and terminate the listeners thread.
+        def close_socket
+            @listening_socket = false
         end
 
         # Send a message through the socket
@@ -41,7 +52,7 @@ module CultomePlayer
         def write_to_socket(*params)
             @socket.print "#{params.join(PARAM_TERMINATOR_SEQ)}#{CMD_TERMINATOR_SEQ}"
         end
- 
+
         private
 
         # The queue of command readed in the socket and waiting to be processed.

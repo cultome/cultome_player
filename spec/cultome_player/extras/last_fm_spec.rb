@@ -34,4 +34,13 @@ describe CultomePlayer::Extras::LastFm do
         t.configure_lastfm([{type: :literal, value: 'done'}])
     end
 
+    it 'send request to Last.fm' do
+        Net::HTTP.should_receive(:get_response).and_return("{response: ok}")
+        t.send(:request_to_lastfm, {
+            api_key: "1235",
+            sk: "secret",
+            my_param: 'my_value'
+        })
+    end
+
 end

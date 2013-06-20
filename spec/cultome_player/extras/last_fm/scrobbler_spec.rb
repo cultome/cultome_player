@@ -77,4 +77,16 @@ describe CultomePlayer::Extras::LastFm::Scrobbler do
         t.play
         t.song_to_scrobble_when(:quit).should eq(t.current_song)
     end
+
+    it 'store the scrobbles when offline to submit them later' do
+        t.should_receive(:request_to_lastfm)
+        t.should_receive(:check_pending_scrobbles).and_raise('internet not available')
+        CultomePlayer::Model::Scrobble.should_receive(:create)
+        t.player.stub(:song_status){{seconds: 45}}
+
+        t.stub(:extras_config){{'session_key' => '12345'}}
+
+        t.execute('play')
+        expect{ t.execute('next') }.to raise_error('internet not available')
+    end
 end

@@ -24,4 +24,45 @@ describe CultomePlayer::Helper do
         out.should_receive(:print).with("Testing")
         t.display("Testing", true)
     end
+
+    it 'identify windows host os' do
+        RbConfig::CONFIG.should_receive(:[]).with('host_os').and_return(:mswin)
+        t.os.should eq(:windows)
+    end
+
+    it 'identify windows host macosx' do
+        RbConfig::CONFIG.should_receive(:[]).with('host_os').and_return(:darwin)
+        t.os.should eq(:macosx)
+    end
+
+    it 'identify windows host linux' do
+        RbConfig::CONFIG.should_receive(:[]).with('host_os').and_return(:linux)
+        t.os.should eq(:linux)
+    end
+
+    it 'identify windows host unix' do
+        RbConfig::CONFIG.should_receive(:[]).with('host_os').and_return(:solaris)
+        t.os.should eq(:unix)
+    end
+
+    it 'holds the db_file path' do
+        t.db_file.should end_with 'db_cultome.dat'
+    end
+
+    it 'holds the db_log_file path' do
+        t.db_log_path.should end_with 'cultome_player.log'
+    end
+
+    it 'holds the db_adapter name' do
+        t.db_adapter.should eq 'sqlite3'
+    end
+
+    it 'capture the stdout from migrations' do
+        swallowed = t.swallow_stdout do
+            puts "Uno"
+            print "Dos"
+        end
+
+        swallowed.should eq("Uno\nDos")
+    end
 end

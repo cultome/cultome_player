@@ -10,15 +10,16 @@ end
 
 describe CultomePlayer::SocketAdapter do
     let(:t) { Test.new }
+    let(:socket){ MockSocket.new }
     let(:host_name) { 'localhost' }
     let(:host_port) { 20103 }
 
     before :each do
-        @pid = t.launch_external_music_player
+        TCPSocket.should_receive(:new).and_return(socket)
     end
 
     after :each do
-        t.kill_external_music_player if @pid
+        t.close_socket
     end
 
     it 'Should create a socket' do
@@ -26,19 +27,17 @@ describe CultomePlayer::SocketAdapter do
     end
 
     it 'Should receive data from the socket' do
+        socket.buffer= "ok~~"
         t.should_receive(:external_player_data_in).at_least(1)
         t.attach_to_socket(host_name, host_port, :external_player_data_in)
-        sleep(0.5)
-
         t.play_in_external_player(CultomePlayer::Model::Song.first.path)
-        sleep(1.5)
+        sleep(0.5)
     end
 
     it 'Should write data to the socket' do
+        socket.should_receive(:print)
         t.attach_to_socket(host_name, host_port, :external_player_data_in)
-        sleep(0.5)
         t.write_to_socket('play', CultomePlayer::Model::Song.first.path)
-        sleep(0.5)
     end
 
     it 'Should raise an error if try to attach a socket twice' do

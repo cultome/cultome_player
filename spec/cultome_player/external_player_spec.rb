@@ -72,4 +72,32 @@ describe CultomePlayer::ExternalPlayer do
             t.play_in_external_player('/home/user/music/01. Algodon.mp3')
         end
     end
+
+    context 'with a player launched and connected' do
+
+        before :each do
+            t.instance_eval { @socket = "" }
+            t.should_receive(:write_to_socket)
+        end
+
+        it 'send a play command to external player' do
+            t.seek_in_external_player("path")
+        end
+
+        it 'send a seek command to external player' do
+            t.seek_in_external_player(1212)
+        end
+
+        it 'send a pause command to external player' do
+            t.pause_in_external_player
+        end
+
+        it 'send a resume command to external player' do
+            t.resume_in_external_player
+        end
+
+        it 'send a stop command to external player' do
+            t.stop_in_external_player
+        end
+    end
 end

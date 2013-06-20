@@ -1,47 +1,71 @@
 require 'spec_helper'
-require 'webmock/rspec'
 
 describe CultomePlayer::Extras::LastFm::SimilarTo do
 
-
-    before :all do
-        @t = Test.new
-        @song = CultomePlayer::Model::Song.find_by_name('Traffic Light')
-        @t.play([{type: :literal, value: 'Traffic Light'}])
-    end
+    let(:t){ Test.new }
 
     it 'register to listen for "similar" command' do
-        @t.should respond_to(:similar)
+        Test.new.should respond_to(:similar)
     end
 
-    it 'find similar songs to current song due empty params' do
-        stub_request(:get, "http://ws.audioscrobbler.com/2.0/?api_key=bfc44b35e39dc6e8df68594a55a442c5&artist=The%20Ting%20Tings&format=json&limit=10&method=track.getSimilar&track=Traffic%20Light").to_return(
-            File.new("#{@t.project_path}/spec/data/http/getSimilarTrack.response")
-        )
+    context 'with similars stored in databse' do
+        before :each do
+            t.play([{type: :literal, value: 'Traffic Light'}])
+            t.should_not_receive(:request_to_lastfm)
+        end
 
-        not_have, have = @t.similar
-        not_have.should_not be_empty
-        have.should_not be_nil
+        it 'find similar songs to current song due empty params' do
+            not_have, have = t.similar
+            not_have.should_not be_empty
+            have.should_not be_nil
+        end
+
+        it 'find similar songs to current song' do
+            not_have, have = t.similar([{type: :object, value: :song}])
+            not_have.should_not be_empty
+            have.should_not be_nil
+        end
+
+        it 'find similar artists to current artist' do
+            not_have, have = t.similar([{type: :object, value: :artist}])
+            have.should_not be_nil
+            not_have.should_not be_empty
+        end
     end
 
-    it 'find similar songs to current song' do
-        stub_request(:get, "http://ws.audioscrobbler.com/2.0/?api_key=bfc44b35e39dc6e8df68594a55a442c5&artist=The%20Ting%20Tings&format=json&limit=10&method=track.getSimilar&track=Traffic%20Light").to_return(
-            File.new("#{@t.project_path}/spec/data/http/getSimilarTrack.response")
-        )
+    context 'without similar in databsae' do
+        before :each do
+            t.play([{type: :literal, value: 'someday'}])
+        end
 
-        not_have, have = @t.similar([{type: :object, value: :song}])
-        not_have.should_not be_empty
-        have.should_not be_nil
-    end
+        it 'find similar songs to current song due empty params' do
+            response = JSON.parse(File.open("#{t.project_path}/spec/data/http/getSimilarTrack.response").readlines.join)
+            t.should_receive(:request_to_lastfm).and_return(response)
+            t.should_receive(:store_similar_tracks)
+            not_have, have = t.similar
+            not_have.should_not be_empty
+            have.should_not be_nil
+        end
 
-    it 'find similar artists to current artist' do
-        stub_request(:get, "http://ws.audioscrobbler.com/2.0/?api_key=bfc44b35e39dc6e8df68594a55a442c5&artist=The%20Ting%20Tings&format=json&limit=10&method=artist.getSimilar").to_return(
-            File.new("#{@t.project_path}/spec/data/http/getSimilarArtist.response")
-        )
+        it 'find similar songs to current song' do
+            response = JSON.parse(File.open("#{t.project_path}/spec/data/http/getSimilarTrack.response").readlines.join)
+            t.should_receive(:request_to_lastfm).and_return(response)
+            t.should_receive(:store_similar_tracks)
 
-        not_have, have = @t.similar([{type: :object, value: :artist}])
-        have.should_not be_nil
-        not_have.should_not be_empty
+            not_have, have = t.similar([{type: :object, value: :song}])
+            not_have.should_not be_empty
+            have.should_not be_nil
+        end
+
+        it 'find similar artists to current artist' do
+            response = JSON.parse(File.open("#{t.project_path}/spec/data/http/getSimilarArtist.response").readlines.join)
+            t.should_receive(:request_to_lastfm).and_return(response)
+            t.should_receive(:store_similar_artists)
+
+            not_have, have = t.similar([{type: :object, value: :artist}])
+            have.should_not be_nil
+            not_have.should_not be_empty
+        end
     end
 end
 

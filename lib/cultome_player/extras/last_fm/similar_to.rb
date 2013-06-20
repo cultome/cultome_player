@@ -54,9 +54,7 @@ When the results are parsed successfully from Last.fm the first time, the result
                         end
 
                         # salvamos los similares
-                        artists.each do |a|
-                            CultomePlayer::Model::Artist.find(artist_id).similars.create(a)
-                        end
+                        store_similar_artists(artists)
 
                         artists_in_library = find_artists_in_library(artists)
                         show_artist(artist_name, artists, artists_in_library)
@@ -73,10 +71,9 @@ When the results are parsed successfully from Last.fm the first time, the result
                                 similar_to: 'track'
                             }
                         end
+
                         # salvamos los similares
-                        tracks.each do |t|
-                            CultomePlayer::Model::Song.find(song_id).similars.create(t)
-                        end
+                        store_similar_tracks(tracks)
                         tracks_in_library = find_tracks_in_library(tracks)
                         show_tracks(song_name, tracks, tracks_in_library)
 
@@ -200,6 +197,18 @@ When the results are parsed successfully from Last.fm the first time, the result
             artists_in_library.each{|a| display("  #{a.name}") } unless artists_in_library.empty?
 
             display c2("No similarities found for #{artist}") if artists.empty? && artists_in_library.empty?
+        end
+
+        def store_similar_artists(similars)
+            artists.each do |a|
+                CultomePlayer::Model::Artist.find(artist_id).similars.create(a)
+            end
+        end
+
+        def store_similar_tracks(tracks)
+            tracks.each do |t|
+                CultomePlayer::Model::Song.find(song_id).similars.create(t)
+            end
         end
     end
 end

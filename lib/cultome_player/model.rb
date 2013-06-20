@@ -63,13 +63,13 @@ module CultomePlayer
 
         # The ActiveRecord model for Similar objects.
         class Similar < ActiveRecord::Base
-            attr_accessible :track, :artist, :artist_url, :track_url, :type
+            attr_accessible :track, :artist, :artist_url, :track_url, :similar_type
 
             belongs_to :similar, polymorphic: true
 
             def to_s
                 str = c4(":::: ")
-                if self.type == 'track'
+                if self.similar_type == 'CultomePlayer::Model::Song'
                     str += c4("Song: ")
                     str += c10(self.track)
                     str += c4(" \\ ")

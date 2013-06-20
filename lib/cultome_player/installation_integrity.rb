@@ -28,17 +28,7 @@ module CultomePlayer
                 current_version = ActiveRecord::Migrator.current_version
 
                 if max_version > current_version
-                    def capture_stdout
-                        s = StringIO.new
-                        oldstd = $stdout
-                        $stdout = s
-                        yield
-                        s.string
-                    ensure
-                        $stdout = oldstd
-                    end
-
-                    capture_stdout { ActiveRecord::Migrator.migrate(migrations_path) }
+                    swallow_stdout { ActiveRecord::Migrator.migrate(migrations_path) }
                 end
 
                 # checamos dos registros clave

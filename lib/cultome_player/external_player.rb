@@ -108,7 +108,7 @@ module CultomePlayer
         # Send a play command throught the socket to the external player.
         #
         # @param external_file_system_path [String] The path to the music file to be played.
-	    def play_in_external_player(external_file_system_path)
+        def play_in_external_player(external_file_system_path)
             write_to_socket("play", external_file_system_path) unless @socket.nil?
         end
 
@@ -120,7 +120,7 @@ module CultomePlayer
         end
 
         # Send a pause command throught the socket to the external player.
-		def pause_in_external_player
+        def pause_in_external_player
             write_to_socket("pause") unless @socket.nil?
         end
 
@@ -130,7 +130,7 @@ module CultomePlayer
         end
 
         # Send a stop command throught the socket to the external player.
-		def stop_in_external_player
+        def stop_in_external_player
             write_to_socket("close") unless @socket.nil?
         end
 
