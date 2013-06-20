@@ -37,8 +37,8 @@ describe CultomePlayer::Extras::CopyTo do
     describe 'raise an error' do
         it 'there is no active playback' do
             expect{ t.copy([
-                {type: :object, value: :playlist},
-                {type: :path, value: '/home/user/mypod'},
+                {type: :object, value: :song},
+                {type: :path, value: "#{t.project_path}"},
             ]) }.to raise_error('no active playback')
         end
 
@@ -81,7 +81,7 @@ describe CultomePlayer::Extras::CopyTo do
             expect{ @t.copy([
                 {type: :object, value: :history},
                 {type: :path, value: '/home/user/mypod'},
-            ]) }.to raise_error('the object hold reference to no songs')
+            ]) }.to raise_error("The object 'history' is empty!")
         end
     end
 end

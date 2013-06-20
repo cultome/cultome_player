@@ -28,6 +28,7 @@ module CultomePlayer::Player
         alias :songs_in_focus :focus
         alias :songs_in_search_results :search_results
         alias :songs_in_search :search_results
+        alias :search :search_results
         alias :songs_in_queue :queue
         alias :songs_in_history :history
 

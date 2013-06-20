@@ -1,11 +1,4 @@
-#require 'cultome/persistence'
-#require 'cultome/exception'
-#require 'plugins/last_fm/similar_to'
-#require 'plugins/last_fm/scrobbler'
 require 'net/http'
-#require 'json'
-#require 'cgi'
-#require 'digest'
 require 'cultome_player/extras/last_fm/similar_to'
 require 'cultome_player/extras/last_fm/scrobbler'
 

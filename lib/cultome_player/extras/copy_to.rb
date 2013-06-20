@@ -31,16 +31,17 @@ A common usages would be as follow:
         #
         # @param params [List<Hash>] With parsed player's object information and one path.
         def copy(params=[])
-            raise 'no active playback' if current_song.nil?
-
             raise 'two parameters are required' if params.size != 2
             raise 'one object parameter are required' unless params.one?{|a| a[:type] == :object }
             raise 'one path parameter are required' unless params.one?{|a| a[:type] == :path }
+            
+            obj_name = params.find{|a| a[:type] == :object }[:value]
+            raise 'no active playback' if obj_name == :song && current_song.nil?
 
             path = params.find{|a| a[:type] == :path }[:value]
             raise 'the path parameter is not a valid directory' unless valid_file_path?(path)
 
-            files = file_list_from(params.find{|a| a[:type] == :object }[:value])
+            files = file_list_from(obj_name)
             raise 'the object hold reference to no songs' if files.nil?
 
             return copy_files(files, path)
@@ -61,9 +62,10 @@ A common usages would be as follow:
         # @param object [String] the name of the player's object.
         # @return [List<String>, nil] The files path list or nil if problem.
         def file_list_from(object)
-            list = player.instance_variable_get("@#{object}")
+            list = player.send object.to_sym
+            raise "The object '#{object}' is invalid" if list.nil?
             return [list.path] if list.class == CultomePlayer::Model::Song
-            return nil if list.empty?
+            raise "The object '#{object}' is empty!" if list.empty?
 
 
             if list[0].class == CultomePlayer::Model::Song
