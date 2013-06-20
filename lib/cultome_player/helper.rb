@@ -1,4 +1,5 @@
 require 'logger'
+require 'net/http'
 
 module CultomePlayer
     module Helper
@@ -172,5 +173,14 @@ module CultomePlayer
             $stdout = oldstd
         end
 
+        # Get a HTTP client for handle request. It check for environment variable __http_proxy__ and if setted, create Prxyed client.
+        #
+        # @return [Net::HTTP] The client to make request.
+        def get_http_client
+            return Net::HTTP unless ENV['http_proxy']
+
+            proxy = URI.parse ENV['http_proxy']
+            Net::HTTP::Proxy(proxy.host, proxy.port)
+        end
     end
 end

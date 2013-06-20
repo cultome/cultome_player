@@ -2,7 +2,7 @@
 #require 'cultome/exception'
 #require 'plugins/last_fm/similar_to'
 #require 'plugins/last_fm/scrobbler'
-#require 'net/http'
+require 'net/http'
 #require 'json'
 #require 'cgi'
 #require 'digest'
@@ -84,6 +84,8 @@ Thats it! Not so hard right? So, lets begin! When you are ready press <enter> ..
                   auth_info = define_lastfm_query(:token)
                   json = request_to_lastfm(auth_info, true)
 
+                  raise 'Houston! we had a problem extracting Last.fm information' if json.nil?
+
                   return display(c2("Problem! #{json['error']}: #{json['message']}")) if json['token'].nil?
 
                   # guardamos el token para el segundo paso
@@ -160,16 +162,6 @@ Thats it! Not so hard right? So, lets begin! When you are ready press <enter> ..
             rescue Exception => e
                 raise Cultome::CultomePlayerException.new(:internet_not_available, error_message: e.message, take_action: false) if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
             end
-        end
-
-        # Get a HTTP client for handle request. It check for environment variable __http_proxy__ and if setted, create Prxyed client.
-        #
-        # @return [Net::HTTP] The client to make request.
-        def get_http_client
-            return Net::HTTP unless ENV['http_proxy']
-
-            proxy = URI.parse ENV['http_proxy']
-            Net::HTTP::Proxy(proxy.host, proxy.port)
         end
 
         # Given the command information, creates a search criteria.

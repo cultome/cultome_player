@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'net/http'
 
 describe CultomePlayer::Helper do
     let(:out){ double('output').as_null_object }
@@ -64,5 +65,16 @@ describe CultomePlayer::Helper do
         end
 
         swallowed.should eq("Uno\nDos")
+    end
+
+    it 'get http client' do
+        ENV['http_proxy'] = nil
+        t.get_http_client.should eq Net::HTTP
+    end
+
+    it 'get http client behind a proxy' do
+        ENV['http_proxy'] = 'http://avalid.server.com:1234'
+        Net::HTTP.should_receive(:Proxy).with('avalid.server.com', 1234)
+        t.get_http_client
     end
 end

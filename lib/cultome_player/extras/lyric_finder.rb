@@ -35,9 +35,11 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
             url = "http://lyrics.wikia.com/api.php?artist=#{CGI::escape(artist_name)}&song=#{CGI::escape(song_name)}&fmt=json"
 
             begin
-                response = Net::HTTP.get_response(URI(url)).body
+                client = get_http_client
+
+                response = client.get_response(URI(url)).body
                 json = JSON.parse(response.gsub("\n", '').gsub("'", '"').gsub('song = ', ''))
-                Net::HTTP.get_response(URI(json['url'])).body.lines.each do |line|
+                client.get_response(URI(json['url'])).body.lines.each do |line|
                     if line =~ /<div class='lyricbox'>/
                         lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
 

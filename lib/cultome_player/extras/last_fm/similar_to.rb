@@ -43,6 +43,8 @@ When the results are parsed successfully from Last.fm the first time, the result
                 if in_db.empty?
                     json = request_to_lastfm(query_info)
 
+                    raise 'Houston! we had a problem extracting Last.fm information' if json.nil?
+
                     if !json['similarartists'].nil?
                         # get the information form the reponse
                         artists = json['similarartists']['artist'].collect do |a|
@@ -54,7 +56,7 @@ When the results are parsed successfully from Last.fm the first time, the result
                         end
 
                         # salvamos los similares
-                        store_similar_artists(artists)
+                        store_similar_artists(artist_id, artists)
 
                         artists_in_library = find_artists_in_library(artists)
                         show_artist(artist_name, artists, artists_in_library)
@@ -73,7 +75,7 @@ When the results are parsed successfully from Last.fm the first time, the result
                         end
 
                         # salvamos los similares
-                        store_similar_tracks(tracks)
+                        store_similar_tracks(song_id, tracks)
                         tracks_in_library = find_tracks_in_library(tracks)
                         show_tracks(song_name, tracks, tracks_in_library)
 
@@ -199,15 +201,15 @@ When the results are parsed successfully from Last.fm the first time, the result
             display c2("No similarities found for #{artist}") if artists.empty? && artists_in_library.empty?
         end
 
-        def store_similar_artists(similars)
+        def store_similar_artists(artist_id, artists)
             artists.each do |a|
                 CultomePlayer::Model::Artist.find(artist_id).similars.create(a)
             end
         end
 
-        def store_similar_tracks(tracks)
+        def store_similar_tracks(track_id, tracks)
             tracks.each do |t|
-                CultomePlayer::Model::Song.find(song_id).similars.create(t)
+                CultomePlayer::Model::Song.find(track_id).similars.create(t)
             end
         end
     end
