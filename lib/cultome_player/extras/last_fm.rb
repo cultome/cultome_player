@@ -61,7 +61,7 @@ This process is required only once, we promess you.
 
         # Configure the user cultome player client for scrobble.
         #
-        # @param [Array<Hash>] It receive one literal parameter and the only two valid values for this is 'begin' and 'done'.
+        # @param params [Array<Hash>] It receive one literal parameter and the only two valid values for this is 'begin' and 'done'.
         def configure_lastfm(params=[])
             return nil if params.empty?
             return nil unless params.size == 1 && params[0][:type] == :literal
@@ -244,7 +244,7 @@ Thats it! Not so hard right? So, lets begin! When you are ready press <enter> ..
         # Create a safe query string to use with the request to the webservice.
         #
         # @param (see #define_lastfm_query)
-        # @result [String] A safe query string.
+        # @return [String] A safe query string.
         def convert_to_query_string(search_info)
             return search_info.sort.inject(""){|sum,map| sum += "#{map[0]}=#{CGI::escape(map[1].to_s)}&" }
         end

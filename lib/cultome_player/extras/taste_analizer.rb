@@ -10,8 +10,7 @@ module CultomePlayer::Extras
 
         # Give point to a song, artist and album depending on various factors like how much the song played? is the same genre? same artist?
         #
-        # @param song [Song] The current song
-        # @param next_song [Song] The next song to be played
+        # @param command [Hash] The user command
         def qualify_song_preference(command)
             return nil if player.prev_song.nil?
 

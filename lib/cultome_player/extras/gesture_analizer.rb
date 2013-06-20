@@ -8,7 +8,7 @@ module CultomePlayer::Extras
 
         # Add a command to the events' queue, then analize the queue looking for patterns.
         #
-        # @param cmd [Hash] With the command information
+        # @param commands [Array<Hash>] List with the user commands executed.
         def add_gesture(commands)
             commands.each do |cmd|
                 user_actions.add(cmd)

@@ -57,7 +57,7 @@ You can declared as many place holders as you want. The rules of players' parame
 
 		# Invoked when a player exception is throwed
 		#
-		# @param ex [CultomePlayerException] The exception throwed
+		# @param user_input [CultomePlayerException] The exception throwed
 		def search_for_command_alias(user_input)
 			# separamos el comando
 			split = user_input.split(' ')
