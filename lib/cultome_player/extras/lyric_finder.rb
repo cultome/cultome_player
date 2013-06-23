@@ -45,8 +45,7 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
 
                         display c4(found_txt)
 
-                        display c12(lyric)
-                        return lyric
+                        return c12(lyric)
                     end
                 end
             rescue Exception => e
