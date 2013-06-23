@@ -153,7 +153,7 @@ Thats it! Not so hard right? So, lets begin! When you are ready press <enter> ..
                 end
                 return JSON.parse(json_string)
             rescue Exception => e
-                raise Cultome::CultomePlayerException.new(:internet_not_available, error_message: e.message, take_action: false) if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
+                raise 'internet not available' if e.message =~ /(Connection refused|Network is unreachable|name or service not known)/
             end
         end
 

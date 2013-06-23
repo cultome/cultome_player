@@ -43,7 +43,6 @@ The lyric is searched using the lyrics.wikia.com webservice. So if the player do
                     if line =~ /<div class='lyricbox'>/
                         lyric = HTMLEntities.new.decode(line.gsub(/<div.*?>.*?<\/div>/, '').gsub(/<br.*?>/, "\n").gsub(/<.*/, ''))
 
-                        #thrd.kill
                         display c4(found_txt)
 
                         display c12(lyric)

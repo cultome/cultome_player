@@ -22,7 +22,6 @@ module CultomePlayer::Extras::LastFm
             progress = player.song_status[:seconds] || 0
             # necesitamos que la cancion haya sido tocada almenos 30 segundos
             return nil if progress < 30
-            song_name = current_song.name
 
             # no hacemos scrobble si el artista o el track son desconocidos
             raise 'unable_to_scrobble' if artist_id == 1

@@ -19,7 +19,7 @@ module CultomePlayer
         }
 
         # The number of retries that this player try to connect with external player during launch. Every try wait 0.5 seconds before do another.
-        EXTERNAL_LAUNCH_MAX_RETRIES = 6
+        EXTERNAL_LAUNCH_MAX_RETRIES = 20
 
         # Once the external player is running you can open a socket connection between this player and the external player.
         #
@@ -75,7 +75,9 @@ module CultomePlayer
         # @return [Boolean] true if the process was killed successfuly, false otherwise.
         def kill_external_music_player
             raise 'There is no external player registered or and error ocurr when registering' unless @external_player_pid
+
             system("kill -9 #{@external_player_pid}")
+
             return $?.success?
         end
 

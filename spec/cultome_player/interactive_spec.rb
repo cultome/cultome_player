@@ -47,4 +47,11 @@ describe CultomePlayer::Interactive do
         t.begin_interactive("my prompt")
     end
 
+    it 'select the correct return value' do
+        t.send(:select_return_value, ([1,2,3])).should eq([1,2,3])
+        t.send(:select_return_value, ([[1,2,3]])).should eq([1,2,3])
+        t.send(:select_return_value, ([[1,2], 3])).should eq(3)
+        t.send(:select_return_value, ([[1,2,3], [4,5]])).should eq([4,5])
+        t.send(:select_return_value, ([[1,2], [3,4], 5])).should eq(5)
+    end
 end

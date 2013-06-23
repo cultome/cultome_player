@@ -37,12 +37,13 @@ Shutdown the player. In this moment is when the player save the plugin configura
 
                 with_connection do
                     begin
-                        return_value = execute input
+                        response = execute input
+                        return_value = select_return_value(response)
 
-                        if return_value.last.blank?
+                        if return_value.blank?
                             display c2("Nothing to see here... by now") 
                         else
-                            display return_value.last if displayable?(return_value.last.to_s) 
+                            display return_value if displayable?(return_value.to_s) 
                         end
                     rescue Exception => e
                         display c2(e.message)
@@ -60,6 +61,24 @@ Shutdown the player. In this moment is when the player save the plugin configura
         end
 
         private
+
+        def select_return_value(response)
+            value = response
+            while value.all?{|v| v.class == Array}
+                value = value.last
+            end
+
+            if value.any?{|v| v.class == Array}
+                ret_value = value.last
+            else
+                ret_value = value
+            end
+
+            ret_value.compact! if ret_value.respond_to?(:compact!)
+
+            return nil if ret_value.blank?
+            return ret_value
+        end
 
         # Do a logic to determine if a message returned from the player is appropiated to be displayed to the user.
         #

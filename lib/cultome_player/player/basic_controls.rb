@@ -40,6 +40,8 @@ module CultomePlayer::Player
                 @songs_not_played_in_playlist = (0...current_playlist.size).to_a
             end
 
+            #return nil if pl.blank? && !current_playlist.blank?
+
             player.history.push current_song unless current_song.nil?
             do_play
 
@@ -404,10 +406,15 @@ module CultomePlayer::Player
                     when /literal|criteria/ then search_criteria << param
                     when :number
                         if player.focus[param[:value].to_i - 1].nil?
-                            player.queue.push current_playlist[param[:value].to_i - 1]
+                            selected_song = current_playlist[param[:value].to_i - 1]
+                            raise "Invalid selection!" if selected_song.nil?
+                            player.queue.push selected_song
                         else
-                            player.queue.push player.focus[param[:value].to_i - 1]
+                            selected_song = player.focus[param[:value].to_i - 1]
+                            raise "Invalid selection!" if selected_song.nil?
+                            player.queue.push selected_song
                         end
+
                     when :object
                         case param[:value]
                         when :library 
