@@ -1,12 +1,14 @@
 require 'net/http'
 require 'cultome_player/extras/last_fm/similar_to'
 require 'cultome_player/extras/last_fm/scrobbler'
+require 'cultome_player/extras/last_fm/fingerprinter'
 
 module CultomePlayer::Extras
     module LastFm
 
         include SimilarTo
         include Scrobbler
+        include Fingerprinter
 
         # Last.fm webservice endpoint
         LAST_FM_WS_ENDPOINT = 'http://ws.audioscrobbler.com/2.0/'

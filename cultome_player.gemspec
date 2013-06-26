@@ -25,6 +25,8 @@ Gem::Specification.new do |gem|
 	gem.add_runtime_dependency "json", [">= 1.7.7"]
 	gem.add_runtime_dependency "colorize", [">= 0.5.8"]
 	gem.add_runtime_dependency "sqlite3", [">= 1.3.7"]
+	gem.add_runtime_dependency "musicbrainz-ruby", [">= 0.4.0"]
+	gem.add_runtime_dependency "nokogiri", [">= 1.6.0"]
 
 	gem.add_development_dependency "rake", [">= 10.0.4"]
 	gem.add_development_dependency "coveralls", [">= 0.6.7"]

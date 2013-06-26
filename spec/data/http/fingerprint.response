@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<lfm status="ok">
+    <tracks>
+        <track rank="1">
+            <name>The Rage</name>
+            <duration>283</duration>
+
+            <mbid>369a4aaf-bf6b-4760-9d9e-c7feb75f16cf</mbid>
+
+
+            <url>http://www.last.fm/music/Judas+Priest/_/The+Rage</url>
+            <streamable fulltrack="0">0</streamable>
+            <artist>
+                <name>Judas Priest</name>
+                <mbid>6b335658-22c8-485d-93de-0bc29a1d0349</mbid>
+
+                <url>http://www.last.fm/music/Judas+Priest</url>
+            </artist>
+            <image size="small">http://userserve-ak.last.fm/serve/34s/78516656.png</image>
+            <image size="medium">http://userserve-ak.last.fm/serve/64s/78516656.png</image>
+            <image size="large">http://userserve-ak.last.fm/serve/126/78516656.png</image>
+            <image size="extralarge">http://userserve-ak.last.fm/serve/300x300/78516656.png</image>
+        </track>
+        <track rank="0.015927">
+            <name>Rage, The</name>
+            <duration></duration>
+
+            <mbid></mbid>
+
+
+            <url>http://www.last.fm/music/Judas+Priest/_/Rage,+The</url>
+            <streamable fulltrack="0">0</streamable>
+            <artist>
+                <name>Judas Priest</name>
+                <mbid>6b335658-22c8-485d-93de-0bc29a1d0349</mbid>
+
+                <url>http://www.last.fm/music/Judas+Priest</url>
+            </artist>
+        </track>
+        <track rank="0.008135">
+            <name>Rage</name>
+            <duration>283</duration>
+
+            <mbid></mbid>
+
+
+            <url>http://www.last.fm/music/Judas+Priest/_/Rage</url>
+            <streamable fulltrack="0">0</streamable>
+            <artist>
+                <name>Judas Priest</name>
+                <mbid>6b335658-22c8-485d-93de-0bc29a1d0349</mbid>
+
+                <url>http://www.last.fm/music/Judas+Priest</url>
+            </artist>
+            <image size="small">http://images.amazon.com/images/P/B0007X9UFQ.01._SCMZZZZZZZ_.jpg</image>
+            <image size="medium">http://images.amazon.com/images/P/B0007X9UFQ.01._SCMZZZZZZZ_.jpg</image>
+            <image size="large">http://images.amazon.com/images/P/B0007X9UFQ.01._SCMZZZZZZZ_.jpg</image>
+            <image size="extralarge">http://images.amazon.com/images/P/B0007X9UFQ.01._SCMZZZZZZZ_.jpg</image>
+        </track>
+        <track rank="0.003554">
+            <name>To Be Wise</name>
+            <duration>284</duration>
+
+            <mbid></mbid>
+
+
+            <url>http://www.last.fm/music/Judas+Priest/_/To+Be+Wise</url>
+            <streamable fulltrack="0">0</streamable>
+            <artist>
+                <name>Judas Priest</name>
+                <mbid>6b335658-22c8-485d-93de-0bc29a1d0349</mbid>
+
+                <url>http://www.last.fm/music/Judas+Priest</url>
+            </artist>
+        </track>
+        <track rank="0.003083">
+            <name>Piste audio 08</name>
+            <duration>284</duration>
+
+            <mbid></mbid>
+
+
+            <url>http://www.last.fm/music/Judas+Priest/_/Piste+audio+08</url>
+            <streamable fulltrack="0">0</streamable>
+            <artist>
+                <name>Judas Priest</name>
+                <mbid>6b335658-22c8-485d-93de-0bc29a1d0349</mbid>
+
+                <url>http://www.last.fm/music/Judas+Priest</url>
+            </artist>
+        </track>
+    </tracks>
+</lfm>
