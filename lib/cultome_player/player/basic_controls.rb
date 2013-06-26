@@ -321,7 +321,7 @@ module CultomePlayer::Player
 		def create_song_from_file(file_path, drive)
 			info = extract_mp3_information(file_path)
 
-			return nil if info.nil?
+			raise "ID3 tag information could not be extrated from #{file_path}" if info.nil?
 
 			unless info[:artist].blank?
                 info[:artist_id] = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]).id

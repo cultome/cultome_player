@@ -6,7 +6,9 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
     let(:mbid){ '369a4aaf-bf6b-4760-9d9e-c7feb75f16cf' }
     let(:song_path){ "/home/csoria/music/Judas Priest/British Steel/08. The Rage.mp3" }
     let(:xml_response){ File.open("#{t.project_path}/spec/data/http/fingerprint.response").readlines.join("\n") }
-    let(:mb_response){ File.open('spec/data/obj/mb_response.dat'){|f| Marshal.load(f) }}
+    let(:mb_response){ File.open('spec/data/obj/the_rage.dat'){|f| Marshal.load(f) }}
+    let(:mb_response_to_binge){ File.open('spec/data/obj/to_binge.dat'){|f| Marshal.load(f) }}
+    let(:mb_response_hello){ File.open('spec/data/obj/hello.dat'){|f| Marshal.load(f) }}
 
     before :each do
         t.play([{type: :criteria, criteria: :t, value: 'The Rage'}])
@@ -51,14 +53,11 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
     it 'gets the complete information from mb response' do
         t.send(:extract_musicbrainz_details_of, mb_response).should eq({
                 name: "The Rage",
-                artist: [{
-                    mbid: "6b335658-22c8-485d-93de-0bc29a1d0349",
-                    name: "Judas Priest"
-                }],
+                artist: "Judas Priest",
                 album: "Metal Works '73-'93",
                 track: 11,
                 year: "2002-02-21",
-                genre: ["british", "classic pop and rock", "hard rock", "heavy metal", "metal", "nwobhm"],
+                genre: "british, classic pop and rock, hard rock, heavy metal, metal, nwobhm",
                 mbid: mbid,
         })
     end
@@ -86,17 +85,17 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
         end
 
         it 'write the ID3 tags' do
-            t.should_receive(:write_tags_to)
+            t.should_receive(:update_track_information)
             t.identify
         end
 
         it 'returns a message confirming tags were writed' do
-            t.stub(:write_tags_to){ true }
+            t.stub(:update_track_information){ true }
             t.identify.should eq("Tags were successfuly updated")
         end
 
         it 'returns a message informing an error if tags couldnt be writed' do
-            t.stub(:write_tags_to){ false }
+            t.stub(:update_track_information){ raise "Could not be writed!" }
             t.identify.should eq("A problem ocurr while writing the ID3 tags")
         end
 
@@ -108,7 +107,7 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
         end
 
         it 'write nothing if user denies it' do
-            t.should_not_receive(:write_tags_to)
+            t.should_not_receive(:update_track_information)
             t.identify
         end
 
@@ -117,4 +116,15 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
         end
     end
 
+    it 'join correctly 2 artists with joinphrase' do
+        t.send(:extract_musicbrainz_details_of, mb_response_to_binge)[:artist].should eq( "Gorillaz feat. Little Dragon" )
+
+        t.send(:extract_musicbrainz_details_of, mb_response_hello)[:artist].should eq( "Martin Solveig & Dragonette" )
+    end
+
+    it 'join correctly the genres' do
+        t.send(:extract_musicbrainz_details_of, mb_response)[:genre].should eq( "british, classic pop and rock, hard rock, heavy metal, metal, nwobhm" )
+        t.send(:extract_musicbrainz_details_of, mb_response_hello)[:genre].should eq( "dance and electronica, pop and chart" )
+        t.send(:extract_musicbrainz_details_of, mb_response_to_binge)[:genre].should eq( "alternative hip-hop, alternative rock, british, electronic, electronica, electropop, english, fictional, hip hop, hip-hop, parlophone, producer, producteur, rock, rock and indie, trip hop, trip rock, trip-hop, uk, united kingdom, downtempo, soul and reggae" )
+    end
 end

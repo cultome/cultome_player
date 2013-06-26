@@ -4,7 +4,7 @@ require 'mp3info'
 
 module CultomePlayer::Extras::LastFm
     module Fingerprinter
-        def self.include(base)
+        def self.included(base)
             CultomePlayer::Player.command_registry << :identify
             CultomePlayer::Player.command_help_registry[:identify] = {
                 help: "Detect the audio file and correct the ID3 Tag",
@@ -43,9 +43,12 @@ The following information was extracted:
 Should we write this information to the ID3 tags?
    MSG
                                                                 )
-            return "Tags were successfuly updated" if write_tags_to(song.path, song_details)
-
-            return "A problem ocurr while writing the ID3 tags"
+            begin
+                update_track_information(song, song_details)
+                return "Tags were successfuly updated"
+            rescue Exception => e
+                return "A problem ocurr while writing the ID3 tags"
+            end
         end
 
         private
@@ -59,13 +62,17 @@ Should we write this information to the ID3 tags?
             genres = extract_mb_genres(response)
             release = extract_mb_release(response)
 
+            # extraemos el join entre artistas
+            artist_join = artists.collect{|a| a[:joinphrase] }.compact
+            artist_join = artist_join.empty? ? ", " : artist_join[0]
+
             details = {
                 name: response.recording.title,
-                artist: artists,
+                artist: artists.collect{|a| a[:name] }.join(artist_join),
                 album: release.title,
                 track: release.medium_list.medium.track_list.track.position.to_i,
                 year: release.date,
-                genre: genres,
+                genre: genres.join(", "),
                 mbid: response.recording.id,
             }
 
@@ -85,7 +92,12 @@ Should we write this information to the ID3 tags?
             name_credits = data.recording.artist_credit.name_credit
             if name_credits.class == Array
                 name_credits.collect{ |a|
-                    a.artist.tag_list.tag.collect{|t| t.name }
+                    tags = a.artist.tag_list.tag
+                    if tags.class == Array
+                        tags.collect{|t| t.name }
+                    else
+                        tags.name
+                    end
                 }.flatten
             else
                 name_credits.artist.tag_list.tag.collect{|t| t.name }
@@ -95,7 +107,7 @@ Should we write this information to the ID3 tags?
         def extract_mb_artists(data)
             name_credits = data.recording.artist_credit.name_credit
             if name_credits.class == Array
-                name_credits.collect{|a| {mbid: a.artist.id, name: a.artist.name }}
+                name_credits.collect{|a| {mbid: a.artist.id, name: a.artist.name, joinphrase: a.joinphrase }}
             else
                 [{mbid: name_credits.artist.id, name: name_credits.artist.name}]
             end
@@ -131,16 +143,52 @@ Should we write this information to the ID3 tags?
         end
 
         # Write the ID3 tags into the file and update the database information.
+        #
+        # @param song [CultomePlayer::Model::Song] The song object to update
+        # @param info [Hash] The hash with the information to write.
+        def update_track_information(song, info)
+            update_tag_information(song.path, info)
+            update_db_information(song, info)
+        end
+
+        # Update the databse with the new track information.
+        #
+        # @param song [CultomePlayer::Model::Song] The song to be updated.
+        # @param info [Hash] The hash with the information to update.
+        def update_db_information(song, info)
+            unless info[:artist].blank?
+                info[:artist_id] = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]).id
+            end
+
+            unless info[:album].blank?
+                info[:album_id] = CultomePlayer::Model::Album.find_or_create_by_name(name: info[:album]).id
+            end
+
+            info[:drive_id] = drive.id
+            info[:relative_path] = file_path.gsub("#{drive.path}/", '')
+
+            # buscamos la rola antes de insertarla para evitar duplicados
+            song = CultomePlayer::Model::Song.where('drive_id = ? and relative_path = ?', info[:drive_id], info[:relative_path]).first_or_create(info)
+
+            unless info[:genre].blank?
+                song.genres << CultomePlayer::Model::Genre.find_or_create_by_name(name: info[:genre])
+            end
+
+            return song
+        end
+
+        # Write the ID3 tags into the file.
+        #
         # @param file_path [String] The absolute path to the mp3 file.
         # @param info [Hash] The hash with the information to write.
-        def write_tags_to(file_path, info)
+        def update_tag_information(file_path, info)
             Mp3Info.open(file_path) do |mp3|
                 mp3.tag.title = info[:name]
-                mp3.tag.artist = info[:artist].collect{|a| a[:name] }.join(", ")
+                mp3.tag.artist = info[:artist]
                 mp3.tag.album = info[:album]
                 mp3.tag.tracknum = info[:track]
                 mp3.tag1["year"] = info[:year]
-                mp3.tag1["genre_s"] = info[:genre].join(", ")
+                mp3.tag1["genre_s"] = info[:genre]
             end
         end
     end
