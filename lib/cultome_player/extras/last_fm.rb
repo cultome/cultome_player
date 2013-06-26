@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'net/http'
 require 'cultome_player/extras/last_fm/similar_to'
 require 'cultome_player/extras/last_fm/scrobbler'

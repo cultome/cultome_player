@@ -1,3 +1,4 @@
+# encoding: utf-8
 require "cultome_player/version"
 require "cultome_player/socket_adapter"
 require "cultome_player/player"

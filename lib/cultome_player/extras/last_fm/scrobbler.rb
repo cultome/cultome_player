@@ -1,4 +1,4 @@
-
+# encoding: utf-8
 module CultomePlayer::Extras::LastFm
     module Scrobbler
 

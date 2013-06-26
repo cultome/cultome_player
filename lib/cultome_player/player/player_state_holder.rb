@@ -1,4 +1,4 @@
-
+# encoding: utf-8
 module CultomePlayer::Player
     class PlayerStateHolder
         attr_accessor :playlist

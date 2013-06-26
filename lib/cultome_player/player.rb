@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'cultome_player/player/basic_controls'
 require 'cultome_player/player/player_exposer'
 require 'cultome_player/player/player_state_holder'

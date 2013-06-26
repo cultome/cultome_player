@@ -1,4 +1,4 @@
-
+# encoding: utf-8
 module CultomePlayer::Player
     module BasicControlsHelp
         def self.included(base)

@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'nokogiri'
 require 'musicbrainz'
 require 'mp3info'
@@ -38,7 +39,7 @@ The following information was extracted:
    Album:  #{song_details[:album]}
    Track:  #{song_details[:track]}
    Year:   #{song_details[:year]}
-   Genre:  #{song_details[:genre]}
+   Tags:  #{song_details[:tags]}
 
 Should we write this information to the ID3 tags?
    MSG
@@ -47,6 +48,8 @@ Should we write this information to the ID3 tags?
                 update_track_information(song, song_details)
                 return "Tags were successfuly updated"
             rescue Exception => e
+                puts e.message
+                puts e.backtrace
                 return "A problem ocurr while writing the ID3 tags"
             end
         end
@@ -56,10 +59,10 @@ Should we write this information to the ID3 tags?
         # Given the response from MusicBrainz webservice, select the better information for the song.
         #
         # @param [Hashie] The MusicBrainz XML response parsed in Hashies.
-        # @return [Hash] With the selected information for the song. The has includes the keys: name, artist, album, trac, year, genre, mdbid.
+        # @return [Hash] With the selected information for the song. The has includes the keys: name, artist, album, trac, year, tags, mdbid.
         def extract_musicbrainz_details_of(response)
             artists = extract_mb_artists(response)
-            genres = extract_mb_genres(response)
+            tags = extract_mb_tags(response)
             release = extract_mb_release(response)
 
             # extraemos el join entre artistas
@@ -72,7 +75,7 @@ Should we write this information to the ID3 tags?
                 album: release.title,
                 track: release.medium_list.medium.track_list.track.position.to_i,
                 year: release.date,
-                genre: genres.join(", "),
+                tags: tags.join(", "),
                 mbid: response.recording.id,
             }
 
@@ -88,7 +91,7 @@ Should we write this information to the ID3 tags?
             }.find{|r| r.date.to_s != ""}
         end
 
-        def extract_mb_genres(data)
+        def extract_mb_tags(data)
             name_credits = data.recording.artist_credit.name_credit
             if name_credits.class == Array
                 name_credits.collect{ |a|
@@ -156,25 +159,15 @@ Should we write this information to the ID3 tags?
         # @param song [CultomePlayer::Model::Song] The song to be updated.
         # @param info [Hash] The hash with the information to update.
         def update_db_information(song, info)
-            unless info[:artist].blank?
-                info[:artist_id] = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]).id
-            end
+            song.name = info[:name] unless info[:name].blank?
+            song.track = info[:track] unless info[:track].blank?
+            song.track = info[:year] unless info[:year].blank?
 
-            unless info[:album].blank?
-                info[:album_id] = CultomePlayer::Model::Album.find_or_create_by_name(name: info[:album]).id
-            end
+            song.artist = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]) unless info[:artist].blank?
+            song.album = CultomePlayer::Model::Album.find_or_create_by_name(name: info[:album]) unless info[:album].blank?
+            #song.tags << CultomePlayer::Model::Tags.find_or_create_by_name(name: info[:tags]) unless info[:tags].blank?
 
-            info[:drive_id] = drive.id
-            info[:relative_path] = file_path.gsub("#{drive.path}/", '')
-
-            # buscamos la rola antes de insertarla para evitar duplicados
-            song = CultomePlayer::Model::Song.where('drive_id = ? and relative_path = ?', info[:drive_id], info[:relative_path]).first_or_create(info)
-
-            unless info[:genre].blank?
-                song.genres << CultomePlayer::Model::Genre.find_or_create_by_name(name: info[:genre])
-            end
-
-            return song
+            return song.save!
         end
 
         # Write the ID3 tags into the file.
@@ -188,7 +181,6 @@ Should we write this information to the ID3 tags?
                 mp3.tag.album = info[:album]
                 mp3.tag.tracknum = info[:track]
                 mp3.tag1["year"] = info[:year]
-                mp3.tag1["genre_s"] = info[:genre]
             end
         end
     end

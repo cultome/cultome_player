@@ -31,8 +31,8 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
         }]
     end
 
-    it 'extract genre information from mb response' do
-        t.send(:extract_mb_genres, mb_response).should eq ["british", "classic pop and rock", "hard rock", "heavy metal", "metal", "nwobhm"]
+    it 'extract tags information from mb response' do
+        t.send(:extract_mb_tags, mb_response).should eq ["british", "classic pop and rock", "hard rock", "heavy metal", "metal", "nwobhm"]
     end
 
     it 'extract release title information from mb response' do
@@ -57,7 +57,7 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
                 album: "Metal Works '73-'93",
                 track: 11,
                 year: "2002-02-21",
-                genre: "british, classic pop and rock, hard rock, heavy metal, metal, nwobhm",
+                tags: "british, classic pop and rock, hard rock, heavy metal, metal, nwobhm",
                 mbid: mbid,
         })
     end
@@ -122,9 +122,9 @@ describe CultomePlayer::Extras::LastFm::Fingerprinter do
         t.send(:extract_musicbrainz_details_of, mb_response_hello)[:artist].should eq( "Martin Solveig & Dragonette" )
     end
 
-    it 'join correctly the genres' do
-        t.send(:extract_musicbrainz_details_of, mb_response)[:genre].should eq( "british, classic pop and rock, hard rock, heavy metal, metal, nwobhm" )
-        t.send(:extract_musicbrainz_details_of, mb_response_hello)[:genre].should eq( "dance and electronica, pop and chart" )
-        t.send(:extract_musicbrainz_details_of, mb_response_to_binge)[:genre].should eq( "alternative hip-hop, alternative rock, british, electronic, electronica, electropop, english, fictional, hip hop, hip-hop, parlophone, producer, producteur, rock, rock and indie, trip hop, trip rock, trip-hop, uk, united kingdom, downtempo, soul and reggae" )
+    it 'join correctly the tags' do
+        t.send(:extract_musicbrainz_details_of, mb_response)[:tags].should eq( "british, classic pop and rock, hard rock, heavy metal, metal, nwobhm" )
+        t.send(:extract_musicbrainz_details_of, mb_response_hello)[:tags].should eq( "dance and electronica, pop and chart" )
+        t.send(:extract_musicbrainz_details_of, mb_response_to_binge)[:tags].should eq( "alternative hip-hop, alternative rock, british, electronic, electronica, electropop, english, fictional, hip hop, hip-hop, parlophone, producer, producteur, rock, rock and indie, trip hop, trip rock, trip-hop, uk, united kingdom, downtempo, soul and reggae" )
     end
 end

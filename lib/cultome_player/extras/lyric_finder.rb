@@ -1,5 +1,5 @@
+# encoding: utf-8
 require 'net/http'
-#require 'json'
 require 'cgi'
 require 'htmlentities'
 

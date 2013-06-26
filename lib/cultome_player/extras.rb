@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'cultome_player/extras/command_alias'
 require 'cultome_player/extras/copy_to'
 require "cultome_player/extras/colors"
