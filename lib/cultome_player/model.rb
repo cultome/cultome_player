@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'active_record'
+require 'protected_attributes'
 
 module CultomePlayer
     module Model
@@ -7,7 +8,7 @@ module CultomePlayer
         class Scrobble < ActiveRecord::Base
             attr_accessible :artist, :track, :timestamp, :scrobbled
 
-            scope :pending, where(scrobbled: false).limit(50)
+            scope :pending, -> {where(scrobbled: false).limit(50)}
         end
 
         # The ActiveRecord model for Song objects.
@@ -20,7 +21,7 @@ module CultomePlayer
             belongs_to :drive
             has_many :similars, as: :similar
 
-            scope :connected, joins(:drive).where('drives.connected' => true)
+            scope :connected, -> {joins(:drive).where('drives.connected' => true)}
 
             # Get the full path to the song file.
             #

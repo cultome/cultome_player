@@ -351,7 +351,7 @@ module CultomePlayer::Player
         def extract_mp3_information(file_path)
             info = nil
             begin
-                Mp3Info.open(file_path) do |mp3|
+                Mp3Info.open(file_path, encoding: 'utf-8') do |mp3|
                     info = {
                         name: mp3.tag.title,
                         artist: mp3.tag.artist,
@@ -482,7 +482,7 @@ module CultomePlayer::Player
             where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.blank? }.compact.flatten
 
             if where_clause.blank?
-                CultomePlayer::Model::Song.connected.all
+                CultomePlayer::Model::Song.connected.to_a
             else
                 #Song.joins("left outer join artists on artists.id == songs.artist_id")
                 #.joins("left outer join albums on albums.id == songs.album_id")

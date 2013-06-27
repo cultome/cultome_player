@@ -159,15 +159,16 @@ Should we write this information to the ID3 tags?
         # @param song [CultomePlayer::Model::Song] The song to be updated.
         # @param info [Hash] The hash with the information to update.
         def update_db_information(song, info)
-            song.name = info[:name] unless info[:name].blank?
-            song.track = info[:track] unless info[:track].blank?
-            song.track = info[:year] unless info[:year].blank?
+            db_song = CultomePlayer::Model::Song.find(song.id)
+            db_song.name = info[:name] unless info[:name].blank?
+            db_song.track = info[:track] unless info[:track].blank?
+            db_song.track = info[:year] unless info[:year].blank?
 
-            song.artist = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]) unless info[:artist].blank?
-            song.album = CultomePlayer::Model::Album.find_or_create_by_name(name: info[:album]) unless info[:album].blank?
+            db_song.artist = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]) unless info[:artist].blank?
+            db_song.album = CultomePlayer::Model::Album.find_or_create_by_name(name: info[:album]) unless info[:album].blank?
             #song.tags << CultomePlayer::Model::Tags.find_or_create_by_name(name: info[:tags]) unless info[:tags].blank?
 
-            return song.save!
+            return db_song.save!
         end
 
         # Write the ID3 tags into the file.
@@ -175,7 +176,7 @@ Should we write this information to the ID3 tags?
         # @param file_path [String] The absolute path to the mp3 file.
         # @param info [Hash] The hash with the information to write.
         def update_tag_information(file_path, info)
-            Mp3Info.open(file_path) do |mp3|
+            Mp3Info.open(file_path, encoding: 'utf-8') do |mp3|
                 mp3.tag.title = info[:name]
                 mp3.tag.artist = info[:artist]
                 mp3.tag.album = info[:album]

@@ -17,8 +17,8 @@ Gem::Specification.new do |gem|
 	gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
 	gem.require_paths = ["lib"]
 
-	gem.add_runtime_dependency "activerecord", [">= 3.2.13"]
-	gem.add_runtime_dependency "activesupport", [">= 3.2.13"]
+	gem.add_runtime_dependency "activerecord", [">= 4.0.0"]
+	gem.add_runtime_dependency "activesupport", [">= 4.0.0"]
 	gem.add_runtime_dependency "mp3info", [">= 0.6.18"]
 	gem.add_runtime_dependency "rb-readline", [">= 0.4.2"]
 	gem.add_runtime_dependency "htmlentities", [">= 4.3.1"]
@@ -27,6 +27,7 @@ Gem::Specification.new do |gem|
 	gem.add_runtime_dependency "sqlite3", [">= 1.3.7"]
 	gem.add_runtime_dependency "musicbrainz-ruby", [">= 0.4.0"]
 	gem.add_runtime_dependency "nokogiri", [">= 1.6.0"]
+	gem.add_runtime_dependency "protected_attributes", [">= 1.0.2"]
 
 	gem.add_development_dependency "rake", [">= 10.0.4"]
 	gem.add_development_dependency "coveralls", [">= 0.6.7"]
