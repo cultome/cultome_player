@@ -92,7 +92,7 @@ When an object is passed but not finded among the player objects nor the pseudo-
     #
     # @return [String] An ASCII bar with the time progress of the current song.
     def playback_progress
-      actual = player.song_status[:seconds]
+      actual = respond_to?(:song_progress) ? song_progress : player.song_status[:seconds]
       percentage = ((actual * 100) / current_song.duration) / 10
       return c4("#{actual.to_time} <#{"=" * (percentage*2)}#{"-" * ((10-percentage)*2)}> #{current_song.duration.to_time}")
     end

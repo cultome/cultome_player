@@ -7,6 +7,7 @@ require "cultome_player/extras/kill_song"
 require "cultome_player/extras/taste_analizer"
 require "cultome_player/extras/lyric_finder"
 require "cultome_player/extras/last_fm"
+require "cultome_player/extras/mplayer"
 
 module CultomePlayer
   module Extras

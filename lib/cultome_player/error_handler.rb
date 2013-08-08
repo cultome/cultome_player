@@ -13,13 +13,9 @@ module CultomePlayer
     #
     # @param error_msg [String] The error descripcion sended by the player.
     def playback_error_handler(error_msg)
-      begin
-        system("mplayer '#{current_song.path}'")
-      rescue
-        display_with_prompt c2("Could not play #{current_song}")
-        r = execute('next').first
-        display_with_prompt r
-      end
+      display_with_prompt c2("Could not play #{current_song}")
+      r = execute('next').first
+      display_with_prompt r
     end
   end
 end

@@ -2,7 +2,6 @@
 require 'cultome_player/player/basic_controls'
 require 'cultome_player/player/player_exposer'
 require 'cultome_player/player/player_state_holder'
-require 'cultome_player/player/local_player_base'
 
 module CultomePlayer
   module Player
