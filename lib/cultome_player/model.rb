@@ -1,6 +1,5 @@
 # encoding: utf-8
 require 'active_record'
-require 'protected_attributes'
 
 module CultomePlayer
     module Model

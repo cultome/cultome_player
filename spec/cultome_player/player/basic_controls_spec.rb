@@ -415,9 +415,9 @@ describe CultomePlayer::Player::BasicControls do
                 year: 2014,
                 genre: "Psicoledia",
             })
-            CultomePlayer::Model::Artist.should_receive(:find_or_create_by_name).and_call_original
-            CultomePlayer::Model::Album.should_receive(:find_or_create_by_name).and_call_original
-            CultomePlayer::Model::Genre.should_receive(:find_or_create_by_name).and_call_original
+            CultomePlayer::Model::Artist.should_receive(:first_or_create).and_call_original
+            CultomePlayer::Model::Album.should_receive(:first_or_create).and_call_original
+            CultomePlayer::Model::Genre.should_receive(:first_or_create).and_call_original
 
             t.send(:create_song_from_file, '/home/user/fake.mp3', CultomePlayer::Model::Drive.all.first).should be_kind_of CultomePlayer::Model::Song
         end

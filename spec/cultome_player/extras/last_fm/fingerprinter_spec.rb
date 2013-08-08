@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'hashie'
 
 describe CultomePlayer::Extras::LastFm::Fingerprinter do
 

@@ -1,6 +1,6 @@
 # encoding: utf-8
 require 'cultome_player/player/help/basic_controls_help'
-require 'mp3info'
+require 'taglib'
 
 module CultomePlayer::Player
     module BasicControls
@@ -324,11 +324,11 @@ module CultomePlayer::Player
 			raise "ID3 tag information could not be extrated from #{file_path}" if info.nil?
 
 			unless info[:artist].blank?
-                info[:artist_id] = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]).id
+                info[:artist_id] = CultomePlayer::Model::Artist.first_or_create(name: info[:artist]).id
 			end
 
 			unless info[:album].blank?
-				info[:album_id] = CultomePlayer::Model::Album.find_or_create_by_name(name: info[:album]).id
+				info[:album_id] = CultomePlayer::Model::Album.first_or_create(name: info[:album]).id
 			end
 
 			info[:drive_id] = drive.id
@@ -338,7 +338,7 @@ module CultomePlayer::Player
 			song = CultomePlayer::Model::Song.where('drive_id = ? and relative_path = ?', info[:drive_id], info[:relative_path]).first_or_create(info)
 
 			unless info[:genre].blank?
-				song.genres << CultomePlayer::Model::Genre.find_or_create_by_name(name: info[:genre])
+				song.genres << CultomePlayer::Model::Genre.first_or_create(name: info[:genre])
 			end
 
 			return song
@@ -351,7 +351,8 @@ module CultomePlayer::Player
         def extract_mp3_information(file_path)
             info = nil
             begin
-                Mp3Info.open(file_path, encoding: 'utf-8') do |mp3|
+                TagLib::FileRef.open(file_path) do |mp3|
+                  unless mp3.nil?
                     info = {
                         name: mp3.tag.title,
                         artist: mp3.tag.artist,
@@ -361,6 +362,7 @@ module CultomePlayer::Player
                         year: mp3.tag1["year"],
                         genre: mp3.tag1["genre_s"]
                     }
+                  end
                 end
 
                 if info[:name].nil?

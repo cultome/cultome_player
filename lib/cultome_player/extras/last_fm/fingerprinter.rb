@@ -1,7 +1,7 @@
 # encoding: utf-8
 require 'nokogiri'
 require 'musicbrainz'
-require 'mp3info'
+require 'taglib'
 
 module CultomePlayer::Extras::LastFm
     module Fingerprinter
@@ -48,8 +48,8 @@ Should we write this information to the ID3 tags?
                 update_track_information(song, song_details)
                 return "Tags were successfuly updated"
             rescue Exception => e
-                puts e.message
-                puts e.backtrace
+                display c4(e.message)
+                #puts e.backtrace
                 return "A problem ocurr while writing the ID3 tags"
             end
         end
@@ -164,9 +164,9 @@ Should we write this information to the ID3 tags?
             db_song.track = info[:track] unless info[:track].blank?
             db_song.track = info[:year] unless info[:year].blank?
 
-            db_song.artist = CultomePlayer::Model::Artist.find_or_create_by_name(name: info[:artist]) unless info[:artist].blank?
-            db_song.album = CultomePlayer::Model::Album.find_or_create_by_name(name: info[:album]) unless info[:album].blank?
-            #song.tags << CultomePlayer::Model::Tags.find_or_create_by_name(name: info[:tags]) unless info[:tags].blank?
+            db_song.artist = CultomePlayer::Model::Artist.first_or_create(name: info[:artist]) unless info[:artist].blank?
+            db_song.album = CultomePlayer::Model::Album.first_or_create(name: info[:album]) unless info[:album].blank?
+            #song.tags << CultomePlayer::Model::Tags.first_or_create(name: info[:tags]) unless info[:tags].blank?
 
             return db_song.save!
         end
@@ -176,12 +176,14 @@ Should we write this information to the ID3 tags?
         # @param file_path [String] The absolute path to the mp3 file.
         # @param info [Hash] The hash with the information to write.
         def update_tag_information(file_path, info)
-            Mp3Info.open(file_path, encoding: 'utf-8') do |mp3|
+            Taglib::FileRef.open(file_path) do |mp3|
+              unless mp3.nil?
                 mp3.tag.title = info[:name]
                 mp3.tag.artist = info[:artist]
                 mp3.tag.album = info[:album]
                 mp3.tag.tracknum = info[:track]
                 mp3.tag1["year"] = info[:year]
+              end
             end
         end
     end
