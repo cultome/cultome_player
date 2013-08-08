@@ -33,8 +33,8 @@ module CultomePlayer
                 end
 
                 # checamos dos registros clave
-                CultomePlayer::Model::Artist.first_or_create(id: 0, name: 'Unknown')
-                CultomePlayer::Model::Album.first_or_create(id: 0, name: 'Unknown')
+                CultomePlayer::Model::Artist.where(id: 0, name: 'Unknown').first_or_create
+                CultomePlayer::Model::Album.where(id: 0, name: 'Unknown').first_or_create
             end
         end
     end

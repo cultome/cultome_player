@@ -164,9 +164,9 @@ Should we write this information to the ID3 tags?
             db_song.track = info[:track] unless info[:track].blank?
             db_song.track = info[:year] unless info[:year].blank?
 
-            db_song.artist = CultomePlayer::Model::Artist.first_or_create(name: info[:artist]) unless info[:artist].blank?
-            db_song.album = CultomePlayer::Model::Album.first_or_create(name: info[:album]) unless info[:album].blank?
-            #song.tags << CultomePlayer::Model::Tags.first_or_create(name: info[:tags]) unless info[:tags].blank?
+            db_song.artist = CultomePlayer::Model::Artist.where(name: info[:artist]).first_or_create unless info[:artist].blank?
+            db_song.album = CultomePlayer::Model::Album.where(name: info[:album]).first_or_create unless info[:album].blank?
+            #song.tags << CultomePlayer::Model::Tags.where(name: info[:tags]).first_or_create unless info[:tags].blank?
 
             return db_song.save!
         end
@@ -181,8 +181,9 @@ Should we write this information to the ID3 tags?
                 mp3.tag.title = info[:name]
                 mp3.tag.artist = info[:artist]
                 mp3.tag.album = info[:album]
-                mp3.tag.tracknum = info[:track]
-                mp3.tag1["year"] = info[:year]
+                mp3.tag.track = info[:track]
+                mp3.tag.year = info[:year]
+                #mp3.tag.genre = info[:genre]
               end
             end
         end

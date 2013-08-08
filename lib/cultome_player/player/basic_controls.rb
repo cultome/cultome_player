@@ -324,11 +324,11 @@ module CultomePlayer::Player
 			raise "ID3 tag information could not be extrated from #{file_path}" if info.nil?
 
 			unless info[:artist].blank?
-                info[:artist_id] = CultomePlayer::Model::Artist.first_or_create(name: info[:artist]).id
+        info[:artist_id] = CultomePlayer::Model::Artist.where(name: info[:artist]).first_or_create.id
 			end
 
 			unless info[:album].blank?
-				info[:album_id] = CultomePlayer::Model::Album.first_or_create(name: info[:album]).id
+				info[:album_id] = CultomePlayer::Model::Album.where(name: info[:album]).first_or_create.id
 			end
 
 			info[:drive_id] = drive.id
@@ -338,218 +338,218 @@ module CultomePlayer::Player
 			song = CultomePlayer::Model::Song.where('drive_id = ? and relative_path = ?', info[:drive_id], info[:relative_path]).first_or_create(info)
 
 			unless info[:genre].blank?
-				song.genres << CultomePlayer::Model::Genre.first_or_create(name: info[:genre])
+				song.genres << CultomePlayer::Model::Genre.where(name: info[:genre]).first_or_create
 			end
 
 			return song
 		end
 
-        # Extract the ID3 tag information from a mp3 file.
-        #
-        # @param file_path [String] The full path to a mp3 file.
-        # @return [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre. nil if something is wrong.
-        def extract_mp3_information(file_path)
-            info = nil
-            begin
-                TagLib::FileRef.open(file_path) do |mp3|
-                  unless mp3.nil?
-                    info = {
-                        name: mp3.tag.title,
-                        artist: mp3.tag.artist,
-                        album: mp3.tag.album,
-                        track: mp3.tag.tracknum,
-                        duration: mp3.length,
-                        year: mp3.tag1["year"],
-                        genre: mp3.tag1["genre_s"]
-                    }
-                  end
-                end
-
-                if info[:name].nil?
-                    info[:name] = file_path.split('/').last
-                end
-
-                return polish_mp3_info(info)
-            rescue
-                display c2("The file '#{file_path}' could not be added")
-                return nil
-            end
+    # Extract the ID3 tag information from a mp3 file.
+    #
+    # @param file_path [String] The full path to a mp3 file.
+    # @return [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre. nil if something is wrong.
+    def extract_mp3_information(file_path)
+      info = nil
+      begin
+        TagLib::FileRef.open(file_path) do |mp3|
+          unless mp3.nil?
+            info = {
+              album: mp3.tag.album,
+              artist: mp3.tag.artist,
+              genre: mp3.tag.genre,
+              name: mp3.tag.title,
+              track: mp3.tag.track,
+              year: mp3.tag.year,
+              duration: mp3.audio_properties.length,
+            }
+          end
         end
 
-        # The seeker step to jump between playback positions.
-        #
-        # @return [Integer] The seeker step
-        def seeker_step
-            500
+        if info[:name].nil?
+          info[:name] = file_path.split('/').last
         end
 
-        # Given the parameters, generate a playlist for them.
-        #
-        # @param (see #play)
-        # @return [List<Song>] The generated playlist.
-        def generate_playlist(params)
-            search_criteria = []
-            new_playlist = []
-            player.playing_library = false
+        return polish_mp3_info(info)
+      rescue
+        display c2("The file '#{file_path}' could not be added")
+        return nil
+      end
+    end
 
-            if params.empty? && current_playlist.blank?
-                new_playlist = find_by_query
-                player.playing_library = true
+    # The seeker step to jump between playback positions.
+    #
+    # @return [Integer] The seeker step
+    def seeker_step
+      500
+    end
 
-                if new_playlist.blank?
-                    raise "No music connected yet. Try 'connect /home/user_name/music => music_library' first!"
-                end
+    # Given the parameters, generate a playlist for them.
+    #
+    # @param (see #play)
+    # @return [List<Song>] The generated playlist.
+    def generate_playlist(params)
+      search_criteria = []
+      new_playlist = []
+      player.playing_library = false
 
-                player.artist = new_playlist[0].artist unless new_playlist[0].blank?
-                player.album = new_playlist[0].album unless new_playlist[0].blank?
+      if params.empty? && current_playlist.blank?
+        new_playlist = find_by_query
+        player.playing_library = true
+
+        if new_playlist.blank?
+          raise "No music connected yet. Try 'connect /home/user_name/music => music_library' first!"
+        end
+
+        player.artist = new_playlist[0].artist unless new_playlist[0].blank?
+        player.album = new_playlist[0].album unless new_playlist[0].blank?
+      else
+        params.each do |param|
+          case param[:type]
+          when /literal|criteria/ then search_criteria << param
+          when :number
+            if player.focus[param[:value].to_i - 1].nil?
+              selected_song = current_playlist[param[:value].to_i - 1]
+              raise "Invalid selection!" if selected_song.nil?
+              player.queue.push selected_song
             else
-                params.each do |param|
-                    case param[:type]
-                    when /literal|criteria/ then search_criteria << param
-                    when :number
-                        if player.focus[param[:value].to_i - 1].nil?
-                            selected_song = current_playlist[param[:value].to_i - 1]
-                            raise "Invalid selection!" if selected_song.nil?
-                            player.queue.push selected_song
-                        else
-                            selected_song = player.focus[param[:value].to_i - 1]
-                            raise "Invalid selection!" if selected_song.nil?
-                            player.queue.push selected_song
-                        end
-
-                    when :object
-                        case param[:value]
-                        when :library 
-                            new_playlist = find_by_query
-                            player.playing_library = true
-                        when :playlist then new_playlist = current_playlist
-                        when /search|search_results/ then new_playlist += player.search_results
-                        when :history then new_playlist += player.history
-                        when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ player.artist.name }%"}], and: []})
-                        when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ player.album.name }%"}], and: []})
-
-                            # criterios de busqueda avanzados
-                        when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'songs.created_at > ?', value: CultomePlayer::Model::Song.maximum('created_at') - (60*60*24)}], and: []})
-                        when :recently_played then new_playlist += find_by_query({or: [{id: 7, condition: 'last_played_at > ?', value: CultomePlayer::Model::Song.maximum('last_played_at') - (60*60*24)}], and: []})
-                        when :more_played then new_playlist += find_by_query({or: [{id: 8, condition: 'plays > ?', value: CultomePlayer::Model::Song.maximum('plays') - CultomePlayer::Model::Song.average('plays')}], and: []})
-                        when :less_played then new_playlist += find_by_query({or: [{id: 9, condition: 'plays < ?', value: CultomePlayer::Model::Song.average('plays')}], and: []})
-                        when :populars then new_playlist += find_by_query({or: [{id: 10, condition: 'songs.points > ?', value: CultomePlayer::Model::Song.average('points').ceil.to_i}], and: []})
-                        else
-                            # intentamos matchear las unidades primero
-                            drive = drives_registered.find{|d| d.name.to_sym == param[:value]}
-                            if drive.nil?
-                                # intetamos matchear por genero
-                                new_playlist += CultomePlayer::Model::Song.connected.joins(:genres).where('genres.name like ?', "%#{param[:value].to_s.gsub('_', ' ')}%" )
-                            else
-                                new_playlist += find_by_query({or: [{id: 11, condition: 'drive_id = ?', value: drive.id}], and: []})
-                            end
-                        end
-                    end # case
-                end # do
-            end # if
-
-            new_playlist += search(search_criteria) unless search_criteria.blank?
-
-            return new_playlist
-        end
-
-        # Retrive songs from connected drives with the given conditions.
-        #
-        # @param query [Hash] The given conditions for the query
-        # @return [List<Song>] The results of the query.
-        def find_by_query(query={or: [], and: []})
-            # checamos que una condicion que hace que los and's se vuelvan or's
-            #   =>  si una condicion del 2..4 se pone dos o mas veces, esa condicion se hace un or
-            # TODO: ESTO QUEDO MUY FEO, CAMBIARLO
-            (2..4).each do |id_cond|
-                if query[:and].count{|cond| cond[:id] == id_cond} > 1
-                    # sacamos todas las condiciones de este tipo y las metemos como or's
-                    query[:or] = query[:or] + query[:and].select{|cond| cond[:id] == id_cond}
-                    query[:and] = query[:and].delete_if{|cond| cond[:id] == id_cond}
-                end
+              selected_song = player.focus[param[:value].to_i - 1]
+              raise "Invalid selection!" if selected_song.nil?
+              player.queue.push selected_song
             end
 
-            or_condition = query[:or].collect{|c| c[:condition] }.join(' or ')
-            and_condition = query[:and].collect{|c| c[:condition] }.join(' and ')
+          when :object
+            case param[:value]
+            when :library 
+              new_playlist = find_by_query
+              player.playing_library = true
+            when :playlist then new_playlist = current_playlist
+            when /search|search_results/ then new_playlist += player.search_results
+            when :history then new_playlist += player.history
+            when :artist then new_playlist += find_by_query({or: [{id: 5, condition: 'artists.name like ?', value: "%#{ player.artist.name }%"}], and: []})
+            when :album then new_playlist += find_by_query({or: [{id: 5, condition: 'albums.name like ?', value: "%#{ player.album.name }%"}], and: []})
 
-            # armamos la condicion where
-            where_clause = or_condition
-            if where_clause.blank?
-                where_clause = and_condition
-            elsif !and_condition.blank?
-                where_clause += " and #{and_condition}"
-            end
-
-            # preparamos los parametros
-            where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.blank? }.compact.flatten
-
-            if where_clause.blank?
-                CultomePlayer::Model::Song.connected.to_a
+              # criterios de busqueda avanzados
+            when :recently_added then new_playlist += find_by_query({or: [{id: 6, condition: 'songs.created_at > ?', value: CultomePlayer::Model::Song.maximum('created_at') - (60*60*24)}], and: []})
+            when :recently_played then new_playlist += find_by_query({or: [{id: 7, condition: 'last_played_at > ?', value: CultomePlayer::Model::Song.maximum('last_played_at') - (60*60*24)}], and: []})
+            when :more_played then new_playlist += find_by_query({or: [{id: 8, condition: 'plays > ?', value: CultomePlayer::Model::Song.maximum('plays') - CultomePlayer::Model::Song.average('plays')}], and: []})
+            when :less_played then new_playlist += find_by_query({or: [{id: 9, condition: 'plays < ?', value: CultomePlayer::Model::Song.average('plays')}], and: []})
+            when :populars then new_playlist += find_by_query({or: [{id: 10, condition: 'songs.points > ?', value: CultomePlayer::Model::Song.average('points').ceil.to_i}], and: []})
             else
-                #Song.joins("left outer join artists on artists.id == songs.artist_id")
-                #.joins("left outer join albums on albums.id == songs.album_id")
-                CultomePlayer::Model::Song.connected.joins(:artist, :album).where(where_clause, *where_params)
+              # intentamos matchear las unidades primero
+              drive = drives_registered.find{|d| d.name.to_sym == param[:value]}
+              if drive.nil?
+                # intetamos matchear por genero
+                new_playlist += CultomePlayer::Model::Song.connected.joins(:genres).where('genres.name like ?', "%#{param[:value].to_s.gsub('_', ' ')}%" )
+              else
+                new_playlist += find_by_query({or: [{id: 11, condition: 'drive_id = ?', value: drive.id}], and: []})
+              end
             end
+          end # case
+        end # do
+      end # if
+
+      new_playlist += search(search_criteria) unless search_criteria.blank?
+
+      return new_playlist
+    end
+
+    # Retrive songs from connected drives with the given conditions.
+    #
+    # @param query [Hash] The given conditions for the query
+    # @return [List<Song>] The results of the query.
+    def find_by_query(query={or: [], and: []})
+      # checamos que una condicion que hace que los and's se vuelvan or's
+      #   =>  si una condicion del 2..4 se pone dos o mas veces, esa condicion se hace un or
+      # TODO: ESTO QUEDO MUY FEO, CAMBIARLO
+      (2..4).each do |id_cond|
+        if query[:and].count{|cond| cond[:id] == id_cond} > 1
+          # sacamos todas las condiciones de este tipo y las metemos como or's
+          query[:or] = query[:or] + query[:and].select{|cond| cond[:id] == id_cond}
+          query[:and] = query[:and].delete_if{|cond| cond[:id] == id_cond}
         end
+      end
 
-        # Executes a logic to select the next song to play and plays it.
-        # Also change the player's state and update de playback count of the song.
-        #
-        # @return [Song] The new song playing.
-        def do_play
-            if player.queue.blank?
-                return self.next
-            end
+      or_condition = query[:or].collect{|c| c[:condition] }.join(' or ')
+      and_condition = query[:and].collect{|c| c[:condition] }.join(' and ')
 
-            player.prev_song = current_song
-            player.song = player.queue.shift
+      # armamos la condicion where
+      where_clause = or_condition
+      if where_clause.blank?
+        where_clause = and_condition
+      elsif !and_condition.blank?
+        where_clause += " and #{and_condition}"
+      end
 
-            if current_song.nil?
-                raise 'There is no song to play'
-            end
+      # preparamos los parametros
+      where_params = query.values.collect{|c| c.collect{|v| v[:value] } if !c.blank? }.compact.flatten
 
-            if current_song.class == CultomePlayer::Model::Artist
-                player.artist = current_song
-                return play([{type: :object, value: :artist}])
-            elsif current_song.class == CultomePlayer::Model::Album
-                player.album = current_song
-                return play([{type: :object, value: :album}])
-            elsif current_song.class == CultomePlayer::Model::Genre
-                return play([{type: :object, value: current_song.name.gsub(' ', '_').to_sym}])
-            end
+      if where_clause.blank?
+        CultomePlayer::Model::Song.connected.to_a
+      else
+        #Song.joins("left outer join artists on artists.id == songs.artist_id")
+        #.joins("left outer join albums on albums.id == songs.album_id")
+        CultomePlayer::Model::Song.connected.joins(:artist, :album).where(where_clause, *where_params)
+      end
+    end
 
-            player.album = current_song.album 
-            player.artist = current_song.artist
+    # Executes a logic to select the next song to play and plays it.
+    # Also change the player's state and update de playback count of the song.
+    #
+    # @return [Song] The new song playing.
+    def do_play
+      if player.queue.blank?
+        return self.next
+      end
 
-            begin
-                play_in_music_player(current_song.path)
-            rescue Exception => e
-                raise "Unable_to_play: #{e.message}" #, take_action: true, error_message: e.message)
-            end
+      player.prev_song = current_song
+      player.song = player.queue.shift
 
-            # agregamos al contador de reproducciones
-            CultomePlayer::Model::Song.increment_counter :plays, current_song.id
-            CultomePlayer::Model::Song.update(current_song.id, last_played_at: Time.now)
+      if current_song.nil?
+        raise 'There is no song to play'
+      end
 
-            return current_song
-        end
+      if current_song.class == CultomePlayer::Model::Artist
+        player.artist = current_song
+        return play([{type: :object, value: :artist}])
+      elsif current_song.class == CultomePlayer::Model::Album
+        player.album = current_song
+        return play([{type: :object, value: :album}])
+      elsif current_song.class == CultomePlayer::Model::Genre
+        return play([{type: :object, value: current_song.name.gsub(' ', '_').to_sym}])
+      end
 
-        # Clean and format the track information.
-        # @param info [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre.
-        # @return [Hash] The same hash but with polished values.
-        def polish_mp3_info(info)
-            [:genre, :name, :artist, :album].each{|k| info[k] = info[k].downcase.strip.titleize unless info[k].nil? }
-            [:track, :year].each{|k| info[k] = info[k].to_i if info[k] =~ /\A[\d]+\Z/ }
-            info[:duration] = info[:duration].to_i
+      player.album = current_song.album 
+      player.artist = current_song.artist
 
-            info
-        end
+      begin
+        play_in_music_player(current_song.path)
+      rescue Exception => e
+        raise "Unable_to_play: #{e.message}" #, take_action: true, error_message: e.message)
+      end
 
-        # The collection of songs not yet played in the current playlist when the shuffle is on.
-        #
-        # @return [Array] with the songs not yet played.
-        def songs_not_played_in_playlist 
-            @songs_not_played_in_playlist ||= []
-        end
+      # agregamos al contador de reproducciones
+      CultomePlayer::Model::Song.increment_counter :plays, current_song.id
+      CultomePlayer::Model::Song.update(current_song.id, last_played_at: Time.now)
+
+      return current_song
+    end
+
+    # Clean and format the track information.
+    # @param info [Hash] With the keys: :name, :artist, :album, :track, :duration, :year and :genre.
+    # @return [Hash] The same hash but with polished values.
+    def polish_mp3_info(info)
+      [:genre, :name, :artist, :album].each{|k| info[k] = info[k].downcase.strip.titleize unless info[k].nil? }
+      [:track, :year].each{|k| info[k] = info[k].to_i if info[k] =~ /\A[\d]+\Z/ }
+      info[:duration] = info[:duration].to_i
+
+      info
+    end
+
+    # The collection of songs not yet played in the current playlist when the shuffle is on.
+    #
+    # @return [Array] with the songs not yet played.
+    def songs_not_played_in_playlist 
+      @songs_not_played_in_playlist ||= []
+    end
     end
 end
