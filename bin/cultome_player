@@ -4,11 +4,11 @@
 require 'cultome_player'
 
 class MyPlayer
-    include CultomePlayer
+  include CultomePlayer
 
-    def initialize(env={})
-        set_environment(env)
-    end
+  def initialize(env={})
+    set_environment(env)
+  end
 end
 
 @p = MyPlayer.new
@@ -16,7 +16,7 @@ end
 @p.launch_external_music_player
 @p.connect_external_music_player('localhost', 20103)
 @p.register_event_listener(:player_state_updated) do |old_state, new_state|
-    @p.display_with_prompt(@p.execute('next').first) if new_state == :EOM 
+  @p.display_with_prompt(@p.execute('next').first) if new_state == :EOM 
 end
 
 system("clear") if @p.os == :linux

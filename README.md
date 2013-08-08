@@ -296,16 +296,16 @@ Whats next? Musicbrainz integration, I need to tags correctly all the songs if I
 
 ## Contributing
 
-1. Fork it
+  1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
+  3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+  5. Create new Pull Request
 
 ## Additional Information
 
 #### jlGui BasicPlayer
-This component is what I use to play music and is included within the libraries of this project, dependencies included of course.
+  This component is what I use to play music and is included within the libraries of this project, dependencies included of course.
 
-[jlGui](http://www.javazoom.net/jlgui/developerguide.html)
+  [jlGui](http://www.javazoom.net/jlgui/developerguide.html)
 

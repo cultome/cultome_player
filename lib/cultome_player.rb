@@ -14,14 +14,14 @@ require 'cultome_player/error_handler'
 
 # Main module in the gem. Includes everything that is needed to operate the player.
 module CultomePlayer
-    include SocketAdapter
-    include Player
-    include UserInput
-    include ExternalPlayer
-    include Helper
-    include Interactive
-    include InstallationIntegrity
-    include Extras
-    include ErrorHandler
+  include SocketAdapter
+  include Player
+  include UserInput
+  include ExternalPlayer
+  include Helper
+  include Interactive
+  include InstallationIntegrity
+  include Extras
+  include ErrorHandler
 
 end

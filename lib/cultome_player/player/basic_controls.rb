@@ -3,346 +3,346 @@ require 'cultome_player/player/help/basic_controls_help'
 require 'taglib'
 
 module CultomePlayer::Player
-    module BasicControls
+  module BasicControls
 
-        # Register all the command provided by this module to the player, which are: play, enqueue, search, pause, stop, next, prev, connect, disconnect, ff, fb, shuffle, repeat
-        #
-        # @param base [Class] The class where this module was included.
-        def self.included(base)
-            base.command_registry << :play
-            base.command_registry << :enqueue
-            base.command_registry << :search
-            base.command_registry << :pause
-            base.command_registry << :stop
-            base.command_registry << :next
-            base.command_registry << :prev
-            base.command_registry << :connect
-            base.command_registry << :disconnect
-            base.command_registry << :ff
-            base.command_registry << :fb
-            base.command_registry << :shuffle
-            base.command_registry << :repeat
+    # Register all the command provided by this module to the player, which are: play, enqueue, search, pause, stop, next, prev, connect, disconnect, ff, fb, shuffle, repeat
+    #
+    # @param base [Class] The class where this module was included.
+    def self.included(base)
+      base.command_registry << :play
+      base.command_registry << :enqueue
+      base.command_registry << :search
+      base.command_registry << :pause
+      base.command_registry << :stop
+      base.command_registry << :next
+      base.command_registry << :prev
+      base.command_registry << :connect
+      base.command_registry << :disconnect
+      base.command_registry << :ff
+      base.command_registry << :fb
+      base.command_registry << :shuffle
+      base.command_registry << :repeat
 
-            base.send :include, BasicControlsHelp
+      base.send :include, BasicControlsHelp
+    end
+
+    # Create and play a playlist with the results of parameters criterios.
+    #
+    # @param params [List<Hash>] The hashes contains the keys, dependending on the parameter type, :value, :type, :criteria.
+    # @return (see #do_play)
+    def play(params=[])
+      pl = generate_playlist(params)
+      # si se encolan
+      unless pl.blank?
+        player.playlist = player.focus = pl
+        player.play_index = -1
+        player.queue = []
+        @songs_not_played_in_playlist = (0...current_playlist.size).to_a
+      end
+
+      #return nil if pl.blank? && !current_playlist.blank?
+
+      player.history.push current_song unless current_song.nil?
+      do_play
+
+      return select_play_return_value(params)
+    end
+
+    # Add songs to the current playlist.
+    #
+    # @param (see #play)
+    # @return [List<Song>] The new playlist.
+    def enqueue(params=[])
+      pl = generate_playlist(params)
+      player.playlist = player.focus = current_playlist + pl 
+      songs_not_played_in_playlist << current_playlist.size
+      return current_playlist
+    end
+
+    # Search for songs in the connected drives.
+    #
+    # @param (see #play)
+    # @return [List<Song>] The results of the search
+    def search(params=[])
+      return [] if params.blank?
+
+      query = {
+        or: [],
+        and: []
+      }
+
+      params.each do |param|
+        param_value = "%#{param[:value]}%"
+
+        case param[:type]
+        when :literal
+          query[:or] << {id: 1, condition: '(artists.name like ? or albums.name like ? or songs.name like ?)', value: [param_value] * 3}
+        when :criteria
+          if param[:criteria] == :a then query[:and] << {id: 2, condition: 'artists.name like ?', value: param_value}
+          elsif param[:criteria] == :b then query[:and] << {id: 3, condition: 'albums.name like ?', value: param_value}
+          elsif param[:criteria] == :t then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
+        when :object
+          case param[:value]
+          when :artist then query[:and] << {id: 12, condition: 'artists.id = ?', value: player.artist.id}
+          when :album then query[:and] << {id: 13, condition: 'albums.id = ?', value: player.album.id}
+          end
+        end
+      end
+
+      results = find_by_query(query).to_a
+
+      raise "No results found!" if results.empty?
+
+      return player.search_results = player.focus = results
+    end
+
+    # Select the next song to be played and plays it.
+    #
+    # @return (see #do_play)
+    def next(params=[])
+      if player.play_index + 1 < current_playlist.size
+        player.history.push current_song unless current_song.nil?
+
+        if player.shuffling?
+          # Para tener un mejor random hacemos qur toque 
+          # primero toda la playlist antes de repetir las rolas
+          if songs_not_played_in_playlist.empty?
+            @songs_not_played_in_playlist = (0...current_playlist.size).to_a
+          end
+
+          idx = songs_not_played_in_playlist.sample
+          songs_not_played_in_playlist.delete(idx)
+          player.queue.push current_playlist[idx]
+        else
+          player.play_index += 1
+          player.queue.push current_playlist[player.play_index]
         end
 
-        # Create and play a playlist with the results of parameters criterios.
-        #
-        # @param params [List<Hash>] The hashes contains the keys, dependending on the parameter type, :value, :type, :criteria.
-        # @return (see #do_play)
-        def play(params=[])
-            pl = generate_playlist(params)
-            # si se encolan
-            unless pl.blank?
-                player.playlist = player.focus = pl
-                player.play_index = -1
-                player.queue = []
-                @songs_not_played_in_playlist = (0...current_playlist.size).to_a
-            end
+        do_play
+      else
+        raise "No more songs in playlist!"
+      end
+    end
 
-            #return nil if pl.blank? && !current_playlist.blank?
+    # Get the latest song from history and plays it.
+    #
+    # @return (see #do_play)
+    def prev(params=[])
+      if player.history.blank?
+        raise "There is no files in history"
+      else
+        player.queue.unshift player.history.pop
+        player.play_index -= 1 if player.play_index > 0
 
-            player.history.push current_song unless current_song.nil?
-            do_play
+        do_play
+      end
+    end
 
-            return select_play_return_value(params)
+    # Add a new drive to the library and imports all the mp3 files in it.
+    # If the drive exisits just connect an exisiting drive to the library and update all the mp3 files in it.
+    #
+    # @param params [List<Hash>] With parsed path and literal information.
+    # @return [Integer] The number of files imported or songs in connected drive.
+    def connect(params=[])
+      path_param = params.find{|p| p[:type] == :path}
+
+      if path_param.nil?
+        drive_name = params.find{|p| p[:type] == :literal}
+        drive = CultomePlayer::Model::Drive.find_by_name(drive_name[:value])
+        if drive.nil?
+          display c2("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
+        else
+          drive.update_attributes(connected: true)
+          drives_registered  << drive
         end
 
-		# Add songs to the current playlist.
-		#
-		# @param (see #play)
-		# @return [List<Song>] The new playlist.
-		def enqueue(params=[])
-			pl = generate_playlist(params)
-			player.playlist = player.focus = current_playlist + pl 
-			songs_not_played_in_playlist << current_playlist.size
-            return current_playlist
-		end
+        return CultomePlayer::Model::Song.where(drive_id: drive.id).count()
+      else
+        # conectamos una unidad nueva
+        raise 'directory doesnt exist!' unless Dir.exist?(path_param[:value])
 
-        # Search for songs in the connected drives.
-        #
-        # @param (see #play)
-        # @return [List<Song>] The results of the search
-        def search(params=[])
-            return [] if params.blank?
-
-            query = {
-                or: [],
-                and: []
-            }
-
-            params.each do |param|
-                param_value = "%#{param[:value]}%"
-
-                case param[:type]
-                when :literal
-                    query[:or] << {id: 1, condition: '(artists.name like ? or albums.name like ? or songs.name like ?)', value: [param_value] * 3}
-                when :criteria
-                    if param[:criteria] == :a then query[:and] << {id: 2, condition: 'artists.name like ?', value: param_value}
-                    elsif param[:criteria] == :b then query[:and] << {id: 3, condition: 'albums.name like ?', value: param_value}
-                    elsif param[:criteria] == :t then query[:and] << {id: 4, condition: 'songs.name like ?', value: param_value} end
-                when :object
-                    case param[:value]
-                    when :artist then query[:and] << {id: 12, condition: 'artists.id = ?', value: player.artist.id}
-                    when :album then query[:and] << {id: 13, condition: 'albums.id = ?', value: player.album.id}
-                    end
-                end
-            end
-
-            results = find_by_query(query).to_a
-
-            raise "No results found!" if results.empty?
-
-            return player.search_results = player.focus = results
+        name_param = params.find{|p| p[:type] == :literal}
+        new_drive = CultomePlayer::Model::Drive.find_by_path(path_param[:value])
+        if new_drive.nil?
+          drives_registered << (new_drive = CultomePlayer::Model::Drive.create(name: name_param[:value], path: path_param[:value]))
+        else
+          display c2("The drive '#{new_drive.name}' is refering the same path. Update of '#{new_drive.name}' is in progress.")
+          new_drive.update_attributes(connected: true)
         end
 
-        # Select the next song to be played and plays it.
-        #
-        # @return (see #do_play)
-        def next(params=[])
-            if player.play_index + 1 < current_playlist.size
-                player.history.push current_song unless current_song.nil?
+        music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
+        imported = 0
+        to_be_imported = music_files.size
 
-                if player.shuffling?
-                    # Para tener un mejor random hacemos qur toque 
-                    # primero toda la playlist antes de repetir las rolas
-                    if songs_not_played_in_playlist.empty?
-                        @songs_not_played_in_playlist = (0...current_playlist.size).to_a
-                    end
-
-                    idx = songs_not_played_in_playlist.sample
-                    songs_not_played_in_playlist.delete(idx)
-                    player.queue.push current_playlist[idx]
-                else
-                    player.play_index += 1
-                    player.queue.push current_playlist[player.play_index]
-                end
-
-                do_play
-            else
-                raise "No more songs in playlist!"
-            end
+        music_files.each do |file_path|
+          begin
+            create_song_from_file(file_path, new_drive)
+            imported += 1
+            display(c4("Importing #{c14(imported.to_s)}/#{c14(to_be_imported.to_s)}...\r"), true)
+          rescue
+            display(c2("Error importing #{file_path}...\r"))
+          end
         end
 
-        # Get the latest song from history and plays it.
-        #
-        # @return (see #do_play)
-        def prev(params=[])
-            if player.history.blank?
-                raise "There is no files in history"
-            else
-                player.queue.unshift player.history.pop
-                player.play_index -= 1 if player.play_index > 0
+        display(c14(imported.to_s) + c4(" files imported in drive #{c14(new_drive.name)}"))
 
-                do_play
-            end
+        return music_files.size
+      end
+    end
+
+    # Remove from the library one drive.
+    #
+    # @param params [List<Hash>] With parsed literal information.
+    # @return [Integer] The number of songs in the disconnected drive.
+    def disconnect(params=[])
+      drive_name = params.find{|p| p[:type] == :literal}
+      drive = CultomePlayer::Model::Drive.find_by_name(drive_name[:value])
+      if drive.nil?
+        raise "An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?"
+      else
+        drive.update_attributes(connected: false)
+        drives_registered.delete(drive)
+      end
+
+      return CultomePlayer::Model::Song.where(drive_id: drive.id).count()
+    end
+
+    # Pause the current playback if playing and resume it if paused.
+    def pause(params=[])
+      turn_pause player.state =~ /PLAYING|RESUMED/ ? :on : :off
+    end
+
+    # Change the pause status of the player between PAUSED and RESUMED.
+    def toggle_pause
+      turn_pause player.state =~ /PLAYING|RESUMED/ ? :on : :off
+    end
+
+    # Change the status of the pause.
+    #
+    # @param state [Symbol] Valid values are :on and :off.
+    def turn_pause(state)
+      raise 'This command is not valid in this moment.' if current_song.nil?
+      raise 'Invalid parameter. Only :on or :off are valids' if state !~ /\Aon|off\Z/
+
+        inverse_pause_state = paused? ? c4("Playback resumed!") : c4("Holding your horses")
+      state == :on ?  pause_in_music_player : resume_in_music_player
+
+      return inverse_pause_state
+    end
+
+    # Stop the current playback.
+    def stop(params=[])
+      raise 'This command is not valid in this moment.' if current_song.nil?
+      stop_in_music_player
+    end
+
+
+    # Fast forward to the current song.
+    def ff(params=[])
+      raise 'This command is not valid in this moment.' if current_song.nil?
+
+      next_pos = player.song_status[:bytes] + (player.song_status[:frame_size] * seeker_step)
+      seek_in_music_player(next_pos)
+      return show
+    end
+
+    # Fast backward to the current song.
+    def fb(params=[])
+      raise 'This command is not valid in this moment.' if current_song.nil?
+
+      next_pos = player.song_status[:bytes] - (player.song_status[:frame_size] * seeker_step)
+      seek_in_music_player(next_pos)
+      return show
+    end
+
+    # Check and change the shuffle setting. Without parameters just print the current state of shuffle. 
+    # If a literal o numerical parameter is passed, then if its value matches /Y|y|yes|1|si|s|ok/ then 
+    # the shuffle is turned on, otherwise is turned off.
+    #
+    # @param params [List<Hash>] With parsed literal or numerical information.
+    # @return [Boolean] The current state of shuffling.
+    def shuffle(params=[])
+      unless params.empty?
+        params.each do |param|
+          player.shuffling = is_true_value param[:value].to_s
+        end
+      end
+
+      display(player.shuffling ? c3("Everyday i'm shuffling") : c2("Shuffle is off"))
+
+      return player.shuffling
+    end
+
+    # Change the shuffle status of the player between ON and OFF.
+    def toggle_shuffle
+      shuffle([{value: !player.shuffling }])
+    end
+
+    # Change the status of the shuffle.
+    #
+    # @param state [Symbol] Valid values are :on and :off.
+    def turn_shuffle(state)
+      raise 'Invalid parameter. Only :on or :off are valids' if state !~ /\Aon|off\Z/
+        shuffle([{value: state}])
+    end
+
+    # Begin the current song from the begining.
+    def repeat(params=[])
+      raise 'This command is not valid in this moment.' if current_song.nil?
+      seek_in_music_player(0)
+      return current_song
+    end
+
+    private
+
+    # Given the parameter passed to the play command, it selects the better response object.
+    #
+    # @param params [Array<Hash>] The user command' parameter for the command play
+    # @return [CultomePlayer::Model::Song|Array<CultomePlayer::Model::Songi>] The object that suit better a response in the player context
+    def select_play_return_value(params)
+      if params.empty?
+        return current_song
+      elsif params.size == 1
+        case params[0][:type]
+        when :number then return current_song
+        when /\A(object|literal|criteria)\Z/ then return current_playlist
         end
 
-		# Add a new drive to the library and imports all the mp3 files in it.
-		# If the drive exisits just connect an exisiting drive to the library and update all the mp3 files in it.
-		#
-		# @param params [List<Hash>] With parsed path and literal information.
-		# @return [Integer] The number of files imported or songs in connected drive.
-		def connect(params=[])
-			path_param = params.find{|p| p[:type] == :path}
+      else
+        return current_playlist
+      end
+    end
 
-			if path_param.nil?
-				drive_name = params.find{|p| p[:type] == :literal}
-				drive = CultomePlayer::Model::Drive.find_by_name(drive_name[:value])
-				if drive.nil?
-					display c2("An error occured when connecting drive #{drive_name[:value]}. Maybe is mispelled?")
-				else
-					drive.update_attributes(connected: true)
-					drives_registered  << drive
-				end
+    # Insert a song in the library given its file_path and drive connected.
+    #
+    # @param file_path [String] The full path to the mp3 file.
+    # @param drive [Drive] The connected drive where the file will live.
+    # @return [Song] The added song.
+    def create_song_from_file(file_path, drive)
+      info = extract_mp3_information(file_path)
 
-				return CultomePlayer::Model::Song.where(drive_id: drive.id).count()
-			else
-				# conectamos una unidad nueva
-				raise 'directory doesnt exist!' unless Dir.exist?(path_param[:value])
+      raise "ID3 tag information could not be extrated from #{file_path}" if info.nil?
 
-				name_param = params.find{|p| p[:type] == :literal}
-				new_drive = CultomePlayer::Model::Drive.find_by_path(path_param[:value])
-				if new_drive.nil?
-					drives_registered << (new_drive = CultomePlayer::Model::Drive.create(name: name_param[:value], path: path_param[:value]))
-				else
-					display c2("The drive '#{new_drive.name}' is refering the same path. Update of '#{new_drive.name}' is in progress.")
-					new_drive.update_attributes(connected: true)
-				end
-
-				music_files = Dir.glob("#{path_param[:value]}/**/*.mp3")
-				imported = 0
-				to_be_imported = music_files.size
-
-				music_files.each do |file_path|
-					begin
-                        create_song_from_file(file_path, new_drive)
-                        imported += 1
-                        display(c4("Importing #{c14(imported.to_s)}/#{c14(to_be_imported.to_s)}...\r"), true)
-                    rescue
-                        display(c2("Error importing #{file_path}...\r"))
-                    end
-				end
-
-				display(c14(imported.to_s) + c4(" files imported in drive #{c14(new_drive.name)}"))
-
-				return music_files.size
-			end
-		end
-
-		# Remove from the library one drive.
-		#
-		# @param params [List<Hash>] With parsed literal information.
-		# @return [Integer] The number of songs in the disconnected drive.
-		def disconnect(params=[])
-			drive_name = params.find{|p| p[:type] == :literal}
-			drive = CultomePlayer::Model::Drive.find_by_name(drive_name[:value])
-			if drive.nil?
-				raise "An error occured when disconnecting drive #{drive_name[:value]}. Maybe is mispelled?"
-			else
-				drive.update_attributes(connected: false)
-				drives_registered.delete(drive)
-			end
-
-			return CultomePlayer::Model::Song.where(drive_id: drive.id).count()
-		end
-
-        # Pause the current playback if playing and resume it if paused.
-        def pause(params=[])
-            turn_pause player.state =~ /PLAYING|RESUMED/ ? :on : :off
-        end
-
-        # Change the pause status of the player between PAUSED and RESUMED.
-        def toggle_pause
-            turn_pause player.state =~ /PLAYING|RESUMED/ ? :on : :off
-        end
-
-        # Change the status of the pause.
-        #
-        # @param state [Symbol] Valid values are :on and :off.
-        def turn_pause(state)
-            raise 'This command is not valid in this moment.' if current_song.nil?
-            raise 'Invalid parameter. Only :on or :off are valids' if state !~ /\Aon|off\Z/
-
-            inverse_pause_state = paused? ? c4("Playback resumed!") : c4("Holding your horses")
-            state == :on ?  pause_in_music_player : resume_in_music_player
-            
-            return inverse_pause_state
-        end
-
-        # Stop the current playback.
-        def stop(params=[])
-            raise 'This command is not valid in this moment.' if current_song.nil?
-            stop_in_music_player
-        end
-
-
-        # Fast forward to the current song.
-        def ff(params=[])
-            raise 'This command is not valid in this moment.' if current_song.nil?
-
-            next_pos = player.song_status[:bytes] + (player.song_status[:frame_size] * seeker_step)
-            seek_in_music_player(next_pos)
-            return show
-        end
-
-        # Fast backward to the current song.
-        def fb(params=[])
-            raise 'This command is not valid in this moment.' if current_song.nil?
-
-            next_pos = player.song_status[:bytes] - (player.song_status[:frame_size] * seeker_step)
-            seek_in_music_player(next_pos)
-            return show
-        end
-
-		# Check and change the shuffle setting. Without parameters just print the current state of shuffle. 
-		# If a literal o numerical parameter is passed, then if its value matches /Y|y|yes|1|si|s|ok/ then 
-		# the shuffle is turned on, otherwise is turned off.
-		#
-		# @param params [List<Hash>] With parsed literal or numerical information.
-		# @return [Boolean] The current state of shuffling.
-		def shuffle(params=[])
-			unless params.empty?
-				params.each do |param|
-					player.shuffling = is_true_value param[:value].to_s
-				end
-			end
-
-			display(player.shuffling ? c3("Everyday i'm shuffling") : c2("Shuffle is off"))
-
-			return player.shuffling
-		end
-
-        # Change the shuffle status of the player between ON and OFF.
-        def toggle_shuffle
-            shuffle([{value: !player.shuffling }])
-        end
-
-        # Change the status of the shuffle.
-        #
-        # @param state [Symbol] Valid values are :on and :off.
-        def turn_shuffle(state)
-            raise 'Invalid parameter. Only :on or :off are valids' if state !~ /\Aon|off\Z/
-            shuffle([{value: state}])
-        end
-
-		# Begin the current song from the begining.
-		def repeat(params=[])
-            raise 'This command is not valid in this moment.' if current_song.nil?
-            seek_in_music_player(0)
-            return current_song
-		end
-
-        private
-
-        # Given the parameter passed to the play command, it selects the better response object.
-        #
-        # @param params [Array<Hash>] The user command' parameter for the command play
-        # @return [CultomePlayer::Model::Song|Array<CultomePlayer::Model::Songi>] The object that suit better a response in the player context
-        def select_play_return_value(params)
-            if params.empty?
-                return current_song
-            elsif params.size == 1
-                case params[0][:type]
-                when :number then return current_song
-                when /\A(object|literal|criteria)\Z/ then return current_playlist
-                end
-
-            else
-                return current_playlist
-            end
-        end
-
-		# Insert a song in the library given its file_path and drive connected.
-		#
-		# @param file_path [String] The full path to the mp3 file.
-		# @param drive [Drive] The connected drive where the file will live.
-		# @return [Song] The added song.
-		def create_song_from_file(file_path, drive)
-			info = extract_mp3_information(file_path)
-
-			raise "ID3 tag information could not be extrated from #{file_path}" if info.nil?
-
-			unless info[:artist].blank?
+      unless info[:artist].blank?
         info[:artist_id] = CultomePlayer::Model::Artist.where(name: info[:artist]).first_or_create.id
-			end
+      end
 
-			unless info[:album].blank?
-				info[:album_id] = CultomePlayer::Model::Album.where(name: info[:album]).first_or_create.id
-			end
+      unless info[:album].blank?
+        info[:album_id] = CultomePlayer::Model::Album.where(name: info[:album]).first_or_create.id
+      end
 
-			info[:drive_id] = drive.id
-			info[:relative_path] = file_path.gsub("#{drive.path}/", '')
+      info[:drive_id] = drive.id
+      info[:relative_path] = file_path.gsub("#{drive.path}/", '')
 
-			# buscamos la rola antes de insertarla para evitar duplicados
-			song = CultomePlayer::Model::Song.where('drive_id = ? and relative_path = ?', info[:drive_id], info[:relative_path]).first_or_create(info)
+      # buscamos la rola antes de insertarla para evitar duplicados
+      song = CultomePlayer::Model::Song.where('drive_id = ? and relative_path = ?', info[:drive_id], info[:relative_path]).first_or_create(info)
 
-			unless info[:genre].blank?
-				song.genres << CultomePlayer::Model::Genre.where(name: info[:genre]).first_or_create
-			end
+      unless info[:genre].blank?
+        song.genres << CultomePlayer::Model::Genre.where(name: info[:genre]).first_or_create
+      end
 
-			return song
-		end
+      return song
+    end
 
     # Extract the ID3 tag information from a mp3 file.
     #
@@ -551,5 +551,5 @@ module CultomePlayer::Player
     def songs_not_played_in_playlist 
       @songs_not_played_in_playlist ||= []
     end
-    end
+  end
 end
