@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency "activerecord", "~> 4.0.0"
   gem.add_runtime_dependency "activesupport", "~> 4.0.0"
-  gem.add_runtime_dependency "taglib", "~> 0.6.0"
+  gem.add_runtime_dependency "taglib-ruby", "~> 0.6.0"
   gem.add_runtime_dependency "rb-readline", "~> 0.4.2"
   gem.add_runtime_dependency "sqlite3", "~> 1.3.7"
   gem.add_runtime_dependency "colorize", "~> 0.5.8"

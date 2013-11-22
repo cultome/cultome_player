@@ -251,6 +251,7 @@ play
 ## What's new
 
 **Version 2.0.0**
+
 You know! I cant remember how many times I have rewrited this player. Mainly I do it because is fun to work in it, but the ugly truth is that I never finish it. However I will try to delivery at least a stable and prolonged api for this version. I'm taking my time and hopefully some day near I can delivery a fully funcional version with the plugins and all the flashing lights. If you wanna try the player while Im building it, try this version, if not stick it to the 1.0.0 (Im using version 1.0.0 while writing this) until I rech the functional point of that version, when that happens I'll post it here.
 
 **Version 1.0.0**
