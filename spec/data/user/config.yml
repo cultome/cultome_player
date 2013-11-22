@@ -1,5 +1,0 @@
----
-aliases:
-  exit: quit
-  sap: search %1 | play 1
-genres_compatibility: {}

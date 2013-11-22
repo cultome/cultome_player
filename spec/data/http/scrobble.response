@@ -1,3 +1,0 @@
-HTTP/1.0 200 OK
-
-{"scrobbles":{"scrobble":{"track":{"#text":"Great Dj","corrected":"0"},"artist":{"#text":"The Ting Tings","corrected":"0"},"album":{"#text":"","corrected":"0"},"albumArtist":{"#text":"","corrected":"0"},"timestamp":"1369089915","ignoredMessage":{"#text":"","code":"0"}},"@attr":{"accepted":"1","ignored":"0"}}}
