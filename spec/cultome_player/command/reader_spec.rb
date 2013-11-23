@@ -33,7 +33,8 @@ describe CultomePlayer::Command::Reader do
 
     it 'paths' do
       Readline.stub(:line_buffer){ "play /home/" }
-      t.completion_proc.call("/home/").should eq ["/home/apache/", "/home/csoria/", "/home/lost+found/"]
+      opcs = t.completion_proc.call("/home/")
+      opcs.each{|opc| opc.should start_with "/home/" }
     end
 
     it 'objects' do

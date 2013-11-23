@@ -78,7 +78,7 @@ describe CultomePlayer::Player::Interface::Basic do
         it 'play the nth element in focus list without altering the current playlist' do
           t.execute 'search a'
           t.execute 'play 2'
-          t.current_song.name.should eq "The Way It Is"
+          t.current_song.name.should eq t.playlists[:focus].at(1).name
         end
       end
 
