@@ -7,11 +7,11 @@ module CultomePlayer
     end
 
     def db_file
-      '/home/csoria/ws/cultome_player/spec/db.dat'
+      File.expand_path 'spec/db.dat'
     end
 
     def db_log_path
-      '/home/csoria/ws/cultome_player/spec/db.log'
+      File.expand_path 'spec/db.log'
     end
 
     def file_types
