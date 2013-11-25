@@ -36,24 +36,9 @@ module CultomePlayer::Command
     end
 
     def identify_tokens(tokens)
-      tokens.collect do |token|
-        id = token_identities.find do |tok_id|
-          token =~ tok_id[:identity]
-        end
-
-        if id.nil?
-          {type: :unknown, value: token}
-        else
-          captures = id[:captures] || 1
-          labels = id[:labels] || [:value]
-
-          identified = {type: id[:type]}
-          attrs = (1..captures).to_a.zip(labels).each do |idx, label|
-            identified[label] = eval("$#{idx}")
-          end
-
-          identified
-        end
+      tokens.map do |token|
+        id = guess_token_id(token)
+        id.nil? ?  {type: :unknown, value: token} : get_token_value(token, id)
       end
     end
 
@@ -66,31 +51,7 @@ module CultomePlayer::Command
     end
 
     def get_command_format(type, tokens)
-      # buscamos el formato que tenga mas matches con los parametros
-      format = sintaxis[type].find do |tk|
-        if tk.class == String
-          tk.split.size >= tokens.size
-        elsif tk.class == Symbol
-          if tokens.class == Hash
-            tokens[:type] == tk
-          elsif tokens.class == Array && tokens.size == 1
-            tokens.first[:type] == tk
-          else
-            false
-          end
-        else
-          raise 'invalid command:invalid command format'
-        end
-      end
-
-      if format.nil?
-        max = sintaxis[type].max{|tk| tk.class == String ? tk.split.size: 0}
-        if max.respond_to?(:split) && tokens.size > max.split.size
-          format = max
-        else
-          raise 'invalid command:invalid command'
-        end
-      end
+      format = guess_command_format(type, tokens)
 
       return format if format.class == Symbol
 
@@ -114,5 +75,60 @@ module CultomePlayer::Command
       # limpiamos el formato final
       return cmd_format.strip.gsub(" ", " ")
     end
+
+    private
+
+    def guess_token_id(token)
+      token_identities.find do |tok_id|
+        token =~ tok_id[:identity]
+      end
+    end
+
+    def get_token_value(token, id)
+      captures = id[:captures] || 1
+      labels = id[:labels] || [:value]
+
+      token_info = {type: id[:type]}
+
+      token =~ id[:identity]
+      (1..captures).to_a.zip(labels).each do |idx, label|
+        token_info[label] = eval("$#{idx}")
+      end
+
+      return token_info
+    end
+
+    def guess_command_format(type, tokens)
+      # buscamos el formato que tenga mas matches con los parametros
+      format = sintaxis[type].find do |stxs_elem| # ["action", "action parameters"]
+        if stxs_elem.is_a?(String)
+           # checamos si el numero de token en el comando corresponde
+           # con el numer de tokens en la sintaxis
+           stxs_elem.split.size >= tokens.size # ej. "play 1 2" === "action paramters"
+        elsif stxs_elem.is_a?(Symbol)
+          if tokens.is_a?(Hash)
+            tokens[:type] == stxs_elem
+          elsif tokens.is_a?(Array) && tokens.size == 1
+            tokens.first[:type] == stxs_elem
+          else
+            false
+          end
+        else
+          raise 'invalid command:invalid command format'
+        end
+      end
+
+      if format.nil?
+        max = sintaxis[type].max{|tk| tk.class == String ? tk.split.size: 0}
+        if max.respond_to?(:split) && tokens.size > max.split.size
+          format = max
+        else
+          raise 'invalid command:invalid command'
+        end
+      end
+
+      return format
+    end
+
   end
 end
