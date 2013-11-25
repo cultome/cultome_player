@@ -1,5 +1,8 @@
 module CultomePlayer::Player::Interface
   module Helper
+
+    VALID_SONG_ATTR = [:name, :year, :track, :duration, :relative_path, :artist_id, :album_id, :drive_id]
+
     def process_for_search(params)
       return nil, [] if params.empty?
 
@@ -49,23 +52,27 @@ module CultomePlayer::Player::Interface
       return song
     end
 
-    def select_songs_with(cmd)
+    def search_songs_with(cmd)
       criteria_query, criteria_values = process_for_search(cmd.params(:criteria))
       literal_query, literal_values = process_for_search(cmd.params(:literal))
       object_query, object_values = process_for_search(cmd.params(:object))
-      # extract songs from focus playlist
-      from_focus = get_from_focus(cmd.params(:number))
-      # extract from playlists
-      lists = cmd.params(:object).map{|p| playlist?(p.value) ? p.value : nil }.compact
-      from_playlists = playlists[*lists].songs
-
       # preparamos la query completa con sus parametros
       search_query = [criteria_query, object_query, literal_query].compact.collect{|q| "(#{q})" }.join(" or ")
       search_values = [criteria_values, object_values, literal_values].flatten.compact
-
       # hacemos la query!
-      songs = search_query.empty? ? [] : Song.includes(:artist, :album).where(search_query, *search_values).references(:artist, :album).to_a
-      return songs + from_focus + from_playlists
+      return search_query.empty? ? [] : Song.includes(:artist, :album).where(search_query, *search_values).references(:artist, :album).to_a
+    end
+
+    def get_from_playlists(lists)
+      valid_lists = lists.select{|list_name| playlist?(list_name) }
+      return playlists[*valid_lists].songs
+    end
+
+    def select_songs_with(cmd)
+      founded_songs = search_songs_with(cmd)
+      from_focus = get_from_focus(cmd.params(:number))
+      from_playlists = get_from_playlists(cmd.params_values(:object))
+      return founded_songs + from_focus + from_playlists
     end
 
     def player_object(name)
@@ -99,24 +106,37 @@ module CultomePlayer::Player::Interface
       Song.all.collect{|m| m.path }.uniq
     end
 
+    def artist_id(artist_name)
+      return 0 if artist_name.blank?
+      artist = Artist.where(name: artist_name).first_or_create
+      return artist.id
+    end
+
+    def album_id(album_name)
+      return 0 if album_name.blank?
+      album = Album.where(name: album_name).first_or_create
+      return album.id
+    end
+
+    def drive_id(library_path)
+      return 0 if library_path.blank?
+      drive = Drive.where(path: library_path).first_or_create
+      return drive.id
+    end
+
+    def add_genre_to(song, genre)
+      unless genre.blank?
+        song.genres << Genre.where(name: genre).first_or_create
+      end
+    end
+
     def write_song(info, song=nil)
-      unless info[:artist].blank?
-        info[:artist_id] = Artist.where(name: info[:artist]).first_or_create.id
-      end
-
-      unless info[:album].blank?
-        info[:album_id] = Album.where(name: info[:album]).first_or_create.id
-      end
-
-      unless info[:library_path].blank?
-        info[:drive_id] = Drive.where(path: info[:library_path]).first_or_create.id
-      end
-
+      info[:artist_id] = artist_id(info[:artist])
+      info[:album_id] = album_id(info[:album])
+      info[:drive_id] = drive_id(info[:library_path])
       info[:relative_path] = info[:file_path].gsub("#{info[:library_path]}/", '')
 
-      valid_song_attr = [:name, :year, :track, :duration, :relative_path, :artist_id, :album_id, :drive_id]
-
-      song_attr = info.select{|k,v| valid_song_attr.include?(k) }
+      song_attr = info.select{|k,v| VALID_SONG_ATTR.include?(k) }
 
       if song.nil?
         song = Song.create!(song_attr)
@@ -124,9 +144,7 @@ module CultomePlayer::Player::Interface
         song.update_attributes(song_attr)
       end
 
-      unless info[:genre].blank?
-        song.genres << Genre.where(name: info[:genre]).first_or_create
-      end
+      add_genre_to(song, info[:genre])
 
       return song.persisted?
     end
@@ -161,16 +179,17 @@ module CultomePlayer::Player::Interface
     end
 
     def process_criteria_for_search(params)
+      default = Hash.new{|h,k| h[k] = {count: 0, query: "", values: []} }
       # analizamos los criterios
-      criterios = params.each_with_object(Hash.new{|h,k| h[k] = {count: 0, query: "", values: []} }) do |p, acc|
-        info = acc[p.criteria]
+      criterios = params.each_with_object(default) do |p, acc|
+        info = acc[p.criteria] # creamos nuevo mapa o sacamos el existente
 
         info[:count] += 1
         info[:query] << " or " if info[:count] > 1
         case p.criteria
-        when 'a' then info[:query] << "artists.name like ?"
-        when 'b' then info[:query] << "albums.name like ?"
-        when 't' then info[:query] << "songs.name like ?"
+          when :a then info[:query] << "artists.name like ?"
+          when :b then info[:query] << "albums.name like ?"
+          when :t then info[:query] << "songs.name like ?"
         end
         info[:values] << "%#{p.value}%"
       end

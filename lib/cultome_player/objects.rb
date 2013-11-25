@@ -20,6 +20,10 @@ module CultomePlayer
       def params_groups
         @parameters.collect{|p| p.type }.each_with_object({}){|type,acc| acc[type] = params(type) }
       end
+
+      def params_values(type)
+        params(type).map{|p| p.value }
+      end
     end
 
     class Parameter
@@ -30,7 +34,7 @@ module CultomePlayer
       end
 
       def criteria
-        @data[:criteria]
+        @data[:criteria].to_sym
       end
 
       def value
