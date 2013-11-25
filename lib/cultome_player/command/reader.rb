@@ -7,20 +7,6 @@ module CultomePlayer::Command
       command_reader.readline(prompt, true)
     end
 
-    def get_command_param_options(cmd, word)
-      if word.empty?
-        # completa! mostramos los parametros disponibles para el comando
-        if semantics.keys.include?(cmd)
-          # mostramos las opciones de parametros IFF acepta parametros
-          params = semantics[cmd].source.gsub(/^\^literal/, '').gsub(/\[\\s\][+*]/, "").gsub(/[()*$]/, '')
-
-          params.split(/[| ]/).collect{|p| "<#{p}>"} unless params.empty?
-        end
-      else
-        yield if block_given?
-      end
-    end
-
     def command_reader
       return Readline if @command_reader_initialized
 
@@ -39,22 +25,9 @@ module CultomePlayer::Command
         else
           tks = Readline.line_buffer.split
           if tks.length == 1
-            # escribio una parabra..
-            options = get_command_param_options(tks[0], word) do
-              # incompleta! require acompletar el action actual
-              semantics.keys.grep(/^#{Regexp.escape(Readline.line_buffer)}/).collect{|s| "#{s} "}
-            end
+            options = complete_action(tks[0], word)
           elsif tks.length > 1
-            options = get_command_param_options(tks[0], word) do
-              # esta acompletando un parametro
-              if word.start_with?("/") || word.start_with?("~/")
-                expanded_path = File.expand_path(word)
-                expanded_path += "/" if File.directory?(expanded_path)
-                Dir[expanded_path + "*"].grep(/^#{Regexp.escape(expanded_path)}/).collect{|d| "#{d}/"}
-              elsif word.start_with?("@")
-                %w{@library @search @playlist @history @queue @song @artist @album @drives}.grep(/^#{word}/)
-              end
-            end
+            options = complete_parameter(tks[0], word)
           end
         end
 
@@ -63,6 +36,43 @@ module CultomePlayer::Command
         options << " " if options.all?{|o| o.start_with?("<")}
         options # final return
       end # proc
+    end
+
+    private
+
+    def get_command_param_options(cmd, word)
+      if word.empty?
+        # completa! mostramos los parametros disponibles para el comando
+        if semantics.keys.include?(cmd)
+          # mostramos las opciones de parametros IFF acepta parametros
+          params = semantics[cmd].source.gsub(/^\^literal/, '').gsub(/\[\\s\][+*]/, "").gsub(/[()*$]/, '')
+
+          params.split(/[| ]/).collect{|p| "<#{p}>"} unless params.empty?
+        end
+      else
+        yield if block_given?
+      end
+    end
+
+    def complete_parameter(cmd, word)
+      options = get_command_param_options(cmd, word) do
+        # esta acompletando un parametro
+        if word.start_with?("/") || word.start_with?("~/")
+          expanded_path = File.expand_path(word)
+          expanded_path += "/" if File.directory?(expanded_path)
+          Dir[expanded_path + "*"].grep(/^#{Regexp.escape(expanded_path)}/).collect{|d| "#{d}/"}
+        elsif word.start_with?("@")
+          %w{@library @search @playlist @history @queue @song @artist @album @drives}.grep(/^#{word}/)
+        end
+      end
+    end
+
+    def complete_action(cmd, word)
+      # escribio una parabra..
+      get_command_param_options(cmd, word) do
+        # incompleta! require acompletar el action actual
+        semantics.keys.grep(/^#{Regexp.escape(Readline.line_buffer)}/).collect{|s| "#{s} "}
+      end
     end
 
   end
