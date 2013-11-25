@@ -86,13 +86,11 @@ module CultomePlayer::Player::Playlist
     end
 
     def play_index
-      return @data.values.first[:idx] if @data.size == 1
-      return @data.values.collect{|info| info[:idx] }
+      return first_or_map :idx
     end
 
     def repeat?
-      return @data.values.first[:repeat] if @data.size == 1
-      return @data.values.collect{|info| info[:repeat] }
+      return first_or_map :repeat
     end
 
     def repeat(value)
@@ -128,6 +126,11 @@ module CultomePlayer::Player::Playlist
     end
 
     private
+
+    def first_or_map (attr)
+      return @data.values.first[attr] if @data.size == 1
+      return @data.values.map{|info| info[attr] }
+    end
 
     def each_next
       nexts = @data.values
