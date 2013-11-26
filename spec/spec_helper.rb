@@ -56,10 +56,39 @@ module FakeExtractor
   end
 end
 
+module MockPlayer
+  def send_to_player(cmd)
+    if cmd == 'pause'
+      @paused = true
+      @stopped = @playing = false
+    elsif cmd.start_with?('osd_show_text')
+      @paused = @stopped = false
+      @playing = true
+    elsif cmd.start_with?('loadfile')
+      @playing = true
+    elsif cmd.start_with?('stop')
+      @is_player_running = @paused = @playing = false
+      @stopped = true
+    else
+      puts "ERROR: #{cmd} !!!!!!!"
+    end
+  end
+
+  def control_pipe
+    STDOUT
+  end
+
+  def start_player_with(song)
+      @is_player_running = @playing = true
+      @paused = @stopped = false
+  end
+end
+
 class TestClass
   include CultomePlayer
   include FakeStatus
   include FakeExtractor
+  include MockPlayer
 
   def initialize
     playlists.register(:current)

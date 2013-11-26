@@ -62,7 +62,7 @@ describe CultomePlayer::Player::Interface::Basic do
           my_song = t.current_song
           t.execute "stop"
           t.should be_stopped
-          r = t.execute 'play'
+          t.execute 'play'
           t.should be_playing
           my_song.should eq t.current_song
         end
