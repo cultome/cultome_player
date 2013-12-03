@@ -3,6 +3,7 @@ module CultomePlayer::Player::Adapter
     def play_in_player(song)
       @current_song = song
       player_running? ? loadfile(song) : start_player_with(song)
+      check_playback_duration
     end
 
     def pause_in_player
@@ -32,6 +33,14 @@ module CultomePlayer::Player::Adapter
 
     private
 
+    def check_playback_duration
+      send_to_player "get_time_length"
+    end
+
+    def check_time_position
+      send_to_player "get_time_pos"
+    end
+
     def print_in_osd(msg)
       send_to_player "osd_show_text '#{msg}'"
     end
@@ -54,11 +63,24 @@ module CultomePlayer::Player::Adapter
     end
 
     def control_pipe
-      if pipe.nil? || pipe.closed?
+      unless pipe_alive?
         @pipe = File.open(pipe_location, 'a+')
       end
 
       @pipe
+    end
+
+    def pipe_alive?
+      return !(@pipe.nil? || @pipe.closed?)
+    end
+
+    def watch_playback
+      Thread.new do
+        while pipe_alive?
+          check_time_position
+          sleep 1
+        end
+      end
     end
 
     def start_player_with(song)
@@ -84,6 +106,8 @@ module CultomePlayer::Player::Adapter
           control_pipe.close
         end
       end
+
+      watch_playback
     end
 
   end

@@ -66,4 +66,21 @@ module CultomePlayer
   def current_album
     current_song.album
   end
+
+  class << self
+    class DefaultPlayer
+      include CultomePlayer
+
+      def initialize
+        playlists.register(:current)
+        playlists.register(:history)
+        playlists.register(:queue)
+        playlists.register(:focus)
+      end
+    end
+
+    def get_player
+      DefaultPlayer.new
+    end
+  end
 end

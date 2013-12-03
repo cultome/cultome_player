@@ -20,6 +20,7 @@ describe CultomePlayer::Player::Adapter::MPlayer do
 
   it 'plays a song if there is one active playback' do
     t.should_receive(:send_to_player).with(/^loadfile/)
+    t.should_receive(:send_to_player).with(/^get_time_length$/).exactly(2).times
     t.play_in_player song
     t.should be_player_running
     t.play_in_player song

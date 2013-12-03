@@ -69,6 +69,10 @@ module MockPlayer
     elsif cmd.start_with?('stop')
       @is_player_running = @paused = @playing = false
       @stopped = true
+    elsif cmd.start_with?('get_time_length')
+      @playback_time_length = 120
+    elsif cmd.start_with?('get_time_pos')
+      @playback_time_position = 1
     else
       puts "ERROR: #{cmd} !!!!!!!"
     end

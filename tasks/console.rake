@@ -13,10 +13,6 @@ task :console do
   )
   ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
 
-  class Player
-    include CultomePlayer
-  end
-
-  p = Player.new
+  p = CultomePlayer.get_player
   binding.pry
 end
