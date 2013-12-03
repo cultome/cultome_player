@@ -24,6 +24,7 @@ module CultomePlayer::Command
         "pause" => /^literal (boolean)$/,
         "prev" => /^literal((literal)|[\s]+)*$/,
         "next" => /^literal[\s]*$/,
+        "quit" => /^literal[\s]*$/,
         "shuffle" => /^literal[\s]+(boolean)$/,
       }
     end

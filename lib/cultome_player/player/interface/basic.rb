@@ -75,6 +75,7 @@ module CultomePlayer
         end
 
         def quit(cmd)
+          terminate_session
         end
       end
     end
