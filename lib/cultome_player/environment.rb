@@ -34,6 +34,7 @@ module CultomePlayer
       env_config = YAML.load_file File.expand_path('config/environment.yml')
       @env_config = env_config[env.to_s]
       raise 'environment problem:environment not found' if @env_config.nil?
+      expand_paths @env_config
       create_required_files @env_config
       load_master_config @env_config
     end
@@ -47,11 +48,20 @@ module CultomePlayer
     def create_required_files(env_config)
       env_config.each do |k,v|
         if k.end_with?('_file')
-          file_path = File.expand_path(v)
-          unless File.exist?(file_path)
-            %x[mkdir -p '#{File.dirname(file_path)}' && touch '#{file_path}']
+          unless File.exist?(v)
+            %x[mkdir -p '#{File.dirname(v)}' && touch '#{v}']
             raise 'environment problem:cannot create required files' unless $?.success?
           end
+        end
+      end
+    end
+
+    private
+
+    def expand_paths(env_config)
+      env_config.each do |k,v|
+        if k.end_with?('_file')
+          env_config[k] = File.expand_path(v)
         end
       end
     end

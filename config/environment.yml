@@ -18,7 +18,7 @@ rspec:
   config_file: spec/config.yml
 test:
   db_adapter: sqlite3
-  db_file: spec/test/db.dat
-  db_log_file: spec/test/db.log
+  db_file: ~/tmp/db.dat
+  db_log_file: ~/tmp/db.log
   file_types: mp3
-  config_file: spec/test/config.yml
+  config_file: ~/tmp/config.yml

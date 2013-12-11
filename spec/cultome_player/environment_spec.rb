@@ -42,7 +42,7 @@ describe CultomePlayer::Environment do
       t.db_file.should end_with 'spec/db.dat'
     end
     it 'load the db_log_file' do
-      t.db_log_file.should eq 'spec/db.log'
+      t.db_log_file.should end_with 'spec/db.log'
     end
 
     it 'load the file_types' do
@@ -50,7 +50,7 @@ describe CultomePlayer::Environment do
     end
 
     it 'load the config_file' do
-      t.config_file.should eq 'spec/config.yml'
+      t.config_file.should end_with 'spec/config.yml'
     end
   end
 end
