@@ -11,7 +11,7 @@ task :console do
     adapter: db_adapter,
     database: db_file
   )
-  ActiveRecord::Base.logger = Logger.new(File.open(db_log_path, 'a'))
+  ActiveRecord::Base.logger = Logger.new(File.open(db_log_file, 'a'))
 
   p = CultomePlayer.get_player
   binding.pry

@@ -5,6 +5,7 @@ require 'cultome_player'
 Coveralls.wear!
 
 include CultomePlayer::Environment
+include CultomePlayer::Utils
 include CultomePlayer::Objects
 
 RSpec.configure do |config|
@@ -14,6 +15,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   config.before(:suite) do
+    prepare_environment(:rspec)
     with_connection do
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
@@ -36,10 +38,6 @@ module FakeStatus
 
   def current_album
     Album.new(name: 'album_tres')
-  end
-
-  def file_types
-    'mp3'
   end
 end
 
@@ -94,7 +92,8 @@ class TestClass
   include FakeExtractor
   include MockPlayer
 
-  def initialize
+  def initialize(env=:rspec)
+    prepare_environment(env) unless env.nil?
     playlists.register(:current)
     playlists.register(:history)
     playlists.register(:queue)

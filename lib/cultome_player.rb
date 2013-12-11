@@ -71,7 +71,8 @@ module CultomePlayer
     class DefaultPlayer
       include CultomePlayer
 
-      def initialize
+      def initialize(env)
+        prepare_environment(env)
         playlists.register(:current)
         playlists.register(:history)
         playlists.register(:queue)
@@ -79,8 +80,8 @@ module CultomePlayer
       end
     end
 
-    def get_player
-      DefaultPlayer.new
+    def get_player(env=:user)
+      DefaultPlayer.new(env)
     end
   end
 end

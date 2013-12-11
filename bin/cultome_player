@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'cultome_player'
+
+options = {
+  interactive: false,
+}
+
+parser = OptionParser.new do |opts|
+  opts.banner = "Usage: cultome_player [options] [file1, file2, ...]"
+
+  opts.on('-i', '--interactive', 'Starts the player in interactive mode') do |file|
+    options[:interactive] = true
+  end
+
+  opts.on('--version', "Shows version") do
+    puts CultomePlayer::VERSION
+    exit
+  end
+
+end
+
+# parseamos las opciones
+parser.parse!(ARGV)
+
+player = CultomePlayer.get_player
+
+if options[:interactive]
+  player.begin_session
+end
