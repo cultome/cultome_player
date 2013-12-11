@@ -6,6 +6,17 @@ module CultomePlayer
       /true|yes|on|y|n|s|si|cierto/ === value 
     end
 
+    # Capture and dispose the standard output sended inside the block provided.
+    def swallow_stdout
+      s = StringIO.new
+      oldstd = $stdout
+      $stdout = s
+      yield
+      s.string
+    ensure
+      $stdout = oldstd
+    end
+
     def with_connection(&db_logic)
       begin
         ActiveRecord::Base.connection_pool
