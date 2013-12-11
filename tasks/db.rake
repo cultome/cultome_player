@@ -12,8 +12,8 @@ namespace :db do
     prepare_environment(env, false)
     with_connection do
       ActiveRecord::Migrator.migrate(migrations_path)
-      Album.create!(id: 0, name: 'Unknown')
-      Artist.create!(id: 0, name: 'Unknown')
+      Album.find_or_create_by(id: 0, name: 'Unknown')
+      Artist.find_or_create_by(id: 0, name: 'Unknown')
     end
   end
 end

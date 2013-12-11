@@ -22,11 +22,11 @@ module CultomePlayer::Player::Adapter
       send_to_player "stop"
     end
 
-    def ff(secs=10)
+    def ff_in_player(secs)
       send_to_player "seek #{secs}"
     end
 
-    def fb(secs=10)
+    def fb_in_player(secs)
       send_to_player "seek -#{secs}"
     end
 
@@ -97,7 +97,7 @@ module CultomePlayer::Player::Adapter
           when /Starting playback/
             @is_player_running = @playing = true
             @paused = @stopped = false
-          when /Exiting... (End of file)/
+          when /End of file/
             @is_player_running = @playing = @paused = false
             @stopped = true
             control_pipe.close

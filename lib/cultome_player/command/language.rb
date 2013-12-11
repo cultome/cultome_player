@@ -25,6 +25,8 @@ module CultomePlayer::Command
         "prev" => /^literal((literal)|[\s]+)*$/,
         "next" => /^literal[\s]*$/,
         "quit" => /^literal[\s]*$/,
+        "ff" => /^literal(number|[\s]+)*$/,
+        "fb" => /^literal(number|[\s]+)*$/,
         "shuffle" => /^literal[\s]+(boolean)$/,
       }
     end

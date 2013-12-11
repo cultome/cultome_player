@@ -10,6 +10,12 @@ module CultomePlayer
       stdout.puts msg
     end
 
+    (1..15).each do |idx|
+      define_method :"c#{idx}" do |str|
+        str
+      end
+    end
+
     # Capture and dispose the standard output sended inside the block provided.
     def swallow_stdout
       s = StringIO.new

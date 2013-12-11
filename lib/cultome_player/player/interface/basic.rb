@@ -55,7 +55,7 @@ module CultomePlayer
 
         def stop(cmd)
           stop_in_player
-          success(paused: paused?, stopped: stopped?, playing: playing?)
+          success(message: "Stop it!", paused: paused?, stopped: stopped?, playing: playing?)
         end
 
         def next(cmd)
@@ -69,7 +69,7 @@ module CultomePlayer
           # aqui enviamos al reproductor externo a tocar
           play_queue
 
-          return success(now_playing: current_song)
+          return success(message: "Now playing #{current_song}", now_playing: current_song)
         end
 
         def prev(cmd)

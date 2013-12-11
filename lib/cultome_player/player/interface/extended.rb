@@ -68,10 +68,28 @@ module CultomePlayer::Player::Interface
     def disconnect
     end
 
-    def ff
+    def ff(cmd)
+      ff_in_secs = 10
+
+      unless cmd.params(:number).empty?
+        ff_in_secs = cmd.params(:number).first.value
+      end
+
+      ff_in_player ff_in_secs
+
+      return success(message: "Fast Forwarded by #{ff_in_secs} secs")
     end
 
-    def fb
+    def fb(cmd)
+      fb_in_secs = 10
+
+      unless cmd.params(:number).empty?
+        fb_in_secs = cmd.params(:number).first
+      end
+
+      fb_in_player fb_in_secs
+
+      return success(message: "Fast Backwarded by #{fb_in_secs} secs")
     end
   end
 end
