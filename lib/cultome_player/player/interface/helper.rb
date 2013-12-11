@@ -95,6 +95,19 @@ module CultomePlayer::Player::Interface
       return false
     end
 
+    def connect_response_msg(imported, updated)
+      message = ""
+      if imported > 0
+        message += "Songs imported: #{imported}."
+      end
+
+      if updated > 0
+        message += "Songs updated: #{updated}."
+      end
+
+      return message
+    end
+
     private
 
     def get_from_focus(params)

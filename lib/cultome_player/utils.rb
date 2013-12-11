@@ -6,6 +6,10 @@ module CultomePlayer
       /true|yes|on|y|n|s|si|cierto/ === value 
     end
 
+    def display(msg)
+      stdout.puts msg
+    end
+
     # Capture and dispose the standard output sended inside the block provided.
     def swallow_stdout
       s = StringIO.new

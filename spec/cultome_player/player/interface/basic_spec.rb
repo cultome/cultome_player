@@ -3,6 +3,8 @@ require 'spec_helper'
 describe CultomePlayer::Player::Interface::Basic do
   let(:t){ TestClass.new }
 
+  it 'all commands should return a Response object'
+
   describe '#pause' do
     it 'calls the underliying player' do
       t.should_receive(:pause_in_player)

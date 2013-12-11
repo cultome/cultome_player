@@ -2,9 +2,11 @@ module CultomePlayer::Player
   module Interactive
     def begin_session
       @in_session = true
+      display "Cultome Player v#{CultomePlayer::VERSION}"
 
       while in_session?
-        execute read_command("cultome> ")
+        r = execute read_command("cultome> ")
+        display r.message
       end
     end
 

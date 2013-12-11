@@ -23,6 +23,14 @@ module CultomePlayer
       env_config['config_file'] || raise('environment problem:environment information not loaded')
     end
 
+    def mplayer_pipe
+      env_config['mplayer_pipe'] || raise('environment problem:environment information not loaded')
+    end
+
+    def stdout
+      STDOUT
+    end
+
     def player_config
       @player_config ||= {}
     end
@@ -66,13 +74,18 @@ module CultomePlayer
             %x[mkdir -p '#{File.dirname(v)}' && touch '#{v}']
             raise 'environment problem:cannot create required files' unless $?.success?
           end
+        elsif k.end_with?('_pipe')
+          unless File.exist?(v)
+            %x[mkfifo '#{v}']
+            raise 'environment problem:cannot create required pipe' unless $?.success?
+          end
         end
       end
     end
 
     def expand_paths(env_config)
       env_config.each do |k,v|
-        if k.end_with?('_file')
+        if k.end_with?('_file') || k.end_with?('_pipe')
           env_config[k] = File.expand_path(v)
         end
       end

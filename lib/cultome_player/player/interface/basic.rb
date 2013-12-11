@@ -77,6 +77,8 @@ module CultomePlayer
 
         def quit(cmd)
           terminate_session
+          return success(message: "See you next time!") unless in_session?
+          return failure(message: "Oops! You should user Ctr-c or throw water to the CPU NOW!!!!")
         end
       end
     end

@@ -57,7 +57,11 @@ module CultomePlayer::Player::Interface
         updated = update_song(track_info)
         imported = insert_song(track_info)
 
-        success(files_detected: track_info.size, files_imported: imported, files_updated: updated, drive_updated: is_update)
+        success(message: connect_response_msg(imported, updated),
+                files_detected: track_info.size,
+                files_imported: imported,
+                files_updated: updated,
+                drive_updated: is_update)
       end
     end
 

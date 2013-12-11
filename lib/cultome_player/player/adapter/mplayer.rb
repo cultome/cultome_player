@@ -3,7 +3,6 @@ module CultomePlayer::Player::Adapter
     def play_in_player(song)
       @current_song = song
       player_running? ? loadfile(song) : start_player_with(song)
-      check_playback_duration
     end
 
     def pause_in_player
@@ -56,15 +55,12 @@ module CultomePlayer::Player::Adapter
     def send_to_player(cmd)
       raise 'invalid state:player is not running' unless player_running?
       control_pipe.puts cmd
-    end
-
-    def pipe_location
-      "/home/csoria/tmp/mpctr"
+      control_pipe.flush
     end
 
     def control_pipe
       unless pipe_alive?
-        @pipe = File.open(pipe_location, 'a+')
+        @pipe = File.open(mplayer_pipe, 'a+')
       end
 
       @pipe
@@ -84,31 +80,32 @@ module CultomePlayer::Player::Adapter
     end
 
     def start_player_with(song)
-      start_cmd = "mplayer -slave -input file='#{pipe_location}' '#{song.path}'"
-      IO.popen(start_cmd).each do |line|
-        case line
-        when /ANS_TIME_POSITION=([\d.]+)/
-          @playback_time_position = $1.to_f
-        when /ANS_length=([\d.]+)/
-          @playback_time_length = $1.to_f
-        when /=====  PAUSE  =====/
-          @stopped = @playing = false
-          @paused = true
-        when /=====  UNPAUSE  =====/
-          @stopped = @paused = false
-          @playing = true
-        when /Starting playback/
-          @is_player_running = @playing = true
-          @paused = @stopped = false
-        when /Exiting... (End of file)/
-          @is_player_running = @playing = @paused = false
-          @stopped = true
-          control_pipe.close
-        end
-      end
+      Thread.new do
+        start_cmd = "mplayer -slave -input file='#{mplayer_pipe}' '#{song.path}' 2>/dev/null"
+        IO.popen(start_cmd).each do |line|
+          case line
+          when /ANS_TIME_POSITION=([\d.]+)/
+            @playback_time_position = $1.to_f
+          when /ANS_length=([\d.]+)/
+            @playback_time_length = $1.to_f
+          when /=====  PAUSE  =====/
+            @stopped = @playing = false
+            @paused = true
+          when /=====  UNPAUSE  =====/
+            @stopped = @paused = false
+            @playing = true
+          when /Starting playback/
+            @is_player_running = @playing = true
+            @paused = @stopped = false
+          when /Exiting... (End of file)/
+            @is_player_running = @playing = @paused = false
+            @stopped = true
+            control_pipe.close
+          end # case
+        end # IO
+      end # Thread
 
       watch_playback
     end
-
   end
 end

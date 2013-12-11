@@ -12,6 +12,7 @@ RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
+  config.filter_run_excluding :mplayer
   config.order = 'random'
 
   config.before(:suite) do
@@ -81,8 +82,8 @@ module MockPlayer
   end
 
   def start_player_with(song)
-      @is_player_running = @playing = true
-      @paused = @stopped = false
+    @is_player_running = @playing = true
+    @paused = @stopped = false
   end
 end
 
