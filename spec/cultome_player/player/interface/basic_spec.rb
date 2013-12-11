@@ -23,6 +23,13 @@ describe CultomePlayer::Player::Interface::Basic do
   end
 
   describe '#play' do
+    context 'without music connected' do
+      it 'advise to connect music first if no music is connected' do
+        r = t.execute("play")
+        r.message.should eq "No music connected! You should try 'connect /home/yoo/music => main' first"
+      end
+    end
+
     context 'with music connected' do
       before :each do
         t.execute "connect '#{test_folder}' => test"

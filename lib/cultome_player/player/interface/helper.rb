@@ -1,5 +1,6 @@
 module CultomePlayer::Player::Interface
   module Helper
+    include CultomePlayer::Objects
 
     VALID_SONG_ATTR = [:name, :year, :track, :duration, :relative_path, :artist_id, :album_id, :drive_id]
 

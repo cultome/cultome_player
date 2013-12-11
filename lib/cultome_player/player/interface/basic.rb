@@ -20,6 +20,7 @@ module CultomePlayer
             end
             # tocamos toda la libreria
             songs = whole_library
+            return failure("No music connected! You should try 'connect /home/yoo/music => main' first") if songs.empty?
             playlists[:current, :focus] <= songs
 
           else
