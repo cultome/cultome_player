@@ -25,6 +25,8 @@ parser = OptionParser.new do |opts|
 
 end
 
+ARGV << "--help" if ARGV.empty?
+
 # parseamos las opciones
 parser.parse!(ARGV)
 
