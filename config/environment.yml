@@ -1,10 +1,10 @@
 user:
   db_adapter: sqlite3
-  db_file: ~/.cultome/db.dat
-  db_log_file: ~/.cultome/db.log
+  db_file: ~/.cultome_new/db.dat
+  db_log_file: ~/.cultome_new/db.log
   file_types: mp3
-  mplayer_pipe: ~/.cultome/mpctr
-  config_file: ~/.cultome/config.yml
+  mplayer_pipe: ~/.cultome_new/mpctr
+  config_file: ~/.cultome_new/config.yml
 memory:
   db_adapter: sqlite3
   db_file: /tmp/db.dat

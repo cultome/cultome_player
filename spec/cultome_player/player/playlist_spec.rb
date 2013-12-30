@@ -139,6 +139,14 @@ describe CultomePlayer::Player::Playlist do
         p[:playlist].remove_next.should eq "dos"
         p[:playlist].should have(2).songs
       end
+
+      it 'iterate over every song' do
+        pl = ":"
+        p[:playlist].each_song do |s|
+          pl << s.to_s
+        end
+        pl.should eq ":unodostrescuatro"
+      end
     end
   end
 
@@ -195,6 +203,16 @@ describe CultomePlayer::Player::Playlist do
     it 'raise an error if getting the next of an empty playlist' do
       p[:uno] << "uno"
       expect{ p[:uno, :dos].next }.to raise_error 'playlist empty:no songs in one of the playlists'
+    end
+
+    it 'iterate over every song' do
+      p[:uno] << "uno"
+      p[:dos] << "dos"
+      pl = ":"
+      p.each_song do |s,idx|
+        pl << "#{idx}#{s.to_s}"
+      end
+      pl.should eq ":1uno2dos"
     end
   end
 end

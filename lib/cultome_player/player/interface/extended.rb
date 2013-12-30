@@ -1,5 +1,7 @@
+
 module CultomePlayer::Player::Interface
   module Extended
+
     def search(cmd)
       songs = select_songs_with cmd
 
@@ -12,7 +14,27 @@ module CultomePlayer::Player::Interface
       end
     end
 
-    def show
+    def show(cmd)
+      if cmd.params.empty?
+        if playing?
+          #mostramos la cancion actual
+          return success(message: current_song.to_s, song: current_song)
+        else
+          return failure("Nothing to show yet. Try with 'play' first.")
+        end
+
+      else
+        list_to_show = cmd.params(:object).reduce([]) do |acc, p|
+          acc + case p.value
+          when :playlist then current_playlist.to_a
+          when :library then whole_library.to_a
+          else []
+          end
+        end
+
+        msg = list_to_show.each_with_index.collect{|s,i| "#{i+1}. #{s.to_s}"}.join("\n")
+        return success(message: msg, list: list_to_show)
+      end
     end
 
     def enqueue

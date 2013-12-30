@@ -23,7 +23,8 @@ module CultomePlayer::Player::Playlist
     end
 
     def each_song
-      @data.values.each{|info| info[:list].each{|song| yield song } }
+      idx = 0
+      @data.values.each{|info| info[:list].each{|song| yield song, idx += 1 } }
     end
 
     def each
@@ -123,6 +124,12 @@ module CultomePlayer::Player::Playlist
     def at(idx)
       return @data.values.first[:list].at(idx) if @data.size == 1
       return @data.values.collect{|info| info[:list].at(idx) }
+    end
+
+    def as_list
+      list = ""
+      each_song{|s,i| list << "#{i}. #{s.to_s}\n" }
+      return list
     end
 
     private
