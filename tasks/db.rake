@@ -1,4 +1,4 @@
-require 'cultome_player/environment'
+require 'cultome_player'
 
 include CultomePlayer::Environment
 include CultomePlayer::Utils
