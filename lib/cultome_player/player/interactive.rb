@@ -5,8 +5,12 @@ module CultomePlayer::Player
       display "Cultome Player v#{CultomePlayer::VERSION}"
 
       while in_session?
-        r = execute read_command("cultome> ")
-        display r.message
+        begin
+          r = execute read_command("cultome> ")
+          display r.message
+        rescue Exception => e
+          display e.message
+        end
       end
     end
 
