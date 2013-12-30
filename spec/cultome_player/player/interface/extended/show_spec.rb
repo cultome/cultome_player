@@ -18,6 +18,7 @@ describe CultomePlayer::Player::Interface::Extended do
     it 'without parameters shows the current song' do
       r = t.execute 'show'
       r.message.should match /^:::: Song: .+? \\ Artist: .+? \\ Album: .+? ::::$/
+      r.message.should match /[\d]{2}:[\d]{2} \|[#_]+?\| [\d]{2}:[\d]{2}/
     end
 
     context 'with object parameter' do

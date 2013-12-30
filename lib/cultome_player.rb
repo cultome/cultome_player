@@ -67,6 +67,14 @@ module CultomePlayer
     current_song.album
   end
 
+  def playback_position
+    @playback_time_position ||= 0
+  end
+
+  def playback_length
+    @playback_time_length ||= 0
+  end
+
   class << self
     class DefaultPlayer
       include CultomePlayer

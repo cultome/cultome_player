@@ -4,6 +4,25 @@ module CultomePlayer::Player::Interface
 
     VALID_SONG_ATTR = [:name, :year, :track, :duration, :relative_path, :artist_id, :album_id, :drive_id]
 
+    def format_secs(secs)
+      mins = secs.to_i / 60
+      secs_left = secs.to_i % 60
+      return "#{mins.to_s.rjust(2, "0")}:#{secs_left.to_s.rjust(2, "0")}"
+    end
+
+    def get_progress_bar_with_labels(current, total=100, size=10, left='', right='')
+      bar = get_progress_bar(current, total, size)
+      return "#{left} #{bar} #{right}".strip
+    end
+
+    def get_progress_bar(current, total=100, size=10)
+      factor = total > 0 ? current / total.to_f : 0
+      bars = ( factor * size ).floor
+      total = "_" * size
+      total[0,bars] = "#" * bars
+      return "|#{total}|"
+    end
+
     def process_for_search(params)
       return nil, [] if params.empty?
 

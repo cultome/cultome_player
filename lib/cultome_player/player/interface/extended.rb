@@ -18,7 +18,8 @@ module CultomePlayer::Player::Interface
       if cmd.params.empty?
         if playing?
           #mostramos la cancion actual
-          return success(message: current_song.to_s, song: current_song)
+          msg = get_progress_bar_with_labels(playback_position, playback_length, 20, format_secs(playback_position), format_secs(playback_length))
+          return success(message: "#{current_song.to_s}\n#{msg}", song: current_song)
         else
           return failure("Nothing to show yet. Try with 'play' first.")
         end
@@ -28,6 +29,7 @@ module CultomePlayer::Player::Interface
           acc + case p.value
           when :playlist then current_playlist.to_a
           when :library then whole_library.to_a
+          when :song then return success(message: current_song.to_s, song: current_song)
           else []
           end
         end
