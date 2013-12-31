@@ -74,19 +74,23 @@ module CultomePlayer::Player::Adapter
       Thread.new do
         while pipe_alive?
           check_time_position
+          check_playback_duration
           sleep 1
         end
       end
     end
 
     def start_player_with(song)
+      # inicializamos la pipe
+      control_pipe
+      # cramos el thread que leas del mplayer
       Thread.new do
         start_cmd = "mplayer -slave -input file='#{mplayer_pipe}' '#{song.path}' 2>/dev/null"
         IO.popen(start_cmd).each do |line|
           case line
           when /ANS_TIME_POSITION=([\d.]+)/
             @playback_time_position = $1.to_f
-          when /ANS_length=([\d.]+)/
+          when /ANS_LENGTH=([\d.]+)/
             @playback_time_length = $1.to_f
           when /=====  PAUSE  =====/
             @stopped = @playing = false
@@ -97,6 +101,7 @@ module CultomePlayer::Player::Adapter
           when /Starting playback/
             @is_player_running = @playing = true
             @paused = @stopped = false
+            watch_playback
           when /End of file/
             @is_player_running = @playing = @paused = false
             @stopped = true
@@ -104,8 +109,6 @@ module CultomePlayer::Player::Adapter
           end # case
         end # IO
       end # Thread
-
-      watch_playback
     end
   end
 end
