@@ -5,6 +5,7 @@ require "cultome_player/command"
 require "cultome_player/player"
 require "cultome_player/media"
 require "cultome_player/utils"
+require "cultome_player/events"
 
 module CultomePlayer
   include Environment
@@ -13,6 +14,7 @@ module CultomePlayer
   include Command
   include Player
   include Media
+  include Events
 
   def execute(user_input)
     cmd = parse(user_input)
