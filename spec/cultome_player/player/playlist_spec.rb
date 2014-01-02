@@ -120,7 +120,7 @@ describe CultomePlayer::Player::Playlist do
         p[:playlist].next
         p[:playlist].next
         p[:playlist].next.should eq "cuatro"
-        expect{ p[:playlist].next }.to raise_error("end of playlist:no more song in the playlist")
+        expect{ p[:playlist].next }.to raise_error("playlist empty:no songs in playlists")
       end
 
       it 'return nil if checking current song but playlist has not be played' do
@@ -146,6 +146,17 @@ describe CultomePlayer::Player::Playlist do
           pl << s.to_s
         end
         pl.should eq ":unodostrescuatro"
+      end
+
+      it 'check if there are songs remaining in the playlist' do
+        p[:playlist].repeat(false)
+        p[:playlist].repeat?.should be_false
+        p[:playlist].next?.should be_true
+        p[:playlist].next
+        p[:playlist].next
+        p[:playlist].next
+        p[:playlist].next
+        p[:playlist].next?.should be_false
       end
     end
   end
@@ -213,6 +224,18 @@ describe CultomePlayer::Player::Playlist do
         pl << "#{idx}#{s.to_s}"
       end
       pl.should eq ":1uno2dos"
+    end
+
+    it 'check if there are songs remaining in the playlists' do
+      p[:uno, :dos].repeat false
+      p[:uno, :dos].repeat?.should eq [false, false]
+      p[:uno, :dos] << 'uno'
+      p[:uno] << 'dos'
+      p[:uno].next?.should be_true
+      p[:dos].next?.should be_true
+      p[:uno, :dos].next?.should eq [true, true]
+      p[:uno, :dos].next
+      p[:uno, :dos].next?.should eq [true, false]
     end
   end
 end

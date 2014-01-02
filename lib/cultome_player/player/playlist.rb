@@ -75,14 +75,14 @@ module CultomePlayer::Player::Playlist
 
     def next
       each_next do |info, nxt_idx|
-        info[:idx] = nxt_idx 
+        info[:idx] = nxt_idx
         info[:list].at nxt_idx
       end
     end
 
     def remove_next
       each_next do |info, nxt_idx|
-        info[:list].delete_at nxt_idx 
+        info[:list].delete_at nxt_idx
       end
     end
 
@@ -132,21 +132,31 @@ module CultomePlayer::Player::Playlist
       return list
     end
 
+    def next?
+      nexts = each_next_with_index{|info, nxt_idx| nxt_idx }
+      has_nexts = nexts.map{|nxt_idx| !nxt_idx.nil? }
+      return has_nexts.first if has_nexts.size == 1
+      return has_nexts
+    end
+
     private
 
-    def first_or_map (attr)
+    def first_or_map(attr)
       return @data.values.first[attr] if @data.size == 1
       return @data.values.map{|info| info[attr] }
     end
 
-    def each_next
-      nexts = @data.values
+    def each_next_with_index
+      @data.values
       .select{|info| !info[:list].empty? }
       .map do |info|
         nxt_idx = next_idx(info[:idx], info[:list].size, info[:repeat])
-        yield(info, nxt_idx)
+        nxt_idx.nil? ? nil : yield(info, nxt_idx)
       end
+    end
 
+    def each_next(&block)
+      nexts = each_next_with_index(&block).compact
       raise "playlist empty:no songs in playlists" if nexts.empty?
       raise "playlist empty:no songs in one of the playlists" if nexts.size != @data.size
       return nexts.first if nexts.size == 1
@@ -156,7 +166,7 @@ module CultomePlayer::Player::Playlist
     def next_idx(actual_idx, size, repeat)
       next_idx = actual_idx + 1
       next_idx = next_idx % size if repeat
-      raise 'end of playlist:no more song in the playlist' if next_idx >= size
+      return nil if next_idx >= size
       return next_idx
     end
 
