@@ -56,12 +56,13 @@ module CultomePlayer::Player::Playlist
 
     def register(name, value=nil)
       raise 'invalid registry:playlist already registered' unless @data[name].nil?
-      @data[name] = value.nil? ? {list: [], idx: -1, repeat: true} : value
+      @data[name] = value.nil? ? {list: [], idx: -1, repeat: true, shuffled: false} : value
     end
 
     def shuffle
       @data.values.each do |info|
         info[:list].shuffle!
+        info[:shuffled] = true
         info[:idx] = -1
       end
     end
@@ -70,6 +71,7 @@ module CultomePlayer::Player::Playlist
       @data.values.each do |info|
         info[:list].sort!
         info[:idx] = -1
+        info[:shuffled] = false
       end
     end
 
@@ -137,6 +139,10 @@ module CultomePlayer::Player::Playlist
       has_nexts = nexts.map{|nxt_idx| !nxt_idx.nil? }
       return has_nexts.first if has_nexts.size == 1
       return has_nexts
+    end
+
+    def shuffling?
+      return first_or_map :shuffled
     end
 
     private

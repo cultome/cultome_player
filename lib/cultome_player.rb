@@ -77,6 +77,10 @@ module CultomePlayer
     @playback_time_length ||= 0
   end
 
+  def shuffling?
+    playlists[:current].shuffling?
+  end
+
   class << self
     class DefaultPlayer
       include CultomePlayer

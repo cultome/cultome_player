@@ -52,6 +52,14 @@ describe CultomePlayer::Player::Playlist do
       expect{ p[:playlist].next }.to raise_error 'playlist empty:no songs in playlists'
     end
 
+    it 'change shuffle status' do
+      p[:playlist].should_not be_shuffling
+      p[:playlist].shuffle
+      p[:playlist].should be_shuffling
+      p[:playlist].order
+      p[:playlist].should_not be_shuffling
+    end
+
     context 'with a full playlist' do
       before :each do
         p[:playlist] <= %w{uno dos tres cuatro}
@@ -237,5 +245,14 @@ describe CultomePlayer::Player::Playlist do
       p[:uno, :dos].next
       p[:uno, :dos].next?.should eq [true, false]
     end
+
+    it 'change shuffle status' do
+      p[:uno, :dos].shuffling?.should eq [false, false]
+      p[:uno, :dos].shuffle
+      p[:uno, :dos].shuffling?.should eq [true, true]
+      p[:uno, :dos].order
+      p[:uno, :dos].shuffling?.should eq [false, false]
+    end
+
   end
 end

@@ -42,7 +42,17 @@ module CultomePlayer::Player::Interface
     def enqueue
     end
 
-    def shuffle
+    def shuffle(cmd)
+      if cmd.params.empty?
+        if playlists[:current].shuffling?
+          return success(message: "Everyday I'm shuffling!", shuffling: true)
+        else
+          return success(message: "No shuffling", shuffling: false)
+        end
+      end
+
+      turn_on = cmd.params(:boolean).first.value
+      turn_on ? playlists[:current].shuffle : playlists[:current].order
     end
 
     def help
