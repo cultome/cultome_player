@@ -92,7 +92,9 @@ module CultomePlayer::Player::Interface
       founded_songs = search_songs_with(cmd)
       from_focus = get_from_focus(cmd.params(:number))
       from_playlists = get_from_playlists(cmd.params_values(:object))
-      return founded_songs + from_focus + from_playlists
+      results = founded_songs + from_focus + from_playlists
+      return results
+      #return CultomePlayer::Player::Playlist::Playlists.new(results)
     end
 
     def player_object(name)

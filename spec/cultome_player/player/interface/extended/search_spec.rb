@@ -23,17 +23,19 @@ describe CultomePlayer::Player::Interface::Extended do
     Album.create!(id: 4, name: "album_cuatro")
   end
 
-  it 'should return a Response object' do
+  it 'return a Response object' do
     t.execute('search a:artist_uno').should be_instance_of Response
   end
 
-  it 'should respond success when there are results' do
+  it 'respond with a list when results are found in the message property'
+
+  it 'respond success when there are results' do
     r = t.execute('search a:artist_uno')
     r.should be_success
     r.should respond_to :songs
   end
 
-  it 'should respond failure when there are not results' do
+  it 'respond failure when there are not results' do
     r = t.execute('search a:nothing')
     r.should be_failure
     r.should respond_to :message
