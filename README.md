@@ -236,7 +236,7 @@ help <command_name>
 ```
 
 ## Installation
-Due I'm not a genius I have to rely in the best media player I'd ever used, MPlayer, as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have MPlayer installed.
+Due I'm not a genius I have to rely in an excelent media player as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have Mpg123 installed.
 
 ```ruby
 gem install cultome_player

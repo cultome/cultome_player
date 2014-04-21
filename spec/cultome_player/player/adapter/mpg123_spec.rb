@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CultomePlayer::Player::Adapter::MPlayer do
+describe CultomePlayer::Player::Adapter::Mpg123 do
   let(:t){ TestClass.new }
   let(:song) do
     s = Song.new
@@ -13,15 +13,8 @@ describe CultomePlayer::Player::Adapter::MPlayer do
   end
 
   it 'start the player if is not running' do
-    t.should_receive :start_player_with
+    t.should_receive :start_player
     t.should_not be_player_running
-    t.play_in_player song
-  end
-
-  it 'plays a song if there is one active playback' do
-    t.should_receive(:send_to_player).with(/^loadfile/)
-    t.play_in_player song
-    t.should be_player_running
     t.play_in_player song
   end
 
@@ -43,19 +36,18 @@ describe CultomePlayer::Player::Adapter::MPlayer do
     it 'resume a paused song' do
       t.pause_in_player
       t.should_receive(:send_to_player).with("pause")
-      t.should_receive(:send_to_player).with("osd_show_text '=====  UNPAUSE  ====='")
       t.resume_in_player
     end
 
     it 'resume a stopped song' do
       t.stop_in_player
-      t.should_receive(:start_player_with)
+      t.should_receive(:start_player)
       t.play_in_player song
     end
   end
 
-  context 'running actual mplayer', mplayer: true do
-    it 'dont show the initial text from mplayer' do
+  context 'running actual mpg123 player', mplayer: true do
+    it 'dont show the initial text from mpg123' do
       th = Thread.new do
         class MplayerTest
           include CultomePlayer

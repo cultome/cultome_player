@@ -58,20 +58,18 @@ end
 module MockPlayer
   def send_to_player(cmd)
     if cmd == 'pause'
-      @paused = true
-      @stopped = @playing = false
-    elsif cmd.start_with?('osd_show_text')
-      @paused = @stopped = false
-      @playing = true
-    elsif cmd.start_with?('loadfile')
-      @playing = true
+      if @paused
+        @paused = @stopped = false
+        @playing = true
+      else
+        @paused = true
+        @stopped = @playing = false
+      end
+    elsif cmd.start_with?('load')
+      @is_player_running = @playing = true
     elsif cmd.start_with?('stop')
       @is_player_running = @paused = @playing = false
       @stopped = true
-    elsif cmd.start_with?('get_time_length')
-      @playback_time_length = 120
-    elsif cmd.start_with?('get_time_pos')
-      @playback_time_position = 1
     else
       puts "ERROR: #{cmd} !!!!!!!"
     end
@@ -81,8 +79,9 @@ module MockPlayer
     STDOUT
   end
 
-  def start_player_with(song)
-    @is_player_running = @playing = true
+  def start_player
+    @play_in_player = true
+    @playing = true
     @paused = @stopped = false
   end
 end

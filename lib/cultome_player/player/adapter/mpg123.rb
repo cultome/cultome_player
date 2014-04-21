@@ -1,5 +1,6 @@
 module CultomePlayer::Player::Adapter
   module Mpg123
+    # Contract
     def play_in_player(song)
       @current_song = song
       unless player_running?
@@ -9,10 +10,12 @@ module CultomePlayer::Player::Adapter
       loadfile(song)
     end
 
+    # Contract
     def pause_in_player
       toggle_pause
     end
 
+    # Contract
     def resume_in_player
       if paused?
         toggle_pause
@@ -21,16 +24,23 @@ module CultomePlayer::Player::Adapter
       end
     end
 
+    # Contract
     def stop_in_player
       send_to_player "stop"
     end
 
+    # Contract
     def ff_in_player(secs)
       send_to_player "jump +#{secs}s"
     end
 
+    # Contract
     def fb_in_player(secs)
       send_to_player "jump -#{secs}s"
+    end
+
+    def quit_in_player
+      send_to_player "quit"
     end
 
     private
@@ -61,7 +71,7 @@ module CultomePlayer::Player::Adapter
     end
 
     def start_player
-      # creamos el thread que leas del mplayer
+      # creamos el thread que lea la salida del mpg123
       Thread.new do
         start_cmd = "mpg123 --fifo #{mplayer_pipe} -R"
         IO.popen(start_cmd).each do |line|
@@ -71,7 +81,7 @@ module CultomePlayer::Player::Adapter
           	when /^@P ([\d])$/
           		case $1.to_i
 	          		when 0 # stopped
-	          			@is_player_running = @playing = @paused = false
+	          			@playing = @paused = false
 	            		@stopped = true
 	          		when 1 # paused
 			            @stopped = @playing = false
@@ -80,6 +90,8 @@ module CultomePlayer::Player::Adapter
 									@playing = true
 	            		@paused = @stopped = false
             	end
+            when //
+              @is_player_running = false
             when /^@F ([\d]+) ([\d]+) ([\d.]+) ([\d.]+)$/
 	            @playback_time_position = $3.to_f
 	            @playback_time_length = @playback_time_position + $4.to_f
