@@ -118,12 +118,17 @@ module CultomePlayer::Player::Interface
       fb_in_secs = 10
 
       unless cmd.params(:number).empty?
-        fb_in_secs = cmd.params(:number).first
+        fb_in_secs = cmd.params(:number).first.value
       end
 
       fb_in_player fb_in_secs
 
       return success(message: "Fast Backwarded by #{fb_in_secs} secs")
+    end
+
+    def repeat(cmd)
+      repeat_in_player
+      return success(message: "Repeating " + current_song.to_s)
     end
   end
 end

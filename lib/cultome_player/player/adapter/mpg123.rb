@@ -43,6 +43,10 @@ module CultomePlayer::Player::Adapter
       send_to_player "quit"
     end
 
+    def repeat_in_player
+      send_to_player "jump 0"
+    end
+
     private
 
     def toggle_pause
@@ -90,8 +94,6 @@ module CultomePlayer::Player::Adapter
 									@playing = true
 	            		@paused = @stopped = false
             	end
-            when //
-              @is_player_running = false
             when /^@F ([\d]+) ([\d]+) ([\d.]+) ([\d.]+)$/
 	            @playback_time_position = $3.to_f
 	            @playback_time_length = @playback_time_position + $4.to_f

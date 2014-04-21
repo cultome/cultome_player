@@ -13,6 +13,7 @@ module CultomePlayer::Command
       }
     end
 
+    # The first literal in regex is the command itself
     def semantics
       {
         "play" => /^literal(literal|number|criteria|object|[\s]+)*$/,
@@ -28,6 +29,7 @@ module CultomePlayer::Command
         "ff" => /^literal(number|[\s]+)*$/,
         "fb" => /^literal(number|[\s]+)*$/,
         "shuffle" => /^literal[\s]+(boolean)$/,
+        "repeat" => /^literal[\s]*$/,
       }
     end
 
