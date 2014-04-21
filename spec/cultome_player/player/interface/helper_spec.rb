@@ -24,4 +24,40 @@ describe CultomePlayer::Player::Interface::Helper do
     t.format_secs(75).should eq "01:15"
     t.format_secs(65).should eq "01:05"
   end
+
+  describe '#process_object_for_search' do
+    it 'returns sql criteria and values for object type artist' do
+      artist = double("artist", name: "artist_name")
+      t.should_receive(:current_artist).and_return(artist)
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :artist})] )
+      q.should eq 'artists.name = ?'
+      v.should eq ["artist_name"]
+    end
+
+    it 'returns sql criteria and values for object type album' do
+      album = double("album", name: "album_name")
+      t.should_receive(:current_album).and_return(album)
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :album})] )
+      q.should eq 'albums.name = ?'
+      v.should eq ["album_name"]
+    end
+
+    it 'returns sql criteria and values for object type song' do
+      song = double("song", name: "song_name")
+      t.should_receive(:current_song).and_return(song)
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :song})] )
+      q.should eq 'songs.name = ?'
+      v.should eq ["song_name"]
+    end
+
+    it 'returns sql criteria and values for object type library' do
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :library})] )
+      q.should eq 'songs.id > 0'
+      v.should be_empty
+    end
+  end
+
 end

@@ -8,7 +8,7 @@ module CultomePlayer::Player::Interface
       playlists[:focus] <= songs
 
       if songs.empty?
-        failure('It match not even one')
+        failure('It matches not even one')
       else
         success(songs: songs)
       end

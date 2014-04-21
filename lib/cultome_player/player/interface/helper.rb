@@ -89,10 +89,10 @@ module CultomePlayer::Player::Interface
     end
 
     def select_songs_with(cmd)
-      founded_songs = search_songs_with(cmd)
+      found_songs = search_songs_with(cmd)
       from_focus = get_from_focus(cmd.params(:number))
       from_playlists = get_from_playlists(cmd.params_values(:object))
-      results = founded_songs + from_focus + from_playlists
+      results = found_songs + from_focus + from_playlists
       return results
       #return CultomePlayer::Player::Playlist::Playlists.new(results)
     end
@@ -201,6 +201,7 @@ module CultomePlayer::Player::Interface
           when :artist then {query: 'artists.name = ?', value: current_artist.name }
           when :album then {query: 'albums.name = ?', value: current_album.name }
           when :song then {query: 'songs.name = ?', value: current_song.name }
+          when :library then {query: 'songs.id > 0'}
           else raise 'invalid search:unknown type'
           end unless playlist?(p.value)
       end.compact
@@ -208,7 +209,7 @@ module CultomePlayer::Player::Interface
       return nil, [] if objs.empty?
 
       query = objs.collect{|o| o[:query] }.join(" or ")
-      values = objs.collect{|o| o[:value]}
+      values = objs.collect{|o| o[:value]}.compact
 
       return query, values
     end

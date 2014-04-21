@@ -16,8 +16,9 @@ module CultomePlayer
   include Media
   include Events
 
+  # Posibbly valid inside a Interactive module
   def execute(user_input)
-    cmd = parse(user_input)
+    cmd = parse user_input
     raise 'invalid command:action unknown' unless respond_to?(cmd.action)
     with_connection do
       send(cmd.action, cmd)
@@ -41,6 +42,7 @@ module CultomePlayer
     end
   end
 
+  #Posibbly inside StateChecker module
   def paused?
     @paused ||= false
   end
