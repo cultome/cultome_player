@@ -39,23 +39,23 @@ module CultomePlayer
 
         def pause(cmd)
           if cmd.params.empty?
-            is_pause = !@paused
+            is_pause = !paused?
           else
             is_pause = cmd.params(:boolean).first.value
           end
 
-          if is_pause 
+          if is_pause
             pause_in_player
           else
             resume_in_player
           end
 
-          success(paused: paused?, stopped: stopped?, playing: playing?)
+          success(message: is_pause ? "Holding your horses" : "Letting it flow", paused: paused?, stopped: stopped?, playing: playing?)
         end
 
         def stop(cmd)
           stop_in_player
-          success(message: "Stop it!", paused: paused?, stopped: stopped?, playing: playing?)
+          success(message: "Stoped it!", paused: paused?, stopped: stopped?, playing: playing?)
         end
 
         def next(cmd)

@@ -1,7 +1,7 @@
-require 'cultome_player/player/adapter/mplayer'
+require 'cultome_player/player/adapter/mpg123'
 
 module CultomePlayer::Player::Adapter
-  include MPlayer
+  include Mpg123
 
   def player_running?
     @is_player_running
