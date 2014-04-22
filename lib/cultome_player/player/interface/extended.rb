@@ -28,13 +28,13 @@ module CultomePlayer::Player::Interface
           acc + case p.value
           when :playlist then current_playlist.to_a
           when :library then whole_library.to_a
+          when :drives then Drive.all
           when :song then return success(message: current_song.to_s, song: current_song)
           else []
           end
         end
 
-        msg = list_to_show.each_with_index.collect{|s,i| "#{i+1}. #{s.to_s}"}.join("\n")
-        return success(message: msg, list: list_to_show)
+        return success(list: list_to_show, response_type: :list)
       end
     end
 

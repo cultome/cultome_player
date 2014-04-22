@@ -103,6 +103,18 @@ module CultomePlayer::Player::Adapter
 					end # case line
         end # IO
       end # Thread
+
+      wait_player
     end
+
+    def wait_player
+      count = 0
+      while !player_running?
+        sleep(0.1)
+        count += 1
+        return if count > 50 # 5 seg
+      end
+    end
+
   end
 end
