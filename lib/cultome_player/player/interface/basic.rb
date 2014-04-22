@@ -73,6 +73,9 @@ module CultomePlayer
         end
 
         def prev(cmd)
+          playlists[:queue] << playlists[:history].pop
+          playlists[:current].rewind_by 1
+          self.next(nil)
         end
 
         def quit(cmd)

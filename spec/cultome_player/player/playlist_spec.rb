@@ -166,6 +166,27 @@ describe CultomePlayer::Player::Playlist do
         p[:playlist].next
         p[:playlist].next?.should be_false
       end
+
+      it 'pop the last element inserted' do
+        p[:playlist].should have(4).songs
+        p[:playlist] << 'cinco'
+        p[:playlist].should have(5).songs
+        p[:playlist].pop.should eq 'cinco'
+        p[:playlist].pop.should eq 'cuatro'
+        p[:playlist].should have(3).songs
+      end
+
+      it 'rewind the playlist' do
+        p[:playlist].next.should eq 'uno'
+        p[:playlist].next.should eq 'dos'
+        p[:playlist].next.should eq 'tres'
+        p[:playlist].next.should eq 'cuatro'
+        p[:playlist].current.should eq 'cuatro'
+        p[:playlist].rewind_by(1).should eq 'tres'
+        p[:playlist].current.should eq 'tres'
+        p[:playlist].rewind_by(2).should eq 'uno'
+        p[:playlist].current.should eq 'uno'
+      end
     end
   end
 
@@ -254,5 +275,29 @@ describe CultomePlayer::Player::Playlist do
       p[:uno, :dos].shuffling?.should eq [false, false]
     end
 
+
+    it 'pop the last element inserted' do
+      p[:uno].should have(0).songs
+      p[:dos].should have(0).songs
+      p[:uno] << 'cinco'
+      p[:dos] << 'seis'
+      p[:uno].should have(1).songs
+      p[:dos].should have(1).songs
+      p[:uno, :dos].pop.should eq ['cinco', 'seis']
+      p[:uno].should have(0).songs
+      p[:dos].should have(0).songs
+    end
+
+    it 'rewind the playlists' do
+      p[:uno] << 'uno'
+      p[:uno] << 'dos'
+      p[:dos] << 'tres'
+      p[:dos] << 'cuatro'
+
+      p[:uno, :dos].next.should eq ['uno', 'tres']
+      p[:uno, :dos].next.should eq ['dos', 'cuatro']
+      p[:uno, :dos].current.should eq ['dos', 'cuatro']
+      p[:uno, :dos].rewind_by(1).should eq ['uno', 'tres']
+    end
   end
 end

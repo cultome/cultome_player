@@ -54,6 +54,12 @@ module CultomePlayer::Player::Playlist
       end
     end
 
+    def pop
+      last_ones = collect{|list| list.pop }
+      return last_ones.first if last_ones.size == 1
+      return last_ones 
+    end
+
     def register(name, value=nil)
       raise 'invalid registry:playlist already registered' unless @data[name].nil?
       @data[name] = value.nil? ? {list: [], idx: -1, repeat: true, shuffled: false} : value
@@ -75,10 +81,18 @@ module CultomePlayer::Player::Playlist
       end
     end
 
+    # Returns the next song in playlist, which means the new current song.
     def next
       each_next do |info, nxt_idx|
         info[:idx] = nxt_idx
         info[:list].at nxt_idx
+      end
+    end
+
+    def rewind_by(idx)
+      each_next do |info, nxt_idx|
+        info[:idx] -= idx
+        info[:list].at info[:idx]
       end
     end
 
@@ -152,6 +166,7 @@ module CultomePlayer::Player::Playlist
       return @data.values.map{|info| info[attr] }
     end
 
+    # Returns the non-empty playlists yielded by the block
     def each_next_with_index
       @data.values
       .select{|info| !info[:list].empty? }
@@ -161,6 +176,7 @@ module CultomePlayer::Player::Playlist
       end
     end
 
+    # Returns an array with songs, if multiple playlists and only one if single playlist is available
     def each_next(&block)
       nexts = each_next_with_index(&block).compact
       raise "playlist empty:no songs in playlists" if nexts.empty?
