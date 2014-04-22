@@ -78,7 +78,16 @@ module CultomePlayer::Player::Interface
         # es una reconexion...
         drive = Drive.find_by(name: name.value)
         raise 'invalid name:the named drive doesnt exists' if drive.nil?
-        drive.update_attributes({connected: true})
+
+        if drive.connected
+            failure(message: "What you mean? Drive 'name.value' is connected.")
+        else
+          if drive.update_attributes({connected: true})
+            success(message: "Drive '#{name.value}' was reconnected.")
+          else
+            failure(message: "Something went wrong and I couldnt reconnect drive '#{name.value}'. Try again later please.")
+          end
+        end
       else
         # with path and literal parameter
         raise 'invalid path:the directory is invalid' unless Dir.exist?(path.value)
@@ -108,7 +117,18 @@ module CultomePlayer::Player::Interface
       end
     end
 
-    def disconnect
+    def disconnect(cmd)
+      name = cmd.params(:literal).first.value
+      drive = Drive.find_by(name: name)
+      if drive.connected
+        if drive.update(connected: false)
+          success(message: "Drive '#{name}' is now disconnected.")
+        else
+          failure(message: "I cant disconnect drive '#{name}', something weird happened. Maybe if you again later works.")
+        end
+      else
+        failure(message: "The drive '#{name}' is already disconnected.")
+      end
     end
 
     def ff(cmd)

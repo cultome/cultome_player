@@ -63,7 +63,7 @@ module CultomePlayer::Player::Interface
     end
 
     def whole_library
-      Song.all.to_a
+      Song.connected.to_a
     end
 
     def play_queue
@@ -80,7 +80,7 @@ module CultomePlayer::Player::Interface
       search_query = [criteria_query, object_query, literal_query].compact.collect{|q| "(#{q})" }.join(" or ")
       search_values = [criteria_values, object_values, literal_values].flatten.compact
       # hacemos la query!
-      return search_query.empty? ? [] : Song.includes(:artist, :album).where(search_query, *search_values).references(:artist, :album).to_a
+      return search_query.empty? ? [] : Song.includes(:artist, :album).connected.where(search_query, *search_values).references(:artist, :album).to_a
     end
 
     def get_from_playlists(lists)

@@ -21,6 +21,7 @@ module CultomePlayer::Command
         "search" => /^literal(literal|criteria|[\s]+)+$/,
         "enqueue" => /^literal(literal|number|criteria|object|[\s]+)+$/,
         "connect" => /^literal ((literal)|(path) bubble (literal))$/,
+        "disconnect" => /^literal (literal)$/,
         "stop" => /^literal[\s]*$/,
         "pause" => /^literal (boolean)$/,
         "prev" => /^literal((literal)|[\s]+)*$/,
