@@ -5,12 +5,11 @@ module CultomePlayer::Player::Interface
     def search(cmd)
       songs = select_songs_with cmd
 
-      playlists[:focus] <= songs
-
       if songs.empty?
         failure('It matches not even one')
       else
-        success(songs: songs)
+        playlists[:focus] <= songs
+        success(songs: songs, response_type: :songs)
       end
     end
 
@@ -39,7 +38,17 @@ module CultomePlayer::Player::Interface
       end
     end
 
-    def enqueue
+    def enqueue(cmd)
+      songs = select_songs_with cmd
+      if songs.empty?
+        failure(message: "No songs found with this criteria. Sorry, nothing was enqueued.")
+      else
+        playlists[:queue] << songs
+        msg = "These songs were enqueued:\n"
+        songs.each {|s,idx| msg << "  #{s.to_s}\n"}
+
+        success(message: msg, enqueued: songs)
+      end
     end
 
     def shuffle(cmd)

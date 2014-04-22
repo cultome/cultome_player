@@ -40,7 +40,10 @@ module CultomePlayer::Player::Adapter
     end
 
     def quit_in_player
-      send_to_player "quit"
+      begin
+        send_to_player "quit"
+      rescue Exception => e
+      end
     end
 
     def repeat_in_player

@@ -7,7 +7,7 @@ module CultomePlayer::Player
       while in_session?
         begin
           r = execute read_command("cultome> ")
-          display r.message
+          show_response(r)
         rescue Exception => e
           display e.message
         end
@@ -21,5 +21,28 @@ module CultomePlayer::Player
     def terminate_session
       @in_session = false
     end
+
+    private
+
+    def show_response(r)
+      if r.respond_to?(:response_type)
+        res_obj = r.send(r.response_type)
+        if res_obj.respond_to?(:each)
+          res_obj.each.with_index do |elem, idx|
+            display "#{(idx + 1).to_s.ljust(3)} | #{elem.to_s}"
+          end
+        elsif res_obj.class == String
+          display res_obj.to_s
+        else
+          display "(((#{res_obj.to_s})))"
+        end
+
+      elsif r.respond_to?(:message)
+        display r.message
+      else
+        display "!!!#{r}!!!"
+      end
+    end
+
   end
 end

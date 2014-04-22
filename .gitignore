@@ -20,3 +20,5 @@ tester.rb
 *.tmp
 TODO
 checklist
+spec/db.dat
+spec/db.log
