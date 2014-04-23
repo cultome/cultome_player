@@ -24,7 +24,7 @@ module CultomePlayer::Command
         "disconnect" => /^literal (literal)$/,
         "stop" => /^literal[\s]*$/,
         "pause" => /^literal (boolean)$/,
-        "prev" => /^literal((literal)|[\s]+)*$/,
+        "prev" => /^literal[\s]*$/,
         "next" => /^literal[\s]*$/,
         "quit" => /^literal[\s]*$/,
         "ff" => /^literal(number|[\s]+)*$/,

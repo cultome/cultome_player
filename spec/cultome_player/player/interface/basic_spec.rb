@@ -3,7 +3,8 @@ require 'spec_helper'
 describe CultomePlayer::Player::Interface::Basic do
   let(:t){ TestClass.new }
 
-  it 'all commands should return a Response object'
+  it 'all commands return a Response object'
+  it 'all commands respond to describe and usage help'
 
   describe '#pause' do
     it 'calls the underliying player' do
