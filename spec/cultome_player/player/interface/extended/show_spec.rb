@@ -24,12 +24,12 @@ describe CultomePlayer::Player::Interface::Extended do
     context 'with object parameter' do
       it 'library' do
         r = t.execute 'show @library'
-        r.message.should match /([\d]+. :::: Song: .+? \\ Artist: .+? \\ Album: .+? ::::\n?)+/
+        r.list.should_not be_empty
       end
 
-      it 'playlist' do
-        r = t.execute 'show @playlist'
-        r.message.should match /([\d]+. :::: Song: .+? \\ Artist: .+? \\ Album: .+? ::::\n?)+/
+      it 'song' do
+        r = t.execute 'show @song'
+        r.message.should match /:::: Song: .+? (\\ Artist: .+? )?(\\ Album: .+? )?::::\n?/
       end
     end
   end

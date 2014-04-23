@@ -6,6 +6,7 @@ describe CultomePlayer::Player::Interface::Extended do
   let(:t){ TestClass.new }
 
   before :each do
+    Drive.create!(id: 1, name: 'test', path: '/patito', connected: true)
     Song.create!(id: 1, name: "song_uno",    artist_id: 1, album_id: 1, drive_id: 1, relative_path: "uno/uno.mp3") 
     Song.create!(id: 2, name: "song_dos",    artist_id: 1, album_id: 2, drive_id: 1, relative_path: "uno/dos/dos.mp3")
     Song.create!(id: 3, name: "song_tres",   artist_id: 1, album_id: 2, drive_id: 1, relative_path: "uno/dos/tres/tres.mp3")

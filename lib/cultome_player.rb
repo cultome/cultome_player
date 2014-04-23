@@ -6,6 +6,7 @@ require "cultome_player/player"
 require "cultome_player/media"
 require "cultome_player/utils"
 require "cultome_player/events"
+require "cultome_player/plugins"
 
 module CultomePlayer
   include Environment
@@ -15,6 +16,7 @@ module CultomePlayer
   include Player
   include Media
   include Events
+  include Plugins
 
   # Posibbly valid inside a Interactive module
   def execute(user_input)

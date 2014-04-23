@@ -94,7 +94,6 @@ module CultomePlayer::Player::Interface
       from_playlists = get_from_playlists(cmd.params_values(:object))
       results = found_songs + from_focus + from_playlists
       return results
-      #return CultomePlayer::Player::Playlist::Playlists.new(results)
     end
 
     def player_object(name)
@@ -232,7 +231,6 @@ module CultomePlayer::Player::Interface
 
       query = criterios.values.collect{|c| "(#{c[:query]})" }.join(" and ")
       values = criterios.values.collect{|c| c[:values] }.flatten
-
       return query, values
     end
 

@@ -64,9 +64,6 @@ module CultomePlayer::Player::Interface
       turn_on ? playlists[:current].shuffle : playlists[:current].order
     end
 
-    def help
-    end
-
     def connect(cmd)
       path = cmd.params(:path).first
       name = cmd.params(:literal).first
