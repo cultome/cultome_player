@@ -7,6 +7,7 @@ require "cultome_player/media"
 require "cultome_player/utils"
 require "cultome_player/events"
 require "cultome_player/plugins"
+require "cultome_player/state_checker"
 
 module CultomePlayer
   include Environment
@@ -17,7 +18,12 @@ module CultomePlayer
   include Media
   include Events
   include Plugins
+  include StateChecker
 
+  # Interpret a user input string as it would be typed in the console.
+  #
+  # @param user_input [String] The user input.
+  # @return [Response] Response object with information about command execution.
   def execute(user_input)
     cmd = parse user_input
     # revisamos si es un built in command o un plugin
@@ -36,62 +42,34 @@ module CultomePlayer
     end
   end
 
+  # Creates a generic response
+  #
+  # @param type [Symbol] The response type.
+  # @param data [Hash] The information that the response will contain.
+  # @return [Response] Response object with information in form of getter methods.
   def create_response(type, data)
     data[:response_type] = data.keys.first unless data.has_key?(:response_type)
     return Response.new(type, data)
   end
 
+  # Creates a success response. Handy method for #create_response
+  #
+  # @param response [Hash] The information that the response will contain.
+  # @return [Response] Response object with information in form of getter methods.
   def success(response)
     create_response(:success, response)
   end
 
+  # Creates a failure response. Handy method for #create_response
+  #
+  # @param response [Hash] The information that the response will contain.
+  # @return [Response] Response object with information in form of getter methods.
   def failure(response)
     if response.instance_of?(String)
       create_response(:failure, message: response)
     else
       create_response(:failure, response)
     end
-  end
-
-  #Posibbly inside StateChecker module
-  def paused?
-    @paused ||= false
-  end
-
-  def stopped?
-    @stopped ||= true
-  end
-
-  def playing?
-    @playing ||= false
-  end
-
-  def current_song
-    @current_song
-  end
-
-  def current_playlist
-    playlists[:current]
-  end
-
-  def current_artist
-    current_song.artist
-  end
-
-  def current_album
-    current_song.album
-  end
-
-  def playback_position
-    @playback_time_position ||= 0
-  end
-
-  def playback_length
-    @playback_time_length ||= 0
-  end
-
-  def shuffling?
-    playlists[:current].shuffling?
   end
 
   class << self
@@ -107,6 +85,10 @@ module CultomePlayer
       end
     end
 
+    # Get an instance of DefaultPlayer
+    #
+    # @param env [Symbol] The environment from which the configirations will be taken.
+    # @return [DefaultPlayer] A Cultome player ready to rock.
     def get_player(env=:user)
       DefaultPlayer.new(env)
     end

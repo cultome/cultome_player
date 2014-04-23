@@ -2,6 +2,12 @@ require 'taglib'
 
 module CultomePlayer
   module Media
+
+    # Get information from ID3 tags in a mp3.
+    #
+    # @param filepath [String] The absolute path to the mp3 file.
+    # @param opc [Hash] Additional parameters. Actually only :library_path is supported.
+    # @return [Hash] With information extracted from ID3 tags.
     def extract_from_mp3(filepath, opc={})
       info = nil
       TagLib::FileRef.open(filepath) do |mp3|
@@ -21,11 +27,9 @@ module CultomePlayer
           }
         end
       end
-
-      if info[:name].nil?
-        info[:name] = filepath.split('/').last
-      end
-
+      # si no se encontro nombre de la cancion en las etiquestas, usamos el nombre del archivo
+      info[:name] = filepath.split('/').last if info[:name].nil?
+      # limpiamos la informacion un poco
       return polish_mp3_info(info)
     end
 
