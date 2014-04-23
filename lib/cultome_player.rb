@@ -27,7 +27,12 @@ module CultomePlayer
 
     raise 'invalid command:action unknown' unless respond_to?(action)
     with_connection do
-      send(action, cmd)
+      begin
+        send(action, cmd)
+      rescue Exception => e
+        s = e.message.split(":")
+        failure(message: s[0], details: s[1])
+      end
     end
   end
 

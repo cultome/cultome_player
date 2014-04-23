@@ -50,23 +50,23 @@ To see the usage for play command:
 	    end
 
 	    return <<-HELP
-	usage: <command> [param param ...]
+usage: <command> [param param ...]
 
-	The following commands are availables:
-	#{cmds_availables_formatted.join("\n")}
+The following commands are availables:
+#{cmds_availables_formatted.join("\n")}
 
-	The params can be of any of these types:
-	   criterio     A key:value pair. Only a,b,t are recognized.
-	   literal      Any valid string. If contains spaces quotes or double quotes are required.
-	   object       Identifiers preceded with an @.
-	   number       An integer number.
-	   path         A string representing a path in filesystem.
-	   boolean      Can be true, false. Accept some others.
-	   ip           An IP4 address.
+The params can be of any of these types:
+   criterio     A key:value pair. Only a,b,t are recognized.
+   literal      Any valid string. If contains spaces quotes or double quotes are required.
+   object       Identifiers preceded with an @.
+   number       An integer number.
+   path         A string representing a path in filesystem.
+   boolean      Can be true, false. Accept some others.
+   ip           An IP4 address.
 
-	See 'help <command>' for more information on a especific command.
+See 'help <command>' for more information on a especific command.
 
-	Refer to the README file for a complete user guide.
+Refer to the README file for a complete user guide.
 	    HELP
 	  end
 		end

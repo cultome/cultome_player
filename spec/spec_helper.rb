@@ -70,6 +70,8 @@ module MockPlayer
     elsif cmd.start_with?('stop')
       @is_player_running = @paused = @playing = false
       @stopped = true
+    elsif cmd.start_with?('jump')
+      # do nothing
     else
       puts "ERROR: #{cmd} !!!!!!!"
     end

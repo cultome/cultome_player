@@ -35,7 +35,9 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'raise an error if drive not exists' do
-      expect { t.execute "connect ghost" }.to raise_error('invalid name:the named drive doesnt exists')
+      r = t.execute("connect ghost")
+      r.message.should eq 'invalid name'
+      r.details.should eq 'the named drive doesnt exists'
     end
   end
 
@@ -54,7 +56,9 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'raise an error if path is invalid' do
-      expect { t.execute 'connect /invalid => ghost' }.to raise_error('invalid path:the directory is invalid')
+      r = t.execute('connect /invalid => ghost')
+      r.message.should eq 'invalid path'
+      r.details.should eq 'the directory is invalid'
     end
   end
 

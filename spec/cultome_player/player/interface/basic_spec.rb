@@ -3,13 +3,22 @@ require 'spec_helper'
 describe CultomePlayer::Player::Interface::Basic do
   let(:t){ TestClass.new }
 
-  it 'all commands return a Response object'
-  it 'all commands respond to describe and usage help'
-
   describe '#pause' do
     it 'calls the underliying player' do
       t.should_receive(:pause_in_player)
       t.execute "pause on"
+    end
+
+    it 'respond to description_help' do
+      t.should respond_to(:description_help)
+    end
+
+    it 'respond to usage_help' do
+      t.should respond_to(:usage_help)
+    end
+
+    it 'respond with Response object' do
+      t.execute("pause on").should be_instance_of Response
     end
   end
 
@@ -23,9 +32,34 @@ describe CultomePlayer::Player::Interface::Basic do
       t.execute "play"
       t.execute "stop"
     end
+
+    it 'respond to description_stop' do
+      t.should respond_to(:description_stop)
+    end
+
+    it 'respond to usage_stop' do
+      t.should respond_to(:usage_stop)
+    end
+
+    it 'respond with Response object' do
+      t.execute("stop").should be_instance_of Response
+    end
   end
 
   describe '#play' do
+
+    it 'respond to description_play' do
+      t.should respond_to(:description_play)
+    end
+
+    it 'respond to usage_play' do
+      t.should respond_to(:usage_play)
+    end
+
+    it 'respond with Response object' do
+      t.execute("play").should be_instance_of Response
+    end
+
     context 'without music connected' do
       it 'advise to connect music first if no music is connected' do
         r = t.execute("play")

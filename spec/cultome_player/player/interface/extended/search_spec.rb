@@ -28,8 +28,6 @@ describe CultomePlayer::Player::Interface::Extended do
     t.execute('search a:artist_uno').should be_instance_of Response
   end
 
-  it 'respond with a list when results are found in the message property'
-
   it 'respond success when there are results' do
     r = t.execute('search a:artist_uno')
     r.should be_success

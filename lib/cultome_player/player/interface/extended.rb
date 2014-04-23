@@ -58,10 +58,11 @@ module CultomePlayer::Player::Interface
         else
           return success(message: "No shuffling", shuffling: false)
         end
+      else
+        turn_on = cmd.params(:boolean).first.value
+        turn_on ? playlists[:current].shuffle : playlists[:current].order
+        return success(message: turn_on ? "Now we're shuffling!" : "Shuffle is now off")
       end
-
-      turn_on = cmd.params(:boolean).first.value
-      turn_on ? playlists[:current].shuffle : playlists[:current].order
     end
 
     def connect(cmd)
@@ -117,6 +118,8 @@ module CultomePlayer::Player::Interface
     def disconnect(cmd)
       name = cmd.params(:literal).first.value
       drive = Drive.find_by(name: name)
+      raise "Drive '#{name}' dont exist." if drive.nil?
+
       if drive.connected
         if drive.update(connected: false)
           success(message: "Drive '#{name}' is now disconnected.")
