@@ -1,8 +1,8 @@
 module CultomePlayer
 	module Plugins
 		module Help
-	    def help
-	    	puts "HELP!!"
+			
+	    def help(cmd)
 	    end
 		end
 	end
