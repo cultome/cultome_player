@@ -10,7 +10,7 @@ describe CultomePlayer::Player::Interface do
   end
 
   it 'respond to extended commands' do
-    [:show , :enqueue , :search , :shuffle , :help , :connect , :disconnect , :ff , :fb].each do |cmd|
+    [:show , :enqueue , :search , :shuffle , :connect , :disconnect , :ff , :fb].each do |cmd|
       t.should respond_to cmd
     end
   end

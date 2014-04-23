@@ -8,9 +8,9 @@ describe CultomePlayer::Media do
       @info = t.extract_from_mp3("#{test_folder}/uno/uno.mp3")
     end
 
-    it 'read title' do
-      @info[:title].should_not be_nil
-      @info[:title].should_not be_empty
+    it 'read name' do
+      @info[:name].should_not be_nil
+      @info[:name].should_not be_empty
     end
 
     it 'read album' do

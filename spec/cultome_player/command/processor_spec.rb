@@ -104,6 +104,10 @@ describe CultomePlayer::Command::Processor do
       t.parse("next").should be_instance_of CultomePlayer::Objects::Command
     end
 
+    it 'returns a command even when defined as plugin' do
+      t.parse("help").should be_instance_of CultomePlayer::Objects::Command
+    end
+
     it 'set the action and parameter' do
       cmd = t.parse("enqueue uno 'dos' tres:cuatro")
 

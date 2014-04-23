@@ -45,8 +45,16 @@ module CultomePlayer::Command
     def validate_command(type, tokens)
       current_format = get_command_format(type, tokens)
       # extraemos el primer token, que debe ser el comando
-      valid_format = semantics[tokens.first[:value]]
-      raise 'invalid command:invalid action' if valid_format.nil?
+      cmd = tokens.first[:value]
+      
+      valid_format = semantics[cmd]
+      if valid_format.nil?
+        if plugins_respond_to?(cmd)
+          valid_format = plugin_command_format(cmd)
+        else
+          raise 'invalid command:invalid action'
+        end
+      end
       return current_format =~ valid_format 
     end
 

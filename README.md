@@ -90,8 +90,8 @@ tunnels
 ```
 
 #### Object
-```
 The objects are words with special meaning to the player prefixed with an @. In this moment the fully recognized objects are:
+```
 * @library         Refers to the complete list of songs in you *connected* collection.
 * @search          Refers to the list of songs returned in your last search.
 * @playlist        Refers to the current playlist.
@@ -103,8 +103,8 @@ The objects are words with special meaning to the player prefixed with an @. In 
 * @drives          Refers to all the drives the player knows.
 ```
 
-```
 Some others are not player's objects but act as special functions placeholders.
+```
 * @artists         Referes to the complete list of artists in you *connected* collection.
 * @albums          Referes to the complete list of albums in you *connected* collection.
 * @genres          Referes to the complete list of genres in you *connected* collection.
@@ -116,8 +116,8 @@ Some others are not player's objects but act as special functions placeholders.
 ```
 
 And anything else is interpreted as follow:
-1.  If there is a @drive with the same name, the @drive is used. The spaces in the @drive name are replaced with _. So, @my_drive search a drive with name 'my drive', no matter the case.
-2.  Try to match a genre, with same name tranformation as above. So, @rock refers to the genre named 'rock', no matter the case.
+* 1.  If there is a @drive with the same name, the @drive is used. The spaces in the @drive name are replaced with _. So, @my_drive search a drive with name 'my drive', no matter the case.
+* 2.  Try to match a genre, with same name tranformation as above. So, @rock refers to the genre named 'rock', no matter the case.
 
 #### Number
 The numbers refers to elements in a displayed list. When a list is displayed, that lists becomes the *focused list* and any given numerical parameter refers to the elements in this list. Depending on the list type, that will be the type of parameter used.A *focused list* is usually the latest list displayed by the player.

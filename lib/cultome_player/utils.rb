@@ -16,6 +16,26 @@ module CultomePlayer
       end
     end
 
+    def arrange_in_columns(cols, widths, border)
+      row = ""
+      idxs = cols.collect{|c| 0 }
+      
+      while cols.zip(idxs).any?{|col| col[0].length > col[1] }
+        cols.each.with_index do |col, idx|
+          slice_width = widths[idx]
+          
+          slice = col.slice(idxs[idx], slice_width) || "" # sacamos el pedazo de la columna
+          row << slice.ljust(slice_width) # concatenamos a la fila
+          idxs[idx] += slice_width # recorremos el indice
+          row << " " * border # agregamos el border de la derecha
+        end
+
+        row = row.strip << "\n" # quitamos el ultimo border
+      end
+
+      return row.strip # quitamos el ultimo salto de linea
+    end
+
     # Capture and dispose the standard output sended inside the block provided.
     def swallow_stdout
       s = StringIO.new

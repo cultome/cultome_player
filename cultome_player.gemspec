@@ -9,8 +9,8 @@ Gem::Specification.new do |gem|
   gem.summary       = "CulToMe Player"
   gem.description   = "A console music library explorer and player"
   gem.authors       = ["Carlos Soria"]
-  gem.email         = "zooria@gmail.com"
-  gem.homepage      = "https://github.com/csoriav/cultome_player"
+  gem.email         = "cultome@gmail.com"
+  gem.homepage      = "https://github.com/cultome/cultome_player"
   gem.license       = "MIT"
 
   gem.files         = `git ls-files`.split($/)
