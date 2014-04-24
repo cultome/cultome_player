@@ -80,15 +80,15 @@ module CultomePlayer
         def prev(cmd)
           playlists[:queue] << playlists[:history].pop
           playlists[:current].rewind_by 1
-          self.next(nil)
+          execute("next no_history")
         end
 
         # For more information on this command refer to user manual or inline help in interactive mode.
         def quit(cmd)
           quit_in_player
           terminate_session
-          return success(message: "See you next time!") unless in_session?
-          return failure(message: "Oops! You should use Ctr-c or throw water to the CPU NOW!!!!")
+          return success("See you next time!") unless in_session?
+          return failure("Oops! You should use Ctr-c or throw water to the CPU NOW!!!!")
         end
       end
     end

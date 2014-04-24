@@ -20,12 +20,12 @@ module CultomePlayer::Player::Interface
         if playing?
           #mostramos la cancion actual
           msg = get_progress_bar_with_labels(playback_position, playback_length, 20, format_secs(playback_position), format_secs(playback_length))
-          playlists[:focus] <= current_song
           return success(message: "#{current_song.to_s}\n#{msg}", song: current_song)
         else
           return failure("Nothing to show yet. Try with 'play' first.")
         end
 
+      # with parameters
       else
         list_to_show = cmd.params(:object).reduce([]) do |acc, p|
           acc + case p.value
@@ -55,7 +55,7 @@ module CultomePlayer::Player::Interface
     def enqueue(cmd)
       songs = select_songs_with cmd
       if songs.empty?
-        failure(message: "No songs found with this criteria. Sorry, nothing was enqueued.")
+        failure("No songs found with this criteria. Sorry, nothing was enqueued.")
       else
         playlists[:queue] << songs
         msg = "These songs were enqueued:\n"
@@ -94,12 +94,12 @@ module CultomePlayer::Player::Interface
         raise 'invalid name:the named drive doesnt exists' if drive.nil?
 
         if drive.connected
-            failure(message: "What you mean? Drive 'name.value' is connected.")
+            failure("What you mean? Drive 'name.value' is connected.")
         else
           if drive.update_attributes({connected: true})
             success(message: "Drive '#{name.value}' was reconnected.")
           else
-            failure(message: "Something went wrong and I couldnt reconnect drive '#{name.value}'. Try again later please.")
+            failure("Something went wrong and I couldnt reconnect drive '#{name.value}'. Try again later please.")
           end
         end
       else
@@ -141,10 +141,10 @@ module CultomePlayer::Player::Interface
         if drive.update(connected: false)
           success(message: "Drive '#{name}' is now disconnected.")
         else
-          failure(message: "I cant disconnect drive '#{name}', something weird happened. Maybe if you again later works.")
+          failure("I cant disconnect drive '#{name}', something weird happened. Maybe if you again later works.")
         end
       else
-        failure(message: "The drive '#{name}' is already disconnected.")
+        failure("The drive '#{name}' is already disconnected.")
       end
     end
 

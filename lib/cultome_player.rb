@@ -57,7 +57,7 @@ module CultomePlayer
   # @param response [Hash] The information that the response will contain.
   # @return [Response] Response object with information in form of getter methods.
   def success(response)
-    create_response(:success, response)
+    create_response(:success, get_response_params(response))
   end
 
   # Creates a failure response. Handy method for #create_response
@@ -65,11 +65,7 @@ module CultomePlayer
   # @param response [Hash] The information that the response will contain.
   # @return [Response] Response object with information in form of getter methods.
   def failure(response)
-    if response.instance_of?(String)
-      create_response(:failure, message: response)
-    else
-      create_response(:failure, response)
-    end
+    create_response(:failure, get_response_params(response))
   end
 
   class << self
@@ -82,6 +78,11 @@ module CultomePlayer
         playlists.register(:history)
         playlists.register(:queue)
         playlists.register(:focus)
+        register_listener(:playback_finish, self)
+      end
+
+      def on_playback_finish
+        execute("next no_history")
       end
     end
 
@@ -92,5 +93,12 @@ module CultomePlayer
     def get_player(env=:user)
       DefaultPlayer.new(env)
     end
+  end
+
+  private
+
+  def get_response_params(response) 
+    return {message: response} if response.instance_of?(String)
+    return response
   end
 end
