@@ -2,6 +2,7 @@
 module CultomePlayer::Player::Interface
   module Extended
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def search(cmd)
       songs = select_songs_with cmd
 
@@ -13,6 +14,7 @@ module CultomePlayer::Player::Interface
       end
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def show(cmd)
       if cmd.params.empty?
         if playing?
@@ -38,6 +40,7 @@ module CultomePlayer::Player::Interface
       end
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def enqueue(cmd)
       songs = select_songs_with cmd
       if songs.empty?
@@ -51,6 +54,7 @@ module CultomePlayer::Player::Interface
       end
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def shuffle(cmd)
       if cmd.params.empty?
         if playlists[:current].shuffling?
@@ -65,6 +69,7 @@ module CultomePlayer::Player::Interface
       end
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def connect(cmd)
       path = cmd.params(:path).first
       name = cmd.params(:literal).first
@@ -115,6 +120,7 @@ module CultomePlayer::Player::Interface
       end
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def disconnect(cmd)
       name = cmd.params(:literal).first.value
       drive = Drive.find_by(name: name)
@@ -131,6 +137,7 @@ module CultomePlayer::Player::Interface
       end
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def ff(cmd)
       ff_in_secs = 10
 
@@ -143,6 +150,7 @@ module CultomePlayer::Player::Interface
       return success(message: "Fast Forwarded by #{ff_in_secs} secs")
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def fb(cmd)
       fb_in_secs = 10
 
@@ -155,6 +163,7 @@ module CultomePlayer::Player::Interface
       return success(message: "Fast Backwarded by #{fb_in_secs} secs")
     end
 
+    # For more information on this command refer to user manual or inline help in interactive mode.
     def repeat(cmd)
       repeat_in_player
       return success(message: "Repeating " + current_song.to_s)

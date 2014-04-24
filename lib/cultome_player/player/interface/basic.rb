@@ -3,6 +3,7 @@ module CultomePlayer
     module Interface
       module Basic
 
+        # For more information on this command refer to user manual or inline help in interactive mode.
         def play(cmd)
           if cmd.params.empty?
             # Estos los consideramos comportamientos inteligentes
@@ -37,6 +38,7 @@ module CultomePlayer
           return success(playlist: songs) + execute("next no_history")
         end
 
+        # For more information on this command refer to user manual or inline help in interactive mode.
         def pause(cmd)
           if cmd.params.empty?
             is_pause = !paused?
@@ -53,11 +55,13 @@ module CultomePlayer
           success(message: is_pause ? "Holding your horses" : "Letting it flow", paused: paused?, stopped: stopped?, playing: playing?)
         end
 
+        # For more information on this command refer to user manual or inline help in interactive mode.
         def stop(cmd)
           stop_in_player
           success(message: "Stoped it!", paused: paused?, stopped: stopped?, playing: playing?)
         end
 
+        # For more information on this command refer to user manual or inline help in interactive mode.
         def next(cmd)
           if playlists[:queue].empty?
             unless cmd.params(:literal).any?{|p| p.value == 'no_history'}
@@ -72,12 +76,14 @@ module CultomePlayer
           return success(message: "Now playing #{current_song}", now_playing: current_song)
         end
 
+        # For more information on this command refer to user manual or inline help in interactive mode.
         def prev(cmd)
           playlists[:queue] << playlists[:history].pop
           playlists[:current].rewind_by 1
           self.next(nil)
         end
 
+        # For more information on this command refer to user manual or inline help in interactive mode.
         def quit(cmd)
           quit_in_player
           terminate_session

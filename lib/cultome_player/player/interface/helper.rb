@@ -4,17 +4,31 @@ module CultomePlayer::Player::Interface
 
     VALID_SONG_ATTR = [:name, :year, :track, :duration, :relative_path, :artist_id, :album_id, :drive_id]
 
+    # Returns a string representation of a number of seconds in the format: mm:ss
+    #
+    # @param secs [Integer] Number of seconds to be represented.
+    # @return [String] The number of seconds formatted as mm:ss.
     def format_secs(secs)
       mins = secs.to_i / 60
       secs_left = secs.to_i % 60
       return "#{mins.to_s.rjust(2, "0")}:#{secs_left.to_s.rjust(2, "0")}"
     end
 
+    # Returns a representation of a progress bar.
+    #
+    # @param current [Integer] The actual progress.
+    # @param total [Integer] The total progress to achive.
+    # @param total [Integer] Optional, the total progress to achive. Default 100.
+    # @param size [Integer] Optional, the width of the bar. Default 10.
+    # @param left [String] Optional, prefix to append. Default ''.
+    # @param right [String] Optional, postfix to append. Default ''.
+    # @return [String] The string representation of a progress bar.
     def get_progress_bar_with_labels(current, total=100, size=10, left='', right='')
       bar = get_progress_bar(current, total, size)
       return "#{left} #{bar} #{right}".strip
     end
 
+    # (see #get_progress_bar_with_labels)
     def get_progress_bar(current, total=100, size=10)
       factor = total > 0 ? current / total.to_f : 0
       bars = ( factor * size ).floor
@@ -23,6 +37,10 @@ module CultomePlayer::Player::Interface
       return "|#{total}|"
     end
 
+    # Generate a query and a array of values to replace into the query for a given set of parameters.
+    #
+    # @param params [List<Parameter>] The list of serach parameter to prepare.
+    # @return [(List<String>,List<String>)] The query and the values set to use.
     def process_for_search(params)
       return nil, [] if params.empty?
 
@@ -36,21 +54,33 @@ module CultomePlayer::Player::Interface
       return query, values
     end
 
+    # Return a list of absolute path of files in the path which has extension.
+    #
+    # @param path [String] The path to searlook for files.
+    # @param extension [List<String>] The list of extension to filter the files with.
+    # @return [List<String>] The absolute paths to the files found.
     def get_files_in_tree(path, *extensions)
       return extensions.each_with_object([]) do |ext, files|
         files << Dir.glob("#{path}/**/*.#{ext}")
       end.flatten
     end
 
+    # Insert a new song into database. Except if its already present by path.
+    #
+    # @param new_info [List<Hash>] Has contains the keys :artist_id, :album_id, :drive_id, :relative_path, :library_path (optional).
+    # @return [Integer] The number of songs writed.
     def insert_song(new_info)
       existing_paths = get_unique_paths
       to_be_processed = new_info.select{|s| !existing_paths.include?(s[:file_path]) }
       return to_be_processed.count do |info|
-        # aqui va la logica de insercion
         write_song(info)
       end
     end
 
+    # Updates a song into database
+    #
+    # @param new_info [List<Hash>] Has contains the keys :artist_id, :album_id, :drive_id, :relative_path, :library_path (optional).
+    # @return [Integer] The number of songs updated.
     def update_song(new_info)
       existing_paths = get_unique_paths
       to_be_processed = new_info.select{|s| existing_paths.include?(s[:file_path]) }
@@ -62,16 +92,38 @@ module CultomePlayer::Player::Interface
       end
     end
 
+    # Extract the full list of songs connected.
+    #
+    # @return [List<Song>] The full list of songs connected in library.
     def whole_library
       Song.connected.to_a
     end
 
+    # Play the next song in queue playlist.
+    #
+    # @return [Song] The song programed.
     def play_queue
       song = playlists[:queue].remove_next
       play_in_player song
       return song
     end
 
+    # Select songs from the library and current and focus playlist.
+    #
+    # @param cmd [Command] The user command.
+    # @return [List<Song>] The list of songs picked.
+    def select_songs_with(cmd)
+      found_songs = search_songs_with(cmd)
+      from_focus = get_from_focus(cmd.params(:number))
+      from_playlists = get_from_playlists(cmd.params_values(:object))
+      results = found_songs + from_focus + from_playlists
+      return results
+    end
+
+    # Search in library for songs that fullfil the command parameters.
+    #
+    # @param cmd [Command] The user command.
+    # @return [List<Song>] The list of songs found.
     def search_songs_with(cmd)
       criteria_query, criteria_values = process_for_search(cmd.params(:criteria))
       literal_query, literal_values = process_for_search(cmd.params(:literal))
@@ -83,26 +135,30 @@ module CultomePlayer::Player::Interface
       return search_query.empty? ? [] : Song.includes(:artist, :album).connected.where(search_query, *search_values).references(:artist, :album).to_a
     end
 
+    # Get a list of songs from selected playlists, only if the playlist exist.
+    #
+    # @param lists [List<Symbol>] The names of the playlists to check.
+    # @return [List<Song>] The songs in the valid playlists.
     def get_from_playlists(lists)
       valid_lists = lists.select{|list_name| playlist?(list_name) }
       return playlists[*valid_lists].songs
     end
 
-    def select_songs_with(cmd)
-      found_songs = search_songs_with(cmd)
-      from_focus = get_from_focus(cmd.params(:number))
-      from_playlists = get_from_playlists(cmd.params_values(:object))
-      results = found_songs + from_focus + from_playlists
-      return results
-    end
-
+    # Try to find the player object by name.
+    #
+    # @param name [Symbol] The name of the player object
+    # @return [Object] The player object found, if any.
     def player_object(name)
       case name
-      when :song then playlists[:current].current
-      else raise 'unknown player object:unknown player object'
+        when :song then playlists[:current].current
+        else raise 'unknown player object:unknown player object'
       end
     end
 
+    # Check if a command has the format to be considered a ply inline (dont create a playlist).
+    #
+    # @param cmd [Command] The command to check.
+    # @return [Boolean] True if is considered to be played inline. False otherwise.
     def play_inline?(cmd)
       if cmd.action == :play
         return true if cmd.params.all?{|p| p.type == :number }
@@ -115,6 +171,11 @@ module CultomePlayer::Player::Interface
       return false
     end
 
+    # Select the connect action message depending on the imported and updated parameters.
+    #
+    # @param imported [Integer] The number of imported songs.
+    # @param updated [Integer] The number of updated songs.
+    # @return [String] The appropiated message to show to user.
     def connect_response_msg(imported, updated)
       message = ""
       if imported > 0

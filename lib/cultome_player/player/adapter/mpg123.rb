@@ -1,6 +1,10 @@
 module CultomePlayer::Player::Adapter
   module Mpg123
-    # Contract
+
+    # Start a playback in the media player.
+    #
+    # @contract Adapter
+    # @param song [Song] The song to be played.
     def play_in_player(song)
       @current_song = song
       unless player_running?
@@ -10,12 +14,16 @@ module CultomePlayer::Player::Adapter
       loadfile(song)
     end
 
-    # Contract
+    # Activate the pause in media player.
+    #
+    # @contract Adapter
     def pause_in_player
       toggle_pause
     end
 
-    # Contract
+    # Resume playback in media player. If is paused or stopped.
+    #
+    # @contract Adapter
     def resume_in_player
       if paused?
         toggle_pause
@@ -24,21 +32,30 @@ module CultomePlayer::Player::Adapter
       end
     end
 
-    # Contract
+    # Stop playback in media player.
+    #
+    # @contract Adapter
     def stop_in_player
       send_to_player "stop"
     end
 
-    # Contract
+    # Fast forward the playback
+    #
+    # @contract Adapter
+    # @param secs [Integer] Number of seconds to fast forward.
     def ff_in_player(secs)
       send_to_player "jump +#{secs}s"
     end
 
-    # Contract
+    # Fast backward the playback
+    #
+    # @contract Adapter
+    # @param secs [Integer] Number of seconds to fast backward.
     def fb_in_player(secs)
       send_to_player "jump -#{secs}s"
     end
 
+    # Turn off the media player
     def quit_in_player
       begin
         send_to_player "quit"
@@ -46,6 +63,7 @@ module CultomePlayer::Player::Adapter
       end
     end
 
+    # Play from the begining the current playback.
     def repeat_in_player
       send_to_player "jump 0"
     end
@@ -90,12 +108,15 @@ module CultomePlayer::Player::Adapter
 	          		when 0 # stopped
 	          			@playing = @paused = false
 	            		@stopped = true
+                  emit_event(:playback_finish)
 	          		when 1 # paused
 			            @stopped = @playing = false
 			            @paused = true
+                  emit_event(:playback_paused)
 	          		when 2 # unpaused
 									@playing = true
 	            		@paused = @stopped = false
+                  emit_event(:playback_resumed)
             	end
             when /^@F ([\d]+) ([\d]+) ([\d.]+) ([\d.]+)$/
 	            @playback_time_position = $3.to_f

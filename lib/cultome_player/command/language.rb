@@ -1,5 +1,9 @@
 module CultomePlayer::Command
   module Language
+
+    # Define the sintaxis of the player language.
+    #
+    # @return [Hash] With the keys :command, :parameters, :actions, :param
     def sintaxis
       # <command>    : <action> | <action> <parameters>
       # <action>     : literal
@@ -13,7 +17,10 @@ module CultomePlayer::Command
       }
     end
 
-    # The first literal in regex is the command itself
+    # Returns the semantics of the builtin commands.
+    #
+    # @note The first literal in regex is the command itself.
+    # @return [Hash<String, Regex>] The key is the command name and the regex its format.
     def semantics
       {
         "play" => /^literal(literal|number|criteria|object|[\s]+)*$/,
@@ -34,6 +41,9 @@ module CultomePlayer::Command
       }
     end
 
+    # Return the token identities.
+    #
+    # @return [List<Hash>] The has contains the type of the token and their format.
     def token_identities
       [
         {type: :bubble, identity: /^(=>|->)$/},

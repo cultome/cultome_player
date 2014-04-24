@@ -2,9 +2,15 @@ module CultomePlayer
 	module Plugins
 		module Help
 
+			# Command implementation for action "help".
+			# Shows usage information for the actions of the player if called with an action as parameter and shows a player usage information if called without parameters.
+			#
+			# @contract Plugin
+			# @param cmd [Command] Command information parsed from user input
+			# @return [Response] Contains a message to be displayed with the help required.
 	    def command_help(cmd)
 	    	if cmd.params.empty?
-	    		success(message: help_cultome_player)
+	    		success(message: usage_cultome_player)
 	    	else
 	    		help = send("usage_#{cmd.params.first.value}")
 	    		if help.nil?
@@ -15,10 +21,18 @@ module CultomePlayer
 	    	end
 	    end
 
+	    # Description of the action help.
+	    #
+	    # @contract Help Plugin.
+	    # @return [String] The description of the action.
 	    def description_help
 	    	"Provides information for player features."
 	    end
 
+			# Usage information of the action help.
+	    #
+	    # @contract Help Plugin.
+	    # @return [String] The usage information of the action.
 	    def usage_help
 	    	return <<-USAGE
 usage: help [command]
@@ -35,40 +49,6 @@ To see the usage for play command:
 
 	    	USAGE
 	    end
-
-    def help_cultome_player
-	    cmds_availables = methods.grep(/^description_/).collect do |method_name|
-	      [method_name.to_s.gsub("description_", ""), send(method_name)]
-	    end
-
-	    border_width = 5
-	    cmd_column_width = cmds_availables.reduce(0){|sum, arr| sum > arr[0].length ? sum : arr[0].length}
-	    desc_column_width = 90 - border_width - cmd_column_width
-
-	    cmds_availables_formatted = cmds_availables.collect do |arr|
-	      "   " + arrange_in_columns(arr, [cmd_column_width, desc_column_width], border_width)
-	    end
-
-	    return <<-HELP
-usage: <command> [param param ...]
-
-The following commands are availables:
-#{cmds_availables_formatted.join("\n")}
-
-The params can be of any of these types:
-   criterio     A key:value pair. Only a,b,t are recognized.
-   literal      Any valid string. If contains spaces quotes or double quotes are required.
-   object       Identifiers preceded with an @.
-   number       An integer number.
-   path         A string representing a path in filesystem.
-   boolean      Can be true, false. Accept some others.
-   ip           An IP4 address.
-
-See 'help <command>' for more information on a especific command.
-
-Refer to the README file for a complete user guide.
-	    HELP
-	  end
 		end
 	end
 end

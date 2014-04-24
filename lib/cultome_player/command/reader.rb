@@ -3,10 +3,17 @@ require 'readline'
 module CultomePlayer::Command
   module Reader
 
+    # Display a prompt and read user input.
+    #
+    # @param prompt [String] The message to display to user for arcking for input.
+    # @return [String] The user input readed.
     def read_command(prompt)
       command_reader.readline(prompt, true)
     end
 
+    # Lazy getter for readline object.
+    #
+    # @return [Readline] The readline object
     def command_reader
       return Readline if @command_reader_initialized
 
@@ -16,6 +23,8 @@ module CultomePlayer::Command
       @command_reader_initialized = true
       return Readline
     end
+
+    private
 
     def completion_proc
       proc do |word|
@@ -37,8 +46,6 @@ module CultomePlayer::Command
         options # final return
       end # proc
     end
-
-    private
 
     def get_command_param_options(cmd, word)
       if word.empty?

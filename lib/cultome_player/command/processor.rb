@@ -1,11 +1,20 @@
 module CultomePlayer::Command
   module Processor
+
+    # Parse a user input into a command
+    #
+    # @param user_input [String] The user input to be parsed.
+    # @return [Command] The parsed command.
     def parse(user_input)
       tokens = identify_tokens(get_tokens(user_input))
       validate_command(:command, tokens)
       return CultomePlayer::Objects::Command.new(tokens.shift, tokens)
     end
 
+    # Split the user input into tokens.
+    #
+    # @param user_input [String] The user input.
+    # @return [List<String>] The detected tokens.
     def get_tokens(user_input)
       tokens = []
       token = ""
@@ -35,6 +44,10 @@ module CultomePlayer::Command
       return tokens
     end
 
+    # Identify detected tokens.
+    #
+    # @param tokens [List<String>] The detected tokens.
+    # @return [List<Hash>] The hash contains keys :type and :value.
     def identify_tokens(tokens)
       tokens.map do |token|
         id = guess_token_id(token)
@@ -42,6 +55,11 @@ module CultomePlayer::Command
       end
     end
 
+    # Check that a the tokens identifed correspond to a player command.
+    #
+    # @param type [Symbol] The language structure you try to match.
+    # @param tokens [List<Hash>] The list of tokens identified.
+    # @return [Boolean] True if the user command match with a player command format.
     def validate_command(type, tokens)
       current_format = get_command_format(type, tokens)
       # extraemos el primer token, que debe ser el comando
@@ -58,6 +76,11 @@ module CultomePlayer::Command
       return current_format =~ valid_format 
     end
 
+    # Creates a string representation of the command prototype.
+    #
+    # @param type [Symbol] The Language structure you try to match.
+    # @param tokens [List<Hash>] The Language structure you try to match.
+    # @return [String] The string representation of the command prototype.
     def get_command_format(type, tokens)
       format = guess_command_format(type, tokens)
 

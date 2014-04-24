@@ -1,10 +1,15 @@
 require 'cultome_player/utils'
 
 module CultomePlayer::Player::Playlist
+
+  # Lazy getter for playlists.
+  #
+  # @return [Playlists] The playlists handled by the system.
   def playlists
     @playlists ||= Playlists.new
   end
 
+  # (see Playlists#registered?)
   def playlist?(name)
     playlists.registered?(name)
   end
@@ -13,39 +18,73 @@ module CultomePlayer::Player::Playlist
     include Enumerable
     include CultomePlayer::Utils
 
+    # Initialize a playlist with optional information to fill.
+    #
+    # @param data [#each] A collection of items to add to playlist
     def initialize(data=nil)
       @data = {}
       data.each{|arr| register(*arr) } unless data.nil?
     end
 
+    # Register a playlist.
+    #
+    # @param name [Symbol] The name of the new playlist.
+    # @param value [List<Object>] Optional data to initialize the playlist.
+    def register(name, value=nil)
+      raise 'invalid registry:playlist already registered' unless @data[name].nil?
+      @data[name] = value.nil? ? {list: [], idx: -1, repeat: true, shuffled: false} : value
+    end
+
+    # Check if a playlist is registered.
+    #
+    # @param name [Symbol] The name of the new playlist.
+    # @return [Boolean] True if previously registered, False otherwise.
     def registered?(name)
       @data.has_key?(name)
     end
 
+    # Creates an interator for all the songs in all the playlists
+    #
+    # @return [Iterator] Iterator over all the songs.
     def each_song
       idx = 0
       @data.values.each{|info| info[:list].each{|song| yield song, idx += 1 } }
     end
 
+    # Creates an interator for the playlists
+    #
+    # @return [Iterator] Iterator over the playlists.
     def each
       @data.values.each{|info| yield info[:list] }
     end
 
+    # Check if there is playlists registered.
+    #
+    # @return [Boolean] True if there is any playlist registered. False otherwise.
     def empty?
       return @data.values.first[:list].empty? if @data.size == 1
       @data.empty?
     end
 
+    # Creates a new playlist object that contains the playlists named in parameters.
+    #
+    # @return [Playlists] Playlists with selected playlists inside.
     def [](*names)
       validate names
       selected = @data.select{|name,info| names.include?(name) }
       return Playlists.new(selected)
     end
 
+    # Replace the content of the playlist with the content of parameter.
+    #
+    # @param value [List<Object>] The new contents of the playlist.
     def <=(value)
       @data.keys.each{|name| replace(name, value) }
     end
 
+    # Append the content of the playlist with the content of parameter.
+    #
+    # @param value [List<Object>] The appended of the playlist.
     def <<(value)
       if value.respond_to?(:each)
         @data.values.each{|info| value.each{|v| info[:list] << v } }
@@ -54,17 +93,16 @@ module CultomePlayer::Player::Playlist
       end
     end
 
+    # Removes the last element in the playlists.
+    #
+    # @return [List<Object>, Object] The las elements in the playlists.
     def pop
       last_ones = collect{|list| list.pop }
       return last_ones.first if last_ones.size == 1
       return last_ones 
     end
 
-    def register(name, value=nil)
-      raise 'invalid registry:playlist already registered' unless @data[name].nil?
-      @data[name] = value.nil? ? {list: [], idx: -1, repeat: true, shuffled: false} : value
-    end
-
+    # Shuffle the playlists and reset the indexes.
     def shuffle
       @data.values.each do |info|
         info[:list].shuffle!
@@ -73,6 +111,7 @@ module CultomePlayer::Player::Playlist
       end
     end
 
+    # Order the playlists and reset the indexes.
     def order
       @data.values.each do |info|
         info[:list].sort!
@@ -82,6 +121,8 @@ module CultomePlayer::Player::Playlist
     end
 
     # Returns the next song in playlist, which means the new current song.
+    #
+    # @return [List<Object>,Object] The next element(s) in playlist(s).
     def next
       each_next do |info, nxt_idx|
         info[:idx] = nxt_idx
@@ -89,6 +130,9 @@ module CultomePlayer::Player::Playlist
       end
     end
 
+    # Returns the previous song in playlist.
+    #
+    # @return [List<Object>,Object] The previous element(s) in playlist(s).
     def rewind_by(idx)
       each_next do |info, nxt_idx|
         info[:idx] -= idx
@@ -96,24 +140,37 @@ module CultomePlayer::Player::Playlist
       end
     end
 
+    # Remove the next element in playlist.
+    #
+    # @return [List<Object>,Object] The next element(s) in playlist(s).
     def remove_next
       each_next do |info, nxt_idx|
         info[:list].delete_at nxt_idx
       end
     end
 
+    # Return the play index in the playlists.
+    #
+    # @return [List<Integer>, Integer] Indexes of the playlists.
     def play_index
       return first_or_map :idx
     end
 
+    # Return the repeat status in the playlists.
+    #
+    # @return [List<Boolean>, Boolean] Indexes of the playlists.
     def repeat?
       return first_or_map :repeat
     end
 
+    # Change the repeat status in the playlists.
     def repeat(value)
       @data.values.each{|info| info[:repeat] = is_true_value?(value) }
     end
 
+    # Returns the current element in playlists.
+    #
+    # @return [List<Object>, Object] The current element(s) in playlist(s).
     def current
       currents = @data.values
       .select{|info| info[:idx] >= 0}
@@ -127,27 +184,43 @@ module CultomePlayer::Player::Playlist
       return currents
     end
 
+    # The number of registered playlists.
+    #
+    # @return [Integer] The size of registered playlist.
     def size
       @data.size
     end
 
+    # Return a list with all the songs in all the playlists.
+    #
+    # @return [List<Object>] A list with all the songs in all the playlists.
     def to_a
       @data.values.reduce([]){|acc,info| acc + info[:list]}
     end
 
     alias :songs :to_a
 
+    # Returns the elements in the playlist.
+    #
+    # @param idx [Integer] The positional index of the element required.
+    # @return [List<Object>, Object] The positional elements in the playlists.
     def at(idx)
       return @data.values.first[:list].at(idx) if @data.size == 1
       return @data.values.collect{|info| info[:list].at(idx) }
     end
 
+    # Returns a string representation of the playlists.
+    #
+    # @return [String] A representation of the playlists.
     def as_list
       list = ""
       each_song{|s,i| list << "#{i}. #{s.to_s}\n" }
       return list
     end
 
+    # Check if there is another element in playlists.
+    #
+    # @return [List<Boolean>, Boolean] True if the the playlist has more elements, False otherwise.
     def next?
       nexts = each_next_with_index{|info, nxt_idx| nxt_idx }
       has_nexts = nexts.map{|nxt_idx| !nxt_idx.nil? }
@@ -155,6 +228,9 @@ module CultomePlayer::Player::Playlist
       return has_nexts
     end
 
+    # Check the status of shuffling in playlists.
+    #
+    # @return [List<Boolean>, Boolean] True if playlist is shuffling. False otherwise.
     def shuffling?
       return first_or_map :shuffled
     end

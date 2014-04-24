@@ -12,6 +12,6 @@ describe CultomePlayer do
 	end
 
 	it 'contains usage instrucctions' do
-		t.should respond_to(:help_cultome_player)
+		t.should respond_to(:usage_cultome_player)
 	end
 end

@@ -1,5 +1,7 @@
 module CultomePlayer::Player
   module Interactive
+
+    # Begin a REP loop inside player.
     def begin_session
       @in_session = true
       display "Cultome Player v#{CultomePlayer::VERSION}"
@@ -14,10 +16,14 @@ module CultomePlayer::Player
       end
     end
 
+    # Check if there is an interactive session in progress.
+    #
+    # @return [Boolean] True if session in progress. False otherwise.
     def in_session?
       @in_session ||= false
     end
 
+    # Terminates a interactive session.
     def terminate_session
       @in_session = false
     end
