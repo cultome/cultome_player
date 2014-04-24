@@ -160,7 +160,7 @@ module CultomePlayer::Player::Interface
     # @param cmd [Command] The command to check.
     # @return [Boolean] True if is considered to be played inline. False otherwise.
     def play_inline?(cmd)
-      if cmd.action == :play
+      if cmd.action == "play"
         return true if cmd.params.all?{|p| p.type == :number }
         if cmd.params.size == 1
           p = cmd.params.first

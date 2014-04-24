@@ -68,9 +68,7 @@ describe CultomePlayer::Player::Playlist do
       it 'shuffle the content of the playlist' do
         p[:playlist].first.should eq %w{uno dos tres cuatro}
         p[:playlist].shuffle
-        if p[:playlist].first == %w{uno dos tres cuatro}
-          p[:playlist].shuffle
-        end
+        p[:playlist].shuffle if p[:playlist].first == %w{uno dos tres cuatro}
         p[:playlist].first.should_not eq %w{uno dos tres cuatro}
       end
 

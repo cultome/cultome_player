@@ -20,6 +20,7 @@ module CultomePlayer::Player::Interface
         if playing?
           #mostramos la cancion actual
           msg = get_progress_bar_with_labels(playback_position, playback_length, 20, format_secs(playback_position), format_secs(playback_length))
+          playlists[:focus] <= current_song
           return success(message: "#{current_song.to_s}\n#{msg}", song: current_song)
         else
           return failure("Nothing to show yet. Try with 'play' first.")
@@ -28,15 +29,25 @@ module CultomePlayer::Player::Interface
       else
         list_to_show = cmd.params(:object).reduce([]) do |acc, p|
           acc + case p.value
-          when :playlist then current_playlist.to_a
-          when :library then whole_library.to_a
-          when :drives then Drive.all
-          when :song then return success(message: current_song.to_s, song: current_song)
-          else []
+            when :playlist then current_playlist.to_a
+            when :current then playlists[:current].to_a
+            when :history then playlists[:history].to_a
+            when :queue then playlists[:queue].to_a
+            when :focus then playlists[:focus].to_a
+
+            when :library then whole_library.to_a
+            when :drives then Drive.all
+            when :song then return success(message: current_song.to_s, song: current_song)
+            else []
           end
         end
 
-        return success(list: list_to_show, response_type: :list)
+        if list_to_show.empty?
+          return failure("I checked and there is nothing there.")
+        else
+          playlists[:focus] <= list_to_show
+          return success(list: list_to_show, response_type: :list)
+        end
       end
     end
 
