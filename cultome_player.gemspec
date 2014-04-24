@@ -2,6 +2,13 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'cultome_player/version'
+# select the faile that goes inside the gem
+git_index = `git ls-files`.split("\n")
+gitignored = `cat .gitignore`.split("\n")
+excluded = `cat .excluded`.split("\n")
+
+files = git_index.select{|filepath| !gitignored.include?(filepath) }
+                 .select{|filepath| excluded.none?{|excl_regex| filepath =~ /#{excl_regex}/ }}
 
 Gem::Specification.new do |gem|
   gem.name          = "cultome_player"
@@ -13,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "https://github.com/cultome/cultome_player"
   gem.license       = "MIT"
 
-  gem.files         = `git ls-files`.split($/)
+  gem.files         = files
   gem.executables   = gem.files.grep(%r{^bin/}) { |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
