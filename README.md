@@ -2,7 +2,7 @@
 [![Build Status](https://travis-ci.org/cultome/cultome_player.svg)](https://travis-ci.org/cultome/cultome_player)
 [![Coverage Status](https://coveralls.io/repos/cultome/cultome_player/badge.png)](https://coveralls.io/r/cultome/cultome_player)
 
-# CulToMe Player
+# Cultome Player
 A handy music library explorer. Is designed to facilitate you to play the music you like in the moment you want.
 
 **"I want to play exactly this music"**
@@ -94,7 +94,7 @@ The objects are words with special meaning to the player prefixed with an @. In 
 ```
 * @library         Refers to the complete list of songs in you *connected* collection.
 * @search          Refers to the list of songs returned in your last search.
-* @playlist        Refers to the current playlist.
+* @playlist        Refers to the current playlist. @current work as well.
 * @history         Refers to the playlist of songs you have heard in this session.
 * @queue           Refers to the list of songs scheduled to be played next.
 * @song            Refers to the current song playing.
@@ -116,8 +116,8 @@ Some others are not player's objects but act as special functions placeholders.
 ```
 
 And anything else is interpreted as follow:
-* 1.  If there is a @drive with the same name, the @drive is used. The spaces in the @drive name are replaced with _. So, @my_drive search a drive with name 'my drive', no matter the case.
-* 2.  Try to match a genre, with same name tranformation as above. So, @rock refers to the genre named 'rock', no matter the case.
+* If there is a @drive with the same name, the @drive is used. The spaces in the @drive name are replaced with _. So, @my_drive search a drive with name 'my drive', no matter the case.
+* Try to match a genre, with same name tranformation as above. So, @rock refers to the genre named 'rock', no matter the case.
 
 #### Number
 The numbers refers to elements in a displayed list. When a list is displayed, that lists becomes the *focused list* and any given numerical parameter refers to the elements in this list. Depending on the list type, that will be the type of parameter used.A *focused list* is usually the latest list displayed by the player.
@@ -164,13 +164,13 @@ We get a playlist with all the songs of 'Ke$ha'. Similar behavior if we have had
 #### Path
 Is an absolute path inside the filesystem. As with literals if the path has any spaces in it, is required to be wrapped inside " or '. In this moment there is no route expansion, so path like ~/music are not valids.
 
-```ruby
+```
 /home/usuario/music
 ```
 
 #### Boolean
 Basicly anything that match the next regex is considered a boolean value, so watch out if you try to insert a literal value instead of a boolean.
-```ruby
+```
 /^(on|off|yes|false|true|si|no|y|n|s|ok)$/
 ```
 
@@ -192,28 +192,22 @@ The commands are very rustic. Basicly consist in a command name and a list of pa
 The following command are implemented in this moment.
 
 ```
-* play (<number>|<criteria>|<object>|<literal>)*    Create and inmediatly plays playlists
-* enqueue (<number>|<criteria>|<object>|<literal>)* Append the created playlist to the current playlist
-* search (<criteria>|<object>|<literal>)*           Find inside library for song with the given criteria.
-* show [<object>]                                   Display information about status, objects and library.
-* pause                                             Pause playback.
-* stop                                              Stops playback.
-* next <number>                                     Play the next song in the queue.
-* prev                                              Play the previous song from the history.
-* connect <path> => <literal>                       Add files to the library.
-* disconnect <literal>                              Remove filesfrom the library.
-* quit                                              Exit the player.
-* ff                                                Fast forward the current playback.
-* fb                                                Fast backward the current playback.
-* shuffle <number>|<literal>                        Check and change the status of shuffle.
-* repeat                                            Repeat the current song
-* copy <object> => <path>                           Copy a playlist to some filesystem folder
-* similar <object>                                  Look in last.fm for similar artists or songs
-* kill                                              Delete from disk the current song
-* alias <literal> => <literal>                      Create an alias for one or many commands
-* lyric                                             Find the lyric of the current song
-* configure_lastfm <literal>                        Configure you Last.fm account to be able to scrobble.
-* help <literal>                                    Show this help.
+* help           Provides information for player features.
+* play           Creates a playlist and start playing. Resumes playback.
+* pause          Toggle pause.
+* stop           Stops current playback.
+* next           Play the next song in current playlist.
+* prev           Play the last song in history playlist.
+* quit           Quits the playback and exit the player.
+* search         Search into the connected music drives.
+* show           Shows representations of diverse objects in the player.
+* enqueue        Append a playlist to the queue playlist.
+* shuffle        Check the state of shuffle. Can turn it on and off.
+* connect        Add or reconnect a drive to the music library.
+* disconnect     Disconnect a drive from the music library.
+* ff             Fast forward 10 seconds the current playback.
+* fb             Fast backward 10 seconds the current playback.
+* repeat         Repeat the current playback from the begining.
 ```
 
 Parameters passed to commands that dont require any are simply ignored.
@@ -236,8 +230,14 @@ help <command_name>
 ```
 
 ## Installation
-Due I'm not a genius I have to rely in an excelent media player as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have Mpg123 installed.
+Due I'm not a genius, I rely in an excelent media player as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have Mpg123 installed. With linux, is a piece of cake:
 
+For Ubuntu
+```
+sudo apt-get install mpg123
+```
+
+When you finish install this gem:
 ```ruby
 gem install cultome_player
 
@@ -253,6 +253,10 @@ play
 **Version 2.0.0**
 
 You know! I cant remember how many times I have rewrited this player. Mainly I do it because is fun to work in it, but the ugly truth is that I never finish it. However I will try to delivery at least a stable and prolonged api for this version. I'm taking my time and hopefully some day near I can delivery a fully funcional version with the plugins and all the flashing lights. If you wanna try the player while Im building it, try this version, if not stick it to the 1.0.0 (Im using version 1.0.0 while writing this) until I reach the functional point of that version, when that happens I'll post it here.
+
+UPDATE:
+
+I'm working again! Some changes ocurred since last update. First I change mi github account for dumb reasons, anyway this is the new old gem and I have this first stable new version. You know, some rought edges but at least is useful. I'll release the gem with another name because the cultome_player namespace is reserved. I let you know which one I pick. Wait the new gem in a couple days.
 
 **Version 1.0.0**
 

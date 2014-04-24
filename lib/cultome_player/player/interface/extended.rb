@@ -34,14 +34,29 @@ module CultomePlayer::Player::Interface
             when :history then playlists[:history].to_a
             when :queue then playlists[:queue].to_a
             when :focus then playlists[:focus].to_a
+            when :search then playlists[:search].to_a
+
+            when :song then return success(message: current_song.to_s, song: current_song)
+            when :artist then return success(message: current_artist.to_s, artist: current_song)
+            when :album then return success(message: current_album.to_s, album: current_song)
+
+            when :drives then Drive.all
+            when :artists then return Artist.all
+            when :albums then return Album.all
+            when :genres then return Genre.all
 
             when :library then whole_library.to_a
-            when :drives then Drive.all
-            when :song then return success(message: current_song.to_s, song: current_song)
+
+            when :recently_added then [] # TODO implement
+            when :recently_played then [] # TODO implement
+            when :more_played then [] # TODO implement
+            when :less_played then [] # TODO implement
+            when :populars then [] # TODO implement
+
             else []
           end
         end
-
+        
         if list_to_show.empty?
           return failure("I checked and there is nothing there.")
         else

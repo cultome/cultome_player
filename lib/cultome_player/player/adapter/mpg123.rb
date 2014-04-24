@@ -36,6 +36,7 @@ module CultomePlayer::Player::Adapter
     #
     # @contract Adapter
     def stop_in_player
+      @user_stopped = true
       send_to_player "stop"
     end
 
@@ -108,7 +109,8 @@ module CultomePlayer::Player::Adapter
 	          		when 0 # stopped
 	          			@playing = @paused = false
 	            		@stopped = true
-                  emit_event(:playback_finish)
+                  emit_event(:playback_finish) unless @user_stopped
+                  @user_stopped = false
 	          		when 1 # paused
 			            @stopped = @playing = false
 			            @paused = true

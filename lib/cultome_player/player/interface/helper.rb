@@ -164,7 +164,7 @@ module CultomePlayer::Player::Interface
         return true if cmd.params.all?{|p| p.type == :number }
         if cmd.params.size == 1
           p = cmd.params.first
-          return p.type == :object && p.value == 'song'
+          return p.type == :object && p.value == :song
         end
       end
 

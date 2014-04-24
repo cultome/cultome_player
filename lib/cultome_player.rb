@@ -78,11 +78,14 @@ module CultomePlayer
         playlists.register(:history)
         playlists.register(:queue)
         playlists.register(:focus)
+        playlists.register(:search)
+        
         register_listener(:playback_finish, self)
       end
 
       def on_playback_finish
-        execute("next no_history")
+        r = execute("next no_history")
+        display_over("#{r.message}\n#{PROMPT}")
       end
     end
 

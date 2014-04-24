@@ -1,6 +1,8 @@
 module CultomePlayer::Player
   module Interactive
 
+    PROMPT = "cultome> "
+
     # Begin a REP loop inside player.
     def begin_session
       @in_session = true
@@ -8,7 +10,7 @@ module CultomePlayer::Player
 
       while in_session?
         begin
-          r = execute read_command("cultome> ")
+          r = execute read_command(PROMPT)
           show_response(r)
         rescue Exception => e
           display e.message

@@ -47,11 +47,12 @@ module CultomePlayer::Command
     def token_identities
       [
         {type: :bubble, identity: /^(=>|->)$/},
-        {type: :object, identity: /^@([\w\d]+)$/},
         {type: :number, identity: /^([\d]+)$/},
-        {type: :criteria, identity: /^([\w]+):([\d\w\s]+)$/, captures: 2, labels: [:criteria, :value]},
+        {type: :object, identity: /^@([\w\d]+)$/},
         {type: :path, identity: /^(['"]?(?:\/|~\/)[\/\w\d\s.]+)["']?$/},
+        {type: :criteria, identity: /^([\w]+):([\d\w\s]+)$/, captures: 2, labels: [:criteria, :value]},
         {type: :boolean, identity: /^(on|off|yes|false|true|si|no|y|n|s|ok)$/},
+        {type: :ip, identity: /^([\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3})$/},
         {type: :literal, identity: /^([\w\d\s]+)$/},
       ]
     end

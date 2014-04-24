@@ -20,6 +20,15 @@ module CultomePlayer
       return msg
     end
 
+    # Print a string into stdout (not STDOUT) but before insert a carriage return and dont append a newline character at the end.
+    #
+    # @param msg [String] The value to be printed.
+    # @return [String] The value printed.
+    def display_over(msg)
+      stdout.print "\r#{msg}"
+      return msg
+    end
+
     # Define the 15 colors allowed in my console scheme
     (1..15).each do |idx|
       define_method :"c#{idx}" do |str|
