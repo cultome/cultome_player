@@ -21,6 +21,10 @@ module CultomePlayer
 	    	end
 	    end
 
+	    def sintaxis_help
+	    	return /^literal (literal)$/
+	    end
+
 	    # Description of the action help.
 	    #
 	    # @contract Help Plugin.

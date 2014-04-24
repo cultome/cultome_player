@@ -68,7 +68,7 @@ module CultomePlayer::Command
       valid_format = semantics[cmd]
       if valid_format.nil?
         if plugins_respond_to?(cmd)
-          valid_format = plugin_command_format(cmd)
+          valid_format = plugin_command_sintaxis(cmd)
         else
           raise 'invalid command:invalid action'
         end
