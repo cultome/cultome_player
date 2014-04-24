@@ -1,4 +1,5 @@
 require 'active_record'
+require 'colorize'
 
 module CultomePlayer
   module Utils
@@ -30,9 +31,29 @@ module CultomePlayer
     end
 
     # Define the 15 colors allowed in my console scheme
-    (1..15).each do |idx|
+    (1..18).each do |idx|
       define_method :"c#{idx}" do |str|
-        str
+        case idx
+          when 1 then str.colorize(:blue)
+          when 2 then str.colorize(:black)
+          when 3 then str.colorize(:red)
+          when 4 then str.colorize(:green)
+          when 5 then str.colorize(:yellow)
+          when 6 then str.colorize(:blue)
+          when 7 then str.colorize(:magenta)
+          when 8 then str.colorize(:cyan)
+          when 9 then str.colorize(:white)
+          when 10 then str.colorize(:default)
+          when 11 then str.colorize(:light_black)
+          when 12 then str.colorize(:light_red)
+          when 13 then str.colorize(:light_green)
+          when 14 then str.colorize(:light_yellow)
+          when 15 then str.colorize(:light_blue)
+          when 16 then str.colorize(:light_magenta)
+          when 17 then str.colorize(:light_cyan)
+          when 18 then str.colorize(:light_white)
+          else str
+        end
       end
     end
 

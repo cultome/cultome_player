@@ -248,78 +248,10 @@ connect /home/user/music => main
 play
 ```
 
-## What's new
-
-**Version 2.0.0**
-
-You know! I cant remember how many times I have rewrited this player. Mainly I do it because is fun to work in it, but the ugly truth is that I never finish it. However I will try to delivery at least a stable and prolonged api for this version. I'm taking my time and hopefully some day near I can delivery a fully funcional version with the plugins and all the flashing lights. If you wanna try the player while Im building it, try this version, if not stick it to the 1.0.0 (Im using version 1.0.0 while writing this) until I reach the functional point of that version, when that happens I'll post it here.
-
-UPDATE:
-
-I'm working again! Some changes ocurred since last update. First I change mi github account for dumb reasons, anyway this is the new old gem and I have this first stable new version. You know, some rought edges but at least is useful. I'll release the gem with another name because the cultome_player namespace is reserved. I let you know which one I pick. Wait the new gem in a couple days.
-
-**Version 1.0.0**
-
-I took so long I know, but it was for a good cause. When I realized thanks to [Travis CI](https://travis-ci.org/csoriav/cultome_player) that my code was a little more than difficult to test in more than one environment, considering the weird hybrid that result the JRuby thing, I decided to rewrite all the player, and that was what i been doing since then.
-
-With the hope to deliver zero-defect, multiple-environment-friendly, less error prone code, a better developer experience and a truly code that could be called gem, I invest a lot of effort writing with a test-first methodology with new version. As you can see my coverage incremented radically.
-
-As you can imagine, I test a lot, but even with my greattest efforts is possible that some scenarios have gone under the radar. I'm also conscient that this version still has some jagged edges, mostly of then I have identified but, by the nature of this change and the time it took, i decide to release this stable version and polish all the other things in the next release.
-
-So, whats new with this release? Well at first sight you will feel the speed in the starting, also will note the memory consumption is now less than half than before. I also remove dependencies but over all now the player is **PURE RUBY**... well! you still need to have java installed because the music player is the same, but now run in a separate process and the communication between ruby and java is with sockets. This allows to use the gem even without a music player or connect a nother player, lets say mplayer, with just overwriting a couple methods =D
-
-I remove the share funcitonality in this version, but it will come back in esteroids in future releases.
-
-Whats next? Musicbrainz integration, I need to tags correctly all the songs if I want to go further. So, see you next version!
-
-**Version 0.4.0**
-
-* Now you database and your config file are inside you user directory (~/.cultome), that mean every new version dont require re-connect you music or make your aliases again.
-* Scrobbler? of course! why not? but please run **'configure_lastfm begin'** before use it.
-* Better environment startup check.
-
-**Version 0.3.0**
-
-* Colors!!! Yeah! a color schema that you can customize if you dont like mine.
-* Some ASCII progress bars to let you know the player is not stuck!
-* Improvement in the 'help <command>' command, to, hopefully help you you surf in the player.
-* Add but not yet fully tested the *share* command to share music between two machines.
-* Some minor bugs fixed.
-* Specs up to date! YEAH!
-
-**Version 0.2.0**
-
-* The code were reorganized to be more API-oriented, even when this was not the mainly intention of this project, but can be uselful for others to use it this way.
-* The some commands were extracted from the core, like help and kill.
-* The command 'copy <object> <destiny_path>' were added to copy all the songs in the objet to a directory in the filesystem.
-* The option 'search @\<artist|album\>' was implemented to facilitate the __'that album rocks! lets hear it!'__.
-* The player now emit exception-thrown events, a general exception and a player's exception.
-* The aliases/shortcuts/macros plugin is in place. With this you can translate user input into commands, for example type 'sa' and the players tranform it to 'search @artist'.
-* Changes in plugin structure. Not the final version but a step ahead for building a better plugin model.
-* Some minor bugs fixes, like the db hanging or the lost in focus when search is empty.
-
-## TODO
-
-* Connect with musicbrainz to tag correctly and beatifuly my music, this also surge as Last.fm is very picky with the information you submit with your scrobbles.
-* Add tags to the songs, for example 'party' or 'sadness'.
-* A friend of mine give me an idea, when you are in a place where many people hear the same music, you should be able to decide what to play, as everyone else. So I will try an implementation of this idea, maybe a slave-masters model.
-* Support for Windows. Not my priority but would be nice my wife to use it.
-* Add gestures to the detector and start making appropiated suggestions for them.
-* Refine the taste analizer, which is the component that give preference points to songs.
-* Change the underlying in-file database for a real one, thinking on mongo or mysql.
-
 ## Contributing
 
-  1. Fork it
+1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-  3. Commit your changes (`git commit -am 'Add some feature'`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
-  5. Create new Pull Request
-
-## Additional Information
-
-#### jlGui BasicPlayer
-  This component is what I use to play music and is included within the libraries of this project, dependencies included of course.
-
-  [jlGui](http://www.javazoom.net/jlgui/developerguide.html)
-
+5. Create new Pull Request

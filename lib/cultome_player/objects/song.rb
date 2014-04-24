@@ -20,16 +20,16 @@ module CultomePlayer
 
       def to_s
         str = c4(":::: Song: ")
-        str += c10(self.name)
+        str += c14(self.name)
 
         unless self.artist.nil?
           str += c4(" \\ Artist: ")
-          str += c11(self.artist.name)
+          str += c15(self.artist.name)
         end
 
         unless self.album.nil?
           str += c4(" \\ Album: ")
-          str += c13(self.album.name)
+          str += c16(self.album.name)
         end
         str += c4(" ::::")
       end

@@ -25,7 +25,7 @@ module CultomePlayer::Player::Interface
     # @return [String] The string representation of a progress bar.
     def get_progress_bar_with_labels(current, total=100, size=10, left='', right='')
       bar = get_progress_bar(current, total, size)
-      return "#{left} #{bar} #{right}".strip
+      return c7("#{left} #{bar} #{right}".strip)
     end
 
     # (see #get_progress_bar_with_labels)
@@ -34,7 +34,7 @@ module CultomePlayer::Player::Interface
       bars = ( factor * size ).floor
       total = "_" * size
       total[0,bars] = "#" * bars
-      return "|#{total}|"
+      return "<|#{total}|>"
     end
 
     # Generate a query and a array of values to replace into the query for a given set of parameters.

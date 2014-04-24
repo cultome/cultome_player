@@ -9,7 +9,7 @@ module CultomePlayer
 
       def to_s
         str = c4(":::: Album: ")
-        str += c13(self.name)
+        str += c16(self.name)
         str += c4(" \\ Artist: ")
         unless self.artists.nil? || self.artists.empty?
           str += c11(self.artists.uniq.collect{|a| a.name}.join(', '))

@@ -6,14 +6,14 @@ module CultomePlayer::Player
     # Begin a REP loop inside player.
     def begin_session
       @in_session = true
-      display "Cultome Player v#{CultomePlayer::VERSION}"
+      display c5("Cultome Player v#{CultomePlayer::VERSION}")
 
       while in_session?
         begin
           r = execute read_command(PROMPT)
           show_response(r)
         rescue Exception => e
-          display e.message
+          display c3(e.message)
         end
       end
     end
@@ -37,18 +37,18 @@ module CultomePlayer::Player
         res_obj = r.send(r.response_type)
         if res_obj.respond_to?(:each)
           res_obj.each.with_index do |elem, idx|
-            display "#{(idx + 1).to_s.ljust(3)} | #{elem.to_s}"
+            display c4("#{(idx + 1).to_s.ljust(3)} | #{elem.to_s}")
           end
         elsif res_obj.class == String
-          display res_obj.to_s
+          display c1(res_obj.to_s)
         else
-          display "(((#{res_obj.to_s})))"
+          display c3("(((#{res_obj.to_s})))")
         end
-
+      # Dont has response_type
       elsif r.respond_to?(:message)
-        display r.message
+        display c1(r.message)
       else
-        display "!!!#{r}!!!"
+        display c3("!!!#{r}!!!")
       end
     end
 

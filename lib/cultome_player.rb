@@ -85,7 +85,7 @@ module CultomePlayer
 
       def on_playback_finish
         r = execute("next no_history")
-        display_over("#{r.message}\n#{PROMPT}")
+        display_over c4("#{r.message}\n#{c5(PROMPT)}")
       end
     end
 

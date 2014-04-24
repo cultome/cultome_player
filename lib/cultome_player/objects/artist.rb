@@ -10,7 +10,7 @@ module CultomePlayer
 
       def to_s
         str = c4(":::: Artist: ")
-        str += c11(self.name)
+        str += c15(self.name)
         str += c4(" ::::")
       end
     end
