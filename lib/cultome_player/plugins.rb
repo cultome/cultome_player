@@ -1,10 +1,12 @@
 require 'cultome_player/plugins/help'
 require 'cultome_player/plugins/alias'
+require 'cultome_player/plugins/points'
 
 module CultomePlayer
 	module Plugins
 		include Help
 		include Alias
+		include Points
 
 		# Check if a plugin implements the given command.
 		#
@@ -29,6 +31,10 @@ module CultomePlayer
 		def plugin_config(plugin_name)
 			plugin_ns = player_config['plugins'] ||= {}
 			return plugin_ns[plugin_name.to_s] ||= {}
+		end
+
+		def init_plugins
+			methods.grep(/^init_plugin_/).each{|method_name| send(method_name) }
 		end
 	end
 end

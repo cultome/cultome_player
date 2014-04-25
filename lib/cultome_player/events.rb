@@ -8,14 +8,14 @@ module CultomePlayer
       @listeners ||= Hash.new{|h,k| h[k] = [] }
     end
 
-    # Register a listener to an event.
+    # Register a callback to an event.
     #
     # @param event [Symbol] The event name.
-    # @param listener [Object] Implements a callback with the name on_<event name>.
-    # @return [Object] The registered listener.
-    def register_listener(event, listener)
-      listeners[event] << listener
-      return listener
+    # @param callback [Object] Implements a callback with the name on_<event name>.
+    # @return [Object] The registered callback.
+    def register_listener(event, &callback)
+      listeners[event] << callback
+      return callback
     end
 
     # Broadcast an event to all the registered listeners.
@@ -23,7 +23,7 @@ module CultomePlayer
     # @param event [Symbol] The event name.
     # @param data [Array] The information sended to the listeners.
     def emit_event(event, *data)
-      listeners[event].collect{|l| l.send("on_#{event}".to_sym, *data) }
+      listeners[event].collect{|l| l.call(*data) }
     end
   end
 end

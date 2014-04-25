@@ -109,16 +109,15 @@ module CultomePlayer::Player::Adapter
 	          		when 0 # stopped
 	          			@playing = @paused = false
 	            		@stopped = true
-                  emit_event(:playback_finish) unless @user_stopped
-                  @user_stopped = false
+                  @user_stopped ?  emit_event(:playback_stopped, current_song) : emit_event(:playback_finish, current_song)
 	          		when 1 # paused
 			            @stopped = @playing = false
 			            @paused = true
-                  emit_event(:playback_paused)
+                  emit_event(:playback_paused, current_song)
 	          		when 2 # unpaused
 									@playing = true
 	            		@paused = @stopped = false
-                  emit_event(:playback_resumed)
+                  emit_event(:playback_resumed, current_song)
             	end
             when /^@F ([\d]+) ([\d]+) ([\d.]+) ([\d.]+)$/
 	            @playback_time_position = $3.to_f

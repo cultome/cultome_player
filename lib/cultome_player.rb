@@ -34,15 +34,19 @@ module CultomePlayer
         # revisamos si es un built in command o un plugin
         action = cmd.action
         plugin_action = "command_#{cmd.action}".to_sym
-        action = plugin_action if respond_to?(plugin_action)
+        action = plugin_action if plugins_respond_to?(cmd.action)
 
         raise 'invalid command:action unknown' unless respond_to?(action)
         with_connection do
           begin
+            emit_event("before_command_#{action}".to_sym, cmd)
             r = send(action, cmd)
+            emit_event("after_command_#{action}".to_sym, cmd, r)
             seq_success = false unless r.success?
             r # return response
           rescue Exception => e
+            emit_event(:execute_exception, cmd, e)
+            
             display c3("#{e.message}\n#{e.backtrace}\n") if current_env == :dev
             seq_success = false
             s = e.message.split(":")
@@ -96,6 +100,7 @@ module CultomePlayer
         playlists.register(:search)
         
         register_listener(:playback_finish, self)
+        init_plugins
       end
 
       def on_playback_finish

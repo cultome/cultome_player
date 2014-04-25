@@ -18,6 +18,8 @@ module CultomePlayer::Player
 
           show_response(r.last)
         rescue Exception => e
+          emit_event(:interactive_exception, e)
+
           display c3(e.message)
           display c3(e.backtrace) if current_env == :dev
         end
