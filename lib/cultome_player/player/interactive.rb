@@ -15,9 +15,11 @@ module CultomePlayer::Player
           if r.size > 1
             display c1("#{r.size} commands were executed, Showing result of the last one.")
           end
+
           show_response(r.last)
         rescue Exception => e
           display c3(e.message)
+          display c3(e.backtrace) if current_env == :dev
         end
       end
     end
@@ -46,13 +48,13 @@ module CultomePlayer::Player
             display c4("#{(idx + 1).to_s.ljust(3)} | #{elem.to_s}")
           end
         elsif res_obj.class == String
-          display c1(res_obj.to_s)
+          display r.success? ? c1(res_obj.to_s) : c3(res_obj.to_s)
         else
           display c3("(((#{res_obj.to_s})))")
         end
-      # Dont has response_type
+      # Dont has response_type, eg has a message
       elsif r.respond_to?(:message)
-        display c1(r.message)
+        display r.success? ? c1(r.message) : c3(r.message)
       else
         display c3("!!!#{r}!!!")
       end

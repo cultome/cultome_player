@@ -35,7 +35,7 @@ module CultomePlayer
             end
           end
           
-          return success(playlist: songs) + execute("next no_history")
+          return success(playlist: songs) + execute("next no_history").first
         end
 
         # For more information on this command refer to user manual or inline help in interactive mode.

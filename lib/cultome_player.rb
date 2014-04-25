@@ -43,6 +43,7 @@ module CultomePlayer
             seq_success = false unless r.success?
             r # return response
           rescue Exception => e
+            display c3("#{e.message}\n#{e.backtrace}\n") if current_env == :dev
             seq_success = false
             s = e.message.split(":")
             failure(message: s[0], details: s[1])
