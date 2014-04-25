@@ -19,14 +19,17 @@ module CultomePlayer
 				# si no es un alias, lo dejamos pasar
 				return false if cmd_aliased.nil?
 				# aqui definimos los metodos requeridos para el alias
+				# alias execution...
 				self.class.send(:define_method, "command_#{aka}".to_sym) do |cmd|
 					prepared_command = cmd_aliased.clone
+					# we replace parameters
 					cmd.params_values(:literal).each.with_index do |p, idx|
-						cmd_aliased.gsub!(/%#{idx + 1}/, p) # TODO aqui manejar los parametros con quotes
+						prepared_command.gsub!(/%#{idx + 1}/, "'#{p}'") # TODO aqui manejar los parametros con quotes
 					end
-					
+					# execute the alias
 					return execute(prepared_command)
 				end
+				# ...and sintaxis
 				self.class.send(:define_method, "sintaxis_#{aka}".to_sym) do
 					return /^literal(literal|[\s]+)*$/ # devolvemos la sintaxis para la invocacion del alias, no del comando
 				end

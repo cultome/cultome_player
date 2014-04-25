@@ -53,7 +53,7 @@ module CultomePlayer::Command
         {type: :criteria, identity: /^([\w]+):([\d\w\s]+)$/, captures: 2, labels: [:criteria, :value]},
         {type: :boolean, identity: /^(on|off|yes|false|true|si|no|y|n|s|ok)$/},
         {type: :ip, identity: /^([\d]{1,3}\.[\d]{1,3}\.[\d]{1,3}\.[\d]{1,3})$/},
-        {type: :literal, identity: /^([\w\d\s]+)$/},
+        {type: :literal, identity: /^['"]?([\w\d\s%]+)['"]?$/}, # add % for the alias parameters placeholders
       ]
     end
 
