@@ -89,6 +89,10 @@ module CultomePlayer
       check_db_schema if check_db
     end
 
+    def save_player_configurations
+      open(config_file, 'w'){|f| f.write player_config.to_yaml }
+    end
+
     private
 
     def check_db_schema

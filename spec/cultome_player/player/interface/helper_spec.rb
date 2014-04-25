@@ -8,15 +8,15 @@ describe CultomePlayer::Player::Interface::Helper do
   end
 
   it 'create a progress bar' do
-    t.get_progress_bar(55, 200, 10).should eq "|##________|"
-    t.get_progress_bar(55, 100, 10).should eq "|#####_____|"
-    t.get_progress_bar(55, 100, 20).should eq "|###########_________|"
+    t.get_progress_bar(55, 200, 10).should eq "|##-------->"
+    t.get_progress_bar(55, 100, 10).should eq "|#####----->"
+    t.get_progress_bar(55, 100, 20).should eq "|###########--------->"
   end
 
   it 'create a progress bar with labels in both sides' do
-    t.get_progress_bar_with_labels(5, 10, 10, "left", "right").should eq "left |#####_____| right"
-    t.get_progress_bar_with_labels(5, 10, 10, "left").should eq "left |#####_____|"
-    t.get_progress_bar_with_labels(5, 10, 10, "", "right").should eq "|#####_____| right"
+    t.get_progress_bar_with_labels(5, 10, 10, "left", "right").should eq "left |#####-----> right"
+    t.get_progress_bar_with_labels(5, 10, 10, "left").should eq "left |#####----->"
+    t.get_progress_bar_with_labels(5, 10, 10, "", "right").should eq "|#####-----> right"
   end
 
   it 'format seconds to minutos:seconds' do

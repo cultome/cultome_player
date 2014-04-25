@@ -22,7 +22,7 @@ module CultomePlayer
 	    end
 
 	    def sintaxis_help
-	    	return /^literal (literal)$/
+	    	/^literal (literal)$/
 	    end
 
 	    # Description of the action help.

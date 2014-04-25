@@ -7,6 +7,7 @@ module CultomePlayer::Player
     def begin_session
       @in_session = true
       display c5("Cultome Player v#{CultomePlayer::VERSION}")
+      emit_event(:interactive_session_started)
 
       while in_session?
         begin
@@ -28,6 +29,8 @@ module CultomePlayer::Player
     # Terminates a interactive session.
     def terminate_session
       @in_session = false
+      save_player_configurations
+      emit_event(:interactive_session_ended)
     end
 
     private

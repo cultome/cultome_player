@@ -1,21 +1,21 @@
 require 'spec_helper'
 
-class TestPlugin
-	include CultomePlayer::Plugins::Help
-end
-
 describe CultomePlayer::Plugins::Help do
-	let(:p){ TestPlugin.new }
+	let(:t){ TestClass.new }
 
 	it 'respond to command_help' do
-		p.should respond_to(:command_help)
+		t.should respond_to(:command_help)
+	end
+
+	it 'respond to sintaxis_help' do
+		t.should respond_to(:sintaxis_help)
 	end
 
 	it 'respond to usage_help' do
-		p.should respond_to(:usage_help)
+		t.should respond_to(:usage_help)
 	end
 
 	it 'respond to description_help' do
-		p.should respond_to(:description_help)
+		t.should respond_to(:description_help)
 	end
 end

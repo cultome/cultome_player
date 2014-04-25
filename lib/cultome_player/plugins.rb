@@ -1,8 +1,10 @@
 require 'cultome_player/plugins/help'
+require 'cultome_player/plugins/alias'
 
 module CultomePlayer
 	module Plugins
 		include Help
+		include Alias
 
 		# Check if a plugin implements the given command.
 		#
@@ -18,6 +20,15 @@ module CultomePlayer
 		# @return [Regex] The regex to validate a command format that is implemented by a plugin.
 		def plugin_command_sintaxis(cmd_name)
 			return send("sintaxis_#{cmd_name}".to_sym)
+		end
+
+		# Lazy getter for plugins configurator. Its a persistent store where plugin can put their configurations.
+		#
+		# @param plugin_name [#to_s] The name of the plugin.
+		# @return [Hash] Where plugins can stores their information.
+		def plugin_config(plugin_name)
+			plugin_ns = player_config['plugins'] ||= {}
+			return plugin_ns[plugin_name.to_s] ||= {}
 		end
 	end
 end
