@@ -24,7 +24,7 @@ module CultomePlayer
             return failure("No music connected! You should try 'connect /home/yoo/music => main' first") if songs.empty?
             playlists[:current, :focus] <= songs
 
-          else
+          else # with parameters
             songs = select_songs_with cmd
             # checamos si el tipo de comando es para programar una
             # nueva playlist o solo para tocar una cancion
@@ -34,7 +34,7 @@ module CultomePlayer
               playlists[:current] <= songs
             end
           end
-
+          
           return success(playlist: songs) + execute("next no_history")
         end
 

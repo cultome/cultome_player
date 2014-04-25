@@ -6,9 +6,11 @@ module CultomePlayer::Command
     # @param user_input [String] The user input to be parsed.
     # @return [Command] The parsed command.
     def parse(user_input)
-      tokens = identify_tokens(get_tokens(user_input))
-      validate_command(:command, tokens)
-      return CultomePlayer::Objects::Command.new(tokens.shift, tokens)
+      return user_input.split("&&").collect do |usr_in|
+        tokens = identify_tokens(get_tokens(usr_in.strip))
+        validate_command(:command, tokens)
+        CultomePlayer::Objects::Command.new(tokens.shift, tokens)
+      end
     end
 
     # Split the user input into tokens.

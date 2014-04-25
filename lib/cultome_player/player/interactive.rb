@@ -12,7 +12,10 @@ module CultomePlayer::Player
       while in_session?
         begin
           r = execute read_command(PROMPT)
-          show_response(r)
+          if r.size > 1
+            display c1("#{r.size} commands were executed, Showing result of the last one.")
+          end
+          show_response(r.last)
         rescue Exception => e
           display c3(e.message)
         end

@@ -174,6 +174,10 @@ Basicly anything that match the next regex is considered a boolean value, so wat
 /^(on|off|yes|false|true|si|no|y|n|s|ok)$/
 ```
 
+Note: When the command parser digest your input it try to guess the type of the tokens the best it can. It will match from specific to general, and boolean are more specificthan literals. If you try to write a literal, but yor literal is one of the recognized boolean types, it will detect it as such. This can cause some commands behave in unexpected ways in the worst case, in others may simpy fail.
+
+So pay attention if something goes weird when you type "search yes".
+
 #### IP
 A valid IP4 address.
 

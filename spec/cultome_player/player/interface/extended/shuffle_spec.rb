@@ -5,7 +5,7 @@ describe CultomePlayer::Player::Interface::Extended do
 
   context '#shuffle' do
     it 'check shuffle status' do
-      r = t.execute('shuffle')
+      r = t.execute('shuffle').first
       r.message.should eq "No shuffling"
       r.shuffling.should be_false
     end

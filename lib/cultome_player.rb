@@ -25,21 +25,35 @@ module CultomePlayer
   # @param user_input [String] The user input.
   # @return [Response] Response object with information about command execution.
   def execute(user_input)
-    cmd = parse user_input
-    # revisamos si es un built in command o un plugin
-    action = cmd.action
-    plugin_action = "command_#{cmd.action}".to_sym
-    action = plugin_action if respond_to?(plugin_action)
+    cmds = parse user_input
 
-    raise 'invalid command:action unknown' unless respond_to?(action)
-    with_connection do
-      begin
-        send(action, cmd)
-      rescue Exception => e
-        s = e.message.split(":")
-        failure(message: s[0], details: s[1])
+    seq_success = true # bandera de exito, si un comando de la cadena falla, los siguientes se abortan
+
+    response_seq = cmds.collect do |cmd|
+      if seq_success
+        # revisamos si es un built in command o un plugin
+        action = cmd.action
+        plugin_action = "command_#{cmd.action}".to_sym
+        action = plugin_action if respond_to?(plugin_action)
+
+        raise 'invalid command:action unknown' unless respond_to?(action)
+        with_connection do
+          begin
+            r = send(action, cmd)
+            seq_success = false unless r.success?
+            r # return response
+          rescue Exception => e
+            seq_success = false
+            s = e.message.split(":")
+            failure(message: s[0], details: s[1])
+          end
+        end
+      else # seq_success == false
+        nil
       end
     end
+
+    return response_seq.compact # eliminamos los que no corrieron
   end
 
   # Creates a generic response

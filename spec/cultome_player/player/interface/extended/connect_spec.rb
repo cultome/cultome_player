@@ -15,12 +15,12 @@ describe CultomePlayer::Player::Interface::Extended do
   end
 
   it 'detect all the files in the subdirectories' do
-    r = t.execute "connect '#{test_folder}' => test"
+    r = t.execute("connect '#{test_folder}' => test").first
     r.files_detected.should eq 3
   end
 
   it 'import the files not imported before and update the rest' do
-    r = t.execute "connect '#{test_folder}' => test"
+    r = t.execute("connect '#{test_folder}' => test").first
     r.files_detected.should eq 3
     r.files_updated.should eq 2
     r.files_imported.should eq 1
@@ -30,12 +30,12 @@ describe CultomePlayer::Player::Interface::Extended do
     it 'connect the named drive if exist' do
       Drive.create!(name: "test", path: test_folder, connected: false)
       Drive.find_by(name: 'test').should_not be_connected
-      r = t.execute "connect test"
+      r = t.execute("connect test").first
       Drive.find_by(name: 'test').should be_connected
     end
 
     it 'raise an error if drive not exists' do
-      r = t.execute("connect ghost")
+      r = t.execute("connect ghost").first
       r.message.should eq 'invalid name'
       r.details.should eq 'the named drive doesnt exists'
     end
@@ -44,19 +44,19 @@ describe CultomePlayer::Player::Interface::Extended do
   context 'with a path and a literal' do
     it 'create the drive if not exists' do
       Drive.find_by(name: 'new').should be_nil
-      r = t.execute "connect '#{test_folder}' => new"
+      r = t.execute("connect '#{test_folder}' => new").first
       Drive.find_by(name: 'new').should_not be_nil
       r.drive_updated.should be_false
     end
 
     it 'update the drive if exists' do
       Drive.create!(name: "test", path: test_folder)
-      r = t.execute "connect '#{test_folder}' => test"
+      r = t.execute("connect '#{test_folder}' => test").first
       r.drive_updated.should be_true
     end
 
     it 'raise an error if path is invalid' do
-      r = t.execute('connect /invalid => ghost')
+      r = t.execute('connect /invalid => ghost').first
       r.message.should eq 'invalid path'
       r.details.should eq 'the directory is invalid'
     end
@@ -85,7 +85,7 @@ describe CultomePlayer::Player::Interface::Extended do
       context 'already imported into library' do
         before :each do
           DatabaseCleaner.clean_with(:truncation)
-          r = t2.execute "connect '#{test_folder}/uno/dos/tres' => test"
+          r = t2.execute("connect '#{test_folder}/uno/dos/tres' => test").first
           r.files_imported.should eq 1
           r.files_updated.should eq 0
           @track = Song.all.first

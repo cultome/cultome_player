@@ -18,7 +18,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("search on").should be_instance_of Response
+      t.execute("search on").first.should be_instance_of Response
     end
 	end
 
@@ -32,7 +32,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("show").should be_instance_of Response
+      t.execute("show").first.should be_instance_of Response
     end
 	end
 
@@ -46,7 +46,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("enqueue on").should be_instance_of Response
+      t.execute("enqueue on").first.should be_instance_of Response
     end
 	end
 
@@ -60,7 +60,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("shuffle on").should be_instance_of Response
+      t.execute("shuffle on").first.should be_instance_of Response
     end
 	end
 
@@ -74,7 +74,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("connect drive").should be_instance_of Response
+      t.execute("connect drive").first.should be_instance_of Response
     end
 	end
 
@@ -88,7 +88,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("disconnect drive").should be_instance_of Response
+      t.execute("disconnect drive").first.should be_instance_of Response
     end
 	end
 
@@ -102,7 +102,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("ff").should be_instance_of Response
+      t.execute("ff").first.should be_instance_of Response
     end
 	end
 
@@ -116,7 +116,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("fb").should be_instance_of Response
+      t.execute("fb").first.should be_instance_of Response
     end
 	end
 
@@ -130,7 +130,7 @@ describe CultomePlayer::Player::Interface::Extended do
     end
 
     it 'respond with Response object' do
-      t.execute("repeat").should be_instance_of Response
+      t.execute("repeat").first.should be_instance_of Response
     end
 	end
 end

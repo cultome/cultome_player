@@ -101,68 +101,73 @@ describe CultomePlayer::Command::Processor do
     end
 
     it 'returns a command object' do
-      t.parse("next").should be_instance_of CultomePlayer::Objects::Command
+      t.parse("next").first.should be_instance_of CultomePlayer::Objects::Command
     end
 
     it 'returns a command even when defined as plugin' do
-      t.parse("help").should be_instance_of CultomePlayer::Objects::Command
+      t.parse("help").first.should be_instance_of CultomePlayer::Objects::Command
     end
 
     it 'set the action and parameter' do
-      cmd = t.parse("enqueue uno 'dos' tres:cuatro")
+      cmd = t.parse("enqueue uno 'dos' tres:cuatro").first
 
       cmd.action.should eq "enqueue"
       cmd.parameters.should have(3).items
     end
 
     it 'basic command' do
-      cmd = t.parse("prev")
+      cmd = t.parse("prev").first
       cmd.action.should eq "prev"
       cmd.should have(0).parameters
     end
 
     it 'with one parameter' do
-      cmd = t.parse("shuffle on")
+      cmd = t.parse("shuffle on").first
       cmd.action.should eq "shuffle"
       cmd.should have(1).parameters
     end
 
     it 'with many parameter' do
-      cmd = t.parse("play uno @dos tes:cuatro")
+      cmd = t.parse("play uno @dos tes:cuatro").first
       cmd.action.should eq "play"
       cmd.should have(3).parameters
     end
 
     context 'detect parameter type' do
       it 'type literal' do
-        cmd = t.parse("search uno")
+        cmd = t.parse("search uno").first
         cmd.should have(1).parameters
         cmd.params(:literal).should have(1).item
       end
 
       it 'type number' do
-        cmd = t.parse("enqueue 1 2")
+        cmd = t.parse("enqueue 1 2").first
         cmd.should have(2).parameters
         cmd.params(:number).should have(2).item
       end
 
       it 'type object' do
-        cmd = t.parse("show @uno")
+        cmd = t.parse("show @uno").first
         cmd.should have(1).parameters
         cmd.params(:object).should have(1).item
       end
 
       it 'type path' do
-        cmd = t.parse("connect /home/mio/music => main")
+        cmd = t.parse("connect /home/mio/music => main").first
         cmd.should have(3).parameters
         cmd.params(:path).should have(1).item
       end
 
       it 'type criteria' do
-        cmd = t.parse("play uno:dos")
+        cmd = t.parse("play uno:dos").first
         cmd.should have(1).parameters
         cmd.params(:criteria).should have(1).item
       end
+    end
+
+    it 'parse piped user commands' do
+      cmds = t.parse("search 'algo' && play 1 && ff 45")
+      cmds.should have(3).items
     end
   end
 end

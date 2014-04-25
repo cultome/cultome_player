@@ -3,7 +3,8 @@ module CultomePlayer
 		module Alias
 
 			def command_alias(cmd)
-				command, aka = cmd.params_values(:literal)
+				command = cmd.params.first.value
+				aka = cmd.params.last.value
 				plugin_config(:alias)[aka] = command
 				return success("Alias '#{aka}' created!")
 			end

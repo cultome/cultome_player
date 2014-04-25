@@ -23,6 +23,13 @@ module CultomePlayer
         return is_true_value?(@data[:value]) if @data[:type] == :boolean
         return @data[:value].to_i if @data[:type] == :number
         return @data[:value].to_sym if @data[:type] == :object
+        return raw_value
+      end
+
+      # Return the value as the user input typed (no conversions).
+      #
+      # @return [String] The values of the parameter as the user typed.
+      def raw_value
         @data[:value]
       end
 

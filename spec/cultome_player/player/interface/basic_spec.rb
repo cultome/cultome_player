@@ -18,7 +18,7 @@ describe CultomePlayer::Player::Interface::Basic do
     end
 
     it 'respond with Response object' do
-      t.execute("pause on").should be_instance_of Response
+      t.execute("pause on").first.should be_instance_of Response
     end
   end
 
@@ -42,7 +42,7 @@ describe CultomePlayer::Player::Interface::Basic do
     end
 
     it 'respond with Response object' do
-      t.execute("stop").should be_instance_of Response
+      t.execute("stop").first.should be_instance_of Response
     end
   end
 
@@ -57,12 +57,12 @@ describe CultomePlayer::Player::Interface::Basic do
     end
 
     it 'respond with Response object' do
-      t.execute("play").should be_instance_of Response
+      t.execute("play").first.should be_instance_of Response
     end
 
     context 'without music connected' do
       it 'advise to connect music first if no music is connected' do
-        r = t.execute("play")
+        r = t.execute("play").first
         r.message.should eq "No music connected! You should try 'connect /home/yoo/music => main' first"
       end
     end
@@ -86,7 +86,7 @@ describe CultomePlayer::Player::Interface::Basic do
 
       context 'without parameters' do
         it 'in clean state should play all the library' do
-          r = t.execute 'play'
+          r = t.execute('play').first
           r.playlist.should have(3).items
           r.should respond_to(:now_playing)
           r.should respond_to(:playlist)
@@ -113,7 +113,7 @@ describe CultomePlayer::Player::Interface::Basic do
 
         it 'get an error message if playing' do
           t.execute 'play'
-          r = t.execute 'play'
+          r = t.execute('play').first
           r.message.should eq 'What you mean? Im already playing!'
         end
       end
