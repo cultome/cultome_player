@@ -16,4 +16,9 @@ describe CultomePlayer::Plugins do
 	it 'return the format for a command' do
 		p.plugin_command_sintaxis("help").should be_instance_of Regexp
 	end
+
+	it 'call initializator for all the plugins' do
+		p.should_receive(:init_plugin_points)
+		p.init_plugins
+	end
 end

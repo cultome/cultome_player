@@ -40,6 +40,14 @@ module FakeStatus
   def current_album
     Album.new(name: 'album_tres')
   end
+
+  def playback_length
+    100
+  end
+
+  def playback_position
+    @playback_position ||= 0
+  end
 end
 
 module FakeExtractor
@@ -72,6 +80,8 @@ module MockPlayer
       @stopped = true
     elsif cmd.start_with?('jump')
       # do nothing
+      @playback_position ||= 0
+      @playback_position += cmd.split(" ")[1].to_i
     else
       puts "ERROR: #{cmd} !!!!!!!"
     end
@@ -100,6 +110,7 @@ class TestClass
     playlists.register(:history)
     playlists.register(:queue)
     playlists.register(:focus)
+    init_plugins
   end
 end
 

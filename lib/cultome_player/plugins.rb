@@ -33,6 +33,7 @@ module CultomePlayer
 			return plugin_ns[plugin_name.to_s] ||= {}
 		end
 
+		# Call init_plugin_<action> to initialize all the plugins that require it.
 		def init_plugins
 			methods.grep(/^init_plugin_/).each{|method_name| send(method_name) }
 		end

@@ -4,9 +4,7 @@ describe CultomePlayer::Events do
   let(:t){ TestClass.new }
 
   it 'register event listeners' do
-    t.listeners.should be_empty
-    t.register_listener(:my_event){ "OK 1!" }
-    t.listeners.should have(1).item
+    expect{ t.register_listener(:my_event){ "OK 1!" } }.to change{ t.listeners.size }.by(1)
   end
 
   it 'callback listeners on event' do
