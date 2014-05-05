@@ -101,7 +101,7 @@ module CultomePlayer
         
         register_listener(:playback_finish) do |song|
           r = execute("next no_history").first
-          display_over(c4("#{r.message}\n#{c5(PROMPT)}"))
+          display_over("#{r.message}\n#{c5(PROMPT)}")
         end
         
         init_plugins
@@ -120,7 +120,7 @@ module CultomePlayer
   private
 
   def get_response_params(response) 
-    return {message: response} if response.instance_of?(String)
+    return {message: c1(response)} if response.instance_of?(String)
     return response
   end
 end

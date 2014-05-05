@@ -21,7 +21,7 @@ module CultomePlayer::Player
           emit_event(:interactive_exception, e)
 
           display c3(e.message)
-          display c3(e.backtrace) if current_env == :dev
+          display c3(e.backtrace) #if current_env == :dev
         end
       end
     end
@@ -46,11 +46,13 @@ module CultomePlayer::Player
       if r.respond_to?(:response_type)
         res_obj = r.send(r.response_type)
         if res_obj.respond_to?(:each)
+          # es una lista
           res_obj.each.with_index do |elem, idx|
-            display c4("#{(idx + 1).to_s.ljust(3)} | #{elem.to_s}")
+            display(c4("#{(idx + 1).to_s.ljust(3)} | ") + elem.to_s)
           end
         elsif res_obj.class == String
-          display r.success? ? c1(res_obj.to_s) : c3(res_obj.to_s)
+          # es un mensaje
+          display r.success? ? res_obj.to_s : c3(res_obj.to_s)
         else
           display c3("(((#{res_obj.to_s})))")
         end
