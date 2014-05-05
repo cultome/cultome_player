@@ -38,9 +38,12 @@ module CultomePlayer
         raise 'invalid command:action unknown' unless respond_to?(action)
         with_connection do
           begin
-            emit_event("before_command_#{action}".to_sym, cmd)
+            emit_event(:before_command, cmd)
+            emit_event("before_command_#{action}".to_sym, cmd) if cmd.history?
             r = send(action, cmd)
-            emit_event("after_command_#{action}".to_sym, cmd, r)
+            emit_event("after_command_#{action}".to_sym, cmd, r) if cmd.history?
+            emit_event(:after_command, cmd, r)
+
             seq_success = false unless r.success?
             r # return response
           rescue Exception => e

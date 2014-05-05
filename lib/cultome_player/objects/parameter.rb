@@ -39,6 +39,10 @@ module CultomePlayer
       def type
         @data[:type]
       end
+
+      def to_s
+        value
+      end
     end
   end
 end

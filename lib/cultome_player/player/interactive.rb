@@ -11,7 +11,13 @@ module CultomePlayer::Player
 
       while in_session?
         begin
-          r = execute read_command(PROMPT)
+          cmd = read_command(PROMPT)
+          
+          # agregamos el comando al historia de la session_history
+          session_history << cmd
+
+          r = execute cmd
+
           if r.size > 1
             display c1("#{r.size} commands were executed, Showing result of the last one.")
           end
@@ -38,6 +44,13 @@ module CultomePlayer::Player
       @in_session = false
       save_player_configurations
       emit_event(:interactive_session_ended)
+    end
+
+    # Command history of this session
+    #
+    # @return [Array<Command>] The history of commands of this session.
+    def session_history
+      @session_history ||= []
     end
 
     private

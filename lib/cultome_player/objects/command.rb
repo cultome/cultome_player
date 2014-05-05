@@ -7,6 +7,11 @@ module CultomePlayer
       def initialize(action, parameters)
         @action = action[:value]
         @parameters = parameters.collect{|p| Parameter.new(p) }
+        @no_history = params(:literal).any?{|p| p.value == 'no_history'}
+      end
+
+      def history?
+        !@no_history
       end
 
       # Returns the parameters, optionally filtered by type
@@ -31,6 +36,10 @@ module CultomePlayer
       # @return [List<Object>] The values of the parameters.
       def params_values(type)
         params(type).map{|p| p.value }
+      end
+
+      def to_s
+        "#{action} #{@parameters}"
       end
     end
   end

@@ -63,9 +63,7 @@ module CultomePlayer
 
         # For more information on this command refer to user manual or inline help in interactive mode.
         def next(cmd)
-          unless cmd.params(:literal).any?{|p| p.value == 'no_history'}
-            playlists[:history] << current_song
-          end
+          playlists[:history] << current_song if cmd.history?
           
           if playlists[:queue].empty?
             playlists[:queue] << playlists[:current].next

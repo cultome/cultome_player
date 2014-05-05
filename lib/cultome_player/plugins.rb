@@ -1,12 +1,14 @@
 require 'cultome_player/plugins/help'
 require 'cultome_player/plugins/alias'
 require 'cultome_player/plugins/points'
+require 'cultome_player/plugins/gestures'
 
 module CultomePlayer
 	module Plugins
 		include Help
 		include Alias
 		include Points
+		include Gestures
 
 		# Check if a plugin implements the given command.
 		#
