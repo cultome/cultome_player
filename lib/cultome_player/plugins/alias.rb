@@ -27,8 +27,8 @@ module CultomePlayer
 					cmd.params_values(:literal).each.with_index do |p, idx|
 						prepared_command.gsub!(/%#{idx + 1}/, "'#{p}'") # TODO aqui manejar los parametros con quotes
 					end
-					# execute the alias
-					return execute(prepared_command)
+					# execute the alias, and returns only the last response
+					return execute(prepared_command).last
 				end
 				# ...and sintaxis
 				self.class.send(:define_method, "sintaxis_#{aka}".to_sym) do

@@ -28,7 +28,6 @@ module CultomePlayer
     cmds = parse user_input
 
     seq_success = true # bandera de exito, si un comando de la cadena falla, los siguientes se abortan
-
     response_seq = cmds.collect do |cmd|
       if seq_success
         # revisamos si es un built in command o un plugin
@@ -57,7 +56,6 @@ module CultomePlayer
         nil
       end
     end
-
     return response_seq.compact # eliminamos los que no corrieron
   end
 
