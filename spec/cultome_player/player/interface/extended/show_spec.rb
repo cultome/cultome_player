@@ -5,7 +5,7 @@ describe CultomePlayer::Player::Interface::Extended do
   context 'when no playlist is active and no parameters' do
     it 'shows a message saying so, and giving instructions to play' do
       r = t.execute('show').first
-      r.message.should eq "Nothing to show yet. Try with 'play' first."
+      r.message.should match /Nothing to show yet. Try with 'play' first./
     end
   end
 

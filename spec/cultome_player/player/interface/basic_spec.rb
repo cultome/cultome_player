@@ -63,7 +63,7 @@ describe CultomePlayer::Player::Interface::Basic do
     context 'without music connected' do
       it 'advise to connect music first if no music is connected' do
         r = t.execute("play").first
-        r.message.should eq "No music connected! You should try 'connect /home/yoo/music => main' first"
+        r.message.should match /No music connected! You should try 'connect \/home\/yoo\/music => main' first/
       end
     end
 
@@ -114,7 +114,7 @@ describe CultomePlayer::Player::Interface::Basic do
         it 'get an error message if playing' do
           t.execute 'play'
           r = t.execute('play').first
-          r.message.should eq 'What you mean? Im already playing!'
+          r.message.should match /What you mean\? Im already playing!/
         end
       end
 

@@ -100,7 +100,7 @@ module CultomePlayer
         playlists.register(:search)
         
         register_listener(:playback_finish) do |song|
-          r = execute("next no_history").first
+          r = execute("next").first
           display_over("#{r.message}\n#{c5(PROMPT)}")
         end
         
