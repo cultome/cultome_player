@@ -44,6 +44,6 @@ describe CultomePlayer::Plugins::Points do
 		t.execute("ff 45") # recorremos hast entrar en 81...100
 		points_before = t.current_song.points
 		t.execute("prev")
-		t.current_song.points.should eq (old_points + 1)
+		t.current_song.points.should > old_points
 	end
 end
