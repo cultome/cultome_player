@@ -33,7 +33,9 @@ describe CultomePlayer::Plugins::Points do
 	it 'punctuate more than once' do
 		t.execute("play")
 		curr_song = t.current_song
-		t.execute("ff 40") # recorremos para estar en el rango de puntuacion negativa
+
+		low = (curr_song.duration * 0.2).to_i
+		t.execute("ff #{low}") # recorremos para estar en el rango de puntuacion negativa
 		Song.all.each{|s| s.points.should eq 0 }
 
 		# debe puntuar con puntos negativos 10...50
@@ -41,9 +43,10 @@ describe CultomePlayer::Plugins::Points do
 		old_points = curr_song.points # extraemos los punto de la nueva rola
 
 		curr_song = t.current_song
-		t.execute("ff 45") # recorremos hast entrar en 81...100
-		points_before = t.current_song.points
+		high = (curr_song.duration * 0.9).to_i
+		t.execute("ff #{high}") # recorremos hasta entrar en 81...100
+		points_before = curr_song.points
 		t.execute("prev")
-		t.current_song.points.should > old_points
+		points_before > old_points
 	end
 end
