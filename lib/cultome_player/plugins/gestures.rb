@@ -1,7 +1,7 @@
 module CultomePlayer
 	module Plugins
 		module Gestures
-			def init_plugin_points
+			def init_plugin_gestures
 				register_listener(:after_command){|cmd, res| check_gesture(cmd) }
 			end
 

@@ -1,13 +1,7 @@
 require 'spec_helper'
 
 describe CultomePlayer::Plugins do
-	let(:p){
-		class TestPlugin
-			include CultomePlayer::Plugins
-		end
-
-		TestPlugin.new
-	}
+	let(:p){ TestClass.new }
 	it 'check if plugins respond to a given command' do
 		p.plugins_respond_to?("help").should be_true
 		p.plugins_respond_to?("nonexistent").should_not be_true
