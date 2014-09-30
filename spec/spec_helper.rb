@@ -17,6 +17,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     prepare_environment(:rspec)
+    recreate_db_schema
     with_connection do
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
@@ -106,6 +107,7 @@ class TestClass
 
   def initialize(env=:rspec)
     prepare_environment(env) unless env.nil?
+    recreate_db_schema
     playlists.register(:current)
     playlists.register(:history)
     playlists.register(:queue)

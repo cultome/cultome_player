@@ -5,6 +5,7 @@ describe CultomePlayer::Environment do
 
   it 'prepare environment' do
     t.prepare_environment(:rspec)
+    t.recreate_db_schema
     t.env_config.should_not be_empty
   end
 
@@ -36,6 +37,7 @@ describe CultomePlayer::Environment do
   context 'with environment loaded' do
     before :each do
       t.prepare_environment(:rspec)
+      t.recreate_db_schema
     end
 
     it 'load the db_adapter' do

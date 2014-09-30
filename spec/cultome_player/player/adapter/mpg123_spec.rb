@@ -57,6 +57,7 @@ describe CultomePlayer::Player::Adapter::Mpg123 do
         song2 = double(:song2, path: "/home/csoria/music/unknown/Torches/07 Houdini.mp3")
         p = MplayerTest.new
         p.prepare_environment(:rspec)
+        p.recreate_db_schema
 
         puts "Primera cancion..."
         p.play_in_player(song1)

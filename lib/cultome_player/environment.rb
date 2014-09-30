@@ -78,7 +78,7 @@ module CultomePlayer
     #
     # @param env [Symbol] The name of the environment to load.
     # @param check_db [Boolean] Flag to decide if the database schema should be checked.
-    def prepare_environment(env, check_db=true)
+    def prepare_environment(env)
       env_config = YAML.load_file File.expand_path('config/environment.yml')
       @env_config = env_config[env.to_s]
       @current_env = env.to_sym
@@ -86,7 +86,12 @@ module CultomePlayer
       expand_paths @env_config
       create_required_files @env_config
       load_master_config @env_config['config_file']
-      check_db_schema if check_db
+    end
+
+    def recreate_db_schema
+      Rake.load_rakefile 'Rakefile'
+      Rake.application.load_imports
+      swallow_stdout{ Rake.application.invoke_task("db:create[#{current_env}]") }
     end
 
     def save_player_configurations
@@ -94,12 +99,6 @@ module CultomePlayer
     end
 
     private
-
-    def check_db_schema
-      Rake.load_rakefile 'Rakefile'
-      Rake.application.load_imports
-      swallow_stdout{ Rake.application.invoke_task("db:create[#{current_env}]") }
-    end
 
     def load_master_config(config_file)
       @player_config = YAML.load_file(config_file) || {}

@@ -9,7 +9,7 @@ task :run do
 end
 
 desc "Create database schema"
-task :create, :env do |t, args|
+task :reset, :env do |t, args|
   require 'cultome_player'
 
   include CultomePlayer::Environment
@@ -18,7 +18,8 @@ task :create, :env do |t, args|
 
   migrations_path= File.join(File.dirname(File.expand_path(__FILE__)), "../db")
   env = args[:env] || :user
-  prepare_environment(env, false)
+  prepare_environment(env)
+  recreate_db_schema
   with_connection do
     ActiveRecord::Migrator.migrate(migrations_path)
     Album.find_or_create_by(id: 0, name: 'Unknown')
