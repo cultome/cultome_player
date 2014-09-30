@@ -1,5 +1,4 @@
 require 'yaml'
-require 'rake'
 
 module CultomePlayer
   module Environment
@@ -86,12 +85,6 @@ module CultomePlayer
       expand_paths @env_config
       create_required_files @env_config
       load_master_config @env_config['config_file']
-    end
-
-    def recreate_db_schema
-      Rake.load_rakefile 'Rakefile'
-      Rake.application.load_imports
-      swallow_stdout{ Rake.application.invoke_task("db:create[#{current_env}]") }
     end
 
     def save_player_configurations

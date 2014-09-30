@@ -1,42 +1,26 @@
 require "bundler/gem_tasks"
+require 'cultome_player'
+
+include CultomePlayer::Objects
+include CultomePlayer::Environment
 
 desc "Execute the player in interactive mode in user env"
-task :run do
-  $LOAD_PATH << File.join(File.dirname(File.expand_path(__FILE__)), "..")
-  require 'cultome_player'
-  player = CultomePlayer.get_player(:user)
+task :run => :environment do
+  player = CultomePlayer.get_player(current_env)
   player.begin_session
 end
 
 desc "Create database schema"
-task :reset, :env do |t, args|
-  require 'cultome_player'
-
-  include CultomePlayer::Environment
-  include CultomePlayer::Utils
-  include CultomePlayer::Objects
-
-  migrations_path= File.join(File.dirname(File.expand_path(__FILE__)), "../db")
-  env = args[:env] || :user
-  prepare_environment(env)
+task :reset => :environment do
   recreate_db_schema
-  with_connection do
-    ActiveRecord::Migrator.migrate(migrations_path)
-    Album.find_or_create_by(id: 0, name: 'Unknown')
-    Artist.find_or_create_by(id: 0, name: 'Unknown')
-  end
 end
 
 desc "Start a interactive session in the player"
-task :console do
-  require 'cultome_player'
+task :console => :environment do
   require 'irb'
   require 'irb/completion'
 
-  include CultomePlayer::Objects
-  include CultomePlayer::Environment
-
-  p = CultomePlayer.get_player
+  p = CultomePlayer.get_player(current_env)
 
   ActiveRecord::Base.establish_connection(
     adapter: db_adapter,
@@ -46,4 +30,9 @@ task :console do
 
   ARGV.clear
   IRB.start
+end
+
+task :environment, :env do |t, args|
+  env = args[:env] || :user
+  prepare_environment(env)
 end
