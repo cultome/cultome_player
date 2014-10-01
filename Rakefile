@@ -1,7 +1,6 @@
 require "bundler/gem_tasks"
 require 'cultome_player'
 
-include CultomePlayer::Objects
 include CultomePlayer::Environment
 
 desc "Execute the player in interactive mode in user env"
@@ -12,6 +11,7 @@ end
 
 desc "Create database schema"
 task :reset => :environment do
+  include CultomePlayer::Utils
   recreate_db_schema
 end
 
@@ -35,4 +35,5 @@ end
 task :environment, :env do |t, args|
   env = args[:env] || :user
   prepare_environment(env)
+  puts "Using #{env} environment."
 end

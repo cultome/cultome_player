@@ -1,3 +1,4 @@
+require 'cultome_player/objects'
 require 'active_record'
 require 'colorize'
 
@@ -169,8 +170,8 @@ module CultomePlayer
         end
 
         # Default and required values
-        Album.find_or_create_by(id: 0, name: 'Unknown')
-        Artist.find_or_create_by(id: 0, name: 'Unknown')
+        CultomePlayer::Objects::Album.find_or_create_by(id: 0, name: 'Unknown')
+        CultomePlayer::Objects::Artist.find_or_create_by(id: 0, name: 'Unknown')
       end
     end
 
