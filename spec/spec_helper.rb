@@ -9,7 +9,6 @@ include CultomePlayer::Utils
 include CultomePlayer::Objects
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.filter_run_excluding :mplayer
@@ -99,11 +98,20 @@ module MockPlayer
   end
 end
 
+module FakeUtils
+  def display(msg)
+  end
+
+  def display_over(msg)
+  end
+end
+
 class TestClass
   include CultomePlayer
   include FakeStatus
   include FakeExtractor
   include MockPlayer
+  include FakeUtils
 
   def initialize(env=:rspec)
     prepare_environment(env) unless env.nil?

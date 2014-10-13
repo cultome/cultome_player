@@ -116,64 +116,66 @@ module CultomePlayer
 
     def recreate_db_schema
       with_connection do
-        begin
-        ActiveRecord::Schema.drop_table('songs')
-        ActiveRecord::Schema.drop_table('albums')
-        ActiveRecord::Schema.drop_table('artists')
-        ActiveRecord::Schema.drop_table('genres')
-        ActiveRecord::Schema.drop_table('genres_songs')
-        ActiveRecord::Schema.drop_table('drives')
-        rescue
-        end
-
-        begin
-          ActiveRecord::Schema.define do
-            create_table :songs do |t|
-              t.string :name # If I Had A Gun
-              t.integer :artist_id, default: 0 # Noel Gallagher
-              t.integer :album_id, default: 0 # High Flying Birds
-              t.integer :year # 2011
-              t.integer :track # 3
-              t.integer :duration # 210 sec
-              t.integer :drive_id
-              t.string :relative_path
-              t.integer :points, default: 0
-              t.integer :plays, default: 0
-              t.datetime :last_played_at
-              t.timestamps
-            end
-
-            create_table :albums do |t|
-              t.string :name
-              t.integer :points
-              t.timestamps
-            end
-
-            create_table :artists do |t|
-              t.string :name
-              t.integer :points
-              t.timestamps
-            end
-
-            create_table :genres do |t|
-              t.integer :points
-              t.string :name
-            end
-
-            create_table :genres_songs, id: false do |t|
-              t.integer :song_id
-              t.integer :genre_id
-            end
-
-            create_table :drives do |t|
-              t.string :name
-              t.string :path
-              t.boolean :connected, default: true
-              t.timestamps
-            end
+        swallow_stdout do
+          begin
+            ActiveRecord::Schema.drop_table('songs')
+            ActiveRecord::Schema.drop_table('albums')
+            ActiveRecord::Schema.drop_table('artists')
+            ActiveRecord::Schema.drop_table('genres')
+            ActiveRecord::Schema.drop_table('genres_songs')
+            ActiveRecord::Schema.drop_table('drives')
+          rescue
           end
-        rescue
-        end
+
+          begin
+            ActiveRecord::Schema.define do
+              create_table :songs do |t|
+                t.string :name # If I Had A Gun
+                t.integer :artist_id, default: 0 # Noel Gallagher
+                t.integer :album_id, default: 0 # High Flying Birds
+                t.integer :year # 2011
+                t.integer :track # 3
+                t.integer :duration # 210 sec
+                t.integer :drive_id
+                t.string :relative_path
+                t.integer :points, default: 0
+                t.integer :plays, default: 0
+                t.datetime :last_played_at
+                t.timestamps
+              end
+
+              create_table :albums do |t|
+                t.string :name
+                t.integer :points
+                t.timestamps
+              end
+
+              create_table :artists do |t|
+                t.string :name
+                t.integer :points
+                t.timestamps
+              end
+
+              create_table :genres do |t|
+                t.integer :points
+                t.string :name
+              end
+
+              create_table :genres_songs, id: false do |t|
+                t.integer :song_id
+                t.integer :genre_id
+              end
+
+              create_table :drives do |t|
+                t.string :name
+                t.string :path
+                t.boolean :connected, default: true
+                t.timestamps
+              end
+            end
+          rescue
+          end # begin
+        end # swallow_stdout
 
         # Default and required values
         CultomePlayer::Objects::Album.find_or_create_by(id: 0, name: 'Unknown')
