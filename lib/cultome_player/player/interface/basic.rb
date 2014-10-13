@@ -78,7 +78,8 @@ module CultomePlayer
         def prev(cmd)
           playlists[:queue] << playlists[:history].pop
           playlists[:current].rewind_by 1
-          execute("next no_history")
+          r = execute("next no_history").first
+          return r
         end
 
         # For more information on this command refer to user manual or inline help in interactive mode.
