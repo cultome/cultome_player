@@ -1,8 +1,6 @@
 require "bundler/gem_tasks"
 require 'cultome_player'
 
-include CultomePlayer::Environment
-
 desc "Execute the player in interactive mode in user env"
 task :run => :environment do
   player = CultomePlayer.get_player(current_env)
@@ -22,17 +20,21 @@ task :console => :environment do
 
   p = CultomePlayer.get_player(current_env)
 
-  ActiveRecord::Base.establish_connection(
+  ActiveRecord::Base.establish_connection({
     adapter: db_adapter,
     database: db_file
-  )
+  })
   ActiveRecord::Base.logger = Logger.new(File.open(db_log_file, 'a'))
+
+  include CultomePlayer
 
   ARGV.clear
   IRB.start
 end
 
 task :environment do |t, args|
+  include CultomePlayer::Environment
+
   env = ENV["ENV"] || :user
   prepare_environment(env)
   puts "Using #{env} environment."

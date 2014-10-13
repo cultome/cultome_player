@@ -9,7 +9,7 @@ module CultomePlayer
 				return success("Alias '#{aka}' created!")
 			end
 
-			def respond_to?(name)
+			def respond_to?(name, include_all=false)
 				# si no esta buscando commands lo dejamos pasar
 				return super unless name =~ /^command_(.+?)$/
 				# si el comando existe, lo dejamos pasar
