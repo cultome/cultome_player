@@ -16,49 +16,49 @@ describe CultomePlayer::Player::Interface::Extended do
 
   it 'detect all the files in the subdirectories' do
     r = t.execute("connect '#{test_folder}' => test").first
-    r.files_detected.should eq 3
+    expect(r.files_detected).to eq 3
   end
 
   it 'import the files not imported before and update the rest' do
     r = t.execute("connect '#{test_folder}' => test").first
-    r.files_detected.should eq 3
-    r.files_updated.should eq 2
-    r.files_imported.should eq 1
+    expect(r.files_detected).to eq 3
+    expect(r.files_updated).to eq 2
+    expect(r.files_imported).to eq 1
   end
 
   context 'with only a literal parameter' do
     it 'connect the named drive if exist' do
       Drive.create!(name: "test", path: test_folder, connected: false)
-      Drive.find_by(name: 'test').should_not be_connected
+      expect(Drive.find_by(name: 'test')).not_to be_connected
       r = t.execute("connect test").first
-      Drive.find_by(name: 'test').should be_connected
+      expect(Drive.find_by(name: 'test')).to be_connected
     end
 
     it 'raise an error if drive not exists' do
       r = t.execute("connect ghost").first
-      r.message.should eq 'invalid name'
-      r.details.should eq 'the named drive doesnt exists'
+      expect(r.message).to eq 'invalid name'
+      expect(r.details).to eq 'the named drive doesnt exists'
     end
   end
 
   context 'with a path and a literal' do
     it 'create the drive if not exists' do
-      Drive.find_by(name: 'new').should be_nil
+      expect(Drive.find_by(name: 'new')).to be_nil
       r = t.execute("connect '#{test_folder}' => new").first
-      Drive.find_by(name: 'new').should_not be_nil
-      r.drive_updated.should be_false
+      expect(Drive.find_by(name: 'new')).not_to be_nil
+      expect(r.drive_updated).to be false
     end
 
     it 'update the drive if exists' do
       Drive.create!(name: "test", path: test_folder)
       r = t.execute("connect '#{test_folder}' => test").first
-      r.drive_updated.should be_true
+      expect(r.drive_updated).to be true
     end
 
     it 'raise an error if path is invalid' do
       r = t.execute('connect /invalid => ghost').first
-      r.message.should eq 'invalid path'
-      r.details.should eq 'the directory is invalid'
+      expect(r.message).to eq 'invalid path'
+      expect(r.details).to eq 'the directory is invalid'
     end
   end
 
@@ -86,30 +86,30 @@ describe CultomePlayer::Player::Interface::Extended do
         before :each do
           DatabaseCleaner.clean_with(:truncation)
           r = t2.execute("connect '#{test_folder}/uno/dos/tres' => test").first
-          r.files_imported.should eq 1
-          r.files_updated.should eq 0
+          expect(r.files_imported).to eq 1
+          expect(r.files_updated).to eq 0
           @track = Song.all.first
         end
 
         it 'insert the correct song information' do
-          @track.name.should eq "Sing For Absolution"
-          @track.year.should eq 2003
-          @track.track.should eq 4
-          @track.duration.should eq 295
-          @track.relative_path.should eq "tres.mp3"
+          expect(@track.name).to eq "Sing For Absolution"
+          expect(@track.year).to eq 2003
+          expect(@track.track).to eq 4
+          expect(@track.duration).to eq 295
+          expect(@track.relative_path).to eq "tres.mp3"
           # dependencias
-          @track.artist_id.should eq 1
-          @track.album_id.should eq 1
-          @track.drive_id.should eq 1
+          expect(@track.artist_id).to eq 1
+          expect(@track.album_id).to eq 1
+          expect(@track.drive_id).to eq 1
         end
 
         it 'insert the correct artist information' do
-          @track.artist.name.should eq "Muse"
+          expect(@track.artist.name).to eq "Muse"
         end
 
         it 'insert the correct album information' do
-          @track.album.name.should eq "Absolution"
-          @track.album.artists.first.name.should eq "Muse"
+          expect(@track.album.name).to eq "Absolution"
+          expect(@track.album.artists.first.name).to eq "Muse"
         end
       end
     end

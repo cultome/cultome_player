@@ -6,7 +6,7 @@ describe CultomePlayer::Plugins::Alias do
 	it 'create an alias' do
 		r = t.execute("alias play => p").first
 		expect(r).to be_success
-		t.plugin_config(:alias)['p'].should eq "play"
+		expect(t.plugin_config(:alias)['p']).to eq "play"
 		expect(t).to receive(:play)
 		t.execute("p")
 	end
@@ -14,7 +14,7 @@ describe CultomePlayer::Plugins::Alias do
 	it 'create an alias with params' do
 		r = t.execute("alias 'search %1' => ss").first
 		expect(r).to be_success
-		t.plugin_config(:alias)['ss'].should eq "search %1"
+		expect(t.plugin_config(:alias)['ss']).to eq "search %1"
 		expect(t).to receive(:search)
 		t.execute("ss my_param")
 	end

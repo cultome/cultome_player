@@ -115,7 +115,7 @@ class TestClass
 
   def initialize(env=:rspec)
     prepare_environment(env) unless env.nil?
-    recreate_db_schema
+    #recreate_db_schema
     playlists.register(:current)
     playlists.register(:history)
     playlists.register(:queue)

@@ -25,35 +25,35 @@ describe CultomePlayer::Player::Interface::Extended do
   end
 
   it 'return a Response object' do
-    t.execute('search a:artist_uno').first.should be_instance_of Response
+    expect(t.execute('search a:artist_uno').first).to be_instance_of Response
   end
 
   it 'respond success when there are results' do
     r = t.execute('search a:artist_uno').first
-    r.should be_success
-    r.should respond_to :songs
+    expect(r).to be_success
+    expect(r).to respond_to :songs
   end
 
   it 'respond failure when there are not results' do
     r = t.execute('search a:nothing').first
-    r.should be_failure
-    r.should respond_to :message
+    expect(r).to be_failure
+    expect(r).to respond_to :message
   end
 
   context 'with criteria parameters' do
     it 'different criterias create an AND filter' do
       r = t.execute('search a:artist_uno b:album_dos').first
       songs = r.send(r.response_type)
-      songs.should have(2).items
-      songs.each{|s| s.artist.name.should match /uno/ }
-      songs.each{|s| s.album.name.should match /dos/ }
+      expect(songs.size).to eq 2
+      songs.each{|s| expect(s.artist.name).to match /uno/ }
+      songs.each{|s| expect(s.album.name).to match /dos/ }
     end
 
     it 'same criterias create an OR filter' do
       r = t.execute('search a:artist_dos a:artist_tres').first
       songs = r.send(r.response_type)
-      songs.should have(2).songs
-      songs.each{|s| s.artist.name.should match /(dos|tres)/ }
+      expect(songs.size).to eq 2
+      songs.each{|s| expect(s.artist.name).to match /(dos|tres)/ }
     end
   end
 
@@ -61,30 +61,30 @@ describe CultomePlayer::Player::Interface::Extended do
     it 'search using an object as criteria' do
       r = t.execute('search @artist').first
       songs = r.send(r.response_type)
-      songs.should have(3).item
-      songs.each{|s| s.artist.name.should eq t.current_artist.name }
+      expect(songs.size).to eq 3
+      songs.each{|s| expect(s.artist.name).to eq t.current_artist.name }
     end
 
     it 'create and OR filter more than one object' do
-      t.execute('search @artist @album').first.should have(4).songs
+      expect(t.execute('search @artist @album').first.songs.size).to eq 4
     end
   end
 
   context 'with literal parameters' do
     it 'create an OR filter with the fields trackname, artist and album' do
-      t.execute('search song_cuatro song_cinco').first.should have(2).songs
-      t.execute('search song_uno song_dos').first.should have(2).songs
-      t.execute('search album_dos cinco').first.should have(3).songs
-      t.execute('search cinco').first.should have(1).songs
+      expect(t.execute('search song_cuatro song_cinco').first.songs.size).to eq 2
+      expect(t.execute('search song_uno song_dos').first.songs.size).to eq 2
+      expect(t.execute('search album_dos cinco').first.songs.size).to eq 3
+      expect(t.execute('search cinco').first.songs.size).to eq 1
     end
   end
 
   context 'with mixed parameters' do
     it 'create an OR filter between each type' do
-      t.execute('search t:song_tres artist_tres @album').first.should have(3).songs
-      t.execute('search t:song_cuatro t:song_dos @album').first.should have(2).songs
-      t.execute('search song_dos song_uno').first.should have(2).songs
-      t.execute('search @artist song_tres').first.should have(3).songs
+      expect(t.execute('search t:song_tres artist_tres @album').first.songs.size).to eq 3
+      expect(t.execute('search t:song_cuatro t:song_dos @album').first.songs.size).to eq 2
+      expect(t.execute('search song_dos song_uno').first.songs.size).to eq 2
+      expect(t.execute('search @artist song_tres').first.songs.size).to eq 3
     end
   end
 end

@@ -4,17 +4,17 @@ describe CultomePlayer::Player::Adapter::Mpg123 do
   let(:t){ TestClass.new }
   let(:song) do
     s = Song.new
-    s.stub(:path){'/duck/path'}
+    allow(s).to receive(:path).and_return( '/duck/path' )
     s
   end
 
   it 'can check if player is running' do
-    t.should respond_to :player_running?
+    expect(t).to respond_to :player_running?
   end
 
   it 'start the player if is not running' do
-    t.should_receive :start_player
-    t.should_not be_player_running
+    expect(t).to receive :start_player
+    expect(t).not_to be_player_running
     t.play_in_player song
   end
 
@@ -24,24 +24,24 @@ describe CultomePlayer::Player::Adapter::Mpg123 do
     end
 
     it 'pause a song' do
-      t.should_receive(:send_to_player).with('pause')
+      expect(t).to receive(:send_to_player).with('pause')
       t.pause_in_player
     end
 
     it 'stops a song' do
-      t.should_receive(:send_to_player).with('stop')
+      expect(t).to receive(:send_to_player).with('stop')
       t.stop_in_player
     end
 
     it 'resume a paused song' do
       t.pause_in_player
-      t.should_receive(:send_to_player).with("pause")
+      expect(t).to receive(:send_to_player).with("pause")
       t.resume_in_player
     end
 
     it 'resume a stopped song' do
       t.stop_in_player
-      t.should_receive(:start_player)
+      expect(t).to receive(:start_player)
       t.play_in_player song
     end
   end

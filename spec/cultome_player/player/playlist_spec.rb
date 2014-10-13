@@ -4,9 +4,9 @@ describe CultomePlayer::Player::Playlist do
   let(:p){ CultomePlayer::Player::Playlist::Playlists.new }
 
   it 'add a new playlist' do
-    p.should be_empty
+    expect(p).to be_empty
     p.register(:playlist)
-    p.should have(1).item
+    expect(p.size).to eq 1
   end
 
   it 'raise error if trying to use a unregistered playlist' do
@@ -18,8 +18,8 @@ describe CultomePlayer::Player::Playlist do
       p.register(:playlist)
     end
 
-    it 'should return playlists object' do
-      p[:playlist].should be_instance_of CultomePlayer::Player::Playlist::Playlists
+    it 'return playlists object' do
+      expect(p[:playlist]).to be_instance_of CultomePlayer::Player::Playlist::Playlists
     end
 
     it 'raise and error if traying to register a previous registered playlist' do
@@ -27,25 +27,25 @@ describe CultomePlayer::Player::Playlist do
     end
 
     it 'get a playlist by name' do
-      p[:playlist].should have(1).item
-      p[:playlist].first.should_not be_nil
+      expect(p[:playlist].size).to eq 1
+      expect(p[:playlist].first).not_to be_nil
     end
 
     it 'add an element to an existing playlist' do
-      p[:playlist].first.should be_empty
+      expect(p[:playlist].first).to be_empty
       p[:playlist] << "eleme"
-      p[:playlist].first.should have(1).item
+      expect(p[:playlist].first.size).to eq 1
       p[:playlist] << "eleme"
-      p[:playlist].first.should have(2).item
+      expect(p[:playlist].first.size).to eq 2
     end
 
     it 'replace the content of a playlist' do
-      p[:playlist].first.should be_empty
+      expect(p[:playlist].first).to be_empty
       p[:playlist] << "eleme"
       p[:playlist] << "eleme"
-      p[:playlist].first.should have(2).item
+      expect(p[:playlist].first.size).to eq 2
       p[:playlist] <= %w{uno dos tres cuatro}
-      p[:playlist].first.should have(4).item
+      expect(p[:playlist].first.size).to eq 4
     end
 
     it 'raise an error if trying to get the next song in an empty list' do
@@ -53,11 +53,11 @@ describe CultomePlayer::Player::Playlist do
     end
 
     it 'change shuffle status' do
-      p[:playlist].should_not be_shuffling
+      expect(p[:playlist]).not_to be_shuffling
       p[:playlist].shuffle
-      p[:playlist].should be_shuffling
+      expect(p[:playlist]).to be_shuffling
       p[:playlist].order
-      p[:playlist].should_not be_shuffling
+      expect(p[:playlist]).not_to be_shuffling
     end
 
     context 'with a full playlist' do
@@ -66,20 +66,20 @@ describe CultomePlayer::Player::Playlist do
       end
 
       it 'shuffle the content of the playlist' do
-        p[:playlist].first.should eq %w{uno dos tres cuatro}
+        expect(p[:playlist].first).to eq %w{uno dos tres cuatro}
         p[:playlist].shuffle
         p[:playlist].shuffle if p[:playlist].first == %w{uno dos tres cuatro}
-        p[:playlist].first.should_not eq %w{uno dos tres cuatro}
+        expect(p[:playlist].first).not_to eq %w{uno dos tres cuatro}
       end
 
       it 'get an element by index' do
-        p[:playlist].at(0).should eq "uno"
-        p[:playlist].at(3).should eq "cuatro"
+        expect(p[:playlist].at(0)).to eq "uno"
+        expect(p[:playlist].at(3)).to eq "cuatro"
       end
 
       it 'order the content of the playlist' do
         p[:playlist].order
-        p[:playlist].first.should eq %w{cuatro dos tres uno}
+        expect(p[:playlist].first).to eq %w{cuatro dos tres uno}
       end
 
       it 'updated the play index' do
@@ -88,62 +88,62 @@ describe CultomePlayer::Player::Playlist do
 
       it 'reset the play order when ordered' do
         p[:playlist].next
-        p[:playlist].play_index.should eq 0
+        expect(p[:playlist].play_index).to eq 0
         p[:playlist].next
-        p[:playlist].play_index.should eq 1
+        expect(p[:playlist].play_index).to eq 1
 
         p[:playlist].order
 
         p[:playlist].next
-        p[:playlist].play_index.should eq 0
+        expect(p[:playlist].play_index).to eq 0
       end
 
       it 'reset the play order when shuffled' do
         p[:playlist].next
-        p[:playlist].play_index.should eq 0
+        expect(p[:playlist].play_index).to eq 0
         p[:playlist].next
-        p[:playlist].play_index.should eq 1
+        expect(p[:playlist].play_index).to eq 1
 
         p[:playlist].shuffle
 
         p[:playlist].next
-        p[:playlist].play_index.should eq 0
+        expect(p[:playlist].play_index).to eq 0
       end
 
       it 'repeat the list if repeat is active' do
-        p[:playlist].repeat?.should be_true
-        p[:playlist].next.should eq "uno"
+        expect(p[:playlist].repeat?).to be true
+        expect(p[:playlist].next).to eq "uno"
         p[:playlist].next
         p[:playlist].next
-        p[:playlist].next.should eq "cuatro"
-        p[:playlist].next.should eq "uno"
+        expect(p[:playlist].next).to eq "cuatro"
+        expect(p[:playlist].next).to eq "uno"
       end
 
       it 'raise an error if traying to retrive an ended playlist' do
         p[:playlist].repeat false
-        p[:playlist].repeat?.should be_false
-        p[:playlist].next.should eq "uno"
+        expect(p[:playlist].repeat?).to be false
+        expect(p[:playlist].next).to eq "uno"
         p[:playlist].next
         p[:playlist].next
-        p[:playlist].next.should eq "cuatro"
+        expect(p[:playlist].next).to eq "cuatro"
         expect{ p[:playlist].next }.to raise_error("playlist empty:no songs in playlists")
       end
 
       it 'return nil if checking current song but playlist has not be played' do
-        p[:playlist].current.should be_nil
+        expect(p[:playlist].current).to be_nil
       end
 
       it 'return the current song in playlist' do
-        p[:playlist].next.should eq "uno"
-        p[:playlist].current.should eq "uno"
+        expect(p[:playlist].next).to eq "uno"
+        expect(p[:playlist].current).to eq "uno"
       end
 
       it 'removes and return the next song from the playlist' do
-        p[:playlist].should have(4).songs
-        p[:playlist].remove_next.should eq "uno"
-        p[:playlist].should have(3).songs
-        p[:playlist].remove_next.should eq "dos"
-        p[:playlist].should have(2).songs
+        expect(p[:playlist].songs.size).to eq 4
+        expect(p[:playlist].remove_next).to eq "uno"
+        expect(p[:playlist].songs.size).to eq 3
+        expect(p[:playlist].remove_next).to eq "dos"
+        expect(p[:playlist].songs.size).to eq 2
       end
 
       it 'iterate over every song' do
@@ -151,39 +151,39 @@ describe CultomePlayer::Player::Playlist do
         p[:playlist].each_song do |s|
           pl << s.to_s
         end
-        pl.should eq ":unodostrescuatro"
+        expect(pl).to eq ":unodostrescuatro"
       end
 
       it 'check if there are songs remaining in the playlist' do
         p[:playlist].repeat(false)
-        p[:playlist].repeat?.should be_false
-        p[:playlist].next?.should be_true
+        expect(p[:playlist].repeat?).to be false
+        expect(p[:playlist].next?).to be true
         p[:playlist].next
         p[:playlist].next
         p[:playlist].next
         p[:playlist].next
-        p[:playlist].next?.should be_false
+        expect(p[:playlist].next?).to be false
       end
 
       it 'pop the last element inserted' do
-        p[:playlist].should have(4).songs
+        expect(p[:playlist].songs.size).to eq 4
         p[:playlist] << 'cinco'
-        p[:playlist].should have(5).songs
-        p[:playlist].pop.should eq 'cinco'
-        p[:playlist].pop.should eq 'cuatro'
-        p[:playlist].should have(3).songs
+        expect(p[:playlist].songs.size).to eq 5
+        expect(p[:playlist].pop).to eq 'cinco'
+        expect(p[:playlist].pop).to eq 'cuatro'
+        expect(p[:playlist].songs.size).to eq 3
       end
 
       it 'rewind the playlist' do
-        p[:playlist].next.should eq 'uno'
-        p[:playlist].next.should eq 'dos'
-        p[:playlist].next.should eq 'tres'
-        p[:playlist].next.should eq 'cuatro'
-        p[:playlist].current.should eq 'cuatro'
-        p[:playlist].rewind_by(1).should eq 'tres'
-        p[:playlist].current.should eq 'tres'
-        p[:playlist].rewind_by(2).should eq 'uno'
-        p[:playlist].current.should eq 'uno'
+        expect(p[:playlist].next).to eq 'uno'
+        expect(p[:playlist].next).to eq 'dos'
+        expect(p[:playlist].next).to eq 'tres'
+        expect(p[:playlist].next).to eq 'cuatro'
+        expect(p[:playlist].current).to eq 'cuatro'
+        expect(p[:playlist].rewind_by(1)).to eq 'tres'
+        expect(p[:playlist].current).to eq 'tres'
+        expect(p[:playlist].rewind_by(2)).to eq 'uno'
+        expect(p[:playlist].current).to eq 'uno'
       end
     end
   end
@@ -195,24 +195,24 @@ describe CultomePlayer::Player::Playlist do
     end
 
     it 'get multiples playlists by name' do
-      p[:uno, :dos].should have(2).item
+      expect(p[:uno, :dos].size).to eq 2
     end
 
     it 'add an element to more than one existing playlists' do
-      p[:uno, :dos].each{|p| p.should be_empty }
+      p[:uno, :dos].each{|p| expect(p).to be_empty }
       p[:uno, :dos] << "elem"
-      p[:uno, :dos].each{|p| p.should have(1).item }
+      p[:uno, :dos].each{|p| expect(p.size).to eq 1}
     end
 
     it 'replace the content of more than one existing playlists' do
-      p[:uno, :dos].each{|p| p.should be_empty }
+      p[:uno, :dos].each{|p| expect(p).to be_empty }
       p[:uno, :dos] << "elem"
       p[:uno, :dos] << "elem"
-      p[:uno, :dos].each{|p| p.should have(2).item }
-      p[:uno, :dos].each{|p| p.should eq ["elem", "elem"] }
+      p[:uno, :dos].each{|p| expect(p.size).to eq 2}
+      p[:uno, :dos].each{|p| expect(p).to eq ["elem", "elem"] }
       p[:uno, :dos] <= %w{uno dos tres cuatro}
-      p[:uno, :dos].each{|p| p.should have(4).item }
-      p[:uno, :dos].each{|p| p.should eq %w{uno dos tres cuatro} }
+      p[:uno, :dos].each{|p| expect(p.size).to eq 4}
+      p[:uno, :dos].each{|p| expect(p).to eq %w{uno dos tres cuatro} }
     end
 
     it 'return elements in aparence order' do
@@ -221,11 +221,11 @@ describe CultomePlayer::Player::Playlist do
       p[:dos] << "dos"
       p[:tres] << "tres"
 
-      p[:uno, :dos, :tres].next.should eq %w{uno dos tres}
+      expect(p[:uno, :dos, :tres].next).to eq %w{uno dos tres}
     end
 
     it 'return nil if checking current song but playlist has not be played' do
-      p[:uno, :dos].current.should be_nil
+      expect(p[:uno, :dos].current).to be_nil
       p[:uno] << "uno"
       p[:uno].next
       expect{ p[:uno, :dos].current }.to raise_error "no current:no current song in one of the playlists"
@@ -234,8 +234,8 @@ describe CultomePlayer::Player::Playlist do
     it 'return the current song in playlist' do
       p[:uno] << "uno"
       p[:dos] << "tres"
-      p[:uno, :dos].next.should eq ["uno", "tres"]
-      p[:uno, :dos].current.should eq ["uno", "tres"]
+      expect(p[:uno, :dos].next).to eq ["uno", "tres"]
+      expect(p[:uno, :dos].current).to eq ["uno", "tres"]
     end
 
     it 'raise an error if getting the next of an empty playlist' do
@@ -250,40 +250,40 @@ describe CultomePlayer::Player::Playlist do
       p.each_song do |s,idx|
         pl << "#{idx}#{s.to_s}"
       end
-      pl.should eq ":1uno2dos"
+      expect(pl).to eq ":1uno2dos"
     end
 
     it 'check if there are songs remaining in the playlists' do
       p[:uno, :dos].repeat false
-      p[:uno, :dos].repeat?.should eq [false, false]
+      expect(p[:uno, :dos].repeat?).to eq [false, false]
       p[:uno, :dos] << 'uno'
       p[:uno] << 'dos'
-      p[:uno].next?.should be_true
-      p[:dos].next?.should be_true
-      p[:uno, :dos].next?.should eq [true, true]
+      expect(p[:uno].next?).to be true
+      expect(p[:dos].next?).to be true
+      expect(p[:uno, :dos].next?).to eq [true, true]
       p[:uno, :dos].next
-      p[:uno, :dos].next?.should eq [true, false]
+      expect(p[:uno, :dos].next?).to eq [true, false]
     end
 
     it 'change shuffle status' do
-      p[:uno, :dos].shuffling?.should eq [false, false]
+      expect(p[:uno, :dos].shuffling?).to eq [false, false]
       p[:uno, :dos].shuffle
-      p[:uno, :dos].shuffling?.should eq [true, true]
+      expect(p[:uno, :dos].shuffling?).to eq [true, true]
       p[:uno, :dos].order
-      p[:uno, :dos].shuffling?.should eq [false, false]
+      expect(p[:uno, :dos].shuffling?).to eq [false, false]
     end
 
 
     it 'pop the last element inserted' do
-      p[:uno].should have(0).songs
-      p[:dos].should have(0).songs
+      expect(p[:uno].songs.size).to eq 0
+      expect(p[:dos].songs.size).to eq 0
       p[:uno] << 'cinco'
       p[:dos] << 'seis'
-      p[:uno].should have(1).songs
-      p[:dos].should have(1).songs
-      p[:uno, :dos].pop.should eq ['cinco', 'seis']
-      p[:uno].should have(0).songs
-      p[:dos].should have(0).songs
+      expect(p[:uno].songs.size).to eq 1
+      expect(p[:dos].songs.size).to eq 1
+      expect(p[:uno, :dos].pop).to eq ['cinco', 'seis']
+      expect(p[:uno].songs.size).to eq 0
+      expect(p[:dos].songs.size).to eq 0
     end
 
     it 'rewind the playlists' do
@@ -292,10 +292,10 @@ describe CultomePlayer::Player::Playlist do
       p[:dos] << 'tres'
       p[:dos] << 'cuatro'
 
-      p[:uno, :dos].next.should eq ['uno', 'tres']
-      p[:uno, :dos].next.should eq ['dos', 'cuatro']
-      p[:uno, :dos].current.should eq ['dos', 'cuatro']
-      p[:uno, :dos].rewind_by(1).should eq ['uno', 'tres']
+      expect(p[:uno, :dos].next).to eq ['uno', 'tres']
+      expect(p[:uno, :dos].next).to eq ['dos', 'cuatro']
+      expect(p[:uno, :dos].current).to eq ['dos', 'cuatro']
+      expect(p[:uno, :dos].rewind_by(1)).to eq ['uno', 'tres']
     end
   end
 end

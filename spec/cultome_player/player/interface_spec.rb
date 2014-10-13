@@ -5,13 +5,13 @@ describe CultomePlayer::Player::Interface do
 
   it 'respond to basic commands' do
     [:play , :pause , :stop , :next , :prev , :quit].each do |cmd|
-      t.should respond_to cmd
+      expect(t).to respond_to cmd
     end
   end
 
   it 'respond to extended commands' do
     [:show , :enqueue , :search , :shuffle , :connect , :disconnect , :ff , :fb].each do |cmd|
-      t.should respond_to cmd
+      expect(t).to respond_to cmd
     end
   end
 end
