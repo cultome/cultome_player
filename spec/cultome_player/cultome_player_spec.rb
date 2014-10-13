@@ -17,16 +17,16 @@ describe CultomePlayer do
 
 	describe 'multiple commands' do
 		it 'executes all commands' do
-			t.should_receive(:command_help).twice.and_call_original
-			t.should_receive(:command_alias).and_call_original
+			expect(t).to receive(:command_help).twice.and_call_original
+			expect(t).to receive(:command_alias).and_call_original
 			r = t.execute("help && help play && alias play => al")
 			r.should have(3).items
 		end
 
 		it 'executes until something fail' do
-			t.should_receive(:command_help).and_call_original
-			t.should_receive(:search).and_call_original
-			t.should_not_receive(:fb)
+			expect(t).to receive(:command_help).and_call_original
+			expect(t).to receive(:search).and_call_original
+			expect(t).not_to receive(:fb)
 			r = t.execute("help && search ksahdiasdyasdsa && fb 10")
 		end
 

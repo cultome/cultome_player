@@ -5,41 +5,41 @@ describe CultomePlayer::Command::Reader do
 
   context 'autocomplete' do
     it 'actions' do
-      Readline.stub(:line_buffer){ "pl" }
-      t.send(:completion_proc).call("pl").should eq ["play "]
+      allow(Readline).to receive(:line_buffer).and_return( "pl" )
+      expect(t.send(:completion_proc).call("pl")).to eq ["play "]
     end
 
     it 'path parameters' do
-      Readline.stub(:line_buffer){ "play /hom" }
-      t.send(:completion_proc).call("/hom").should eq ["/home/"]
+      allow(Readline).to receive(:line_buffer).and_return( "play /hom" )
+      expect(t.send(:completion_proc).call("/hom")).to eq ["/home/"]
     end
 
     it 'object parameters' do
-      Readline.stub(:line_buffer){ "play @art" }
-      t.send(:completion_proc).call("@art").should eq ["@artist"]
+      allow(Readline).to receive(:line_buffer).and_return( "play @art" )
+      expect(t.send(:completion_proc).call("@art")).to eq ["@artist"]
     end
   end
 
   context 'show probable' do
     it 'actions' do
-      Readline.stub(:line_buffer){ "p" }
-      t.send(:completion_proc).call("p").should eq ["play ",  "pause ", "prev "]
+      allow(Readline).to receive(:line_buffer).and_return( "p" )
+      expect(t.send(:completion_proc).call("p")).to eq ["play ",  "pause ", "prev "]
     end
 
     it 'parameter types' do
-      Readline.stub(:line_buffer){ "play " }
-      t.send(:completion_proc).call("").should eq ["<literal>", "<number>", "<criteria>", "<object>", " "]
+      allow(Readline).to receive(:line_buffer).and_return( "play " )
+      expect(t.send(:completion_proc).call("")).to eq ["<literal>", "<number>", "<criteria>", "<object>", " "]
     end
 
     it 'paths' do
-      Readline.stub(:line_buffer){ "play /home/" }
+      allow(Readline).to receive(:line_buffer).and_return( "play /home/" )
       opcs = t.send(:completion_proc).call("/home/")
-      opcs.each{|opc| opc.should start_with "/home/" }
+      opcs.each{|opc| expect(opc).to start_with "/home/" }
     end
 
     it 'objects' do
-      Readline.stub(:line_buffer){ "play @a" }
-      t.send(:completion_proc).call("@a").should eq ["@artist", "@album"]
+      allow(Readline).to receive(:line_buffer).and_return( "play @a" )
+      expect(t.send(:completion_proc).call("@a")).to eq ["@artist", "@album"]
     end
   end
 end

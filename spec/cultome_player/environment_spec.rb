@@ -6,7 +6,7 @@ describe CultomePlayer::Environment do
   it 'prepare environment' do
     t.prepare_environment(:rspec)
     t.recreate_db_schema
-    t.env_config.should_not be_empty
+    expect(t.env_config).not_to be_empty
   end
 
   context 'with no environment loaded' do
@@ -41,27 +41,27 @@ describe CultomePlayer::Environment do
     end
 
     it 'load the db_adapter' do
-      t.db_adapter.should eq 'sqlite3'
+      expect(t.db_adapter).to eq 'sqlite3'
     end
 
     it 'load the mplayer_pipe' do
-      t.mplayer_pipe.should end_with 'spec/mpctr'
+      expect(t.mplayer_pipe).to end_with 'spec/mpctr'
     end
 
     it 'load the db_file' do
-      t.db_file.should end_with 'spec/db.dat'
+      expect(t.db_file).to end_with 'spec/db.dat'
     end
 
     it 'load the db_log_file' do
-      t.db_log_file.should end_with 'spec/db.log'
+      expect(t.db_log_file).to end_with 'spec/db.log'
     end
 
     it 'load the file_types' do
-      t.file_types.should eq 'mp3'
+      expect(t.file_types).to eq 'mp3'
     end
 
     it 'load the config_file' do
-      t.config_file.should end_with 'spec/config.yml'
+      expect(t.config_file).to end_with 'spec/config.yml'
     end
   end
 end

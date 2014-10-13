@@ -9,33 +9,33 @@ describe CultomePlayer::Media do
     end
 
     it 'read name' do
-      @info[:name].should_not be_nil
-      @info[:name].should_not be_empty
+      expect(@info[:name]).not_to be_nil
+      expect(@info[:name]).not_to be_empty
     end
 
     it 'read album' do
-      @info[:album].should_not be_nil
-      @info[:album].should_not be_empty
+      expect(@info[:album]).not_to be_nil
+      expect(@info[:album]).not_to be_empty
     end
 
     it 'read genre' do
-      @info[:genre].should_not be_nil
-      @info[:genre].should_not be_empty
+      expect(@info[:genre]).not_to be_nil
+      expect(@info[:genre]).not_to be_empty
     end
 
     it 'read track' do
-      @info[:track].should_not be_nil
-      @info[:track].should > 0
+      expect(@info[:track]).not_to be_nil
+      expect(@info[:track]).to be > 0
     end
 
     it 'read year' do
-      @info[:year].should_not be_nil
-      @info[:year].should > 0
+      expect(@info[:year]).not_to be_nil
+      expect(@info[:year]).to be > 0
     end
 
     it 'read duration' do
-      @info[:duration].should_not be_nil
-      @info[:duration].should > 0
+      expect(@info[:duration]).not_to be_nil
+      expect(@info[:duration]).to be > 0
     end
   end
 end

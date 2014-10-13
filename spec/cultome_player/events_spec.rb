@@ -11,6 +11,6 @@ describe CultomePlayer::Events do
     t.register_listener(:my_event){|data| "#{data} 1!" }
     t.register_listener(:my_event){|data| "#{data} 2!" }
     r = t.emit_event(:my_event, "DATA")
-    r.should eq ["DATA 1!", "DATA 2!"]
+    expect(r).to eq ["DATA 1!", "DATA 2!"]
   end
 end
