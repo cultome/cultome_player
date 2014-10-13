@@ -31,29 +31,29 @@ module CultomePlayer
       return msg
     end
 
-    # Define the 15 colors allowed in my console scheme
+    # Define the 18 colors allowed in my console scheme
     (1..18).each do |idx|
       define_method :"c#{idx}" do |str|
         case idx
-        when 1 then str.colorize(:blue)
-        when 2 then str.colorize(:black)
-        when 3 then str.colorize(:red)
-        when 4 then str.colorize(:green)
-        when 5 then str.colorize(:yellow)
-        when 6 then str.colorize(:blue)
-        when 7 then str.colorize(:magenta)
-        when 8 then str.colorize(:cyan)
-        when 9 then str.colorize(:white)
-        when 10 then str.colorize(:default)
-        when 11 then str.colorize(:light_black)
-        when 12 then str.colorize(:light_red)
-        when 13 then str.colorize(:light_green)
-        when 14 then str.colorize(:light_yellow)
-        when 15 then str.colorize(:light_blue)
-        when 16 then str.colorize(:light_magenta)
-        when 17 then str.colorize(:light_cyan)
-        when 18 then str.colorize(:light_white)
-        else str
+          when 1 then str.colorize(:blue)
+          when 2 then str.colorize(:black)
+          when 3 then str.colorize(:red)
+          when 4 then str.colorize(:green)
+          when 5 then str.colorize(:yellow)
+          when 6 then str.colorize(:blue)
+          when 7 then str.colorize(:magenta)
+          when 8 then str.colorize(:cyan)
+          when 9 then str.colorize(:white)
+          when 10 then str.colorize(:default)
+          when 11 then str.colorize(:light_black)
+          when 12 then str.colorize(:light_red)
+          when 13 then str.colorize(:light_green)
+          when 14 then str.colorize(:light_yellow)
+          when 15 then str.colorize(:light_blue)
+          when 16 then str.colorize(:light_magenta)
+          when 17 then str.colorize(:light_cyan)
+          when 18 then str.colorize(:light_white)
+          else str
         end
       end
     end
@@ -116,57 +116,63 @@ module CultomePlayer
 
     def recreate_db_schema
       with_connection do
+        begin
         ActiveRecord::Schema.drop_table('songs')
         ActiveRecord::Schema.drop_table('albums')
         ActiveRecord::Schema.drop_table('artists')
         ActiveRecord::Schema.drop_table('genres')
         ActiveRecord::Schema.drop_table('genres_songs')
         ActiveRecord::Schema.drop_table('drives')
+        rescue
+        end
 
-        ActiveRecord::Schema.define do
-          create_table :songs do |t|
-            t.string :name # If I Had A Gun
-            t.integer :artist_id, default: 0 # Noel Gallagher
-            t.integer :album_id, default: 0 # High Flying Birds
-            t.integer :year # 2011
-            t.integer :track # 3
-            t.integer :duration # 210 sec
-            t.integer :drive_id
-            t.string :relative_path
-            t.integer :points, default: 0
-            t.integer :plays, default: 0
-            t.datetime :last_played_at
-            t.timestamps
-          end
+        begin
+          ActiveRecord::Schema.define do
+            create_table :songs do |t|
+              t.string :name # If I Had A Gun
+              t.integer :artist_id, default: 0 # Noel Gallagher
+              t.integer :album_id, default: 0 # High Flying Birds
+              t.integer :year # 2011
+              t.integer :track # 3
+              t.integer :duration # 210 sec
+              t.integer :drive_id
+              t.string :relative_path
+              t.integer :points, default: 0
+              t.integer :plays, default: 0
+              t.datetime :last_played_at
+              t.timestamps
+            end
 
-          create_table :albums do |t|
-            t.string :name
-            t.integer :points
-            t.timestamps
-          end
+            create_table :albums do |t|
+              t.string :name
+              t.integer :points
+              t.timestamps
+            end
 
-          create_table :artists do |t|
-            t.string :name
-            t.integer :points
-            t.timestamps
-          end
+            create_table :artists do |t|
+              t.string :name
+              t.integer :points
+              t.timestamps
+            end
 
-          create_table :genres do |t|
-            t.integer :points
-            t.string :name
-          end
+            create_table :genres do |t|
+              t.integer :points
+              t.string :name
+            end
 
-          create_table :genres_songs, id: false do |t|
-            t.integer :song_id
-            t.integer :genre_id
-          end
+            create_table :genres_songs, id: false do |t|
+              t.integer :song_id
+              t.integer :genre_id
+            end
 
-          create_table :drives do |t|
-            t.string :name
-            t.string :path
-            t.boolean :connected, default: true
-            t.timestamps
+            create_table :drives do |t|
+              t.string :name
+              t.string :path
+              t.boolean :connected, default: true
+              t.timestamps
+            end
           end
+        rescue
         end
 
         # Default and required values

@@ -4,6 +4,9 @@ module CultomePlayer
   module Objects
     # The ActiveRecord model for Album objects.
     class Album < ActiveRecord::Base
+
+      include CultomePlayer::Utils
+
       has_many :songs
       has_many :artists, through: :songs
 

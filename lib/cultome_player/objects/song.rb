@@ -2,8 +2,12 @@ require 'active_record'
 
 module CultomePlayer
   module Objects
+
     # The ActiveRecord model for Song objects.
     class Song < ActiveRecord::Base
+
+      include CultomePlayer::Utils
+
       belongs_to :artist
       belongs_to :album
       has_and_belongs_to_many :genres
@@ -11,6 +15,7 @@ module CultomePlayer
       has_many :similars, as: :similar
 
       scope :connected, -> {joins(:drive).where('drives.connected' => true)}
+
       # Get the full path to the song file.
       #
       # @return [String] The full path to the song file.

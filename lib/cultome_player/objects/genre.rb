@@ -4,6 +4,9 @@ module CultomePlayer
   module Objects
     # The ActiveRecord model for Genre objects.
     class Genre < ActiveRecord::Base
+
+      include CultomePlayer::Utils
+
       has_and_belongs_to_many :songs
 
       def to_s

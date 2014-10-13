@@ -2,6 +2,8 @@
 module CultomePlayer::Player::Interface
   module Extended
 
+    include CultomePlayer::Objects
+
     # For more information on this command refer to user manual or inline help in interactive mode.
     def search(cmd)
       songs = select_songs_with cmd
@@ -137,6 +139,7 @@ module CultomePlayer::Player::Interface
         # insertamos las nuevas y actualizamos las existentes
         updated = update_song(track_info)
         imported = insert_song(track_info)
+        display "" # para insertar un salto de linea despues de las barras de progreso
 
         success(message: connect_response_msg(imported, updated),
                 files_detected: track_info.size,

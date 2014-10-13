@@ -32,8 +32,8 @@ task :console => :environment do
   IRB.start
 end
 
-task :environment, :env do |t, args|
-  env = args[:env] || :user
+task :environment do |t, args|
+  env = ENV["ENV"] || :user
   prepare_environment(env)
   puts "Using #{env} environment."
 end

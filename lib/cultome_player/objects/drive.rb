@@ -4,6 +4,9 @@ module CultomePlayer
   module Objects
     # The ActiveRecord model for Drive objects.
     class Drive < ActiveRecord::Base
+
+      include CultomePlayer::Utils
+
       has_many :songs
 
       def connected?

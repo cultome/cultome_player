@@ -72,7 +72,9 @@ module CultomePlayer::Player::Interface
     def insert_song(new_info)
       existing_paths = get_unique_paths
       to_be_processed = new_info.select{|s| !existing_paths.include?(s[:file_path]) }
+      progress = progress_label("Adding songs {actual}/{total}", to_be_processed.size)
       return to_be_processed.count do |info|
+        display_over c15(progress.increment)
         write_song(info)
       end
     end
@@ -84,8 +86,10 @@ module CultomePlayer::Player::Interface
     def update_song(new_info)
       existing_paths = get_unique_paths
       to_be_processed = new_info.select{|s| existing_paths.include?(s[:file_path]) }
+      progress = progress_label("Updating song {actual} of {total}", to_be_processed.size)
       return to_be_processed.count do |info|
         # extraemos la cancion almacenada.. si existe
+        display_over c15(progress.increment)
         song = Song.includes(:drive).where("drives.path||'/'||songs.relative_path = ?", info[:file_path]).references(:drives).first
 
         song.nil? ? false : write_song(info, song)
@@ -190,6 +194,19 @@ module CultomePlayer::Player::Interface
     end
 
     private
+
+    def progress_label(label, total)
+      return Class.new do
+        def initialize(lbl, tot)
+          @_label, @_actual = lbl.gsub(/\{total\}/, tot.to_s), 0
+        end
+
+        def increment
+          @_actual += 1
+          return @_label.gsub(/\{actual\}/, @_actual.to_s)
+        end
+      end.new(label, total)
+    end
 
     def get_from_focus(params)
       params.map do |p|
