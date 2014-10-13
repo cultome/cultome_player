@@ -26,8 +26,8 @@ module CultomePlayer::Player
         rescue Exception => e
           emit_event(:interactive_exception, e)
 
-          display c3(e.message)
-          display c3(e.backtrace) #if current_env == :dev
+          show_error(e.message)
+          e.backtrace.each{|b| display c3(b) } if current_env == :dev
         end
       end
     end
@@ -55,6 +55,11 @@ module CultomePlayer::Player
 
     private
 
+    def show_error(msg)
+      type, message = msg.split(":")
+      display c3("[#{type}] #{message}")
+    end
+
     def show_response(r)
       if r.respond_to?(:response_type)
         res_obj = r.send(r.response_type)
@@ -63,17 +68,23 @@ module CultomePlayer::Player
           res_obj.each.with_index do |elem, idx|
             display(c4("#{(idx + 1).to_s.ljust(3)} | ") + elem.to_s)
           end
+
         elsif res_obj.class == String
           # es un mensaje
           display r.success? ? res_obj.to_s : c3(res_obj.to_s)
+
         else
           display c3("(((#{res_obj.to_s})))")
+
         end
+
       # Dont has response_type, eg has a message
       elsif r.respond_to?(:message)
         display r.success? ? c1(r.message) : c3(r.message)
+
       else
         display c3("!!!#{r}!!!")
+
       end
     end
 

@@ -27,7 +27,7 @@ module CultomePlayer
 			end
 
 			def suggest_songs
-				display "Can I suggest something to you?"
+				display "Can I suggest you something?"
 			end
 
 		end

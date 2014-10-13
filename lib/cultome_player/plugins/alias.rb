@@ -3,10 +3,18 @@ module CultomePlayer
 		module Alias
 
 			def command_alias(cmd)
-				command = cmd.params.first.value
-				aka = cmd.params.last.value
-				plugin_config(:alias)[aka] = command
-				return success("Alias '#{aka}' created!")
+        if cmd.params.empty?
+          msg = plugin_config(:alias).to_a.reduce("") do |acc,arr|
+            acc += "#{c15(arr[0])} => #{c16(arr[1])}\n"
+          end
+          return success(msg)
+
+        else
+          command = cmd.params.first.value
+          aka = cmd.params.last.value
+          plugin_config(:alias)[aka] = command
+          return success("Alias '#{aka}' created!")
+        end
 			end
 
 			def respond_to?(name, include_all=false)
