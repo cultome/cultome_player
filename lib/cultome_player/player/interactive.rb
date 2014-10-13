@@ -65,7 +65,7 @@ module CultomePlayer::Player
           end
         elsif res_obj.class == String
           # es un mensaje
-          display r.success? ? c15(res_obj.to_s) : c3(res_obj.to_s)
+          display r.success? ? res_obj.to_s : c3(res_obj.to_s)
         else
           display c3("(((#{res_obj.to_s})))")
         end
