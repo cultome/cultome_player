@@ -8,15 +8,23 @@ module CultomePlayer::Player
       @in_session = true
       display c5("Cultome Player v#{CultomePlayer::VERSION}")
       emit_event(:interactive_session_started)
+      last_cmd = nil
 
       while in_session?
         begin
           cmd = read_command(PROMPT)
-          
-          # agregamos el comando al historia de la session_history
-          session_history << cmd
+
+          if cmd.empty?
+            cmd = last_cmd
+          else
+            # agregamos el comando al historia de la session_history
+            session_history << cmd
+          end
 
           r = execute cmd
+          # seteamos el ultimo comando ejecutado
+          # # seteamos el ultimo comando ejecutado
+          last_cmd = cmd
 
           if r.size > 1
             display c1("#{r.size} commands were executed, Showing result of the last one.")
@@ -69,7 +77,7 @@ module CultomePlayer::Player
 
         elsif res_obj.class == String
           # es un mensaje
-          display r.success? ? res_obj.to_s : c3(res_obj.to_s)
+          display r.success? ? res_obj : c3(res_obj.to_s)
 
         else
           display c3("(((#{res_obj.to_s})))")
@@ -78,7 +86,7 @@ module CultomePlayer::Player
 
       # Dont has response_type, eg has a message
       elsif r.respond_to?(:message)
-        display r.success? ? c1(r.message) : c3(r.message)
+        display r.success? ? c15(r.message) : c3(r.message)
 
       else
         display c3("!!! #{r} !!!")

@@ -121,7 +121,7 @@ module CultomePlayer
   private
 
   def get_response_params(response) 
-    return {message: c1(response)} if response.instance_of?(String)
+    return {message: response} if response.instance_of?(String)
     return response
   end
 end

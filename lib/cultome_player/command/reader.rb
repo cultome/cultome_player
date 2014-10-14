@@ -8,7 +8,16 @@ module CultomePlayer::Command
     # @param prompt [String] The message to display to user for arcking for input.
     # @return [String] The user input readed.
     def read_command(prompt)
-      command_reader.readline(c5(prompt), true)
+      input = command_reader.readline(c5(prompt), true)
+
+      # evitamos que comando consecutivos repetidos o vacios queden en el historial
+      if input.empty?
+        command_reader::HISTORY.pop
+      elsif command_reader::HISTORY.to_a.reverse[1] == input
+        command_reader::HISTORY.pop
+      end
+
+      return input
     end
 
     # Lazy getter for readline object.

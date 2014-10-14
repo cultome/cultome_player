@@ -90,8 +90,8 @@ module CultomePlayer
         def quit(cmd)
           quit_in_player
           terminate_session
-          return success("See you next time!") unless in_session?
-          return failure("Oops! You should use Ctr-c or throw water to the CPU NOW!!!!")
+          return success(c15("See you next time!")) unless in_session?
+          return failure(c3("Oops! You should use Ctr-c or throw water to the CPU NOW!!!!"))
         end
       end
     end

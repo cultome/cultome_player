@@ -5,9 +5,9 @@ module CultomePlayer
 			def command_alias(cmd)
         if cmd.params.empty?
           msg = plugin_config(:alias).to_a.reduce("") do |acc,arr|
-            acc += "#{c15(arr[0])} => #{c16(arr[1])}\n"
+            acc += "#{arr[0]} => #{arr[1]}\n"
           end
-          return success(msg)
+          return success(c15(msg))
 
         else
           command = cmd.params.first.value
