@@ -152,18 +152,18 @@ module CultomePlayer
 
               create_table :albums do |t|
                 t.string :name
-                t.integer :points
+                t.integer :points, default: 0
                 t.timestamps
               end
 
               create_table :artists do |t|
                 t.string :name
-                t.integer :points
+                t.integer :points, default: 0
                 t.timestamps
               end
 
               create_table :genres do |t|
-                t.integer :points
+                t.integer :points, default: 0
                 t.string :name
               end
 
@@ -186,6 +186,8 @@ module CultomePlayer
         # Default and required values
         CultomePlayer::Objects::Album.find_or_create_by(id: 0, name: 'Unknown')
         CultomePlayer::Objects::Artist.find_or_create_by(id: 0, name: 'Unknown')
+
+        return true
       end
     end
 

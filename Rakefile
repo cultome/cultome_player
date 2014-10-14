@@ -27,6 +27,7 @@ task :console => :environment do
   ActiveRecord::Base.logger = Logger.new(File.open(db_log_file, 'a'))
 
   include CultomePlayer
+  include CultomePlayer::Environment
 
   ARGV.clear
   IRB.start

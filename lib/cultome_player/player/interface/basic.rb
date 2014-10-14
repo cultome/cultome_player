@@ -71,6 +71,10 @@ module CultomePlayer
 
           # aqui enviamos al reproductor externo a tocar
           play_queue
+
+          # cambiamos la fecha de ultima reproduccion
+          current_song.update_attributes(last_played_at: Time.now)
+          
           return success(message: "Now playing #{current_song}", now_playing: current_song)
         end
 

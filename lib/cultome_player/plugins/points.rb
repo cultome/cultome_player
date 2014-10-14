@@ -11,27 +11,41 @@ module CultomePlayer
 			private
 
 			def on_before_change(cmd)
+        # current_song => the old song
 				return if current_song.nil?
 
-				percent_played = playback_length * playback_position / 100
-				# current_song => the old song
-				case percent_played
-					when (10..50) then current_song.update(points: current_song.points - 1)
-					when (81..100) then current_song.update(points: current_song.points + 1)
-				end
-			end
+				percent_played = playback_position * 100 / playback_length
+        gain = case percent_played
+                 when (10..50) then -1
+                 when (81..100) then 1
+                 else 0
+               end
 
-			def on_after_prev(cmd, response)
-				return if current_song.nil?
+        update_points(gain)
+      end
 
-				if response.success?
-					current_song.update(points: current_song.points + 1) # # current_song => the new song
-				end
-			end
+      def on_after_prev(cmd, response)
+        # # current_song => the new song
+        return if current_song.nil?
 
-			def on_playback_finish(song)
-				song.update(points: song.points + 1)
-			end
-		end
-	end
+        if response.success?
+          update_points(1)
+        end
+      end
+
+      def on_playback_finish(song)
+        update_points(1)
+      end
+
+      def update_points(diff)
+        if current_song
+          current_song.update(points: current_song.points + diff)
+          current_song.artist.update(points: current_song.artist.points + diff) unless current_song.artist.nil?
+          current_song.album.update(points: current_song.album.points + diff) unless current_song.album.nil?
+          current_song.genres.each{|g| g.update(points: g.points + diff) } unless current_song.genres.nil?
+        end
+      end
+
+    end
+  end
 end
