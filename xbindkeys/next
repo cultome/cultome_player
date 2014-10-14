@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+
+echo "Checking user environment pipe.."
+if [ -p "~/.cultome/cmdctr" ]
+  then echo "next" > ~/.cultome/cmdctr
+fi
+
+echo "Checking test environment pipe.."
+if [ -p ~/tmp/cmdctr ]
+  then echo "next" > ~/tmp/cmdctr
+fi
+
+echo "Checking memory environment pipe.."
+if [ -p /tmp/cmdctr ]
+  then echo "next" > /tmp/cmdctr
+fi

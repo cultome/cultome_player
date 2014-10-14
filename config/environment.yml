@@ -4,6 +4,7 @@ user:
   db_log_file: ~/.cultome/db.log
   file_types: mp3
   mplayer_pipe: ~/.cultome/mpctr
+  command_pipe: ~/.cultome/cmdctr
   config_file: ~/.cultome/config.yml
 memory:
   db_adapter: sqlite3
@@ -11,6 +12,7 @@ memory:
   db_log_file: /tmp/db.log
   file_types: mp3
   mplayer_pipe: /tmp/mpctr
+  command_pipe: /tmp/cmdctr
   config_file: /tmp/config.yml
 rspec:
   db_adapter: sqlite3
@@ -18,6 +20,7 @@ rspec:
   db_log_file: spec/db.log
   file_types: mp3
   mplayer_pipe: spec/mpctr
+  command_pipe: spec/cmdctr
   config_file: spec/config.yml
 test:
   db_adapter: sqlite3
@@ -25,4 +28,5 @@ test:
   db_log_file: ~/tmp/db.log
   file_types: mp3
   mplayer_pipe: ~/tmp/mpctr
+  command_pipe: ~/tmp/cmdctr
   config_file: ~/tmp/config.yml

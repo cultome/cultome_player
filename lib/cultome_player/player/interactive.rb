@@ -1,6 +1,8 @@
 module CultomePlayer::Player
   module Interactive
 
+    attr_accessor :last_command
+
     PROMPT = "cultome> "
 
     # Begin a REP loop inside player.
@@ -8,36 +10,44 @@ module CultomePlayer::Player
       @in_session = true
       display c5("Cultome Player v#{CultomePlayer::VERSION}")
       emit_event(:interactive_session_started)
-      last_cmd = nil
 
       while in_session?
         begin
           cmd = read_command(PROMPT)
-
-          if cmd.empty?
-            cmd = last_cmd
-          else
-            # agregamos el comando al historia de la session_history
-            session_history << cmd
-          end
-
-          r = execute cmd
-          # seteamos el ultimo comando ejecutado
-          # # seteamos el ultimo comando ejecutado
-          last_cmd = cmd
-
-          if r.size > 1
-            display c1("#{r.size} commands were executed, Showing result of the last one.")
-          end
-
-          show_response(r.last)
+          execute_interactively cmd
         rescue Exception => e
-          emit_event(:interactive_exception, e)
-
           show_error(e.message)
           e.backtrace.each{|b| display c3(b) } if current_env == :test
-          false
         end
+      end
+    end
+
+    def execute_interactively(cmd)
+      begin
+        if cmd.empty?
+          # tomamos en ultimo comando
+          cmd = last_command
+
+        else
+          # agregamos el comando al historia de la session_history
+          session_history << cmd
+          # seteamos el ultimo comando ejecutado
+          # # seteamos el ultimo comando ejecutado
+          last_command = cmd
+        end
+
+        return false if cmd.nil?
+
+        r = execute cmd
+
+        if r.size > 1
+          display c1("#{r.size} commands were executed, Showing result of the last one.")
+        end
+
+        show_response(r.last)
+      rescue Exception => e
+        emit_event(:interactive_exception, e)
+        raise e
       end
     end
 
@@ -85,7 +95,7 @@ module CultomePlayer::Player
 
         end
 
-      # Dont has response_type, eg has a message
+        # Dont has response_type, eg has a message
       elsif r.respond_to?(:message)
         display r.success? ? c15(r.message) : c3(r.message)
 

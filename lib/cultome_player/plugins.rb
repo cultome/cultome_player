@@ -2,6 +2,7 @@ require 'cultome_player/plugins/help'
 require 'cultome_player/plugins/alias'
 require 'cultome_player/plugins/points'
 require 'cultome_player/plugins/gestures'
+require 'cultome_player/plugins/keyboard_special_keys'
 
 module CultomePlayer
 	module Plugins
@@ -9,6 +10,7 @@ module CultomePlayer
 		include Alias
 		include Points
 		include Gestures
+    include KeyboardSpecialKeys
 
 		# Check if a plugin implements the given command.
 		#

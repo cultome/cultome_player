@@ -236,9 +236,12 @@ help <command_name>
 ## Installation
 Due I'm not a genius, I rely in an excelent media player as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have Mpg123 installed. With linux, is a piece of cake:
 
-For Ubuntu
 ```
+# Ubuntu
 sudo apt-get install mpg123
+
+# Archlinux (yaourt)
+sudo yaourt mpg123
 ```
 
 When you finish install this gem:

@@ -38,6 +38,13 @@ module CultomePlayer
       env_config['config_file'] || raise('environment problem:environment information not loaded')
     end
 
+    # Get the command_pipe environment configuration value.
+    #
+    # @return [String] The command_pipe value for teh selected environment.
+    def command_pipe
+      env_config['command_pipe'] || raise('environment problem:environment information not loaded')
+    end
+
     # Get the mplayer_pipe environment configuration value.
     #
     # @return [String] The mplayer_pipe value for teh selected environment.
