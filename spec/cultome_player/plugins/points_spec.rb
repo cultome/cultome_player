@@ -14,7 +14,7 @@ describe CultomePlayer::Plugins::Points do
 	it 'point a song if repeated' do
 		expect(t).to receive(:current_song).at_least(1).and_return(Song.first)
     expect{
-      t.emit_event(:after_command_prev, Command.new({action: 'prev'}, []), t.success("ok"))
+      t.emit_event(:after_command_prev, Command.new({value: 'prev'}, []), t.success("ok"))
     }.to change{ Song.first.points }.by(1)
 	end
 
@@ -23,7 +23,7 @@ describe CultomePlayer::Plugins::Points do
 		expect(t).to receive(:playback_length).at_least(1).and_return(100)
 		expect(t).to receive(:playback_position).at_least(1).and_return(20)
     expect{
-      t.emit_event(:before_command_next, Command.new({action: 'next'}, []), t.success("ok"))
+      t.emit_event(:before_command_next, Command.new({value: 'next'}, []), t.success("ok"))
     }.to change{ Song.first.points }.by(-1)
 	end
 
@@ -32,7 +32,7 @@ describe CultomePlayer::Plugins::Points do
 		expect(t).to receive(:playback_length).at_least(1).and_return(100)
 		expect(t).to receive(:playback_position).at_least(1).and_return(90)
     expect{
-      t.emit_event(:before_command_prev, Command.new({action: 'prev'}, []), t.success("ok"))
+      t.emit_event(:before_command_prev, Command.new({value: 'prev'}, []), t.success("ok"))
     }.to change{ Song.first.points }.by(1)
 	end
 

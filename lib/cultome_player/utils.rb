@@ -5,6 +5,12 @@ require 'colorize'
 module CultomePlayer
   module Utils
 
+    def to_display_list(list)
+      return list.collect.with_index do |elem, idx|
+        c4("#{(idx + 1).to_s.ljust(3)} | ") + elem.to_s
+      end.join("\n")
+    end
+
     # Check if a string value can be a positive boolean value.
     #
     # @param value [String] String to check if can be a positive boolean value.

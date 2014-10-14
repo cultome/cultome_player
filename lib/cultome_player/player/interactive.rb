@@ -65,9 +65,7 @@ module CultomePlayer::Player
         res_obj = r.send(r.response_type)
         if res_obj.respond_to?(:each)
           # es una lista
-          res_obj.each.with_index do |elem, idx|
-            display(c4("#{(idx + 1).to_s.ljust(3)} | ") + elem.to_s)
-          end
+          display to_display_list(res_obj)
 
         elsif res_obj.class == String
           # es un mensaje
@@ -83,7 +81,7 @@ module CultomePlayer::Player
         display r.success? ? c1(r.message) : c3(r.message)
 
       else
-        display c3("!!!#{r}!!!")
+        display c3("!!! #{r} !!!")
 
       end
     end
