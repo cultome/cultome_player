@@ -35,7 +35,8 @@ module CultomePlayer::Player
           emit_event(:interactive_exception, e)
 
           show_error(e.message)
-          e.backtrace.each{|b| display c3(b) } if current_env == :dev
+          e.backtrace.each{|b| display c3(b) } if current_env == :test
+          false
         end
       end
     end

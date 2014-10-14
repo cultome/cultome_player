@@ -49,7 +49,11 @@ module CultomePlayer
           rescue Exception => e
             emit_event(:execute_exception, cmd, e)
             
-            display c3("#{e.message}\n#{e.backtrace}\n") if current_env == :test
+            if current_env == :test
+              display c3("#{e.message}")
+              e.backtrace.each{|b| display c3(b) }
+            end
+
             seq_success = false
             s = e.message.split(":")
             failure(message: s[0], details: s[1])
