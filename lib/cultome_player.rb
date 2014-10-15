@@ -98,6 +98,7 @@ module CultomePlayer
 
       def initialize(env)
         prepare_environment(env)
+        ensure_db_schema
         playlists.register(:current)
         playlists.register(:history)
         playlists.register(:queue)

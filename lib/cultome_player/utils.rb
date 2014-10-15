@@ -120,6 +120,16 @@ module CultomePlayer
       ActiveRecord::Base.connection_pool.with_connection(&db_logic)
     end
 
+    def ensure_db_schema
+      begin
+        # hacemos una simple query a la base de datos para verificar
+        with_connection{ CultomePlayer::Objects::Song.first }
+      rescue
+        # si la query no funciona recreamos el esquema
+        recreate_db_schema
+      end
+    end
+
     def recreate_db_schema
       with_connection do
         swallow_stdout do

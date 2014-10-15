@@ -8,7 +8,7 @@ task :run => :environment do
 end
 
 desc "Create database schema"
-task :reset => :environment do
+task :reset_db => :environment do
   include CultomePlayer::Utils
   recreate_db_schema
 end

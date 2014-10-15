@@ -12,11 +12,11 @@ options = {
 parser = OptionParser.new do |opts|
   opts.banner = "Usage: cultome_player [options] [file1, file2, ...]"
 
-  opts.on('-i', '--interactive', 'Starts the player in interactive mode') do
+  opts.on('-i', '--interactive', 'Starts the player in interactive mode. [false]') do
     options[:interactive] = true
   end
 
-  opts.on('-e', '--env ENV', 'Starts the player in interactive mode') do |env|
+  opts.on('-e', '--env ENV', 'Select settings from environment. [user]') do |env|
     options[:environment] = env.to_sym
   end
 
@@ -37,3 +37,4 @@ player = CultomePlayer.get_player(options[:environment])
 if options[:interactive]
   player.begin_session
 end
+
