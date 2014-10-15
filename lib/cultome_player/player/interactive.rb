@@ -1,8 +1,6 @@
 module CultomePlayer::Player
   module Interactive
 
-    attr_accessor :last_command
-
     PROMPT = "cultome> "
 
     # Begin a REP loop inside player.
@@ -33,7 +31,7 @@ module CultomePlayer::Player
           session_history << cmd
           # seteamos el ultimo comando ejecutado
           # # seteamos el ultimo comando ejecutado
-          last_command = cmd
+          set_last_command(cmd)
         end
 
         return false if cmd.nil?
@@ -72,6 +70,14 @@ module CultomePlayer::Player
       @session_history ||= []
     end
 
+    def set_last_command(cmd)
+      @last_command = cmd
+    end
+
+    def last_command
+      @last_command
+    end
+
     private
 
     def show_error(msg)
@@ -80,6 +86,8 @@ module CultomePlayer::Player
     end
 
     def show_response(r)
+      return if r.respond_to?(:no_response)
+
       if r.respond_to?(:response_type)
         res_obj = r.send(r.response_type)
         if res_obj.respond_to?(:each)

@@ -23,6 +23,7 @@ module CultomePlayer
             songs = whole_library
             return failure("No music connected! You should try 'connect /home/yoo/music => main' first") if songs.empty?
             playlists[:current, :focus] <= songs
+            playlists[:current, :focus].shuffle
 
           else # with parameters
             songs = select_songs_with cmd

@@ -36,6 +36,15 @@ module CultomePlayer
 						prepared_command.gsub!(/%#{idx + 1}/, "'#{p}'") # TODO aqui manejar los parametros con quotes
 					end
 					# execute the alias, and returns only the last response
+          if in_session?
+            begin
+              r = execute_interactively(prepared_command)
+              return success(no_response: true)
+              #return success(no_response: true)
+            rescue Exception => e
+              return failure(e.message)
+            end
+          end
 					return execute(prepared_command).last
 				end
 				# ...and sintaxis

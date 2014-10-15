@@ -8,7 +8,7 @@ module CultomePlayer
         @data = data
 
         @data.each do |k,v|
-          self.class.send(:define_method, k) do
+          self.singleton_class.send(:define_method, k) do
             v
           end
         end
