@@ -2,11 +2,11 @@
 "/home/csoria/ws/cultome_player/xbindkeys/next"
     Mod2 + XF86Forward
 # Prev
-"(Scheme function)"
+"/home/csoria/ws/cultome_player/xbindkeys/prev"
     Mod2 + XF86Back
 # Toggle pause
-"(Scheme function)"
+"/home/csoria/ws/cultome_player/xbindkeys/pause"
     Mod2 + Cancel
 # Repeat
-"(Scheme function)"
+"/home/csoria/ws/cultome_player/xbindkeys/repeat"
     Mod2 + XF86Reload
