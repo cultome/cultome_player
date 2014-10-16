@@ -37,14 +37,15 @@ ARGV << "--help" if ARGV.empty?
 # parseamos las opciones
 parser.parse!(ARGV)
 
-player = CultomePlayer.get_player(options[:environment])
-
 if options[:interactive]
+  player = CultomePlayer.get_player(options[:environment])
   player.begin_session
 elsif options[:signal]
   begin
-    puts "[*] Writing to signal '#{options[:signal]}' to pipe '#{player.command_pipe}'"
-    open(player.command_pipe, File::WRONLY | File::NONBLOCK | File::SYNC){|out| out.puts options[:signal]}
+    include CultomePlayer::Environment
+    config = load_environment_properties(options[:environment])
+    puts "[*] Writing to signal '#{options[:signal]}' to pipe '#{config["command_pipe"]}'"
+    open(config["command_pipe"], File::WRONLY | File::NONBLOCK | File::SYNC){|out| out.puts options[:signal]}
   rescue Errno::ENXIO, Errno::ENOENT => e
   end
 end

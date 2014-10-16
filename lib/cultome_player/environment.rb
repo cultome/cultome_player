@@ -80,16 +80,21 @@ module CultomePlayer
       @current_env
     end
 
+    def load_environment_properties(env)
+      env_config = YAML.load_file File.expand_path('config/environment.yml', File.join(File.dirname(__FILE__), "../.."))
+      @env_config = env_config[env.to_s]
+      expand_paths @env_config
+      @current_env = env.to_sym
+      return @env_config
+    end
+
     # Extract the configuration for the environment and setup valriables.
     #
     # @param env [Symbol] The name of the environment to load.
     # @param check_db [Boolean] Flag to decide if the database schema should be checked.
     def prepare_environment(env)
-      env_config = YAML.load_file File.expand_path('config/environment.yml')
-      @env_config = env_config[env.to_s]
-      @current_env = env.to_sym
+      load_environment_properties(env)
       raise 'environment problem:environment not found' if @env_config.nil?
-      expand_paths @env_config
       create_required_files @env_config
       load_master_config @env_config['config_file']
     end
