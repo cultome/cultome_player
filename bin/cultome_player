@@ -7,6 +7,7 @@ require 'cultome_player'
 options = {
   interactive: false,
   environment: :user,
+  signal: false,
 }
 
 parser = OptionParser.new do |opts|
@@ -18,6 +19,10 @@ parser = OptionParser.new do |opts|
 
   opts.on('-e', '--env ENV', 'Select settings from environment. [user]') do |env|
     options[:environment] = env.to_sym
+  end
+
+  opts.on('-s', '--signal SIG', 'Send a command to all the command pipes.') do |sig|
+    options[:signal] = sig.gsub(/"/, "")
   end
 
   opts.on('--version', "Shows version") do
@@ -36,5 +41,10 @@ player = CultomePlayer.get_player(options[:environment])
 
 if options[:interactive]
   player.begin_session
+elsif options[:signal]
+  begin
+    puts "[*] Writing to signal '#{options[:signal]}' to pipe '#{player.command_pipe}'"
+    open(player.command_pipe, File::WRONLY | File::NONBLOCK | File::SYNC){|out| out.puts options[:signal]}
+  rescue Errno::ENXIO, Errno::ENOENT => e
+  end
 end
-

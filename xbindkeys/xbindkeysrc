@@ -1,12 +1,12 @@
 # Next
-"/home/csoria/ws/cultome_player/xbindkeys/next"
+"cultome_player --signal next"
     Mod2 + XF86Forward
 # Prev
-"/home/csoria/ws/cultome_player/xbindkeys/prev"
+"cultome_player --signal prev"
     Mod2 + XF86Back
 # Toggle pause
-"/home/csoria/ws/cultome_player/xbindkeys/pause"
+"cultome_player --signal pause"
     Mod2 + Cancel
 # Repeat
-"/home/csoria/ws/cultome_player/xbindkeys/repeat"
+"cultome_player --signal repeat"
     Mod2 + XF86Reload
