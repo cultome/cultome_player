@@ -1,6 +1,6 @@
 language: ruby
 rvm:
-    - 2.0
+    - 2.3
 script: rspec spec
 
 before_install:
