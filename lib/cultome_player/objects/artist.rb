@@ -16,6 +16,10 @@ module CultomePlayer
         str += c15(self.name)
         str += c4(" ::::")
       end
+
+      def readonly?
+        false
+      end
     end
   end
 end
