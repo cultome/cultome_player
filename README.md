@@ -234,7 +234,7 @@ help <command_name>
 ```
 
 ## Installation
-Due I'm not a genius, I rely in an excellent media player as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have Mpg123 installed. With linux, is a piece of cake:
+I rely in an excellent media player as a multimedia backbone, so, unless you're trying to write yor own adapter for other music player, you need to have **Mpg123** installed. With linux, is a piece of cake:
 
 ```
 # Ubuntu
@@ -242,6 +242,12 @@ sudo apt-get install mpg123
 
 # Archlinux (yaourt)
 sudo yaourt mpg123
+```
+
+And to use the ID3 tags I use **taglib** library
+```
+# Ubuntu
+sudo apt-get install libtag1-dev
 ```
 
 When you finish install this gem:
