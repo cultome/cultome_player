@@ -5,7 +5,7 @@
 # Cultome Player
 A handy music library explorer. Is designed to facilitate you to play the music you like in the moment you want.
 
-**"I want to play exactly this music"**
+**"I want to play exactly that song"**
 
 The player is designed around this concept, so it has commands to help you find music in your library and play it.
 
@@ -169,7 +169,7 @@ Is an absolute path inside the filesystem. As with literals if the path has any 
 ```
 
 #### Boolean
-Basicly anything that match the next regex is considered a boolean value, so watch out if you try to insert a literal value instead of a boolean.
+Basically anything that match the next regex is considered a boolean value, so watch out if you try to insert a literal value instead of a boolean.
 ```
 /^(on|off|yes|false|true|si|no|y|n|s|ok)$/
 ```
@@ -187,7 +187,7 @@ A valid IP4 address.
 
 
 ## Commands
-The commands are very rustic. Basicly consist in a command name and a list of parameters.
+The commands are very simples, they consist in a command name and a list of parameters.
 
 ```ruby
 <command> [<param>...]
@@ -234,7 +234,7 @@ help <command_name>
 ```
 
 ## Installation
-Due I'm not a genius, I rely in an excelent media player as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have Mpg123 installed. With linux, is a piece of cake:
+Due I'm not a genius, I rely in an excellent media player as a multimedia backbone. So, unless you're trying to write yor own adapter for other music player, you need to have Mpg123 installed. With linux, is a piece of cake:
 
 ```
 # Ubuntu
