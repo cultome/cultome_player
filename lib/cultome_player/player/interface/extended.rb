@@ -12,6 +12,7 @@ module CultomePlayer::Player::Interface
         failure('It matches not even one')
       else
         playlists[:focus] <= songs
+        playlists[:search] <= songs
         success(songs: songs, response_type: :songs)
       end
     end
@@ -39,22 +40,38 @@ module CultomePlayer::Player::Interface
             when :search then playlists[:search].to_a
 
             when :song then return success(message: current_song.to_s, song: current_song)
-            when :artist then return success(message: current_artist.to_s, artist: current_song)
-            when :album then return success(message: current_album.to_s, album: current_song)
+            when :artist then return success(message: current_artist.to_s, artist: current_artist)
+            when :album then return success(message: current_album.to_s, album: current_album)
 
             when :drives then Drive.all
-            when :artists then return Artist.all
-            when :albums then return Album.all
-            when :genres then return Genre.all
+            when :artists then Artist.all
+            when :albums then Album.all
+            when :genres then Genre.all
 
             when :library then whole_library.to_a
 
-            when :recently_added then [] # TODO implement
-            when :recently_played then [] # TODO implement
-            when :more_played then [] # TODO implement
-            when :less_played then [] # TODO implement
-            when :populars then [] # TODO implement
+            when :recently_added then
+              last_song_added_dt = Song.all.order(created_at: :desc).limit(1).first.created_at.midnight
+              Song.where({created_at: last_song_added_dt..(last_song_added_dt + 1.day)}).to_a
 
+            when :recently_played then
+              last_song_played_dt = Song.all.order(last_played_at: :desc).limit(1).first.last_played_at
+              Song.where({last_played_at: (last_song_played_dt-1.hour)..last_song_played_dt}).to_a
+
+            when :most_played then
+              most_played_song_count = Song.all.order(plays: :desc).limit(1).first.plays
+              Song.where("plays >= ?", most_played_song_count * 0.95).to_a
+
+            when :less_played then
+              less_played_song_count = Song.all.order(:plays).limit(1).first.plays
+              Song.where("plays <= ?", less_played_song_count * 1.05).to_a
+
+            when :populars then
+              upper_time = Time.now.midnight + 1.day
+              lower_time = upper_time - 5.day
+              latest_songs = Song.where({last_played_at: (lower_time..upper_time)}).order(plays: :desc)
+              lower_play_count = latest_songs.first.plays * 0-95
+              latest_songs.take_while{|s| s.plays >= lower_play_count }
             else []
           end
         end

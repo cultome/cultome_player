@@ -110,7 +110,7 @@ Some others are not player's objects but act as special functions placeholders.
 * @genres          Referes to the complete list of genres in you *connected* collection.
 * @recently_added  Referes to the list of recently added to the collection's songs.
 * @recently_played Referes to the list of recently played songs.
-* @more_played     Referes to the list of songs with more playbacks.
+* @most_played     Referes to the list of songs with more playbacks.
 * @less_played     Referes to the list of songs with less playbacks.
 * @populars        Referes to the list of songs with highest puntuations from playback preferences.
 ```

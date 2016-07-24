@@ -120,6 +120,7 @@ class TestClass
     playlists.register(:history)
     playlists.register(:queue)
     playlists.register(:focus)
+    playlists.register(:search)
     init_plugins
   end
 end

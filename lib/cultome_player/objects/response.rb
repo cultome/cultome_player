@@ -37,6 +37,10 @@ module CultomePlayer
         data = @data.merge response.data
         return Response.new(type, data)
       end
+
+      def to_s
+        "Response #{success? ? 'successful' : 'failed'} => #{@data}"
+      end
     end
   end
 end
