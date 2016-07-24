@@ -36,7 +36,7 @@ describe CultomePlayer::Command::Processor do
     end
 
     it 'raise an error if unclosed string is present' do
-      expect { t.get_tokens("uno 'dos") }.to raise_error
+      expect { t.get_tokens("uno 'dos") }.to raise_error('invalid command:unclosed string')
     end
   end
 
