@@ -41,7 +41,16 @@ module CultomePlayer
       end
 
       def to_s
-        value
+        return case @data[:type]
+          when :literal then @data[:value]
+          when :criteria then "#{@data[:criteria]}:#{@data[:value]}"
+          when :number then @data[:value]
+          when :object then "@#{@data[:value]}"
+          when :boolean then @data[:value]
+          when :path then @data[:value]
+          when :bubble then @data[:value]
+          else value
+        end
       end
     end
   end

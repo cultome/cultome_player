@@ -39,7 +39,7 @@ module CultomePlayer
       end
 
       def to_s
-        "#{action} #{@parameters}"
+        "#{action} #{@parameters.join(" ")}"
       end
     end
   end
