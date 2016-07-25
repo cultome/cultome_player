@@ -34,7 +34,6 @@ describe CultomePlayer::Player::Interface::Extended do
         r = t.execute('show @playlist').first
         expect(r.response_type).to eq(:list)
         expect(r.list.size).to eq(2)
-        expect(r.list.map{|s| s.id}).to include(1,3)
       end
 
       it 'history' do
@@ -56,7 +55,6 @@ describe CultomePlayer::Player::Interface::Extended do
         r = t.execute('show @focus').first
         expect(r.response_type).to eq(:list)
         expect(r.list.size).to eq(2)
-        expect(r.list.map{|s| s.id}).to include(1,3)
       end
 
       it 'search' do
@@ -64,7 +62,6 @@ describe CultomePlayer::Player::Interface::Extended do
         r = t.execute('show @search').first
         expect(r.response_type).to eq(:list)
         expect(r.list.size).to eq(1)
-        expect(r.list.map{|s| s.id}).to include(3)
       end
 
       it 'song' do

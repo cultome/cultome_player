@@ -26,6 +26,32 @@ describe CultomePlayer::Player::Interface::Helper do
   end
 
   describe '#play_inline?' do
+    it 'should return true when all play params are numbers' do
+      cmd = t.parse("play 1 2 3").first
+      expect(t.play_inline? cmd).to be true
+    end
+
+    it 'should return false when not all play params are numbers' do
+      cmd1 = t.parse("play @song 2 3").first
+      cmd2 = t.parse("play the 2").first
+      expect(t.play_inline? cmd1).to be false
+      expect(t.play_inline? cmd2).to be false
+    end
+
+    it 'should return true when play param is @song' do
+      cmd = t.parse("play @song").first
+      expect(t.play_inline? cmd).to be true
+    end
+
+    it 'should return false when play param is anything else' do
+      cmd1 = t.parse("play a:the").first
+      cmd2 = t.parse("play song").first
+      cmd3 = t.parse("play @library").first
+
+      expect(t.play_inline? cmd1).to be false
+      expect(t.play_inline? cmd2).to be false
+      expect(t.play_inline? cmd3).to be false
+    end
   end
 
   describe '#get_from_focus' do
