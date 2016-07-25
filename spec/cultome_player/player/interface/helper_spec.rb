@@ -55,6 +55,15 @@ describe CultomePlayer::Player::Interface::Helper do
   end
 
   describe '#get_from_focus' do
+    it 'get elements by an index (index starts in one)' do
+      song = Song.new({name: "Test", artist: Artist.new({name: "Test"}), album: Album.new({name: "Test"})})
+      t.playlists[:focus] << song
+      cmd = t.parse("play 1").first
+
+      songs = t.send(:get_from_focus, cmd.params)
+      expect(songs.size).to eq 1
+      expect(songs.first.name).to eq "Test"
+    end
   end
 
   describe '#get_from_playlist' do
