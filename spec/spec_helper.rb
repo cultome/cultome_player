@@ -1,8 +1,8 @@
 require 'coveralls'
+Coveralls.wear!
+
 require 'database_cleaner'
 require 'cultome_player'
-
-Coveralls.wear!
 
 include CultomePlayer::Environment
 include CultomePlayer::Utils
