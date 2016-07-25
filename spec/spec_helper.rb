@@ -32,16 +32,6 @@ RSpec.configure do |config|
   end
 end
 
-module FakeStatus
-  def playback_length
-    100
-  end
-
-  def playback_position
-    @playback_position ||= 0
-  end
-end
-
 module FakeExtractor
   def extract_from_txt(filepath, opc)
     filename = filepath[filepath.rindex("/")+1, filepath.length]
@@ -102,14 +92,12 @@ end
 
 class TestClass
   include CultomePlayer
-  include FakeStatus
   include FakeExtractor
   include MockPlayer
   include FakeUtils
 
   def initialize(env=:rspec)
     prepare_environment(env) unless env.nil?
-    #recreate_db_schema
     playlists.register(:current)
     playlists.register(:history)
     playlists.register(:queue)

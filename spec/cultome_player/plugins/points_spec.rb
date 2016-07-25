@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CultomePlayer::Plugins::Points do
-	let(:t){ TestClass.new }
+  let(:t){ TestClass.new }
 
   before :each do
     t.execute "connect '#{test_folder}' => test"
@@ -38,20 +38,17 @@ describe CultomePlayer::Plugins::Points do
   end
 
   it 'punctuate more than once' do
+    expect(t).to receive(:playback_position).and_return(10, 90)
+    expect(t).to receive(:playback_length).twice.and_return(100)
+
     t.execute("play")
     curr_song = t.current_song
 
-    low = (curr_song.duration * 0.1).to_i
-    t.execute("ff #{low}") # recorremos para estar en el rango de puntuacion negativa
     Song.all.each{|s| expect(s.points).to eq 0 }
-
     # debe puntuar con puntos negativos 10...50
     expect{ t.execute("next") }.to change{ curr_song.points }.by(-1)
     old_points = curr_song.points # extraemos los punto de la nueva rola
 
-    curr_song = t.current_song
-    high = (curr_song.duration * 0.9).to_i
-    t.execute("ff #{high}") # recorremos hasta entrar en 81...100
     points_before = curr_song.points
     t.execute("prev")
     points_before > old_points

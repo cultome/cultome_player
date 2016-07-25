@@ -38,6 +38,9 @@ describe CultomePlayer::Player::Interface::Extended do
       end
 
       it 'history' do
+        expect(t).to receive(:playback_position).and_return(0)
+        expect(t).to receive(:playback_length).and_return(100)
+
         t.execute('next')
         r = t.execute('show @history').first
         expect(r.response_type).to eq(:list)
