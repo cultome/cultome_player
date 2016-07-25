@@ -3,6 +3,15 @@ require 'spec_helper'
 describe CultomePlayer::Player::Interface::Basic do
   let(:t){ TestClass.new }
 
+  it '#quit terminates session and shutdown underlying player' do
+    t.instance_variable_set("@in_session", true)
+
+    expect(t.in_session?).to be true
+    expect(t).to receive(:send_to_player).with("quit")
+    t.execute("quit")
+    expect(t.in_session?).to be false
+  end
+
   describe '#pause' do
     it 'calls the underliying player' do
       expect(t).to receive(:pause_in_player)
@@ -99,6 +108,8 @@ describe CultomePlayer::Player::Interface::Basic do
           expect(t).to be_paused
           t.execute 'play'
           expect(t).not_to be_paused
+          t.execute "pause"
+          expect(t).to be_paused
         end
 
         it 'if stopped should resume last playback from the begin' do
