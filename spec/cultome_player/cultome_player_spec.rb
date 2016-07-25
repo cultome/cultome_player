@@ -15,6 +15,11 @@ describe CultomePlayer do
 		expect(t).to respond_to(:usage_cultome_player)
 	end
 
+  it 'creates a default player' do
+    player = CultomePlayer.get_player(:rspec)
+    expect(player).not_to be_nil
+  end
+
 	describe 'multiple commands' do
 		it 'executes all commands' do
 			expect(t).to receive(:command_help).twice.and_call_original

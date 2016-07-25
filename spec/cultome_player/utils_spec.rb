@@ -33,6 +33,10 @@ describe CultomePlayer::Utils do
     expect(t.c18("COLOR")).to eq "\e[0;97;49mCOLOR\e[0m"
   end
 
+  it '#ensure_db_schema' do
+    expect{ t.ensure_db_schema }.not_to raise_error
+  end
+
 	describe 'arrange information in columns' do
 		it 'everything fits in a row' do
 			expect(t.arrange_in_columns(["12345", "1234567890"], [5, 10], 2)).to eq "12345  1234567890"

@@ -49,7 +49,7 @@ module CultomePlayer
           rescue Exception => e
             emit_event(:execute_exception, cmd, e)
             
-            if current_env == :test
+            if current_env == :test || current_env == :rspec
               display c3("#{e.message}")
               e.backtrace.each{|b| display c3(b) }
             end
