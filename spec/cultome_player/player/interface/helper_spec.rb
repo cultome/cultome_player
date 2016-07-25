@@ -54,47 +54,85 @@ describe CultomePlayer::Player::Interface::Helper do
     end
   end
 
-  describe '#get_from_focus' do
+  context 'with music in the library' do
     before :each do
       t.execute "connect '#{test_folder}' => test"
     end
 
-    it 'get elements by an index (index starts in one)' do
-      t.execute("play")
-      cmd = t.parse("play 1 2").first
+    describe '#get_from_focus' do
+      it 'get elements by an index (index starts in one)' do
+        t.execute("play")
+        cmd = t.parse("play 1 2").first
 
-      songs = t.send(:get_from_focus, cmd.params)
-      expect(songs.size).to eq 2
-    end
-  end
-
-  describe '#get_from_playlists' do
-    before :each do
-      t.execute "connect '#{test_folder}' => test"
+        songs = t.send(:get_from_focus, cmd.params)
+        expect(songs.size).to eq 2
+      end
     end
 
-    it 'get all songs in the given playlists' do
-      t.execute("play && next")
+    describe '#get_from_playlists' do
+      it 'get all songs in the given playlists' do
+        t.execute("play && next")
 
-      songs = t.get_from_playlists([:current, :history])
-      expect(songs.size).to eq 4
-    end
-  end
-
-  describe '#search_songs_with' do
-    before :each do
-      t.execute "connect '#{test_folder}' => test"
+        songs = t.get_from_playlists([:current, :history])
+        expect(songs.size).to eq 3
+      end
     end
 
-    it 'get songs matching the given criteria param' do
+    describe '#search_songs_with' do
+      it 'get songs matching the given criteria param' do
+        cmd = t.parse("play a:muse").first
+        songs = t.search_songs_with(cmd)
+        expect(songs.size).to eq 1
+        expect(songs.first.artist.name).to match /Muse/
+      end
 
+      it 'get songs matching the given literal param' do
+        cmd = t.parse("play absolution").first
+        songs = t.search_songs_with(cmd)
+        expect(songs.size).to eq 1
+        expect(songs.first.name).to match /Absolution/
+      end
+
+      it 'get songs matching the given object param' do
+        cmd = t.parse("play @less_played").first
+        songs = t.search_songs_with(cmd)
+        expect(songs.size).to eq 3
+      end
+
+      it 'get songs matching the given combinations of params' do
+        cmd = t.parse("play @less_played absolution 3").first
+        songs = t.search_songs_with(cmd)
+        expect(songs.size).to eq 3
+      end
+
+      it 'does not get songs from playlists' do
+        cmd = t.parse("play @current").first
+        songs = t.search_songs_with(cmd)
+        expect(songs).to be_empty
+      end
     end
 
-    it 'get songs matching the given literal param'
+    describe '#select_songs_with' do
+      it 'get songs from focus playlist using number params' do
+        cmd = t.parse("play 2 3").first
+        songs = t.select_songs_with(cmd)
+        expect(songs.size).to eq 2
+      end
 
-    it 'get songs matching the given object param'
+      it 'get songs from playlists' do
+        t.execute("play")
+        cmd = t.parse("play @current").first
+        songs = t.select_songs_with(cmd)
+        expect(songs.size).to eq 3
+      end
 
-    it 'get songs matching the given combinations of params'
+      it 'get songs from the library and any playlist' do
+        t.execute("play")
+        cmd = t.parse("play @current 2 absolution").first
+        songs = t.select_songs_with(cmd)
+        expect(songs.size).to eq 3
+      end
+    end
   end
 
   describe '#process_for_search' do

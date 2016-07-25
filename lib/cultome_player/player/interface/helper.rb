@@ -121,7 +121,7 @@ module CultomePlayer::Player::Interface
       from_focus = get_from_focus(cmd.params(:number))
       from_playlists = get_from_playlists(cmd.params_values(:object))
       results = found_songs + from_focus + from_playlists
-      return results
+      return results.uniq{|s| s.id }
     end
 
     # Search in library for songs that fullfil the command parameters.
@@ -145,7 +145,8 @@ module CultomePlayer::Player::Interface
     # @return [List<Song>] The songs in the valid playlists.
     def get_from_playlists(lists)
       valid_lists = lists.select{|list_name| playlist?(list_name) }
-      return playlists[*valid_lists].songs
+      songs = playlists[*valid_lists].songs
+      return songs.uniq{|s| s.id }
     end
 
     # Try to find the player object by name.
