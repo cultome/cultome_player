@@ -91,6 +91,13 @@ describe CultomePlayer::Player::Interface::Extended do
         expect(r.message).to match /:::: Album: .+? ::::\n?/
       end
 
+      it 'genre' do
+        r = t.execute('show @genre').first
+        expect(r.response_type).to eq(:message)
+        expect(r).to respond_to :genres
+        expect(r).to respond_to :message
+      end
+
       it 'drives' do
         r = t.execute('show @drives').first
         expect(r.response_type).to eq(:list)

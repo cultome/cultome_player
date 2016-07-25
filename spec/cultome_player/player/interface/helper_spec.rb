@@ -25,14 +25,82 @@ describe CultomePlayer::Player::Interface::Helper do
     expect(t.format_secs(65)).to eq "01:05"
   end
 
-  describe '#process_object_for_search' do
-    it 'returns sql criteria and values for object type artist' do
-      artist = double("artist", name: "artist_name")
-      expect(t).to receive(:current_artist).and_return(artist)
+  describe '#play_inline?' do
+  end
 
-      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :artist})] )
-      expect(q).to eq 'artists.name = ?'
-      expect(v).to eq ["artist_name"]
+  describe '#get_from_focus' do
+  end
+
+  describe '#get_from_playlist' do
+  end
+
+  describe '#search_songs_with' do
+  end
+
+  describe '#process_for_search' do
+  end
+
+  describe '#process_literal_for_search' do
+  end
+
+  describe '#process_criteria_for_search' do
+  end
+
+  describe '#process_object_for_search' do
+    it 'return sql criteria and values object type populars' do
+      today = Time.now.midnight
+      last_week = today - 5.day
+      play_low_limit = 50
+
+      expect(t).to receive(:get_popular_criteria_limits).and_return([last_week, today, play_low_limit])
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :populars})] )
+      expect(q).to eq 'last_played_at between ? and ? and plays >= ?'
+      expect(v).to eq [last_week, today, play_low_limit]
+    end
+
+    it 'return sql criteria and values object type less_played' do
+      up_count = 10
+      expect(t).to receive(:get_less_played_criteria_limit).and_return(up_count)
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :less_played})] )
+      expect(q).to eq 'plays <= ?'
+      expect(v).to eq [up_count]
+    end
+
+    it 'return sql criteria and values object type most_played' do
+      low_count = 10
+      expect(t).to receive(:get_most_played_criteria_limit).and_return(low_count)
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :most_played})] )
+      expect(q).to eq 'plays >= ?'
+      expect(v).to eq [low_count]
+    end
+
+    it 'return sql criteria and values object type recently_played' do
+      now = Time.now.midnight
+      past = now - 1.hour
+      expect(t).to receive(:get_recently_played_criteria_limit).and_return([past, now])
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :recently_played})] )
+      expect(q).to eq 'last_played_at between ? and ?'
+      expect(v).to eq [past, now]
+    end
+
+    it 'return sql criteria and values object type recently_added' do
+      today = Time.now.midnight
+      last_week = today - 1.hour
+      expect(t).to receive(:get_recently_added_criteria_limit).and_return([last_week, today])
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :recently_added})] )
+      expect(q).to eq 'created_at between ? and ?'
+      expect(v).to eq [last_week, today]
+    end
+
+    it 'returns sql criteria and values for object type library' do
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :library})] )
+      expect(q).to eq 'songs.id > 0'
+      expect(v).to be_empty
     end
 
     it 'returns sql criteria and values for object type album' do
@@ -44,6 +112,24 @@ describe CultomePlayer::Player::Interface::Helper do
       expect(v).to eq ["album_name"]
     end
 
+    it 'returns sql criteria and values for object type genre' do
+      song = double("song", genres: [Genre.new({name: "Rock"}), Genre.new({name: "Pop"})])
+      expect(t).to receive(:current_song).and_return(song)
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :genre})] )
+      expect(q).to eq 'genres.name in (?)'
+      expect(v).to eq ["Rock", "Pop"]
+    end
+
+    it 'returns sql criteria and values for object type artist' do
+      artist = double("artist", name: "artist_name")
+      expect(t).to receive(:current_artist).and_return(artist)
+
+      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :artist})] )
+      expect(q).to eq 'artists.name = ?'
+      expect(v).to eq ["artist_name"]
+    end
+
     it 'returns sql criteria and values for object type song' do
       song = double("song", name: "song_name")
       expect(t).to receive(:current_song).and_return(song)
@@ -53,11 +139,20 @@ describe CultomePlayer::Player::Interface::Helper do
       expect(v).to eq ["song_name"]
     end
 
-    it 'returns sql criteria and values for object type library' do
-      q,v = t.send(:process_object_for_search, [Parameter.new({type: :object, value: :library})] )
-      expect(q).to eq 'songs.id > 0'
-      expect(v).to be_empty
+    it 'raise an error when object is genres' do
+      expect{t.send(:process_object_for_search, [Parameter.new({type: :object, value: :genres})])}.to raise_error("invalid_search:@genres has no meaning here")
+    end
+
+    it 'raise an error when object is albums' do
+      expect{t.send(:process_object_for_search, [Parameter.new({type: :object, value: :albums})])}.to raise_error("invalid_search:@albums has no meaning here")
+    end
+
+    it 'raise an error when object is artists' do
+      expect{t.send(:process_object_for_search, [Parameter.new({type: :object, value: :artists})])}.to raise_error("invalid_search:@artists has no meaning here")
+    end
+
+    it 'raise an error when object is drives' do
+      expect{t.send(:process_object_for_search, [Parameter.new({type: :object, value: :drives})])}.to raise_error("invalid_search:@drives has no meaning here")
     end
   end
-
 end

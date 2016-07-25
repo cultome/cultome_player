@@ -16,7 +16,7 @@ describe CultomePlayer::Command::Reader do
 
     it 'object parameters' do
       allow(Readline).to receive(:line_buffer).and_return( "play @art" )
-      expect(t.send(:completion_proc).call("@art")).to eq ["@artist"]
+      expect(t.send(:completion_proc).call("@art")).to eq ["@artist", "@artists"]
     end
   end
 
@@ -39,7 +39,7 @@ describe CultomePlayer::Command::Reader do
 
     it 'objects' do
       allow(Readline).to receive(:line_buffer).and_return( "play @a" )
-      expect(t.send(:completion_proc).call("@a")).to eq ["@artist", "@album"]
+      expect(t.send(:completion_proc).call("@a")).to eq ["@artist", "@album", "@artists", "@albums"]
     end
   end
 end

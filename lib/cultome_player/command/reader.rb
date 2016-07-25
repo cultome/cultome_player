@@ -78,7 +78,7 @@ module CultomePlayer::Command
           expanded_path += "/" if File.directory?(expanded_path)
           Dir[expanded_path + "*"].grep(/^#{Regexp.escape(expanded_path)}/).collect{|d| "#{d}/"}
         elsif word.start_with?("@")
-          %w{@library @search @playlist @history @queue @song @artist @album @drives}.grep(/^#{word}/)
+          %w{@playlist @current @history @queue @search @song @artist @album @drives @artists @albums @genres @library @recently_added @recently_played @most_played @less_played @populars}.grep(/^#{word}/)
         end
       end
     end

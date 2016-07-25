@@ -275,10 +275,26 @@ module CultomePlayer::Player::Interface
     def process_object_for_search(params)
       objs = params.collect do |p|
           case p.value
-          when :artist then {query: 'artists.name = ?', value: current_artist.name }
-          when :album then {query: 'albums.name = ?', value: current_album.name }
-          when :song then {query: 'songs.name = ?', value: current_song.name }
+          when :populars then
+            low_time, up_time, low_count = get_popular_criteria_limits
+            {query: 'last_played_at between ? and ? and plays >= ?', value: [low_time, up_time, low_count]}
+          when :less_played then {query: 'plays <= ?', value: get_less_played_criteria_limit}
+          when :most_played then {query: 'plays >= ?', value: get_most_played_criteria_limit}
+          when :recently_played then
+            low_time, high_time = get_recently_played_criteria_limit
+            {query: 'last_played_at between ? and ?', value: [low_time, high_time]}
+          when :recently_added then
+            low_time, high_time = get_recently_added_criteria_limit
+            {query: 'created_at between ? and ?', value: [low_time, high_time]}
           when :library then {query: 'songs.id > 0'}
+          when :album then {query: 'albums.name = ?', value: current_album.name }
+          when :artist then {query: 'artists.name = ?', value: current_artist.name }
+          when :song then {query: 'songs.name = ?', value: current_song.name }
+          when :genre then {query: 'genres.name in (?)', value: current_song.genres.map{|g| g.name} }
+          when :genres then raise 'invalid_search:@genres has no meaning here'
+          when :albums then raise 'invalid_search:@albums has no meaning here'
+          when :artists then raise 'invalid_search:@artists has no meaning here'
+          when :drives then raise 'invalid_search:@drives has no meaning here'
           else raise 'invalid search:unknown type'
           end unless playlist?(p.value)
       end.compact
@@ -286,7 +302,7 @@ module CultomePlayer::Player::Interface
       return nil, [] if objs.empty?
 
       query = objs.collect{|o| o[:query] }.join(" or ")
-      values = objs.collect{|o| o[:value]}.compact
+      values = objs.collect{|o| o[:value]}.flatten.compact
 
       return query, values
     end
@@ -300,9 +316,9 @@ module CultomePlayer::Player::Interface
         info[:count] += 1
         info[:query] << " or " if info[:count] > 1
         case p.criteria
-          when :a then info[:query] << "artists.name like ?"
-          when :b then info[:query] << "albums.name like ?"
-          when :t then info[:query] << "songs.name like ?"
+        when :a then info[:query] << "artists.name like ?"
+        when :b then info[:query] << "albums.name like ?"
+        when :t then info[:query] << "songs.name like ?"
         end
         info[:values] << "%#{p.value}%"
       end
@@ -312,6 +328,37 @@ module CultomePlayer::Player::Interface
       return query, values
     end
 
+    # Get the low and high date range and the lower play limit for a "popular" songs criteria
+    def get_popular_criteria_limits
+      upper_time = Time.now.midnight + 1.day
+      lower_time = upper_time - 5.day
+      latest_songs = Song.where({last_played_at: (lower_time..upper_time)}).order(plays: :desc)
+      lower_play_count = latest_songs.first.plays * 0-95
+
+      return lower_time,  upper_time, lower_play_count
+    end
+
+    # Get the high limit for a "less played" songs criteria
+    def get_less_played_criteria_limit
+      less_played_song_count = Song.all.order(:plays).limit(1).first.plays
+      return less_played_song_count * 1.05
+    end
+
+    # Get the lower limit for a "most played" songs criteria
+    def get_most_played_criteria_limit
+      most_played_song_count = Song.all.order(plays: :desc).limit(1).first.plays
+      return most_played_song_count * 0.95
+    end
+
+    def get_recently_added_criteria_limit
+      last_song_added_dt = Song.all.order(created_at: :desc).limit(1).first.created_at
+      return last_song_added_dt - 1.day, last_song_added_dt
+    end
+
+    def get_recently_played_criteria_limit
+      last_song_played_dt = Song.all.order(last_played_at: :desc).limit(1).first.last_played_at
+      return last_song_played_dt - 1.hour, last_song_played_dt
+    end
   end
 end
 

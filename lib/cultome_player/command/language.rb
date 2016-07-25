@@ -56,6 +56,5 @@ module CultomePlayer::Command
         {type: :literal, identity: /^['"]?([\w\d\s%]+)['"]?$/}, # add % for the alias parameters placeholders
       ]
     end
-
   end
 end
