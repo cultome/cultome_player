@@ -55,31 +55,46 @@ describe CultomePlayer::Player::Interface::Helper do
   end
 
   describe '#get_from_focus' do
+    before :each do
+      t.execute "connect '#{test_folder}' => test"
+    end
+
     it 'get elements by an index (index starts in one)' do
-      song = Song.new({name: "Test", artist: Artist.new({name: "Test"}), album: Album.new({name: "Test"})})
-      t.playlists[:focus] << song
-      cmd = t.parse("play 1").first
+      t.execute("play")
+      cmd = t.parse("play 1 2").first
 
       songs = t.send(:get_from_focus, cmd.params)
-      expect(songs.size).to eq 1
-      expect(songs.first.name).to eq "Test"
+      expect(songs.size).to eq 2
     end
   end
 
   describe '#get_from_playlists' do
-    it 'get all songs in the given playlists' do
-      song1 = Song.new({name: "Test1", artist: Artist.new({name: "Test1"}), album: Album.new({name: "Test1"})})
-      song2 = Song.new({name: "Test2", artist: Artist.new({name: "Test2"}), album: Album.new({name: "Test2"})})
-      t.playlists[:search] << song1
-      t.playlists[:history] << song2
+    before :each do
+      t.execute "connect '#{test_folder}' => test"
+    end
 
-      songs = t.get_from_playlists([:search, :history])
-      expect(songs.size).to eq 2
-      expect(songs.first.name).not_to eq songs.last.name
+    it 'get all songs in the given playlists' do
+      t.execute("play && next")
+
+      songs = t.get_from_playlists([:current, :history])
+      expect(songs.size).to eq 4
     end
   end
 
   describe '#search_songs_with' do
+    before :each do
+      t.execute "connect '#{test_folder}' => test"
+    end
+
+    it 'get songs matching the given criteria param' do
+
+    end
+
+    it 'get songs matching the given literal param'
+
+    it 'get songs matching the given object param'
+
+    it 'get songs matching the given combinations of params'
   end
 
   describe '#process_for_search' do
