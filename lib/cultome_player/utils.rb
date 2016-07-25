@@ -60,7 +60,6 @@ module CultomePlayer
           when 16 then str.colorize(:light_magenta)
           when 17 then str.colorize(:light_cyan)
           when 18 then str.colorize(:light_white)
-          else str
         end
       end
     end
