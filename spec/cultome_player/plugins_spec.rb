@@ -25,6 +25,24 @@ describe CultomePlayer::Plugins do
       it 'returns usage information' do
         expect(t.usage_alias).not_to be_empty
       end
+
+      it 'respond to description_alias' do
+        expect(t).to respond_to(:description_alias)
+      end
+    end
+
+    describe CultomePlayer::Plugins::Help do
+      it 'respond to usage_help' do
+        expect(t).to respond_to(:usage_help)
+      end
+
+      it 'returns usage information' do
+        expect(t.usage_help).not_to be_empty
+      end
+
+      it 'respond to description_help' do
+        expect(t).to respond_to(:description_help)
+      end
     end
   end
 end

@@ -33,14 +33,6 @@ RSpec.configure do |config|
 end
 
 module FakeStatus
-  def current_artist
-    Artist.new(name: 'artist_uno')
-  end
-
-  def current_album
-    Album.new(name: 'album_tres')
-  end
-
   def playback_length
     100
   end

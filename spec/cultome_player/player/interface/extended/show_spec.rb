@@ -12,7 +12,7 @@ describe CultomePlayer::Player::Interface::Extended do
   context 'with and active playlist and playback' do
     before :each do
       t.execute("connect '#{test_folder}' => test").first
-      t.execute 'play'
+      t.execute 'play absolution'
     end
 
     it 'without parameters shows the current song' do
@@ -23,6 +23,7 @@ describe CultomePlayer::Player::Interface::Extended do
 
     context 'with object parameter' do
       it 'current' do
+        t.execute 'play @library'
         r = t.execute('show @current').first
         expect(r.response_type).to eq(:list)
         expect(r.list.size).to eq(3)

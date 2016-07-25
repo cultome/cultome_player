@@ -14,7 +14,7 @@ module CultomePlayer
 	    	else
 	    		help = send("usage_#{cmd.params.first.value}")
 	    		if help.nil?
-	    			failure("No help is available for '#{cmd.first.value}'.")
+	    			failure("No help is available for '#{cmd.params.first.value}'.")
 	    		else
 	    			success(message: help)
 	    		end

@@ -61,14 +61,15 @@ describe CultomePlayer::Player::Interface::Extended do
 
   context 'with object parameters' do
     it 'search using an object as criteria' do
-      r = t.execute('search @artist').first
-      songs = r.send(r.response_type)
-      expect(songs.size).to eq 3
-      songs.each{|s| expect(s.artist.name).to eq t.current_artist.name }
+      r = t.execute('search @library').first
+      songs = r.data[:songs]
+      expect(songs.size).to eq 5
     end
 
     it 'create and OR filter more than one object' do
-      expect(t.execute('search @artist @album').first.songs.size).to eq 4
+      t.execute("play && next")
+      r = t.execute('search @focus @history').first
+      expect(r.songs.size).to eq 5
     end
   end
 
@@ -83,8 +84,9 @@ describe CultomePlayer::Player::Interface::Extended do
 
   context 'with mixed parameters' do
     it 'create an OR filter between each type' do
+      t.execute("play song_uno")
       expect(t.execute('search t:song_tres artist_tres @album').first.songs.size).to eq 3
-      expect(t.execute('search t:song_cuatro t:song_dos @album').first.songs.size).to eq 2
+      expect(t.execute('search t:song_cuatro t:song_dos @album').first.songs.size).to eq 3
       expect(t.execute('search song_dos song_uno').first.songs.size).to eq 2
       expect(t.execute('search @artist song_tres').first.songs.size).to eq 3
     end
