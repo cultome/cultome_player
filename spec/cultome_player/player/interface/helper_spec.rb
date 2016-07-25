@@ -137,12 +137,57 @@ describe CultomePlayer::Player::Interface::Helper do
   end
 
   describe '#process_for_search' do
+    it 'returns blank if parameters are empty' do
+      cmd = t.parse("play").first
+      query, values = t.process_for_search(cmd.params)
+      expect(query).to be_nil
+      expect(values).to be_empty
+    end
   end
 
   describe '#process_literal_for_search' do
+    it 'create a sql query for literal param' do
+      cmd = t.parse("play criteria").first
+      query, values = t.send(:process_literal_for_search, cmd.params)
+
+      expect(query).to eq "artists.name like ? or albums.name like ? or songs.name like ?"
+      expect(values).to eq [[ "%criteria%", "%criteria%", "%criteria%" ]]
+    end
   end
 
   describe '#process_criteria_for_search' do
+    it 'recognize the artist criteria (a:)' do
+      cmd = t.parse("play a:Muse").first
+      query, values = t.send(:process_criteria_for_search, cmd.params)
+      expect(query).to eq "(artists.name like ?)"
+      expect(values).to eq ["%Muse%"]
+    end
+
+    it 'recognize multiple artists criteria (a:)' do
+      cmd = t.parse("play a:Muse a:Baos").first
+      query, values = t.send(:process_criteria_for_search, cmd.params)
+      expect(query).to eq "(artists.name like ? or artists.name like ?)"
+      expect(values).to eq ["%Muse%", "%Baos%"]
+    end
+
+    it 'recognize the album criteria (b:)' do
+      cmd = t.parse("play b:blackholes").first
+      query, values = t.send(:process_criteria_for_search, cmd.params)
+      expect(query).to eq "(albums.name like ?)"
+      expect(values).to eq ["%blackholes%"]
+    end
+
+    it 'recognize multiple albums criteria (b:)' do
+      cmd = t.parse("play b:Absolution b:\"its not you\"").first
+      query, values = t.send(:process_criteria_for_search, cmd.params)
+      expect(query).to eq "(albums.name like ? or albums.name like ?)"
+      expect(values).to eq ["%Absolution%", "%its not you%"]
+    end
+
+    it 'raise error on any other criteria' do
+      cmd = t.parse("play y:Absolution").first
+      expect{ t.send(:process_criteria_for_search, cmd.params) }.to raise_error('invalid command:invalid search criteria')
+    end
   end
 
   describe '#process_object_for_search' do

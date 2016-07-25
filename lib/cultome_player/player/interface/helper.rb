@@ -49,8 +49,6 @@ module CultomePlayer::Player::Interface
         when :criteria then process_criteria_for_search(params)
         when :literal then process_literal_for_search(params)
       end
-
-      raise 'invalid command:invalid search criteria' if query =~ /^[\(\)]+$/
       return query, values
     end
 
@@ -317,9 +315,10 @@ module CultomePlayer::Player::Interface
         info[:count] += 1
         info[:query] << " or " if info[:count] > 1
         case p.criteria
-        when :a then info[:query] << "artists.name like ?"
-        when :b then info[:query] << "albums.name like ?"
-        when :t then info[:query] << "songs.name like ?"
+          when :a then info[:query] << "artists.name like ?"
+          when :b then info[:query] << "albums.name like ?"
+          when :t then info[:query] << "songs.name like ?"
+          else raise 'invalid command:invalid search criteria'
         end
         info[:values] << "%#{p.value}%"
       end
