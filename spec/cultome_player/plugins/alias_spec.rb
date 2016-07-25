@@ -26,9 +26,9 @@ describe CultomePlayer::Plugins::Alias do
   end
 
   it 'respond to alias commands' do
-    expect(t).not_to respond_to :command_ss
-		t.execute("alias 'search %1' => ss")
-    expect(t).to respond_to :command_ss
+    expect(t).not_to respond_to :command_ssonly
+		t.execute("alias 'search %1' => ssonly")
+    expect(t).to respond_to :command_ssonly
   end
 
   it 'execute alias command' do
