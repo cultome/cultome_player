@@ -3,9 +3,6 @@ require 'spec_helper'
 describe CultomePlayer::Command::Processor do
   let(:t){ TestClass.new }
 
-  context '#read_command' do
-  end
-
   context '#get_tokens' do
     it 'respond to get_tokens method' do
       expect(t).to respond_to :get_tokens
