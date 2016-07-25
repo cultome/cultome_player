@@ -1,10 +1,10 @@
 module CultomePlayer::Command
   module Language
 
-    # Define the sintaxis of the player language.
+    # Define the sintax of the player language.
     #
     # @return [Hash] With the keys :command, :parameters, :actions, :param
-    def sintaxis
+    def sintax
       # <command>    : <action> | <action> <parameters>
       # <action>     : literal
       # <parameters> : <param> | <param> <parameters>

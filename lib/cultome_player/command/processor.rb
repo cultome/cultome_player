@@ -70,7 +70,7 @@ module CultomePlayer::Command
       valid_format = semantics[cmd]
       if valid_format.nil?
         if plugins_respond_to?(cmd)
-          valid_format = plugin_command_sintaxis(cmd)
+          valid_format = plugin_command_sintax(cmd)
         else
           raise 'invalid command:invalid action'
         end
@@ -133,10 +133,10 @@ module CultomePlayer::Command
 
     def guess_command_format(type, tokens)
       # buscamos el formato que tenga mas matches con los parametros
-      format = sintaxis[type].find do |stxs_elem| # ["action", "action parameters"]
+      format = sintax[type].find do |stxs_elem| # ["action", "action parameters"]
         if stxs_elem.is_a?(String)
            # checamos si el numero de token en el comando corresponde
-           # con el numer de tokens en la sintaxis
+           # con el numer de tokens en la sintax
            stxs_elem.split.size >= tokens.size # ej. "play 1 2" === "action paramters"
         elsif stxs_elem.is_a?(Symbol)
           if tokens.is_a?(Hash)
@@ -152,7 +152,7 @@ module CultomePlayer::Command
       end
 
       if format.nil?
-        max = sintaxis[type].max{|tk| tk.class == String ? tk.split.size: 0}
+        max = sintax[type].max{|tk| tk.class == String ? tk.split.size: 0}
         if max.respond_to?(:split) && tokens.size > max.split.size
           format = max
         else

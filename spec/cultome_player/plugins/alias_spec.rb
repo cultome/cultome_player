@@ -19,12 +19,18 @@ describe CultomePlayer::Plugins::Alias do
 		t.execute("ss my_param")
 	end
 
+  it 'check existing aliases' do
+		t.execute("alias 'search %1' => ss").first
+		r = t.execute("alias").first
+    expect(r.data[:message]).to eq "\e[0;94;49mss => search %1\n\e[0m"
+  end
+
 	it 'respond to command_alias' do
 		expect(t).to respond_to(:command_alias)
 	end
 
-	it 'respond to sintaxis_alias' do
-		expect(t).to respond_to(:sintaxis_alias)
+	it 'respond to sintax_alias' do
+		expect(t).to respond_to(:sintax_alias)
 	end
 
 	it 'respond to usage_alias' do

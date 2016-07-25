@@ -24,8 +24,8 @@ module CultomePlayer
 		#
 		# @param cmd_name [String] The command name.
 		# @return [Regex] The regex to validate a command format that is implemented by a plugin.
-		def plugin_command_sintaxis(cmd_name)
-			return send("sintaxis_#{cmd_name}".to_sym)
+		def plugin_command_sintax(cmd_name)
+			return send("sintax_#{cmd_name}".to_sym)
 		end
 
 		# Lazy getter for plugins configurator. Its a persistent store where plugin can put their configurations.

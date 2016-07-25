@@ -8,7 +8,7 @@ describe CultomePlayer::Plugins do
 	end
 
 	it 'return the format for a command' do
-		expect(p.plugin_command_sintaxis("help")).to be_instance_of Regexp
+		expect(p.plugin_command_sintax("help")).to be_instance_of Regexp
 	end
 
 	it 'call initializator for all the plugins' do

@@ -7,8 +7,8 @@ describe CultomePlayer::Plugins::Help do
 		expect(t).to respond_to(:command_help)
 	end
 
-	it 'respond to sintaxis_help' do
-		expect(t).to respond_to(:sintaxis_help)
+	it 'respond to sintax_help' do
+		expect(t).to respond_to(:sintax_help)
 	end
 
 	it 'respond to usage_help' do

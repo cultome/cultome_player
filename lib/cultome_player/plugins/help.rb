@@ -21,7 +21,7 @@ module CultomePlayer
 	    	end
 	    end
 
-	    def sintaxis_help
+	    def sintax_help
 	    	/^literal (literal)$/
 	    end
 
