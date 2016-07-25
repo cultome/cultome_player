@@ -25,7 +25,9 @@ describe CultomePlayer::Player::Interface::Extended do
   end
 
   it 'return a Response object' do
-    expect(t.execute('search a:artist_uno').first).to be_instance_of Response
+    r = t.execute('search a:artist_uno').first
+    expect(r).to be_instance_of Response
+    expect(r.to_s).to match "Response successful => "
   end
 
   it 'respond success when there are results' do
