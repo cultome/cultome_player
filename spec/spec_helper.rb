@@ -99,10 +99,12 @@ module MockPlayer
 end
 
 module FakeUtils
-  def display(msg)
+  def stdout
+    @output ||= StringIO.new
   end
 
-  def display_over(msg)
+  def _output
+    @output
   end
 end
 

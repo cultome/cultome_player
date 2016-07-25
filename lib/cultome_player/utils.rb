@@ -25,7 +25,7 @@ module CultomePlayer
     # @return [String] The value printed.
     def display(msg)
       stdout.puts msg
-      return msg
+      return "#{msg}\n"
     end
 
     # Print a string into stdout (not STDOUT) but before insert a carriage return and dont append a newline character at the end.
@@ -33,7 +33,8 @@ module CultomePlayer
     # @param msg [String] The value to be printed.
     # @return [String] The value printed.
     def display_over(msg)
-      stdout.print "\r#{msg}"
+      msg = "\r#{msg}"
+      stdout.print msg
       return msg
     end
 
