@@ -114,6 +114,7 @@ describe CultomePlayer::Player::Interface::Helper do
 
     describe '#select_songs_with' do
       it 'get songs from focus playlist using number params' do
+        t.execute("play")
         cmd = t.parse("play 2 3").first
         songs = t.select_songs_with(cmd)
         expect(songs.size).to eq 2
