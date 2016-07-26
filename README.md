@@ -1,6 +1,6 @@
 [![Gem Version](https://badge.fury.io/rb/cultome_player.png)](http://badge.fury.io/rb/cultome_player)
-[![Build Status](https://travis-ci.org/cultome/cultome_player.svg)](https://travis-ci.org/cultome/cultome_player)
-[![Coverage Status](https://coveralls.io/repos/cultome/cultome_player/badge.png)](https://coveralls.io/r/cultome/cultome_player)
+[![Build Status](https://travis-ci.org/cultome/cultome_player.svg?branch=master)](https://travis-ci.org/cultome/cultome_player)
+[![Coverage Status](https://coveralls.io/repos/github/cultome/cultome_player/badge.svg?branch=master)](https://coveralls.io/github/cultome/cultome_player?branch=master)
 
 # Cultome Player
 A handy music library explorer. Is designed to facilitate you to play the music you like in the moment you want.
