@@ -154,7 +154,9 @@ describe CultomePlayer::Player::Interface::Basic do
       end
 
       context 'with object parameter' do
-        xit 'replace the current playlist with the object content' do
+        it 'replace the current playlist with the object content' do
+          expect(t).to receive(:playback_length).twice.and_return(100)
+
           t.execute 'play'
           expect(t.current_playlist.songs.size).to eq(3)
           t.execute 'next'
