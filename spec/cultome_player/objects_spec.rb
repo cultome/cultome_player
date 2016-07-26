@@ -3,6 +3,19 @@ require 'spec_helper'
 describe CultomePlayer::Objects do
   let(:t){ TestClass.new  }
 
+  describe CultomePlayer::Objects::Drive do
+    it 'generates a string representation' do
+      drive = Drive.new({name: "Rock", path: "/home/user/music", connected: true})
+      expect(drive.to_s).to eq "\e[0;32;49m:::: Drive: \e[0m\e[0;93;49mRock\e[0m\e[0;32;49m => \e[0m\e[0;93;49m0\e[0m\e[0;32;49m songs => \e[0m\e[0;93;49m/home/user/music\e[0m\e[0;32;49m => \e[0m\e[0;31;49mOnline\e[0m\e[0;32;49m ::::\e[0m"
+    end
+  end
+
+  describe CultomePlayer::Objects::Genre do
+    it 'generates a string representation' do
+      expect(Genre.new({name: "Rock"}).to_s).to eq "\e[0;32;49m:::: Genre: \e[0m\e[0;94;49mRock\e[0m\e[0;32;49m ::::\e[0m"
+    end
+  end
+
   describe CultomePlayer::Objects::Command do
     it 'groups parameters by type' do
       cmd1 = t.parse("play young 1 a:Muse @focus").first
