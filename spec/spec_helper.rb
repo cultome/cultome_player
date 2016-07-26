@@ -41,7 +41,7 @@ module FakeExtractor
 
     file_info[:relative_path] = filepath.gsub(/#{opc[:root_path]}\//, '') if opc.has_key?(:root_path)
 
-      return file_info
+    return file_info
   end
 end
 
@@ -103,7 +103,9 @@ class TestClass
     playlists.register(:queue)
     playlists.register(:focus)
     playlists.register(:search)
+
     init_plugins
+    ObjectSpace.define_finalizer(self, proc{ clean_plugins })
   end
 end
 

@@ -1,10 +1,12 @@
 module CultomePlayer
-	module Plugins
-		module KeyboardSpecialKeys
+  module Plugins
+    module KeyboardSpecialKeys
       def init_plugin_keyboard_special_keys
         Thread.new do
           start_cmd = "tail -f #{command_pipe}"
-          IO.popen(start_cmd).each do |line|
+          pipe = IO.popen(start_cmd, "rw")
+          pipe.each do |line|
+          #IO.popen(start_cmd).each do |line|
             # planchamos el prompt...
             display_over("")
             # ejecutamos el comando

@@ -48,7 +48,7 @@ module CultomePlayer
             r # return response
           rescue Exception => e
             emit_event(:execute_exception, cmd, e)
-            
+
             if current_env == :test || current_env == :rspec
               display c3("#{e.message}")
               e.backtrace.each{|b| display c3(b) }
@@ -104,13 +104,14 @@ module CultomePlayer
         playlists.register(:queue)
         playlists.register(:focus)
         playlists.register(:search)
-        
+
         register_listener(:playback_finish) do |song|
           r = execute("next").first
           display_over("#{r.message}\n#{c5(PROMPT)}")
         end
-        
+
         init_plugins
+        ObjectSpace.define_finalizer(self, proc{ clean_plugins })
       end
     end
 
