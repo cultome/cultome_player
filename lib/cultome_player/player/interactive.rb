@@ -93,23 +93,18 @@ module CultomePlayer::Player
         if res_obj.respond_to?(:each)
           # es una lista
           display to_display_list(res_obj)
-
         elsif res_obj.class == String
           # es un mensaje
           display r.success? ? res_obj : c3(res_obj.to_s)
-
         else
           display c3("(((#{res_obj.to_s})))")
-
         end
 
         # Dont has response_type, eg has a message
       elsif r.respond_to?(:message)
         display r.success? ? c15(r.message) : c3(r.message)
-
       else
         display c3("!!! #{r} !!!")
-
       end
     end
 

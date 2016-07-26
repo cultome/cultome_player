@@ -28,8 +28,7 @@ describe CultomePlayer::Player::Interactive do
   end
 
   it 'catches an error during interactive session' do
-    r = t.execute_interactively("show @invalid")
-    expect(r).to match /I checked and there is nothing there/
+    expect{ t.execute_interactively("show @") }.to raise_error "invalid command:invalid command"
   end
 
   it 'terminates a session' do
@@ -49,6 +48,26 @@ describe CultomePlayer::Player::Interactive do
     r1 = t.execute("show @library").first
     r2 = t.send(:show_response, r1)
     expect(r2).to match(/1 /).and match(/2 /).and match(/3 /)
+  end
+
+  it 'display an undefined response' do
+    class T
+      def to_s
+        "test class"
+      end
+    end
+
+    msg = double("msg", message: "one message", success?: true)
+    res = double("response", response_type: :hash, hash: T.new)
+
+    r1 = t.send(:show_response, "unknown response")
+    expect(r1).to match "unknown response" # 3
+
+    r2 = t.send(:show_response, msg)
+    expect(r2).to match "one message" # 2
+
+    r3 = t.send(:show_response, res)
+    expect(r3).to match "\e[0;31;49m(((test class)))\e[0m\n" # 1
   end
 
   it 'displays an error response' do
