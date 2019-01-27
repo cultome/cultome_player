@@ -10,6 +10,8 @@ module CultomePlayer::Core::Importer
 
     update_db_file(data)
 
+    emit "folder_imported", data
+
     data
   end
 
@@ -18,8 +20,8 @@ module CultomePlayer::Core::Importer
   def update_db_file(records)
     create_db_file unless db_file_exists?
 
-    db_content = JSON.load(File.read(db_file))
-    db_content.merge(records)
+    db_content = load_library
+    db_content.merge!(records)
     open(db_file, "w"){|f| JSON.dump(db_content, f) }
   end
 
