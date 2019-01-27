@@ -18,6 +18,22 @@ module CultomePlayer::Core::Objects
         instance_variable_set("@#{k}", v)
       end
     end
+
+    def to_s
+      str = c4(":::: Song: ")
+      str += c14(self.name)
+
+      unless self.artist.nil?
+        str += c4(" \\ Artist: ")
+        str += c15(self.artist)
+      end
+
+      unless self.album.nil?
+        str += c4(" \\ Album: ")
+        str += c16(self.album)
+      end
+      str += c4(" ::::")
+    end
   end
 
   class Command

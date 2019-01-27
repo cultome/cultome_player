@@ -73,7 +73,7 @@ module CultomePlayer::Core::Player
   end
 
   def loadfile(song)
-    send_to_player "load #{song.path}"
+    send_to_player "load #{song.file_path}"
   end
 
   def send_to_player(cmd)

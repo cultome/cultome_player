@@ -18,10 +18,10 @@ module CultomePlayer::Core::Session::Actions
       end
 
       # tocamos toda la libreria
-      songs = library
+      songs = library.values
       return failure("No music connected! You should try 'connect /home/yoo/music => main' first") if songs.empty?
 
-      playlists(:current, :focus).add songs
+      playlists(:current, :focus).add *songs
       playlists(:current, :focus).shuffle
 
     else # with parameters
@@ -29,9 +29,9 @@ module CultomePlayer::Core::Session::Actions
       # checamos si el tipo de comando es para programar una
       # nueva playlist o solo para tocar una cancion
       if play_inline?(cmd)
-        playlists(:queue).add songs
+        playlists(:queue).add *songs
       else
-        playlists(:current).add songs
+        playlists(:current).add *songs
       end
     end
 
