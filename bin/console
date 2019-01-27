@@ -6,7 +6,10 @@ require "pry"
 
 include CultomePlayer
 
-start_player
-send_to_player "load /home/csoria/ws/cultome_player/spec/data/importer/a.mp3"
-Pry.start
-quit_in_player
+begin_session
+# execute "quit"
+
+#start_player
+#send_to_player "load /home/csoria/ws/cultome_player/spec/data/importer/a.mp3"
+#Pry.start
+#quit_in_player

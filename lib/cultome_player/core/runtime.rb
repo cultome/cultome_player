@@ -8,6 +8,15 @@ module CultomePlayer::Core::Runtime
 
     get_library
   end
+
+  def session_history
+    @session_history ||= []
+  end
+
+  def in_session?
+    @in_session ||= false
+  end
+
   #
   # Check the status of pause.
   #
