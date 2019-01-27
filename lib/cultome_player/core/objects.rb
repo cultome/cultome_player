@@ -2,6 +2,22 @@ require "forwardable"
 
 module CultomePlayer::Core::Objects
   class Song
+    attr_reader :file_path
+    attr_reader :album
+    attr_reader :artist
+    attr_reader :genre
+    attr_reader :name
+    attr_reader :track
+    attr_reader :year
+    attr_reader :duration
+    attr_reader :raw_data
+
+    def initialize(props)
+      @raw_data = props
+      props.each do |(k,v)|
+        instance_variable_set("@#{k}", v)
+      end
+    end
   end
 
   class Command
@@ -148,10 +164,12 @@ module CultomePlayer::Core::Objects
     attr_reader :songs
 
     def_delegator :@songs, :pop
+    def_delegator :@songs, :shift
+    def_delegator :@songs, :empty?
 
     def initialize(songs=[])
       @songs = songs
-      @repeat = false
+      @repeat = true
       @current_song_index = 0
     end
 
@@ -206,6 +224,11 @@ module CultomePlayer::Core::Objects
       songs.size == 1 ? songs.first : songs
     end
 
+    def shift
+      songs = @playlists.map{|name,list| list.shift}
+      songs.size == 1 ? songs.first : songs
+    end
+
     def current_song
       songs = @playlists.map{|name,list| list.current_song }
       songs.size == 1 ? songs.first : songs
@@ -222,15 +245,19 @@ module CultomePlayer::Core::Objects
     end
 
     def repeat=(enabled)
-      @playlists.each{|(name,list)| list.repeat = enabled }
+      @playlists.each{|(_,list)| list.repeat = enabled }
     end
 
     def add(*songs)
-      @playlists.each{|(name,list)| list.add(*songs) }
+      @playlists.each{|(_,list)| list.add(*songs) }
     end
 
     def songs
-      @playlists.each.with_object([]){|(name,list),acc| acc.concat list.songs }
+      @playlists.each.with_object([]){|(_,list),acc| acc.concat list.songs }
+    end
+
+    def empty?
+      @playlists.reduce(false){|acc,(_,list)| acc || list.empty? }
     end
 
     def shuffle

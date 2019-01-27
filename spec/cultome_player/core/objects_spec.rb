@@ -17,9 +17,25 @@ RSpec.describe CultomePlayer::Core::Objects do
     expect(playlists(:history).songs.size).to eq 2
   end
 
-  it "remove songs only from selected playlists" do
+  it "append songs to lists" do
     playlists(:current, :history).add 1,2
-    playlists(:current).pop
+    playlists(:current, :history).add 3,4
+
+    expect(playlists(:current).songs.size).to eq 4
+    expect(playlists(:current).songs).to eq [1,2,3,4]
+  end
+
+  it "remove first songs only from selected playlists" do
+    playlists(:current, :history).add 1,2
+    expect(playlists(:current).shift).to eq 1
+
+    expect(playlists(:current).songs.size).to eq 1
+    expect(playlists(:history).songs.size).to eq 2
+  end
+
+  it "remove last songs only from selected playlists" do
+    playlists(:current, :history).add 1,2
+    expect(playlists(:current).pop).to eq 2
 
     expect(playlists(:current).songs.size).to eq 1
     expect(playlists(:history).songs.size).to eq 2
@@ -65,6 +81,7 @@ RSpec.describe CultomePlayer::Core::Objects do
 
   it "return nil if no more songs in playlist" do
     playlists(:current, :history).add 1,2
+    playlists(:current, :history).repeat = false
 
     expect(playlists(:current).current_song).to eq 1
     expect(playlists(:current).next_song).to eq 2
@@ -73,5 +90,13 @@ RSpec.describe CultomePlayer::Core::Objects do
     expect(playlists(:current).next_song).to eq nil
 
     expect(playlists(:current).current_song).to eq nil
+  end
+
+  it "check if playlists are empty" do
+    expect(playlists(:current, :history)).to be_empty
+    playlists(:current).add 1,2
+    expect(playlists(:current, :history)).to be_empty
+    playlists(:history).add 1,2
+    expect(playlists(:current, :history)).not_to be_empty
   end
 end

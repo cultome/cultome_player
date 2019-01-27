@@ -118,7 +118,7 @@ module CultomePlayer::Core::Session
         # revisamos si es un built in command o un plugin
         action = cmd.action
 
-        raise 'invalid command:action unknown' unless respond_to?(action)
+        raise "invalid command:action unknown [#{action}]" unless respond_to?(action)
 
         begin
           emit(:before_command, cmd: cmd)

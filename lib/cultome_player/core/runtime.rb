@@ -95,8 +95,9 @@ module CultomePlayer::Core::Runtime
   end
 
   def load_library
-    JSON.load(File.read(db_file))
-  rescue
-    raise "Database is corrupted! Delete the file ~/.cultome_player/db.json and restart the player"
+    songs = JSON.load(File.read(db_file))
+    songs.each.with_object({}){|(id,song), library| library[id] = CultomePlayer::Core::Objects::Song.new(song)}
+  rescue Exception => e
+    raise "Database is corrupted! Delete the file ~/.cultome_player/db.json and restart the player. [#{e}]"
   end
 end

@@ -1,16 +1,19 @@
 example_id                                       | status | run_time        |
 ------------------------------------------------ | ------ | --------------- |
-./spec/cultome_player/core/importer_spec.rb[1:1] | passed | 0.00131 seconds |
-./spec/cultome_player/core/importer_spec.rb[1:2] | passed | 0.00045 seconds |
-./spec/cultome_player/core/importer_spec.rb[1:3] | passed | 0.00093 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:1]  | passed | 0.00041 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:2]  | passed | 0.00008 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:3]  | passed | 0.00012 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:4]  | passed | 0.00011 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:5]  | passed | 0.0001 seconds  |
-./spec/cultome_player/core/objects_spec.rb[1:6]  | passed | 0.00011 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:7]  | passed | 0.00013 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:8]  | passed | 0.00012 seconds |
-./spec/cultome_player/core/objects_spec.rb[1:9]  | passed | 0.00006 seconds |
+./spec/cultome_player/core/importer_spec.rb[1:1] | passed | 0.00128 seconds |
+./spec/cultome_player/core/importer_spec.rb[1:2] | passed | 0.00054 seconds |
+./spec/cultome_player/core/importer_spec.rb[1:3] | passed | 0.00087 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:1]  | passed | 0.00006 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:2]  | passed | 0.00005 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:3]  | passed | 0.00007 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:4]  | passed | 0.00005 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:5]  | passed | 0.00008 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:6]  | passed | 0.00007 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:7]  | passed | 0.00006 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:8]  | passed | 0.00005 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:9]  | passed | 0.00007 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:10] | passed | 0.00007 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:11] | passed | 0.00006 seconds |
+./spec/cultome_player/core/objects_spec.rb[1:12] | passed | 0.00011 seconds |
 ./spec/cultome_player/core/search_spec.rb[1:1]   | passed | 0.00012 seconds |
-./spec/cultome_player/events_spec.rb[1:1]        | passed | 0.00066 seconds |
+./spec/cultome_player/events_spec.rb[1:1]        | passed | 0.00065 seconds |

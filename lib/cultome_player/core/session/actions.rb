@@ -16,6 +16,7 @@ module CultomePlayer::Core::Session::Actions
         player_object :song
         return execute "play @song"
       end
+
       # tocamos toda la libreria
       songs = library
       return failure("No music connected! You should try 'connect /home/yoo/music => main' first") if songs.empty?
@@ -35,6 +36,22 @@ module CultomePlayer::Core::Session::Actions
     end
 
     return success(playlist: songs) + execute("next no_history").first
+  end
+
+  # For more information on this command refer to user manual or inline help in interactive mode.
+  def next(cmd)
+    playlists(:history).add current_song if cmd.history?
+    if playlists(:queue).empty?
+      playlists(:queue).add playlists(:current).next_song
+    end
+
+    # aqui enviamos al reproductor externo a tocar
+    play_queue
+
+    # cambiamos la fecha de ultima reproduccion
+    # current_song.update_attributes(last_played_at: Time.now)
+
+    return success(message: "Now playing #{current_song}", now_playing: current_song)
   end
 
 =begin
@@ -63,22 +80,6 @@ module CultomePlayer::Core::Session::Actions
   end
 
   # For more information on this command refer to user manual or inline help in interactive mode.
-  def next(cmd)
-    playlists[:history] << current_song if cmd.history?
-    if playlists[:queue].empty?
-      playlists[:queue] << playlists[:current].next
-    end
-
-    # aqui enviamos al reproductor externo a tocar
-    play_queue
-
-    # cambiamos la fecha de ultima reproduccion
-    current_song.update_attributes(last_played_at: Time.now)
-
-    return success(message: "Now playing #{current_song}", now_playing: current_song)
-  end
-
-  # For more information on this command refer to user manual or inline help in interactive mode.
   def prev(cmd)
     playlists[:queue] << playlists[:history].pop
     playlists[:current].rewind_by 1
@@ -93,5 +94,13 @@ module CultomePlayer::Core::Session::Actions
     terminate_session
     return success(c15("See you next time!")) unless in_session?
     return failure(c3("Oops! You should use Ctr-c or throw water to the CPU NOW!!!!"))
+  end
+
+  private
+
+  def play_queue
+    song = playlists(:queue).shift
+    play_in_player song
+    return song
   end
 end

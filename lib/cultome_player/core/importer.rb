@@ -22,14 +22,15 @@ module CultomePlayer::Core::Importer
 
     db_content = load_library
     db_content.merge!(records)
-    open(db_file, "w"){|f| JSON.dump(db_content, f) }
+    data_to_store = db_content.each.with_object({}){|(k,v),acc| acc[k] = v.raw_data}
+    open(db_file, "w"){|f| JSON.dump(data_to_store, f) }
   end
 
   def read_id3_tag(filepath)
     mp3 = TagLib::FileRef.new(filepath)
     return {file_path: filepath} if mp3.nil?
 
-    {
+    CultomePlayer::Core::Objects::Song.new(
       # file information
       file_path: filepath,
       # song information
@@ -40,7 +41,7 @@ module CultomePlayer::Core::Importer
       track: mp3.tag.track,
       year: mp3.tag.year,
       duration: mp3.audio_properties.length,
-    }
+    )
   end
 
   def find_files_in_folder(path)
