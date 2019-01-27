@@ -1,3 +1,4 @@
+require "forwardable"
 
 module CultomePlayer::Core::Objects
   class Song
@@ -138,6 +139,101 @@ module CultomePlayer::Core::Objects
 
     def to_s
       "Response #{success? ? 'successful' : 'failed'} => #{@data}"
+    end
+  end
+
+  class Playlist
+    extend Forwardable
+
+    attr_reader :songs
+
+    def_delegator :@songs, :pop
+
+    def initialize(songs=[])
+      @songs = songs
+      @repeat = false
+      @current_song_index = 0
+    end
+
+    def add(*songs)
+      @songs.concat(songs)
+    end
+
+    def shuffle
+    end
+
+    def current_song
+      @songs[@current_song_index]
+    end
+
+    def prev_song
+      @current_song_index -= 1
+      current_song
+    end
+
+    def next_song
+      @current_song_index = @repeat ? (@current_song_index + 1) % @songs.size : @current_song_index + 1
+      current_song
+    end
+
+    def repeat=(enabled)
+      @repeat = enabled
+    end
+  end
+
+  class Playlists
+    extend Forwardable
+
+    def_delegator :@playlists, :size
+
+    def initialize(playlists={})
+      @playlists = playlists
+    end
+
+    def register(*names)
+      names.each do |name|
+        @playlists[name] ||= Playlist.new
+      end
+    end
+
+    def get(*names)
+      playlists = @playlists.select{|name,_| names.include? name }
+      Playlists.new(playlists)
+    end
+
+    def pop
+      songs = @playlists.map{|name,list| list.pop}
+      songs.size == 1 ? songs.first : songs
+    end
+
+    def current_song
+      songs = @playlists.map{|name,list| list.current_song }
+      songs.size == 1 ? songs.first : songs
+    end
+
+    def next_song
+      songs = @playlists.map{|name,list| list.next_song }
+      songs.size == 1 ? songs.first : songs
+    end
+
+    def prev_song
+      songs = @playlists.map{|name,list| list.prev_song }
+      songs.size == 1 ? songs.first : songs
+    end
+
+    def repeat=(enabled)
+      @playlists.each{|(name,list)| list.repeat = enabled }
+    end
+
+    def add(*songs)
+      @playlists.each{|(name,list)| list.add(*songs) }
+    end
+
+    def songs
+      @playlists.each.with_object([]){|(name,list),acc| acc.concat list.songs }
+    end
+
+    def shuffle
     end
   end
 end

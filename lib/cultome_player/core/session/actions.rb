@@ -13,28 +13,31 @@ module CultomePlayer::Core::Session::Actions
       return execute "pause off" if paused?
       # iniciamos ultima la reproduccion desde el principio
       if stopped? && current_song
-        curr_song = player_object :song
+        player_object :song
         return execute "play @song"
       end
       # tocamos toda la libreria
-      songs = whole_library
+      songs = library
       return failure("No music connected! You should try 'connect /home/yoo/music => main' first") if songs.empty?
-      playlists[:current, :focus] <= songs
-      playlists[:current, :focus].shuffle
+
+      playlists(:current, :focus).add songs
+      playlists(:current, :focus).shuffle
 
     else # with parameters
       songs = select_songs_with cmd
       # checamos si el tipo de comando es para programar una
       # nueva playlist o solo para tocar una cancion
       if play_inline?(cmd)
-        playlists[:queue] << songs
+        playlists(:queue).add songs
       else
-        playlists[:current] <= songs
+        playlists(:current).add songs
       end
     end
 
     return success(playlist: songs) + execute("next no_history").first
   end
+
+=begin
 
   # For more information on this command refer to user manual or inline help in interactive mode.
   def pause(cmd)
@@ -82,6 +85,7 @@ module CultomePlayer::Core::Session::Actions
     r = execute("next no_history").first
     return r
   end
+=end
 
   # For more information on this command refer to user manual or inline help in interactive mode.
   def quit(cmd)

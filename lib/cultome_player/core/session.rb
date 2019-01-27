@@ -4,12 +4,14 @@ end
 require "cultome_player/core/session/reader"
 require "cultome_player/core/session/language"
 require "cultome_player/core/session/processor"
+require "cultome_player/core/session/playlists"
 require "cultome_player/core/session/actions"
 
 module CultomePlayer::Core::Session
   include Reader
   include Language
   include Processor
+  include Playlists
   include Actions
 
   PROMPT = "cultome> "
