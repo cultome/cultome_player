@@ -16,7 +16,7 @@ module CultomePlayer
     # @param value [String] String to check if can be a positive boolean value.
     # @return [Boolean] True if value is a positive boolean value. False otherwise.
     def is_true_value?(value)
-      /true|yes|on|y|n|s|si|cierto/ === value 
+      /true|yes|on|y|n|s|si|cierto/ === value
     end
 
     # Print a string into stdout (not STDOUT) and finish with a newline character.
