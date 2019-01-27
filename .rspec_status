@@ -1,5 +1,6 @@
 example_id                                       | status | run_time        |
 ------------------------------------------------ | ------ | --------------- |
-./spec/cultome_player/core/importer_spec.rb[1:1] | passed | 0.00029 seconds |
+./spec/cultome_player/core/importer_spec.rb[1:1] | passed | 0.00128 seconds |
+./spec/cultome_player/core/importer_spec.rb[1:2] | passed | 0.0004 seconds  |
 ./spec/cultome_player_spec.rb[1:1]               | passed | 0.01366 seconds |
 ./spec/cultome_player_spec.rb[1:2]               | failed | 0.07326 seconds |
