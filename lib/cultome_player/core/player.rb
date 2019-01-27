@@ -11,7 +11,6 @@ module CultomePlayer::Core::Player
   # @contract Adapter
   # @param song [Song] The song to be played.
   def play_in_player(song)
-    require "pry";binding.pry
     @current_song = song
     start_player unless player_running?
 
@@ -95,7 +94,6 @@ module CultomePlayer::Core::Player
   end
 
   def start_player
-    require "pry";binding.pry
     # creamos el thread que lea la salida del mpg123
     Thread.new do
       start_cmd = "mpg123 --fifo #{mplayer_pipe} -R"
