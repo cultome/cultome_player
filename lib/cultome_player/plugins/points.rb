@@ -1,24 +1,24 @@
 module CultomePlayer
-	module Plugins
-		module Points
-			def init_plugin_points
-				register_listener(:playback_finish){|song| on_playback_finish(song) }
-				register_listener(:before_command_next){|cmd, res| on_before_change(cmd) }
-				register_listener(:before_command_prev){|cmd, res| on_before_change(cmd) }
-				register_listener(:after_command_prev){|cmd, res| on_after_prev(cmd, res) }
-			end
+  module Plugins
+    module Points
+      def init_plugin_points
+        register_listener(:playback_finish){|song| on_playback_finish(song) }
+        register_listener(:before_command_next){|cmd, res| on_before_change(cmd) }
+        register_listener(:before_command_prev){|cmd, res| on_before_change(cmd) }
+        register_listener(:after_command_prev){|cmd, res| on_after_prev(cmd, res) }
+      end
 
-			private
+      private
 
-			def on_before_change(cmd)
+      def on_before_change(cmd)
         # current_song => the old song
-				return if current_song.nil?
+        return if current_song.nil?
 
-				percent_played = playback_position * 100 / playback_length
+        percent_played = playback_position * 100 / playback_length
         gain = case percent_played
-                 when (10..50) then -1
-                 when (81..100) then 1
-                 else 0
+               when (10..50) then -1
+               when (81..100) then 1
+               else 0
                end
 
         update_points(gain)

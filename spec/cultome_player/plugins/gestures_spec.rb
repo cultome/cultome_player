@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CultomePlayer::Plugins::Gestures do
-	let(:t){ TestClass.new }
+  let(:t){ TestClass.new }
 
   describe 'looking for something gesture' do
     before :each do

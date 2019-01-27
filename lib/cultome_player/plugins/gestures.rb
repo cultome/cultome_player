@@ -1,48 +1,48 @@
 module CultomePlayer
-	module Plugins
-		module Gestures
+  module Plugins
+    module Gestures
 
       include CultomePlayer::Objects
 
-			def init_plugin_gestures
-				register_listener(:after_command){|cmd, res| check_gesture(cmd) }
-			end
-
-			private
-
-			def actions_history
-				@history ||= []
-			end
-
-			def check_gesture(cmd)
-				if cmd.history?
-					actions_history << [cmd, Time.new]
-					check_looking_for_something
-				end
-			end
-
-      def recents(secs)
-				return actions_history.select{|cmd, time| time >= Time.new - secs}
+      def init_plugin_gestures
+        register_listener(:after_command){|cmd, res| check_gesture(cmd) }
       end
 
-			def check_looking_for_something
-				if recents(60).count{|cmd, time| cmd.action == "next"} >= 5
+      private
+
+      def actions_history
+        @history ||= []
+      end
+
+      def check_gesture(cmd)
+        if cmd.history?
+          actions_history << [cmd, Time.new]
+          check_looking_for_something
+        end
+      end
+
+      def recents(secs)
+        return actions_history.select{|cmd, time| time >= Time.new - secs}
+      end
+
+      def check_looking_for_something
+        if recents(60).count{|cmd, time| cmd.action == "next"} >= 5
           delete_from_history "next"
-					suggest_songs
-				end
-			end
+          suggest_songs
+        end
+      end
 
       def delete_from_history(cmd)
         actions_history.delete_if {|cmd, time| cmd.action == "next"}
       end
 
-			def suggest_songs
-				display "Hey! cant find anything? Try one of these:"
+      def suggest_songs
+        display "Hey! cant find anything? Try one of these:"
         suggestions = get_suggestions
         display to_display_list(suggestions)
         playlists[:focus] <= suggestions
         return suggestions
-			end
+      end
 
       def select_suggestion
         return (1..10).to_a.sample(1).first
@@ -86,5 +86,5 @@ module CultomePlayer
         end
       end #sugestions
     end
-	end
+  end
 end

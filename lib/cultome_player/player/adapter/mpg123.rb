@@ -8,7 +8,7 @@ module CultomePlayer::Player::Adapter
     def play_in_player(song)
       @current_song = song
       unless player_running?
-      	start_player
+        start_player
       end
 
       loadfile(song)
@@ -102,27 +102,27 @@ module CultomePlayer::Player::Adapter
         start_cmd = "mpg123 --fifo #{mplayer_pipe} -R"
         IO.popen(start_cmd).each do |line|
           case line
-          	when /^@R MPG123/
-      				@is_player_running = true
-          	when /^@P ([\d])$/
-          		case $1.to_i
-	          		when 0 # stopped
-	          			@playing = @paused = false
-	            		@stopped = true
-                  @user_stopped ?  emit_event(:playback_stopped, current_song) : emit_event(:playback_finish, current_song)
-	          		when 1 # paused
-			            @stopped = @playing = false
-			            @paused = true
-                  emit_event(:playback_paused, current_song)
-	          		when 2 # unpaused
-									@playing = true
-	            		@paused = @stopped = false
-                  emit_event(:playback_resumed, current_song)
-            	end
-            when /^@F ([\d]+) ([\d]+) ([\d.]+) ([\d.]+)$/
-	            @playback_time_position = $3.to_f
-	            @playback_time_length = @playback_time_position + $4.to_f
-					end # case line
+          when /^@R MPG123/
+            @is_player_running = true
+          when /^@P ([\d])$/
+            case $1.to_i
+            when 0 # stopped
+              @playing = @paused = false
+              @stopped = true
+              @user_stopped ?  emit_event(:playback_stopped, current_song) : emit_event(:playback_finish, current_song)
+            when 1 # paused
+              @stopped = @playing = false
+              @paused = true
+              emit_event(:playback_paused, current_song)
+            when 2 # unpaused
+              @playing = true
+              @paused = @stopped = false
+              emit_event(:playback_resumed, current_song)
+            end
+          when /^@F ([\d]+) ([\d]+) ([\d.]+) ([\d.]+)$/
+            @playback_time_position = $3.to_f
+            @playback_time_length = @playback_time_position + $4.to_f
+          end # case line
         end # IO
       end # Thread
 
