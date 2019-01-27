@@ -45,16 +45,15 @@ module CultomePlayer::Core::Importer
   end
 
   def find_files_in_folder(path)
-    abs_folder_path = File.absolute_path path
+    abs_folder_path = File.expand_path path
 
     Dir.children(abs_folder_path).flat_map do |file|
-      next unless file.end_with?(".mp3")
-
       abs_file_path = File.join(abs_folder_path, file)
 
       if File.directory?(abs_file_path)
         find_files_in_folder(abs_file_path)
       else
+        next unless file.end_with?(".mp3")
         abs_file_path
       end
     end.compact
